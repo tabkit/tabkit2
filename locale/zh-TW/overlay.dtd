@@ -1,0 +1,79 @@
+<!ENTITY tabcontextmenu.label "Tab Kit">
+<!ENTITY tabcontextmenu.accesskey "K">
+
+<!ENTITY global.label "全域行為">
+<!ENTITY global.accesskey "O">
+
+<!ENTITY sortByUri.label "依網址以字母排序">
+<!ENTITY sortByUri.accesskey "A">
+<!ENTITY sortByLastLoaded.label "依最後載入順序排序">
+<!ENTITY sortByLastLoaded.accesskey "L">
+<!ENTITY sortByLastViewed.label "依最後瀏覽順序排序">
+<!ENTITY sortByLastViewed.accesskey "V">
+<!ENTITY sortByCreation.label "依分頁建立順序排序">
+<!ENTITY sortByCreation.accesskey "C">
+<!ENTITY sortByOrigin.label "無排序">
+<!ENTITY sortByOrigin.accesskey "R">
+<!ENTITY sortByTitle.label "依頁面抬頭排序">
+<!ENTITY sortByTitle.accesskey "T">
+<!ENTITY groupByDomain.label "依網域以字母排序">
+<!ENTITY groupByDomain.accesskey "D">
+<!ENTITY groupByOpener.label "依分頁開啟者排序">
+<!ENTITY groupByOpener.accesskey "P">
+<!ENTITY ungroupAll.label "解散所有群組">
+<!ENTITY ungroupAll.accesskey "U">
+
+<!ENTITY newTabs.label "New Tabs...">
+<!ENTITY newTabs.accesskey "N">
+<!ENTITY lastSort.label "Are Ordered By Last Sort">
+<!ENTITY lastSort.accesskey "S">
+<!ENTITY nextToCurrent.label "於目前分頁右方">
+<!ENTITY nextToCurrent.accesskey "C">
+<!ENTITY farRight.label "於所有分頁右方">
+<!ENTITY farRight.accesskey "R">
+<!ENTITY autoGroup.label "依最後群組方式群組">
+<!ENTITY autoGroup.accesskey "G">
+
+<!ENTITY options.label "選項...">
+<!ENTITY options.accesskey "O">
+
+<!ENTITY tab.caption "目前分頁:">
+<!ENTITY newTabHere.label "新增分頁">
+<!ENTITY newTabHere.accesskey "N">
+<!ENTITY duplicateTab.label "複製分頁">
+<!ENTITY duplicateTab.accesskey "D">
+<!ENTITY makeGroup.label "群組此分頁與目前分頁">
+<!ENTITY makeGroup.accesskey "T">
+<!ENTITY toggleProtected.label "Protect Tab">
+<!ENTITY toggleProtected.accesskey "P">
+<!ENTITY toggleUnread.label "標記為未讀">
+<!ENTITY toggleUnread.accesskey "R">
+
+<!ENTITY group.caption "目前群組:">
+<!ENTITY collapse.label "收起群組">
+<!ENTITY collapse.accesskey "C">
+<!ENTITY expand.label "展開群組">
+<!ENTITY expand.accesskey "E">
+<!ENTITY bookmark.label "群組設為書籤">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY closeGroup.label "關閉群組">
+<!ENTITY closeGroup.accesskey "G">
+<!ENTITY closeGroup.modifiers "alt shift">
+<!ENTITY closeGroup.key "W">
+<!ENTITY closeGroup.acceltext "Alt+Shift+W; Ctrl+Middleclick">
+<!ENTITY closeChildren.label "Close Children">
+<!ENTITY closeChildren.accesskey "S">
+<!ENTITY closeChildren.acceltext "Ctrl+Shift+Middleclick">
+<!ENTITY ungroup.label "解散群組">
+<!ENTITY ungroup.accesskey "U">
+
+<!ENTITY selection.caption "被選取的分頁:">
+
+<!ENTITY closeTabsToLeft.label "關閉之左分頁">
+<!ENTITY closeTabsToLeft.accesskey "F">
+<!ENTITY closeTabsToRight.label "關閉之右分頁">
+<!ENTITY closeTabsToRight.accesskey "G">
+<!ENTITY closeTabsAbove.label "關閉以上分頁">
+<!ENTITY closeTabsAbove.accesskey "O">
+<!ENTITY closeTabsBelow.label "關閉以下分頁">
+<!ENTITY closeTabsBelow.accesskey "L">

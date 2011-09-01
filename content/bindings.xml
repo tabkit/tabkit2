@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<bindings id="tabkit-bindings"
+   xmlns="http://www.mozilla.org/xbl"
+   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="scrollbar" extends="chrome://global/content/bindings/scrollbar.xml#scrollbar">
+	<implementation>
+		<constructor><![CDATA[
+			if (navigator.platform.indexOf('Mac') != -1)
+				this.initScrollbar();
+
+			if (this.orient == 'horizontal')
+				this.parentNode.mHorizontalScrollbar = this;
+			else
+				this.parentNode.mVerticalScrollbar = this;
+		]]></constructor>
+		<destructor><![CDATA[
+			if (this.orient == 'horizontal')
+				this.parentNode.mHorizontalScrollbar = null;
+			else
+				this.parentNode.mVerticalScrollbar = null;
+		]]></destructor>
+	</implementation>
+</binding>
+
+</bindings>

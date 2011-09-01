@@ -1,0 +1,192 @@
+<!ENTITY options.title "Tab Kit 选项">
+
+<!ENTITY tabbar.title "标签条">
+
+<!ENTITY panels.caption "面板">
+<!ENTITY tabbarPosition.label1 "标签条位置">
+<!ENTITY tabbarPosition.accesskey "T">
+<!ENTITY tabbarPosition.top.label "窗口最顶端">
+<!ENTITY tabbarPosition.left.label "沿窗口左边">
+<!ENTITY tabbarPosition.right.label "沿窗口右边">
+<!ENTITY tabbarPosition.bottom.label "窗口最底端">
+<!ENTITY tabbarPosition.label2 "">
+<!ENTITY sidebarPosition.label1 "边栏位置">
+<!ENTITY sidebarPosition.accesskey "S">
+<!ENTITY sidebarPosition.top.label "窗口最顶端">
+<!ENTITY sidebarPosition.left.label "沿窗口左边">
+<!ENTITY sidebarPosition.right.label "沿窗口右边">
+<!ENTITY sidebarPosition.bottom.label "窗口最底端">
+<!ENTITY sidebarPosition.label2 " ">
+
+<!ENTITY horizontalTabbar.caption "横排标签条">
+<!ENTITY multipleRows.label "显示多行标签条">
+<!ENTITY multipleRows.accesskey "M">
+<!ENTITY tabRows.label1 "同时显示最多">
+<!ENTITY tabRows.accesskey "R">
+<!ENTITY tabRows.label2 "行标签">
+
+<!ENTITY verticalTabbar.caption "纵排标签条">
+<!ENTITY indentedTree.label "缩进子标签 (树状显示)">
+<!ENTITY indentedTree.accesskey "I">
+<!ENTITY maxTreeLevel.label "最大层数">
+<!ENTITY maxTreeLevel.accesskey "X">
+<!ENTITY indentAmount.label1 "每层缩进显示">
+<!ENTITY indentAmount.accesskey "P">
+<!ENTITY indentAmount.label2 "像素">
+
+<!ENTITY tabs.title "标签">
+
+<!ENTITY tabs.caption "标签">
+<!ENTITY tabMinWidth.label1 "最小标签宽度:">
+<!ENTITY tabMinWidth.accesskey "W">
+<!ENTITY tabMinWidth.label2 "像素">
+<!ENTITY closeButtons.label "关闭按钮:">
+<!ENTITY closeButtons.accesskey "O">
+<!ENTITY closeButtons.active.label "仅显示在活动标签上">
+<!ENTITY closeButtons.all.label "显示在所有标签上">
+<!ENTITY closeButtons.none.label "所有都不显示">
+<!ENTITY closeButtons.end.label "只在标签条末端显示一个单独的关闭按钮">
+
+<!ENTITY appearance.caption "外观">
+<!ENTITY highlightUnreadTabs.label "用黄色高亮显示未读标签">
+<!ENTITY highlightUnreadTabs.accesskey "H">
+<!ENTITY emphasizeCurrentTab.label "用黑色强调显示当前标签">
+<!ENTITY emphasizeCurrentTab.accesskey "E">
+<!ENTITY emphasizeProtectedTabs.label "用绿色强调强调显示受保护的标签页">
+<!ENTITY emphasizeProtectedTabs.accesskey "P">
+
+<!ENTITY coloring.caption "标签配色">
+<!ENTITY forceThemeCompatibility.label "与主题的兼容方式:">
+<!ENTITY forceThemeCompatibility.accesskey "T">
+<!ENTITY forceThemeCompatibility.never.label "从不替代主题中的设置方案">
+<!ENTITY forceThemeCompatibility.auto.label "自动决定 (建议)">
+<!ENTITY forceThemeCompatibility.always.label "总是替代主题中的设置方案">
+<!ENTITY colorTabNotLabel.label "配色:">
+<!ENTITY colorTabNotLabel.accesskey "C">
+<!ENTITY colorTabNotLabel.true.label "高亮时按编组和文字配色">
+<!ENTITY colorTabNotLabel.false.label "高亮时按编组和标签配色">
+<!ENTITY minSaturation.label "组色彩饱和度 - 最小:">
+<!ENTITY minSaturation.accesskey "S">
+<!ENTITY maxSaturation.label "最大:">
+<!ENTITY maxSaturation.accesskey "M">
+<!ENTITY minLightness.label "组色彩亮度 - 最小:">
+<!ENTITY minLightness.accesskey "L">
+<!ENTITY maxLightness.label "最大:">
+<!ENTITY maxLightness.accesskey "M">
+<!ENTITY hue.label "组色彩的色调是自动选取的, 以便与相邻的编组区分开">
+
+<!ENTITY openSelectedLinks.caption "打开选定的链接">
+<!ENTITY openSelectedLinks.label "从页面的关联菜单中打开选定的链接 (包括纯文本的链接) 时, 在新标签页中打开">
+<!ENTITY openSelectedLinks.accesskey "O">
+<!ENTITY openSelectedLinksShowOnlyOne.label "仅提供最佳链接 (否则会提示从 最重要者 / 所有 / 仅纯文本链接 中选择)">
+<!ENTITY openSelectedLinksShowOnlyOne.accesskey "F">
+
+<!ENTITY controls.title "控制">
+
+<!ENTITY mouseGestures.caption "鼠标手势">
+<!ENTITY scrollwheelTabSwitch.label "用滚轮切换标签页...">
+<!ENTITY tabWheelTabSwitch.label "当鼠标指针位于标签条上时">
+<!ENTITY tabWheelTabSwitch.accesskey "T">
+<!ENTITY rmbWheelTabSwitch.label "当按住了鼠标右键时">
+<!ENTITY rmbWheelTabSwitch.accesskey "R">
+<!ENTITY switchTabsOnHover.label "鼠标停在标签条上时用滚轮切换标签页">
+<!ENTITY switchTabsOnHover.accesskey "H">
+<!ENTITY lmbRmbBackForward.label "按住鼠标右键并单击左键, 以及 按住左键单击右键 执行与 后退/前进 按钮相同的动作">
+<!ENTITY lmbRmbBackForward.accesskey "L">
+<!ENTITY doubleClickCollapseExpand.label "在标签编组上的双击动作收缩/展开该标签编组">
+<!ENTITY doubleClickCollapseExpand.accesskey "D">
+
+<!ENTITY dragging.caption "标签拖拽">
+<!ENTITY accelDragCopy.label "按住 Ctrl 键 (在 Mac 机上是 Cmd 键) 时拖拽, 将复制该标签页, 而非移动其标签位置">
+<!ENTITY accelDragCopy.accesskey "C">
+<!ENTITY shiftDragGroups.label "按住 Shift 键时拖拽则一齐拖拽整个编组">
+<!ENTITY shiftDragGroups.accesskey "G">
+<!ENTITY shiftDragSubtrees.label "但在树状模式时, shift-拖拽 操作的对象应该是整个子树/分支, 而非编组 (试验中!)">
+<!ENTITY shiftDragSubtrees.accesskey "I">
+
+<!ENTITY scrolling.caption "滚动">
+<!ENTITY scrollbarsNotArrows.label "在书签和所有标签页菜单中使用滚动条取代箭头*">
+<!ENTITY scrollbarsNotArrows.accesskey "S">
+<!ENTITY onlyAppliesToNewWindows.label1 "* 仅对新建的窗口有效">
+<!ENTITY scrollOneExtra.label "总是保证当前标签页后边的标签可见">
+<!ENTITY scrollOneExtra.accesskey "A">
+
+<!ENTITY grouping.title "编组">
+
+<!ENTITY groupingTabs.caption "标签编组">
+<!ENTITY autoGroupNewTabs.label "自动将新建标签编组*">
+<!ENTITY autoGroupNewTabs.accesskey "A">
+<!ENTITY lastActiveGrouping.label "激活编组功能*:">
+<!ENTITY lastActiveGrouping.accesskey "G">
+<!ENTITY lastActiveGrouping.domain.label "根据域名">
+<!ENTITY lastActiveGrouping.opener.label "根据标签页被打开的位置(推荐)">
+<!ENTITY autoCollapse.label "自动收缩非活动的编组">
+<!ENTITY autoCollapse.accesskey "U">
+
+<!ENTITY positioningTabs.caption "标签放置">
+<!ENTITY newTabPosition.label "未编组的新建标签应被放置于*">
+<!ENTITY newTabPosition.accesskey "N">
+<!ENTITY newTabPosition.lastSort.label "根据最后使用的排序方式">
+<!ENTITY newTabPosition.nextToCurrent.label "紧邻当前标签">
+<!ENTITY newTabPosition.farRight.label "在整个标签条的最右端">
+<!ENTITY lastActiveSort.label "所谓 '最后排序方式' 是指*">
+<!ENTITY lastActiveSort.accesskey "S">
+<!ENTITY lastActiveSort.address.label "按地址">
+<!ENTITY lastActiveSort.lastLoaded.label "按最后的加载顺序">
+<!ENTITY lastActiveSort.lastViewed.label "按最后的访问顺序">
+<!ENTITY lastActiveSort.creation.label "按创建的顺序">
+<!ENTITY lastActiveSort.origin.label "按原始顺序">
+<!ENTITY lastActiveSort.pageTitle.label "按页面标题">
+<!ENTITY openRelativePosition.label "'紧邻当前标签' 是指:">
+<!ENTITY openRelativePosition.accesskey "C">
+<!ENTITY openRelativePosition.left.label "在当前标签左边">
+<!ENTITY openRelativePosition.right.label "在当前标签右边">
+<!ENTITY openRelativePosition.rightOfRecent.label "在当前标签及其 最近的 子标签页之右">
+<!ENTITY openRelativePosition.rightOfConsecutive.label "在当前标签及其 所有的 子标签页之右">
+
+<!ENTITY closingTabs.caption "关闭标签">
+<!ENTITY customCloseOrder.label "在关闭标签页时:">
+<!ENTITY customCloseOrder.accesskey "W">
+<!ENTITY customCloseOrder.auto.label "自动选择 (根据编组或树的层次)">
+<!ENTITY customCloseOrder.groupLeft.label "若无相同编组的其它标签则选择被关闭者左方的标签">
+<!ENTITY customCloseOrder.groupRight.label "若无相同编组的其它标签则选择被关闭者右方的标签">
+<!ENTITY customCloseOrder.left.label "总是选择被关闭者左方的标签">
+<!ENTITY customCloseOrder.right.label "总是选择被关闭者右方的标签">
+<!ENTITY selectOwnerOnClose.label "当被关闭的是弹出窗口时, 不按上述规则, 直接跳回其父标签 (弹出该窗口的标签)">
+<!ENTITY selectOwnerOnClose.accesskey "O">
+
+<!ENTITY onlyAppliesToNewWindows.label2 "* 仅对新窗口有效">
+
+<!ENTITY advanced.title "高级">
+
+<!ENTITY openTabsFrom.caption "默认打开标签页的位置:">
+<!ENTITY addressBar.label "地址栏">
+<!ENTITY addressBar.accesskey "A">
+<!ENTITY searchBar.label "搜索栏">
+<!ENTITY searchBar.accesskey "S">
+<!ENTITY places.label "书签与浏览历史">
+<!ENTITY places.accesskey "K">
+
+<!ENTITY closeOtherTabs.caption "其它">
+<!ENTITY closeBeforeAfterNotOther.label "用 '关闭前/后所有标签页' 两项取代 '关闭其它标签页' 的菜单项">
+<!ENTITY closeBeforeAfterNotOther.accesskey "C">
+
+<!ENTITY tabOrder.caption "标签页顺序">
+<!ENTITY autoSortOpenerGroups.label "自动排序按打开位置编组的标签页(根据祖先)">
+<!ENTITY autoSortOpenerGroups.accesskey "O">
+<!ENTITY autoSortDomainGroups.label "自动排序按域名编组的标签页(根据地址)">
+<!ENTITY autoSortDomainGroups.accesskey "D">
+
+<!ENTITY whenGroupingByOpener.caption "在根据打开位置编组标签页时:">
+<!ENTITY bookmarkTabsAreRelated.label "把从书签中打开的标签页作为与当前标签页相关来对待">
+<!ENTITY bookmarkTabsAreRelated.accesskey "B">
+<!ENTITY historyTabsAreRelated.label "把从历史记录中打开的标签页作为与当前标签页相关来对待">
+<!ENTITY historyTabsAreRelated.accesskey "H">
+<!ENTITY newTabsAreRelated.label "把新建的标签页作为与当前标签页相关来对待">
+<!ENTITY newTabsAreRelated.accesskey "N">
+
+<!ENTITY reset.caption "重置">
+<!ENTITY resetAll.label "重置所有选项为默认值">
+<!ENTITY resetAll.accesskey "R">
+<!ENTITY disableAll.label "关闭所有特性">
+<!ENTITY disableAll.accesskey "T">

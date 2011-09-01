@@ -1,0 +1,14 @@
+<!ENTITY firstRunWizard.title "Tab Kit 首次运行向导">
+
+<!ENTITY layoutChoice.desc "请选择您希望使用哪种标签条布局. 您也可在以后改变此选择, 方法是在工具-&gt;附件组件中选择Tab Kit, 再点击上面的[选项]按钮, 之后根据需要, 在[标签条]面板中调整'标签条位置'和'显示多行标签条'的设置.">
+
+<!ENTITY treeTabs.label "树状布局(推荐)">
+<!ENTITY treeTabs.desc "沿窗口左边缘以树状布局显示标签条">
+
+<!ENTITY multiRowTabs.label "多行布局">
+<!ENTITY multiRowTabs.desc "在正常位置(网页上方)显示标签条, 标签较多时会分多行显示">
+
+<!ENTITY normalTabs.label "常规布局">
+<!ENTITY normalTabs.desc "象不使用Tab Kit时一样以通常的方式显示标签条">
+
+<!ENTITY documentation.text "注意: 了解并用好Tab Kit的最佳途径可能是仔细阅读其选项菜单(工具-&gt;附件组件-&gt;Tab Kit-&gt;选项), 其中列出了所有可用的特性. 此外Tab Kit还在标签页的右键菜单中添加了一些有用的命令. 更详细的文档还在编写中(若您能提供帮助将不胜感激!)">

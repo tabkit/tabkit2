@@ -1,0 +1,79 @@
+<!ENTITY tabcontextmenu.label "Tab Kit">
+<!ENTITY tabcontextmenu.accesskey "K">
+
+<!ENTITY global.label "Übergeordnete Aktionen">
+<!ENTITY global.accesskey "O">
+
+<!ENTITY sortByUri.label "Sortiere Tabs nach Adresse">
+<!ENTITY sortByUri.accesskey "A">
+<!ENTITY sortByLastLoaded.label "Sortiere Tabs nach zuletzt geladen">
+<!ENTITY sortByLastLoaded.accesskey "L">
+<!ENTITY sortByLastViewed.label "Sortiere Tabs nach zuletzt angesehen">
+<!ENTITY sortByLastViewed.accesskey "S">
+<!ENTITY sortByCreation.label "Sortiere Tabs in Erzeugungs-Reihenfolge">
+<!ENTITY sortByCreation.accesskey "Z">
+<!ENTITY sortByOrigin.label "Sortiere Tabs nach Herkunft">
+<!ENTITY sortByOrigin.accesskey "H">
+<!ENTITY sortByTitle.label "Sortiere Tabs nach Titel">
+<!ENTITY sortByTitle.accesskey "T">
+<!ENTITY groupByDomain.label "Gruppiere Tabs nach Domain">
+<!ENTITY groupByDomain.accesskey "D">
+<!ENTITY groupByOpener.label "Gruppiere Tabs nach Öffner">
+<!ENTITY groupByOpener.accesskey "F">
+<!ENTITY ungroupAll.label "Gruppierungen für alle Tabs aufheben">
+<!ENTITY ungroupAll.accesskey "U">
+
+<!ENTITY newTabs.label "Neue Tabs...">
+<!ENTITY newTabs.accesskey "N">
+<!ENTITY lastSort.label "Nach vorhergehender Sorte ordnen">
+<!ENTITY lastSort.accesskey "S">
+<!ENTITY nextToCurrent.label "Neben dem aktuellen Tab öffnen">
+<!ENTITY nextToCurrent.accesskey "A">
+<!ENTITY farRight.label "Ganz rechts öffnen">
+<!ENTITY farRight.accesskey "R">
+<!ENTITY autoGroup.label "Mit vorhergehender Gruppierung gruppieren">
+<!ENTITY autoGroup.accesskey "G">
+
+<!ENTITY options.label "Einstellungen">
+<!ENTITY options.accesskey "E">
+
+<!ENTITY tab.caption "Dieser Tab:">
+<!ENTITY newTabHere.label "Neuer Tab hier">
+<!ENTITY newTabHere.accesskey "N">
+<!ENTITY duplicateTab.label "Tab duplizieren">
+<!ENTITY duplicateTab.accesskey "D">
+<!ENTITY makeGroup.label "Von hier bis zum aktuellen Tab gruppieren">
+<!ENTITY makeGroup.accesskey "T">
+<!ENTITY toggleProtected.label "Tab schützen">
+<!ENTITY toggleProtected.accesskey "S">
+<!ENTITY toggleUnread.label "Als gelesen markieren">
+<!ENTITY toggleUnread.accesskey "G">
+
+<!ENTITY group.caption "Diese Gruppe:">
+<!ENTITY collapse.label "Gruppe zusammenklappen">
+<!ENTITY collapse.accesskey "K">
+<!ENTITY expand.label "Gruppe auseinanderfalten">
+<!ENTITY expand.accesskey "F">
+<!ENTITY bookmark.label "Gruppe als Lesezeichen hinzufügen">
+<!ENTITY bookmark.accesskey "L">
+<!ENTITY closeGroup.label "Gruppe schließen">
+<!ENTITY closeGroup.accesskey "G">
+<!ENTITY closeGroup.modifiers "alt shift">
+<!ENTITY closeGroup.key "W">
+<!ENTITY closeGroup.acceltext "Alt+Shift+W; Ctrl+Middleclick">
+<!ENTITY closeChildren.label "Kinder schließen">
+<!ENTITY closeChildren.accesskey "S">
+<!ENTITY closeChildren.acceltext "Ctrl+Shift+Middleclick">
+<!ENTITY ungroup.label "Gruppierung aufheben">
+<!ENTITY ungroup.accesskey "U">
+
+<!ENTITY selection.caption "Gewählte Tabs:">
+
+<!ENTITY closeTabsToLeft.label "Tabs links von hier schließen">
+<!ENTITY closeTabsToLeft.accesskey "I">
+<!ENTITY closeTabsToRight.label "Tabs rechts von hier schließen">
+<!ENTITY closeTabsToRight.accesskey "E">
+<!ENTITY closeTabsAbove.label "Tabs oberhalb von hier schließen">
+<!ENTITY closeTabsAbove.accesskey "O">
+<!ENTITY closeTabsBelow.label "Tabs unterhalb von hier schließen">
+<!ENTITY closeTabsBelow.accesskey "L">

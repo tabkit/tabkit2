@@ -1,0 +1,14 @@
+<!ENTITY firstRunWizard.title "Assistant de premier démarrage de Tab Kit">
+
+<!ENTITY layoutChoice.desc "Veuillez choisir l'apparence que vous désirez pour votre barre d'onglets. Vous pouvez le modifier ultérieurement en allant sur Outils -&gt; Modules complémentaires, sélectionnant Tab Kit, cliquant Options, puis dans le panneau de réglage de la barre d'onglets choisir 'La barre d'onglets doit être affichée  [...] de la fenêtre' et 'Afficher la barre d'onglets sur plusieurs rangées' comme désiré.">
+
+<!ENTITY treeTabs.label "Arborescence d'onglets (recommandé)">
+<!ENTITY treeTabs.desc "Afficher la barre d'onglets sous forme d'arborescence le long de la bordure gauche de la fenêtre">
+
+<!ENTITY multiRowTabs.label "Onglets multi-rangées">
+<!ENTITY multiRowTabs.desc "Afficher la barre d'onglets en position normale (en haut), sur des rangées multiples si nécessaire">
+
+<!ENTITY normalTabs.label "Onglets normaux">
+<!ENTITY normalTabs.desc "Afficher la barre d'onglet normale sans Tab Kit">
+
+<!ENTITY documentation.text "N.B. : la meilleure façon de démarrer avec Tab Kit est probablement de parcourir le menu des options (Outils -&gt; Modules complémentaires -&gt; Tab Kit -&gt; Options), qui liste toutes les fonctionnalités disponibles. Tab Kit ajoute également un sous-menu au menu clic droit des onglets avec des commandes utiles. Une documentation plus complète est en préparation (aide bienvenue !)">

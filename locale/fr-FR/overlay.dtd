@@ -1,0 +1,79 @@
+<!ENTITY tabcontextmenu.label "Tab Kit">
+<!ENTITY tabcontextmenu.accesskey "K">
+
+<!ENTITY global.label "Actions globales">
+<!ENTITY global.accesskey "O">
+
+<!ENTITY sortByUri.label "Trier les onglets par adresse">
+<!ENTITY sortByUri.accesskey "A">
+<!ENTITY sortByLastLoaded.label "Trier les onglets selon le dernier chargé">
+<!ENTITY sortByLastLoaded.accesskey "L">
+<!ENTITY sortByLastViewed.label "Trier les onglets selon le dernier visualisé">
+<!ENTITY sortByLastViewed.accesskey "V">
+<!ENTITY sortByCreation.label "Trier les onglets par ordre de création">
+<!ENTITY sortByCreation.accesskey "C">
+<!ENTITY sortByOrigin.label "Trier les onglets par origine">
+<!ENTITY sortByOrigin.accesskey "R">
+<!ENTITY sortByTitle.label "Trier les onglets par page de titre">
+<!ENTITY sortByTitle.accesskey "T">
+<!ENTITY groupByDomain.label "Grouper les onglets par domaine">
+<!ENTITY groupByDomain.accesskey "D">
+<!ENTITY groupByOpener.label "Grouper les onglets par origine">
+<!ENTITY groupByOpener.accesskey "P">
+<!ENTITY ungroupAll.label "Dégrouper tous les onglets">
+<!ENTITY ungroupAll.accesskey "U">
+
+<!ENTITY newTabs.label "Les nouveaux onglets...">
+<!ENTITY newTabs.accesskey "N">
+<!ENTITY lastSort.label "sont triés selon le dernier tri">
+<!ENTITY lastSort.accesskey "S">
+<!ENTITY nextToCurrent.label "sont ouverts à côté de l'onglet courant">
+<!ENTITY nextToCurrent.accesskey "C">
+<!ENTITY farRight.label "sont ouverts à l'extrême droite">
+<!ENTITY farRight.accesskey "R">
+<!ENTITY autoGroup.label "sont groupés selon le dernier regroupement">
+<!ENTITY autoGroup.accesskey "G">
+
+<!ENTITY options.label "Options">
+<!ENTITY options.accesskey "O">
+
+<!ENTITY tab.caption "Cet onglet:">
+<!ENTITY newTabHere.label "Nouvel onglet ici">
+<!ENTITY newTabHere.accesskey "N">
+<!ENTITY duplicateTab.label "Dupliquer l'onglet">
+<!ENTITY duplicateTab.accesskey "D">
+<!ENTITY makeGroup.label "Grouper les onglets d'ici à l'onglet actif">
+<!ENTITY makeGroup.accesskey "T">
+<!ENTITY toggleProtected.label "Protéger l'onglet">
+<!ENTITY toggleProtected.accesskey "P">
+<!ENTITY toggleUnread.label "Marquer comme lu">
+<!ENTITY toggleUnread.accesskey "R">
+
+<!ENTITY group.caption "Ce groupe :">
+<!ENTITY collapse.label "Replier le groupe">
+<!ENTITY collapse.accesskey "C">
+<!ENTITY expand.label "Déplier le groupe">
+<!ENTITY expand.accesskey "E">
+<!ENTITY bookmark.label "Marquer le groupe dans les marque-pages">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY closeGroup.label "Fermer le groupe">
+<!ENTITY closeGroup.accesskey "G">
+<!ENTITY closeGroup.modifiers "alt shift">
+<!ENTITY closeGroup.key "W">
+<!ENTITY closeGroup.acceltext "Alt+Shift+W; Ctrl+Middleclick">
+<!ENTITY closeChildren.label "Fermer les descendants">
+<!ENTITY closeChildren.accesskey "S">
+<!ENTITY closeChildren.acceltext "Ctrl+Shift+Middleclick">
+<!ENTITY ungroup.label "Dégrouper le groupe">
+<!ENTITY ungroup.accesskey "U">
+
+<!ENTITY selection.caption "Onglets sélectionnés :">
+
+<!ENTITY closeTabsToLeft.label "Fermer les onglets vers la gauche">
+<!ENTITY closeTabsToLeft.accesskey "F">
+<!ENTITY closeTabsToRight.label "Fermer les onglets vers la droite">
+<!ENTITY closeTabsToRight.accesskey "G">
+<!ENTITY closeTabsAbove.label "Fermer les onglets vers le haut">
+<!ENTITY closeTabsAbove.accesskey "O">
+<!ENTITY closeTabsBelow.label "Fermer les onglets vers le bas">
+<!ENTITY closeTabsBelow.accesskey "L">
