@@ -180,22 +180,32 @@
 #content[vertitabbar] .tabbrowser-arrowscrollbox,
 #content[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox,
 #content[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox > .scrollbox-innerbox,
-#content[vertitabbar] > tabbox > tabpanels {
+#content[vertitabbar] > tabbox > tabpanels,
+#TabsToolbar,/*[sinceFx4]*/
+#TabsToolbar .tabbrowser-tabs,/*[sinceFx4]*/
+#TabsToolbar .tabbrowser-arrowscrollbox,/*[sinceFx4]*/
+#TabsToolbar .tabbrowser-arrowscrollbox > scrollbox,/*[sinceFx4]*/
+#TabsToolbar .tabbrowser-arrowscrollbox > scrollbox > .scrollbox-innerbox/*[sinceFx4]*/
+ {
 	-moz-box-orient: vertical !important;
 	max-height: none !important;	
 }
 
-#content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbox-innerbox {
+#content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbox-innerbox,
+#TabsToolbar .tabbrowser-arrowscrollbox .scrollbox-innerbox/*[sinceFx4]*/ {
 	overflow-x: hidden !important;
 	overflow-y: auto !important;
 }
 /* Hide scrollbuttons since we're putting in a scrollbar */
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-up,
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down-stack/*[Fx2only]*/,
-#content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down/*[Fx3only]*/ {
+#content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down,/*[Fx3only]*/ 
+#TabsToolbar .tabbrowser-arrowscrollbox .scrollbutton-up,/*[sinceFx4]*/
+#TabsToolbar .tabbrowser-arrowscrollbox .scrollbutton-down/*[sinceFx4]*/ {
 	display: none !important;
 }
-#content[vertitabbar] .tabbrowser-tab {
+#content[vertitabbar] .tabbrowser-tab,
+#TabsToolbar .tabbrowser-tab {
 	-moz-box-sizing: padding-box !important;
 	min-height: 24px !important;
 	max-height: 24px !important;
@@ -219,9 +229,12 @@
 	display: none !important;
 }
 
-#content[vertitabbar] .tabbrowser-tabs {
+#content[vertitabbar] .tabbrowser-tabs,
+#TabsToolbar .tabbrowser-tabs/*[sinceFx4]*/
+ {
 	-moz-box-align: stretch !important; /* Make sure tabs fill width */
 	background-image: none !important; /* Background was designed for repeat-x, and looks ugly when tiled vertically */
+	width: 250px;/*Temporary for better look, should be removed @ release <--MEDIC-->*/
 }
 /* Cosmetic: hide tab side images */
 #content[vertitabbar] .tabbrowser-tab .tab-image-left/*[Fx2only] (and apparently Fx3/Mac)*/,
@@ -232,6 +245,12 @@
 /* Hide splitter when tab bar is hidden */
 .tabbrowser-strip[collapsed="true"] + #tabkit-splitter:not([state="collapsed"]) {
 	visibility: collapse;
+}
+
+/* Add by Pika */
+#TabsToolbar .tabbrowser-tab {
+	-moz-box-align: stretch !important; 
+	max-width: 9999px;/* Make sure tabs fill width */
 }
 
 /**************
