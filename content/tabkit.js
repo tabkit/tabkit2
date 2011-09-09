@@ -4871,23 +4871,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
 		var appcontent = document.getElementById("appcontent");
 
-		//FF4+, Left
-		if (pos == tk.Positions.LEFT && tabsToolbar && tabsToolbar.nextSibling != appcontent) {
-          gBrowser.mTabContainer.mTabstrip._stopSmoothScroll();
-          appcontent.parentNode.insertBefore(tabsToolbar, appcontent);
-          tabsToolbar.orient = gBrowser.mTabContainer.orient = gBrowser.mTabContainer.mTabstrip.orient = "vertical";
-          TabsInTitlebar.allowedBy("tabbarposition", false);
-          gBrowser.mTabContainer.removeAttribute("overflow");
-		  tk.log("After vertical tabbar");
-        }
-		//FF4+, Right
-        if (pos == tk.Positions.RIGHT && tabsToolbar && tabsToolbar.previousSibling != appcontent) {
-          gBrowser.mTabContainer.mTabstrip._stopSmoothScroll();
-          appcontent.parentNode.insertBefore(tabsToolbar, appcontent.nextSibling);
-          tabsToolbar.orient = gBrowser.mTabContainer.orient = gBrowser.mTabContainer.mTabstrip.orient = "vertical";
-          TabsInTitlebar.allowedBy("tabbarposition", false);
-          gBrowser.mTabContainer.removeAttribute("overflow");
-        }
 		//End Edit by Pika
 
         // Calculate new orient attributes
@@ -4947,9 +4930,24 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		*/
 
         // Now activate our css
+        if (pos == tk.Positions.LEFT || pos == tk.Positions.RIGHT) {
+            appcontent.parentNode.insertBefore(tabsToolbar, appcontent);
+        }
+        else if (pos == tk.Positions.TOP) {
+            a = document.getElementById("toolbar-menubar");
+            a.parentNode.insertBefore(tabsToolbar, a);
+        }
+        else if (pos == tk.Positions.BOTTOM) {
+            a = document.getElementById("browser-bottombox");
+            a.parentNode.insertBefore(tabsToolbar, a);
+        }
+        tabsToolbar.orient = gBrowser.mTabContainer.mTabstrip.orient = fromHorizontal;
         gBrowser.removeAttribute("horiztabbar");
         gBrowser.removeAttribute("vertitabbar");
         gBrowser.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", flipDirection ? "reverse" : "normal");
+        tabsToolbar.removeAttribute("horiztabbar");
+        tabsToolbar.removeAttribute("vertitabbar");
+        tabsToolbar.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", flipDirection ? "reverse" : "normal");
         
         // Toggle the splitter as appropriate
         var splitter = document.getElementById("tabkit-splitter");

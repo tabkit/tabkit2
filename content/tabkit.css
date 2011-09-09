@@ -181,31 +181,31 @@
 #content[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox,
 #content[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox > .scrollbox-innerbox,
 #content[vertitabbar] > tabbox > tabpanels,
-#TabsToolbar,/*[sinceFx4]*/
-#TabsToolbar .tabbrowser-tabs,/*[sinceFx4]*/
-#TabsToolbar .tabbrowser-arrowscrollbox,/*[sinceFx4]*/
-#TabsToolbar .tabbrowser-arrowscrollbox > scrollbox,/*[sinceFx4]*/
-#TabsToolbar .tabbrowser-arrowscrollbox > scrollbox > .scrollbox-innerbox/*[sinceFx4]*/
+#TabsToolbar[vertitabbar],/*[sinceFx4]*/
+#TabsToolbar[vertitabbar] .tabbrowser-tabs,/*[sinceFx4]*/
+#TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox,/*[sinceFx4]*/
+#TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox,/*[sinceFx4]*/
+#TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox > .scrollbox-innerbox/*[sinceFx4]*/
  {
 	-moz-box-orient: vertical !important;
 	max-height: none !important;	
 }
 
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbox-innerbox,
-#TabsToolbar .tabbrowser-arrowscrollbox .scrollbox-innerbox/*[sinceFx4]*/ {
+#TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox .scrollbox-innerbox/*[sinceFx4]*/ {
 	overflow-x: hidden !important;
 	overflow-y: auto !important;
 }
+
 /* Hide scrollbuttons since we're putting in a scrollbar */
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-up,
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down-stack/*[Fx2only]*/,
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down,/*[Fx3only]*/ 
-#TabsToolbar .tabbrowser-arrowscrollbox .scrollbutton-up,/*[sinceFx4]*/
-#TabsToolbar .tabbrowser-arrowscrollbox .scrollbutton-down/*[sinceFx4]*/ {
+#TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-up,/*[sinceFx4]*/
+#TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down/*[sinceFx4]*/ {
 	display: none !important;
 }
-#content[vertitabbar] .tabbrowser-tab,
-#TabsToolbar .tabbrowser-tab {
+#content[vertitabbar] .tabbrowser-tab {
 	-moz-box-sizing: padding-box !important;
 	min-height: 24px !important;
 	max-height: 24px !important;
@@ -214,6 +214,11 @@
 	margin-top: 0 !important; /*[sinceFx3]*/
 	margin-bottom: 0 !important; /*[sinceFx3]*/
 	padding-top: 0 !important; /*[sinceFx3]*/
+}
+#TabsToolbar[vertitabbar] .tabbrowser-tab {
+	-moz-box-sizing: padding-box !important;
+	min-height: 27px !important;
+	max-height: 27px !important;
 }
 
 /* The All Tabs button is redundant in Firefox 2 since the vertical tab bar is
@@ -230,7 +235,7 @@
 }
 
 #content[vertitabbar] .tabbrowser-tabs,
-#TabsToolbar .tabbrowser-tabs/*[sinceFx4]*/
+#TabsToolbar[vertitabbar] .tabbrowser-tabs/*[sinceFx4]*/
  {
 	-moz-box-align: stretch !important; /* Make sure tabs fill width */
 	background-image: none !important; /* Background was designed for repeat-x, and looks ugly when tiled vertically */
@@ -248,7 +253,7 @@
 }
 
 /* Add by Pika */
-#TabsToolbar .tabbrowser-tab {
+#TabsToolbar[vertitabbar] .tabbrowser-tab {
 	-moz-box-align: stretch !important; 
 	max-width: 9999px;/* Make sure tabs fill width */
 }
