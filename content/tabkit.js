@@ -1135,6 +1135,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     /// Initialisation:
     this.initSortingAndGrouping = function initSortingAndGrouping(event) {
+        tk.log("initSortingAndGrouping");
         // Persist Attributes
         if (_ss) {
                 _ss.persistTabAttribute("tabid");
@@ -1155,10 +1156,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             }
         }
         
+        tk.log("initSortingAndGrouping 873493");
         tk.detectTheme();
         
         // Add event listeners:
+        tk.log("before addEventListener TabOpen");
         _tabContainer.addEventListener("TabOpen", tk.sortgroup_onTabAdded, false);
+        tk.log("after addEventListener TabOpen");
         _tabContainer.addEventListener("TabSelect", tk.sortgroup_onTabSelect, true);
         gBrowser.addEventListener("DOMContentLoaded", tk.sortgroup_onTabLoading, true);
         gBrowser.addEventListener("load", tk.sortgroup_onTabLoaded, true);
@@ -1601,6 +1605,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 tk.addingTabsOver();
                 return;
             }
+            tk.log("addingTabOver");
         }
         catch (ex) {
             tk.dump(ex);
@@ -3270,7 +3275,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 forceThemeCompatibility = 2;
             darkTheme = (theme in badThemes) ? ("dark" in badThemes[theme]) : false;
         }
-        
         if (forceThemeCompatibility > 0)
             _tabContainer.setAttribute("tk-forcethemecompatibility", "true");
         else
@@ -3285,9 +3289,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         if (colorTabNotLabel) {
             if (_tabContainer.getAttribute("colortabnotlabel") != "true") {
                 _tabContainer.setAttribute("colortabnotlabel", "true");
+	        tk.log("delme 9263492 "+_tabs.length);
                 for (var i = 0; i < _tabs.length; i++) {
                     var t = _tabs[i];
-                    t.ownerDocument.getAnonymousElementByAttribute(t, "class", "tab-text").style.backgroundColor = null;
+                    t.ownerDocument.getAnonymousElementByAttribute(t, "class", "tab-text tab-label").style.backgroundColor = null;
                     tk.colorizeTab(t);
                 }
             }
@@ -3447,7 +3452,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 var bgColor = "";
             }
             
-            var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text");
+            var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label");
             
             // Background colors are reset on tab move (and close then restore), hence the listeners
             if (_tabContainer.getAttribute("colortabnotlabel") == "true") { // This is set at the start of initSortingAndGrouping
@@ -3499,7 +3504,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 try {
                     var menuText = document.getAnonymousElementByAttribute(menuItem, "class", "menu-iconic-text");
                     menuText.style.fontStyle = tab.hasAttribute("read") ? "normal" : "italic";
-                    var fgStyle = window.getComputedStyle(document.getAnonymousElementByAttribute(tab, "class", "tab-text"), null);
+                    var fgStyle = window.getComputedStyle(document.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label"), null);
                     menuText.style.setProperty("background-color", fgStyle.backgroundColor, "important");
                     menuText.style.setProperty("color", fgStyle.color, "important");
                 }
