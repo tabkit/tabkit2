@@ -281,7 +281,7 @@
 }
 
 /* Show plus icon next to favicon for collapsed groups */
-.tabbrowser-tab[groupcollapsed] > .tab-icon-image {
+.tabbrowser-tab[groupcollapsed] .tab-icon-image {
 	width: 32px;
 	border-left: 16px solid transparent;
 	background: none;

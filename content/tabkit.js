@@ -332,6 +332,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     //{### Utility Functions
     //|##########################
     
+    // The property "hidden" of a tab is read-only, therefore assigning to this property does not work. See Firefox's source code, browser/base/content/tabbrowser.xml
+    this.tabSetHidden = function tabSetHidden(tab, hidden) {
+    	if (hidden)
+    	    gBrowser.hideTab(tab);
+    	else
+    	    gBrowser.showTab(tab);
+    };
+    
     // A log of all reported errors is kept, in case the Error Console loses them!
     this.logs = {
         dump: [],
@@ -512,10 +520,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
         var container = element.parentNode;
         var firstChild = container.firstChild;
-        while (firstChild.hidden)
+        tk.log("scrollToElement "+firstChild.nodeName);
+        while (firstChild.hidden) // visibility of a tab
             firstChild = firstChild.nextSibling;
         var lastChild = container.lastChild;
-        while (lastChild.hidden)
+        while (lastChild.hidden) // visibility of a tab
             lastChild = lastChild.previousSibling;
 
         var curpos = parseInt(scrollbar.getAttribute("curpos"));
@@ -1831,7 +1840,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 tk.updateAutoCollapse();
             // Else leave the last used group uncollapsed, so you can drag tabs into it, etc.
         }
-        else if (tab.hidden && tab.hasAttribute("groupcollapsed")) {
+        else if (tab.hidden && tab.hasAttribute("groupcollapsed")) { // visibility of a tab
             // Auto-expand groups when a hidden tab is accessed (note that normal methods of switching tabs skip these)
             tk.toggleGroupCollapsed(tab);
         }
@@ -1847,7 +1856,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 tk.debug("sortgroup_onTabSelect: Couldn't find tabs-bottom");
             }
         }
-        
     };
     
     // TODO=P3: GCODE Call updateAutoCollapse on restore if selected before the groupid is restored
@@ -1868,7 +1876,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         if (group[0].getAttribute("groupid") == gid) {
             for each (var t in group) {
                 t.removeAttribute("groupcollapsed");
-                t.hidden = false;
+                tk.tabSetHidden(t, false); // visibility of a tab
                 if (fixIndents && ("treeLevel" in t))
                     t.style.setProperty("margin-left", (indent * t.treeLevel) + "px", "important");
             }
@@ -1877,20 +1885,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             var visible = [];
             for each (var t in group) {
                 t.setAttribute("groupcollapsed", true);
-                if (!t.hidden)
+                if (!t.hidden) // visibility of a tab
                     visible.push(t);
                 if (fixIndents)
                     t.style.marginLeft = "";
             }
             if (visible.length == 0) {
                 group.sort(tk.compareTabViewedExceptUnread);
-                group[group.length - 1].hidden = false;
+                tk.tabSetHidden(group[group.length - 1], false); // visibility of a tab
             }
             else if (visible.length > 1) {
                 visible.sort(tk.compareTabViewedExceptUnread);
-                visible.pop().hidden = false;
+                tk.tabSetHidden(visible.pop(), false); // visibility of a tab
                 for each (var t in visible)
-                    t.hidden = true;
+                    tk.tabSetHidden(t, true); // visibility of a tab
             }
         }
     };
@@ -1951,7 +1959,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 tk.removeGID(tab);
             if (!("groupcollapsed" in attributes) && tab.hasAttribute("groupcollapsed")) {
                 tab.removeAttribute("groupcollapsed");
-                tab.hidden = false;
+                tk.tabSetHidden(tab.hidden, false); // visibility of a tab
             }
             if (!("singletonid" in attributes) && tab.hasAttribute("singletonid"))
                 tab.removeAttribute("singletonid");
@@ -2049,15 +2057,15 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                             tab.setAttribute("groupcollapsed", "true");
                             if (tab.getAttribute("selected") == "true") {
                                 for each (var t in group)
-                                    t.hidden = true;
-                                tab.hidden = false;
+                                    tk.tabSetHidden(t, true); // visibility of a tab
+                                tk.tabSetHidden(tab, false); // visibility of a tab
                             }
                             else {
-                                tab.hidden = true;
+                                tk.tabSetHidden(tab, true); // visibility of a tab
                             }
                         }
                         else {
-                            tab.hidden = false;
+                            tk.tabSetHidden(tab, false); // visibility of a tab
                         }
                     }
                     else {
@@ -2066,10 +2074,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                         
                         //~ if (tab.hasAttribute("groupcollapsed")) {
                             // It is the only "done" tab so far. // TODO=P4: TJS? If there is already a groupcollapsed but not hidden tab being restored show that instead.
-                            tab.hidden = false;
+                            tk.tabSetHidden(tab, false); // visibility of a tab
                         //~ }
                         //~ else {
-                            //~ tab.hidden = false;
+                            //~ tk.tabSetHidden(tab, false); visibility of a tab
                         //~ }
                     }
                 }
@@ -2149,14 +2157,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             }
         }
         
-        if (tab.hasAttribute("groupcollapsed") && !tab.hidden) {
+        if (tab.hasAttribute("groupcollapsed") && !tab.hidden) { // visibility of a tab
             // Make sure collapsed groups don't get totally hidden!
             window.setTimeout(function __uncollapseTab(gid, next, prev) {
                 if (gBrowser.selectedTab.getAttribute("groupid") != gid) {            
                     if (next && next.getAttribute("groupid") == gid)
-                        next.hidden = false;
+                        tk.tabSetHidden(next, false); // visibility of a tab
                     else if (prev && prev.getAttribute("groupid") == gid) // Almost always true
-                        prev.hidden = false;
+                        tk.tabSetHidden(prev, false); // visibility of a tab
                 }
             }, 0, gid, tab.nextSibling, tab.previousSibling);
             
@@ -2407,10 +2415,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         
         // Skip hidden tabs unless they're in the same group (or there's no alternative tab)
         var oldPrev = prev, oldNext = next;
-        while (prev && (prev.hidden && prev.getAttribute("groupid") != gid
+        while (prev && (prev.hidden && prev.getAttribute("groupid") != gid // visibility of a tab
                         || "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(prev) != -1))
             prev = prev.previousSibling;
-        while (next && (next.hidden && next.getAttribute("groupid") != gid
+        while (next && (next.hidden && next.getAttribute("groupid") != gid // visibility of a tab
                         || "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(next) != -1))
             next = next.nextSibling;
         if (!prev && !next) {
@@ -2710,20 +2718,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         if (contextTab.hasAttribute("groupcollapsed")) {
             for each (var tab in group) {
                 tab.removeAttribute("groupcollapsed");
-                tab.hidden = false;
+                tk.tabSetHidden(tab, false); // visibility of a tab
             }
         }
         else {
             for each (var tab in group) {
                 tab.setAttribute("groupcollapsed", "true");
                 if (tab != contextTab)
-                    tab.hidden = true;
+                    tk.tabSetHidden(tab, true); // visibility of a tab */
             }
         }
         
         tk.updateIndents();
         
-        if (gBrowser.selectedTab.hidden)
+        if (gBrowser.selectedTab.hidden) // visibility of a tab
             gBrowser.selectedTab = contextTab;
     };
     this.bookmarkGroup = function bookmarkGroup(contextTab) {
@@ -3069,12 +3077,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 if (t.hasAttribute("groupcollapsed")) {
                     tab.setAttribute("groupcollapsed", "true");
                     for each (var st in tk.getGroupById(gid)) {
-                        if (!st.hidden) {
+                        if (!st.hidden) { // visibility of a tab
                             if (st.getAttribute("selected") == "true") {
-                                tab.hidden = true;
+                                tk.tabSetHidden(tab, true); // visibility of a tab
                             }
                             else {
-                                st.hidden = true;
+                                tk.tabSetHidden(st, true); // visibility of a tab
                             }
                             break;
                         }
@@ -3119,19 +3127,19 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                     tk.ensureCollapsedGroupVisible(oldGroup);
             }
         }
-        tab.hidden = false;  
+        tk.tabSetHidden(tab, false);   // visibility of a tab
     };
 
     this.ensureCollapsedGroupVisible = function ensureCollapsedGroupVisible(group) {
         // TODO=P3: GCODE Optimize ensureCollapsedGroupVisible with a timeout and Set of gids to avoid processing groups repeatedly [O(n^2) time]
         for each (var t in group)
-            if (!t.hidden)
+            if (!t.hidden) // visibility of a tab
                 return;
         var mostRecent = group[0];
         for (var i = 1; i < group.length; i++)
             if (tk.compareTabViewedExceptUnread(group[i], mostRecent) > 0)
                 mostRecent = group[i];
-        mostRecent.hidden = false;
+        tk.tabSetHidden(mostRecent, false); // visibility of a tab
     };
 
     this.subtreesEnabled = function subtreesEnabled() {
@@ -3874,7 +3882,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             // Prevent accidentally dragging into a collapsed group
             if (agid && agid == bgid && afterTab.hasAttribute("groupcollapsed")) {
                 for each (var t in tk.getGroupFromTab(afterTab)) {
-                    if (!t.hidden) {
+                    if (!t.hidden) { // visibility of a tab
                         if (t._tPos < afterTab._tPos) {
                             beforeTab = afterTab;
                             while (beforeTab.nextSibling && beforeTab.nextSibling.getAttribute("groupid") == agid)
@@ -4135,7 +4143,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         // Prevent accidentally dragging into a collapsed group
         if (aGid && aGid == bGid && afterTab.hasAttribute("groupcollapsed")) {
             for each (var t in tk.getGroupFromTab(afterTab)) {
-                if (!t.hidden) {
+                if (!t.hidden) { // visibility of a tab
                     if (t._tPos < afterTab._tPos) {
                         beforeTab = afterTab;
                         while (beforeTab.nextSibling && beforeTab.nextSibling.getAttribute("groupid") == aGid)
@@ -5085,7 +5093,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             else {
                 var visibleTabs = _tabs.length;
                 for (var i = 0; i < _tabs.length; i++)
-                    if (_tabs[i].hidden)
+                    if (_tabs[i].hidden) // visibility of a tab
                         visibleTabs--;
                 var newTabButton = _tabs[_tabs.length-1].boxObject.nextSibling; // [Fx3.5+]
                 if (newTabButton && newTabButton.className == "tabs-newtab-button")
@@ -5500,7 +5508,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             } // end if (!match && includePageText)
             
             // Show only matching tabs
-            tab.hidden = !match;
+            tk.tabSetHidden(tab, !match); // visibility of a tab
         } // end for (let t = 0; t < gBrowser.mTabs.length; t++)
         
         // Recollapse expanded groups after search
@@ -5733,7 +5741,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         var change = event.detail;
         if (change > 0) {
             var lastTab = _tabs[_tabs.length-1];
-            while (lastTab.hidden && lastTab.previousSibling)
+            while (lastTab.hidden && lastTab.previousSibling) // visibility of a tab
                 lastTab = lastTab.previousSibling;
             // Switch to next tab, but requiring 3 wheelscrolls to wrap around
             if (_tabContainer.selectedIndex < lastTab._tPos || _mouseScrollWrapCounter >= 2) {
@@ -5744,7 +5752,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         }
         else if (change < 0) {
             var firstTab = _tabs[0];
-            while (firstTab.hidden && firstTab.nextSibling)
+            while (firstTab.hidden && firstTab.nextSibling) // visibility of a tab
                 firstTab = firstTab.nextSibling;
             // Switch to previous tab, but requiring 3 wheelscrolls to wrap around
             if (_tabContainer.selectedIndex > firstTab._tPos || _mouseScrollWrapCounter >= 2) {
