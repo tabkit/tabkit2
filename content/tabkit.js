@@ -3490,8 +3490,18 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 var nodes = [ tabText ];
             }
             
+			//add by Pika, coloring for Fx4+
+			var styleToSet;
+			if (_isFx4) {
+				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,.9)").replace("@HSL_Bottom",bgColor);
+				styleToSet = "background-image";
+			} else {
+				styleToSet = "background-color";
+			}
+			
             for (var i = 0; i < nodes.length; i++) {
-                nodes[i].style.setProperty("background-color", bgColor, "important");
+				//edit by Pika, coloring for Fx4+
+				nodes[i].style.setProperty(styleToSet, bgColor, "important");
                 nodes[i].style.setProperty("color", bgColor?"black":"", "important");
             }
             
