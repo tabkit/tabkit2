@@ -624,7 +624,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     ];
     
     /// Private Globals:
+	 /* comment by Pika, Fx2 related
     var _isFx2;
+	*/
     var _isFx3;
 	var _isFx4;		//added by Pika, it means FF4 or later, since the layout is not changed much (And I don't want it to change again!)
     
@@ -648,7 +650,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         window.removeEventListener("DOMContentLoaded", tk.onDOMContentLoaded, false);
         
         // Find what version of Firefox we're using TODO=P4: TJS+GCODE Do this in a less hacky way. Or better still, just drop support for Fx2
+		 /* comment by Pika, Fx2 related
         _isFx2 = !(_isFx3 = (document.getElementById("browser-stack") == null));
+		*/
+		_isFx3 = (document.getElementById("browser-stack") == null);
 		_isFx4 = (document.getElementById("TabsToolbar") != null);	//add by Pika, only FF4+ got TabsToolBar
         
         // Check compatibility with existing addons (only in Fx3+, as extensions.enabledItems doesn't exist before that, and not in Fx4+ since _em is unavailable)
@@ -970,7 +975,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 var newCode = code.replace(hook[i++], hook[i++]);
                 if (newCode == code) {
                     if ((!tk.startsWith(hook[i-1], "/*[Fx3only]*/") || _isFx3)
-                     && (!tk.startsWith(hook[i-1], "/*[Fx2only]*/") || _isFx2))
+					 // comment by Pika, Fx2 related
+                     //&& (!tk.startsWith(hook[i-1], "/*[Fx2only]*/") || _isFx2)
+					 )
                     {
                         tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
                     }
@@ -1320,8 +1327,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     // See globalPreInitSortingAndGroupingMethodHooks in tabkit-global.js
     
     this.postInitSortingAndGroupingMethodHooks = function postInitSortingAndGroupingMethodHooks(event) {
+		 /* comment by Pika, Fx2 related
         if ("openselectedlinks" in window && window.openselectedlinks && window.openselectedlinks.goCol) // [Fx2only] (or at least I haven't seen any updated versions of this)
             tk.wrapMethodCode('window.openselectedlinks.goCol', 'tabkit.addingTabs(gBrowser.selectedTab); try {', '} finally { tabkit.addingTabsOver(); }');
+		*/
         
         // Give mlb_common.Utils.openUrlInNewTab a function name so it can be detected by sourceTypes!
         if ("mlb_common" in window && "Utils" in mlb_common && "openUrlInNewTab" in mlb_common.Utils)
@@ -1735,8 +1744,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         { d: 2, n: "BrowserLoadURL",        t: "newtab" }, //[Fx3-] BrowserLoadURL [[[1. loadOneTab 2. BrowserLoadURL 3. handleURLBarCommand 4.  5. anonymous 6. fireEvent 7. onTextEntered]]]
         { d: 2, n: "handleCommand",         t: "newtab" }, //[Fx3.5+] gURLBar.handleCommand [[[1.loadOneTab 2. handleCommand 3. anonymous 4. fireEvent 5. onTextEntered]]]
         { d: 3, n: "doSearch",              t: "newtab" }, //[Fx3only] BrowserSearch.searchBar.doSearch [[[1. loadOneTab 2. openUILinkIn 3. doSearch 4. handleSearchCommand 5. onTextEntered 6. handleEnter 7. onKeyPress]]] // (note: simple replacement wouldn't work if searchbar was added after opening window
-        { d: 2, n: "doSearch",              t: "newtab" }, //[Fx2only] BrowserSearch.getSearchBar().doSearch [[[1. loadOneTab 2. doSearch 3. handleSearchCommand 4. onTextEntered 5. handleEnter 6. onKeyPress 7. onxblkeypress]]] // (note: simple replacement wouldn't work if searchbar was added after opening window
-        { d: 1, n: "_endRemoveTab",         t: "newtab" }, //[Fx3.5+] gBrowser._endRemoveTab [[[1. _endRemoveTab 2. removeTab 3. removeCurrentTab 4. BrowserCloseTabOrWindow 5. oncommand]]]
+         /* comment by Pika, Fx2 related
+		{ d: 2, n: "doSearch",              t: "newtab" }, //[Fx2only] BrowserSearch.getSearchBar().doSearch [[[1. loadOneTab 2. doSearch 3. handleSearchCommand 4. onTextEntered 5. handleEnter 6. onKeyPress 7. onxblkeypress]]] // (note: simple replacement wouldn't work if searchbar was added after opening window
+        */
+		{ d: 1, n: "_endRemoveTab",         t: "newtab" }, //[Fx3.5+] gBrowser._endRemoveTab [[[1. _endRemoveTab 2. removeTab 3. removeCurrentTab 4. BrowserCloseTabOrWindow 5. oncommand]]]
         { d: 1, n: "removeTab",             t: "newtab" }, //[Fx3-] gBrowser.removeTab [[[1. removeTab 2. onTabClick 3. onclick]]]
         
         { d: 4, n: "openReleaseNotes",      t: "unrelated" }, //openReleaseNotes [[[1. loadOneTab 2. openUILinkIn 3. openUILink 4. openReleaseNotes 5. anonymous 6. checkForMiddleClick 7. onclick]]]
@@ -2752,6 +2763,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             });
             PlacesUIUtils.showMinimalAddMultiBookmarkUI(uris);
         }
+		 /* comment by Pika, Fx2 related
         else if ("addBookmarkForTabBrowser" in window) { // [Fx2only]
             // Based on addBookmarkForTabBrowser
             var tabsInfo = [];
@@ -2777,6 +2789,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             dialogArgs.objGroup = tabsInfo;
             openDialog("chrome://browser/content/bookmarks/addBookmark2.xul", "", BROWSER_ADD_BM_FEATURES, dialogArgs);
         }
+		*/
         else {
             tk.dump("Places detection failed.");
         }
@@ -3247,8 +3260,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         const goodThemes = { // Themes that work well
             // TODO=P4: GCODE Keep testing themes...
             "classic/1.0"      : { platform: /Win32/ }, // Default Windows theme ("Strata" in Fx3, "Firefox (default)" in Fx2)
+			 /* comment by Pika, Fx2 related
             "BlueIce"          : {}, // [Fx2only]
             "MidnightFox"      : {}, // [Fx2only]
+			*/
             "abstractPCNightly": {},             // Abstract Classic
             "abstract_zune"    : { dark: true }, // Abstract Zune         (n.b. current tab has solid black bg that hides groups)
             "aero_fox"         : { dark: true }, // Aero Fox              (n.b. current tab has solid black bg that hides groups)
@@ -3309,9 +3324,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             _tabContainer.removeAttribute("colortabnotlabel");
             for (var i = 0; i < _tabs.length; i++) {
                 var t = _tabs[i];
+				 /* comment by Pika, Fx2 related
                 if (gBrowser.mCurrentTab.boxObject.firstChild.className.indexOf("tab-image-") == 0) // [Fx2only]
                     var nodes = t.ownerDocument.getAnonymousNodes(t);
                 else // [Fx3only]
+				*/
                     var nodes = [ t ];
                 for (var j = 0; j < nodes.length; j++)
                     nodes[j].style.backgroundColor = null;
@@ -3495,8 +3512,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     this.colorAllTabsMenuItem = function colorAllTabsMenuItem(tab, menuItem) {
         // TODO=P4: GCODE Fx3: Make All Tabs prettier (since we mess things up a little by setting -moz-appearance: none)
         try {
+			/* comment by Pika, Fx2 related
             var isFx2 = (gBrowser.mCurrentTab.boxObject.firstChild.className.indexOf("tab-image-") == 0);
-            var bgSample = isFx2 ? document.getAnonymousNodes(tab)[0] : tab; // [Fx2only] and [Fx3only]
+             // [Fx2only] and [Fx3only]
+			*/
+			var bgSample = tab;//new line by Pika, Fx2 related
             if (gBrowser.mTabContainer.getAttribute("colortabnotlabel") == "true") {
                 menuItem.style.backgroundColor = bgSample.style.backgroundColor;
             }
@@ -3506,7 +3526,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
                 var bgStyle = window.getComputedStyle(bgSample, null);
                 menuItem.style.backgroundColor = bgStyle.backgroundColor;
             }
+			 /* comment by Pika, Fx2 related
             if (!isFx2)
+			*/
                 menuItem.style.MozAppearance = "none";
             window.setTimeout(function __colorAllTabsMenuText(tab, menuItem) {
                 try {
@@ -4566,7 +4588,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         tabContextMenu.addEventListener("popupshowing", tk.protectedTabs_updateContextMenu, false);
         
         tk.context_closeTab = document.getElementById("context_closeTab");
-        if (!tk.context_closeTab) { /*[Fx2only]*/
+		 /* comment by Pika, Fx2 related
+        if (!tk.context_closeTab) { //[Fx2only]
             for (var i = 0; i < tabContextMenu.childNodes.length; i++) {
                 var el = tabContextMenu.childNodes[i];
                 if (el.getAttribute("oncommand").indexOf("tabbrowser.removeTab(tabbrowser.mContextTab)") != -1) {
@@ -4576,6 +4599,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             }
             tk.dump("Could not find tabbrowser.removeTab(tabbrowser.mContextTab)");
         }
+		*/
     };
     this.initListeners.push(this.initProtectedTabs);
     
@@ -5045,16 +5069,22 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         // Setup new drop indicator (this way it can be moved up and down as well as left and right)
         var oldIndicatorBar = gBrowser.mTabBox.firstChild;
         var oldIndicator = oldIndicatorBar.firstChild;
-        var oldBarStyle = tk.getCSSRule(".tab-drop-indicator-bar").style /*[Fx3only]*/ || window.getComputedStyle(oldIndicatorBar, null) /*[Fx2only]*/;
-        var oldStyle = tk.getCSSRule(".tab-drop-indicator").style /*[Fx3only]*/ || window.getComputedStyle(oldIndicator, null) /*[Fx2only]*/;
+        var oldBarStyle = tk.getCSSRule(".tab-drop-indicator-bar").style /*[Fx3only]*/ 
+		 /* comment by Pika, Fx2 related
+		|| window.getComputedStyle(oldIndicatorBar, null); //[Fx2only]
+		*/
+        var oldStyle = tk.getCSSRule(".tab-drop-indicator").style /*[Fx3only]*/  /* comment by Pika, Fx2 related
+		|| window.getComputedStyle(oldIndicator, null); //[Fx2only]*/
         var newDropIndicatorBar = document.createElementNS(XUL_NS, "hbox");
         var newDropIndicator = document.createElementNS(XUL_NS, "hbox");
         newDropIndicatorBar.id = "tabkit-tab-drop-indicator-bar";
         //newDropIndicatorBar.setAttribute("dragging", oldIndicatorBar.getAttribute("dragging")); // This shouldn't be the case
         if (oldIndicatorBar.hasAttribute("collapsed")) // [Fx3only]
             newDropIndicatorBar.setAttribute("collapsed", "true");
+		/* comment by Pika, Fx2 related
         else // [Fx2only]
             newDropIndicatorBar.setAttribute("dragging", "false");
+		*/
         newDropIndicator.setAttribute("mousethrough", "always");
         newDropIndicatorBar.style.height = oldBarStyle.height;
         newDropIndicatorBar.style.marginTop = oldBarStyle.marginTop;
