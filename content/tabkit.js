@@ -1190,9 +1190,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabMove", tk.sortgroup_onTabMoved, false);
 		_tabContainer.addEventListener("TabClose", tk.sortgroup_onTabRemoved, false);
 		
+		/*Since in Fx4+ the function call is redirected to tabcontainer, so use it directly
 		gBrowser.mStrip.addEventListener("mousedown", tk.sortgroup_onTabMousedown, true);
 		gBrowser.mStrip.addEventListener("click", tk.sortgroup_onClickTab, true);
-		gBrowser.mStrip.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
+		gBrowser.mStrip.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);*/
+		_tabContainer.addEventListener("mousedown", tk.sortgroup_onTabMousedown, true);
+		_tabContainer.addEventListener("click", tk.sortgroup_onClickTab, true);
+		_tabContainer.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
 		
 		tk.addPrefListener("forceThemeCompatibility", tk.detectTheme);
 		tk.addPrefListener("colorTabNotLabel", tk.detectTheme);
@@ -4156,6 +4160,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 	};
 	this._onDrop = function _onDrop(aEvent) { // [Fx3.5+]
+		tk.log("_onDrop runs");
+		
 		var dt = aEvent.dataTransfer;
 		var dropEffect = dt.dropEffect;
 		if (dropEffect == "link")
@@ -4410,7 +4416,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'this.mTabDropIndicatorBar.style.display = "none";'
 			]);//}
 		}
-		else { // [Fx3-]
+		else if("onDrop" in gBrowser) { // [Fx3-]
 			// Allow Accel-dragging a url onto a tab to create a new tab instead of replacing it
 			tk.addMethodHook([
 				"gBrowser.onDrop",//{
@@ -4427,6 +4433,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					this.moveTabTo(newTab, newIndex);'
 			]);//}
 		}
+		else {// [Fx4+]
+			tk.debug("preInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
+		}
 		
 		if ("_onDragLeave" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
@@ -4438,7 +4447,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'this.mTabDropIndicatorBar.style.display = "none";'
 			]);//}
 		}
-		else { // [Fx3-]
+		else if("onDragExit" in gBrowser) { // [Fx3-]
 			tk.addMethodHook([
 				"gBrowser.onDragExit",//{
 				null,
@@ -4447,6 +4456,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'this.mTabDropIndicatorBar.collapsed = true;',
 				'this.mTabDropIndicatorBar.style.display = "none";'
 			]);//}
+		}
+		else {// [Fx4+]
+			tk.debug("preInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
 		}
 		
 		if ("onDragOver" in gBrowser) { // [Fx3-]
@@ -4470,13 +4482,18 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			gBrowser.old_onDrop = gBrowser._onDrop;
 			gBrowser._onDrop = tk._onDrop;
 		}
-		else { // [Fx3-]
+		else if("onDrop" in gBrowser) { // [Fx3-]
 			gBrowser._pre_tk_onDrop = gBrowser.onDrop;
 			gBrowser.onDrop = tk.onDrop;
+		}
+		else {// [Fx4+]
+			tk.debug("postInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
 		}
 		
 	};
 	this.postInitListeners.push(this.postInitTabDragModifications);
+	
+
 	
 	/* TODO=P3: Let Ctrl-Tab switch tabs in most recently viewed order
 	// I would put this under the Gestures section, but it relies on the sorting attributes set here
@@ -4765,10 +4782,15 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabSelect", tk.positionedTabbar_onTabSelect, false);
 		_tabContainer.addEventListener("TabMove", tk.positionedTabbar_onTabSelect, false); // In case a tab is moved out of sight
 		
-		gBrowser.mStrip.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
+		/* gBrowser.mStrip.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
 		gBrowser.mStrip.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
 		gBrowser.mStrip.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
-		gBrowser.mStrip.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
+		gBrowser.mStrip.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true); */
+		
+		_tabContainer = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
+		_tabContainer.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
+		_tabContainer.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
+		_tabContainer.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
 	};
 	this.initListeners.push(this.initTabbarPosition);
 
@@ -5321,7 +5343,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'rect = this.tabContainer.getBoundingClientRect()'
 			]);//}
 		}
-		else { //if ("onDragOver" in gBrowser) [Fx3-]
+		else if("onDragOver" in gBrowser) { //if ("onDragOver" in gBrowser) [Fx3-]
 			tk.addMethodHook([
 				"gBrowser.onDragOver",//{
 				null,
@@ -5373,6 +5395,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'ib.style.display = aDragSession.canDrop ? "-moz-box" : "none";'
 			]);//}
 		}
+		else {// [Fx4+]
+			tk.debug("postInitTabDragIndicator Fx4 Version Unavailable, Developer come!!");
+		}
 		
 		if ("_setEffectAllowedForDataTransfer" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
@@ -5385,7 +5410,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				 && aEvent.screenY <= sourceNode.boxObject.screenY + sourceNode.boxObject.height'
 			]);//}
 		}
-		else { //if ("canDrop" in gBrowser) [Fx3-]
+		else if("canDrop" in gBrowser) { //if ("canDrop" in gBrowser) [Fx3-]
 			// canDrop override breaks multirow, but is only relevant for single row anyway (as multirow hides tabs-bottom), see https://bugzilla.mozilla.org/show_bug.cgi?id=333791#c38
 			tk.addMethodHook([
 				"gBrowser.canDrop",//{
@@ -5393,6 +5418,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'{',
 				'{ if (this.mTabContainer.getAttribute("multirow") == "true" || gBrowser.hasAttribute("vertitabbar")) return true;'
 			]);//}
+		}
+		else {// [Fx4+]
+			tk.debug("postInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
 		}
 	};
 	this.postInitListeners.push(this.postInitTabDragIndicator);
