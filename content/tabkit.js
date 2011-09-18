@@ -1190,13 +1190,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabMove", tk.sortgroup_onTabMoved, false);
 		_tabContainer.addEventListener("TabClose", tk.sortgroup_onTabRemoved, false);
 		
-		/*Since in Fx4+ the function call is redirected to tabcontainer, so use it directly
 		gBrowser.mStrip.addEventListener("mousedown", tk.sortgroup_onTabMousedown, true);
 		gBrowser.mStrip.addEventListener("click", tk.sortgroup_onClickTab, true);
-		gBrowser.mStrip.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);*/
-		_tabContainer.addEventListener("mousedown", tk.sortgroup_onTabMousedown, true);
-		_tabContainer.addEventListener("click", tk.sortgroup_onClickTab, true);
-		_tabContainer.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
+		gBrowser.mStrip.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
 		
 		tk.addPrefListener("forceThemeCompatibility", tk.detectTheme);
 		tk.addPrefListener("colorTabNotLabel", tk.detectTheme);
@@ -4782,15 +4778,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabSelect", tk.positionedTabbar_onTabSelect, false);
 		_tabContainer.addEventListener("TabMove", tk.positionedTabbar_onTabSelect, false); // In case a tab is moved out of sight
 		
-		/* gBrowser.mStrip.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
+		gBrowser.mStrip.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
 		gBrowser.mStrip.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
 		gBrowser.mStrip.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
-		gBrowser.mStrip.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true); */
+		gBrowser.mStrip.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
 		
-		_tabContainer = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
-		_tabContainer.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
-		_tabContainer.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
-		_tabContainer.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
 	};
 	this.initListeners.push(this.initTabbarPosition);
 
