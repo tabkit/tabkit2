@@ -3115,6 +3115,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 	
 	this.removeGID = function removeGID(tab,  becauseSingleton) {
+		tk.log("removeGID start");
 		tk.removeCollapsedTab(tab);
 		
 		if (becauseSingleton)
@@ -3122,6 +3123,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		else
 			tab.removeAttribute("singletonid");
 		tab.removeAttribute("groupid");
+		tk.log("removeGID before coloruzeTab");
 		tk.colorizeTab(tab);
 		tk.updateIndents();
 	};
@@ -3463,7 +3465,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	
 	this.colorizeTab = function colorizeTab(tab) {
 		try {
+			tk.log("colorizeTab start");
 			var gid = tab.getAttribute("groupid");
+			if (gid)
+				tk.log("gid = "+gid");
+			else
+				tk.log("no gid");
+				
 			if (gid) {
 				var bgColor = tk.getWindowValue("knownColor:" + gid);
 				if (!bgColor) {
@@ -3476,6 +3484,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				}
 			}
 			else {
+				tk.log("removing tab color");
 				var bgColor = "";
 			}
 			
