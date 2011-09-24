@@ -3115,7 +3115,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 	
 	this.removeGID = function removeGID(tab,  becauseSingleton) {
-		tk.log("removeGID start");
 		tk.removeCollapsedTab(tab);
 		
 		if (becauseSingleton)
@@ -3123,7 +3122,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		else
 			tab.removeAttribute("singletonid");
 		tab.removeAttribute("groupid");
-		tk.log("removeGID before coloruzeTab");
 		tk.colorizeTab(tab);
 		tk.updateIndents();
 	};
@@ -3465,12 +3463,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	
 	this.colorizeTab = function colorizeTab(tab) {
 		try {
-			tk.log("colorizeTab start");
 			var gid = tab.getAttribute("groupid");
-			if (gid)
-				tk.log("gid = "+gid");
-			else
-				tk.log("no gid");
 				
 			if (gid) {
 				var bgColor = tk.getWindowValue("knownColor:" + gid);
@@ -3484,7 +3477,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				}
 			}
 			else {
-				tk.log("removing tab color");
 				var bgColor = "";
 			}
 			
@@ -3503,12 +3495,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			
 			//add by Pika, coloring for Fx4+
 			var styleToSet;
-			if (_isFx4) {
+			if (bgColor != "")
 				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,.9)").replace("@HSL_Bottom",bgColor);
-				styleToSet = "background-image";
-			} else {
-				styleToSet = "background-color";
-			}
+			styleToSet = "background-image";
 			
 			for (var i = 0; i < nodes.length; i++) {
 				//edit by Pika, coloring for Fx4+
