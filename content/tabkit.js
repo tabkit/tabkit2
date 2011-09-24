@@ -4471,6 +4471,85 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				// Not necessary in Fx3.5+
 			]);//}
 		}
+		
+		//Pika test on dragging start
+		//this event handler can run completely
+		gBrowser.mTabContainer.addEventListener("dragover", function(event) {
+			var tab = event.target.localName == "tab" ? event.target : null;
+			if (!tab || tab.hasAttribute("pinned"))
+				return;
+
+			var dt = event.dataTransfer;
+			var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+			if (!draggedTab || draggedTab == tab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != this)
+				return;
+
+			var dropEffect = dt.dropEffect;
+			if (dropEffect == "link" || dropEffect == "copy") {
+				tab.removeAttribute("dragover");
+				return;
+			}
+
+			var isVertical = this.orient == "vertical";
+			var [position, size] = isVertical ? ["screenY", "height"] : ["screenX", "width"];
+			var [start, end] = isVertical ? ["top", "bottom"] : ["left", "right"];
+
+			if (event.screenX < tab.boxObject.screenX + tab.boxObject.width * .25)
+				tab.setAttribute("dragover", start);
+			else if (event.screenX > tab.boxObject.screenX + tab.boxObject.width * .75)
+				tab.setAttribute("dragover", end);
+			else {
+				tab.setAttribute("dragover", "center");
+				(this._tabDropIndicator || gBrowser.mTabDropIndicatorBar).collapsed = true;
+				event.preventDefault();
+				event.stopPropagation();
+			}
+		}, true);
+		
+		gBrowser.mTabContainer.addEventListener("drop", function(event) {
+			tk.log("Drop 1");
+			var tab = event.target.localName == "tab" ? event.target : null;
+			if (!tab || !tab.hasAttribute("dragover"))
+				return;
+
+			tk.log("Drop 2");
+			var move;
+			switch(tab.getAttribute("dragover")) {
+				case "left":
+				case "top":
+					if (!tab.hasAttribute("group-first") || tab.getAttribute("group-collapsed") == "true")
+						return;
+					move = "before";
+					break;
+				case "right":
+				case "bottom":
+					if (!tab.hasAttribute("group-last") || tab.getAttribute("group-collapsed") == "true")
+						return;
+					move = "after";
+					break;
+				default:
+					move = "group";
+					break;
+			}
+			tk.log("Drop 3");
+
+			tab.removeAttribute("dragover");
+			(this._tabDropIndicator || gBrowser.mTabDropIndicatorBar).collapsed = true;
+			event.stopPropagation();
+			tk.log("Drop 4");
+
+			var dt = event.dataTransfer;
+			var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+			var draggedTabs = [draggedTab];
+			for (var i = 1; i < dt.mozItemCount; i++) {
+				var tab = dt.mozGetDataAt(TAB_DROP_TYPE, i);
+				if (tab._tPos < draggedTab._tPos)
+					draggedTabs.splice(-1, 0, tab);
+				else
+					draggedTabs.push(tab);
+			}
+			tk.log("Drop 5");
+		}, true);
 	};
 	this.preInitListeners.push(this.preInitTabDragModifications);
 	this.postInitTabDragModifications = function postInitTabDragModifications(event) { // TODO=P4: TJS Test
