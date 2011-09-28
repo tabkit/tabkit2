@@ -3895,264 +3895,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		return gBrowser.loadOneTab(gBrowser.getBrowserForTab(aTab).currentURI.spec); // [Fx3- since browser.sessionstore.enabled always on in 3.5+]
 	};
 	
-	this.onDrop = function onDrop(aEvent, aXferData, aDragSession) { // [Fx3-]
-		if (aDragSession.sourceNode && aDragSession.sourceNode.localName == "tab") {
-			var copyNotMove = ((navigator.platform.indexOf("Mac") == -1 ? aEvent.ctrlKey : aEvent.metaKey)
-								   && _prefs.getBoolPref("accelDragCopy"));
-			
-			var oldTab = aDragSession.sourceNode;
-			var ogid = oldTab.getAttribute("groupid");
-			var _previousSibling = oldTab.previousSibling;
-			var _nextSibling = oldTab.nextSibling;
-			
-			var newIndex = gBrowser.mTabContainer._getDropIndex(aEvent);
-			var beforeTab = newIndex > 0 ? _tabs[newIndex - 1] : null;
-			var afterTab = newIndex < _tabs.length ? _tabs[newIndex] : null;
-			var bgid = beforeTab ? beforeTab.getAttribute("groupid") : null;
-			var agid = afterTab ? afterTab.getAttribute("groupid") : null;
-			
-			// Prevent accidentally dragging into a collapsed group
-			if (agid && agid == bgid && afterTab.hasAttribute("groupcollapsed")) {
-				for each (var t in tk.getGroupFromTab(afterTab)) {
-					if (!t.hidden) { // visibility of a tab
-						if (t._tPos < afterTab._tPos) {
-							beforeTab = afterTab;
-							while (beforeTab.nextSibling && beforeTab.nextSibling.getAttribute("groupid") == agid)
-								beforeTab = beforeTab.nextSibling;
-							afterTab = beforeTab.nextSibling; // May be null
-							newIndex = beforeTab._tPos + 1;
-						}
-						else {
-							var afterTab = beforeTab;
-							while (afterTab.previousSibling && afterTab.previousSibling.getAttribute("groupid") == bgid)
-								afterTab = afterTab.previousSibling;
-							beforeTab = afterTab.previousSibling; // May be null
-							newIndex = afterTab._tPos;
-						}
-						bgid = beforeTab ? beforeTab.getAttribute("groupid") : null;
-						agid = afterTab ? afterTab.getAttribute("groupid") : null;
-						break;
-					}
-				}
-			}
-			
-			// [Moving or copying a group or subtree (possibly from a different window)]
-			if (ogid && (aEvent.shiftKey && _prefs.getBoolPref("shiftDragGroups")
-						 || oldTab.hasAttribute("groupcollapsed")))
-			{
-				var shiftDragSubtree = _prefs.getBoolPref("shiftDragSubtrees")
-									   && !oldTab.hasAttribute("groupcollapsed");
-				
-				if (shiftDragSubtree) {
-					/* Note that tk.getSubtreeFromTab checks tk.subtreesEnabled,
-					 * which checks gBrowser.hasAttribute("vertitabbar") &&
-					 * _prefs.getBoolPref("indentedTree")*/
-					var tabs = tk.getSubtreeFromTab(oldTab);
-					if (tabs.length < 2)
-						shiftDragSubtree = false;
-				}
-				if (!shiftDragSubtree) {
-					var tabs = tk.getGroupFromTab(oldTab);
-					// Calculate the treeLevels - we'll need these when copying
-					// possibleparents (getSubtreeFromTab normally does this)
-					tk.updateIndents(tabs);
-				}
-				//TODO=P4: --- make shift-drag force group ungrouped tabs with destination - or something!
-				if (copyNotMove || oldTab.parentNode != _tabContainer) {
-					// Copying within/across windows, or moving across windows
-					var newTabs = [];
-					var tabIdMapping = {};
-					for (var i = 0; i < tabs.length; i++) {
-						tk.addingTab("unrelated", null, true);
-						
-						newTabs[i] = tk._duplicateTab(tabs[i]);
-						if (i == 0 && oldTab.parentNode != _tabContainer)
-							gBrowser.selectedTab = newTabs[i];
-						
-						if (newIndex < _tabs.length)
-							tk.moveBefore(newTabs[i], afterTab);
-						else
-							gBrowser.moveTabTo(newTabs[i], _tabs.length - 1);
-						
-						tk.addingTabOver();
-						
-						// Map tabids of original tabs to tabids of their clones
-						tabIdMapping[tabs[i].getAttribute("tabid")] = newTabs[i].getAttribute("tabid");
-						
-					}
-					
-					// Inherit indentation
-					var app = null;
-					// Only inherit possibleparent if afterTab's group will enclose newTabs
-					if (agid && agid == bgid) {
-						app = afterTab.getAttribute("possibleparent");
-						// Only copy possibleparent if afterTab's possibleparent is in the same group as it
-						var parent = tk.getTabById(app);
-						if (!parent || parent.getAttribute("groupid") != agid)
-							app = null;
-					}
-					for (var i = 0; i < tabs.length; i++) {
-						if (app && tabs[i].treeLevel <= tabs[0].treeLevel)
-						{
-							newTabs[i].setAttribute("possibleparent", app); // TODO=P3: TJS For consistency, use a temporary parent attribute so it's reset by sorts etc. (ditto below)
-						}
-						else {
-							var tpp = tabs[i].getAttribute("possibleparent");
-							if (tpp in tabIdMapping)
-								tpp = tabIdMapping[tpp];
-							newTabs[i].setAttribute("possibleparent", tpp);
-						}
-					}
-					
-					// Do this afterwards so sortgroup_onTabRemoved doesn't mess up tabs we have yet to copy across
-					if (!copyNotMove) {
-						var browser = oldTab.ownerDocument.defaultView.getBrowser();
-						for (var i = 0; i < tabs.length; i++)
-							browser.removeTab(tabs[i]);
-					}
-					
-					// Copy enclosing groupid, or create a new one
-					var useEnclosing = (agid && agid == bgid);
-					var ngid = useEnclosing ? agid : (tk.autoGroupNewTabs ? ":oG-copiedGroupOrSubtree-" + tk.generateId() : null);
-					if (ngid) {
-						for each (var newTab in newTabs) {
-							tk.setGID(newTab, ngid);
-							if (useEnclosing)
-								newTab.setAttribute("outoforder", "true");
-						}
-					}
-					// TODO=P3: ??? Add an openerGroup to copied groups/subtrees
-					if (!copyNotMove)
-						window.focus();
-				}
-				else { // Move group within window
-					for each (var tab in tabs) // Save the treeLevels before we move the tabs
-						tab.originalTreeLevel = tab.treeLevel;
-					
-					if (newIndex < _tabs.length) {
-						for each (var tab in tabs)
-							tk.moveBefore(tab, afterTab);
-					}
-					else {
-						for each (var tab in tabs)
-							gBrowser.moveTabTo(tab, _tabs.length - 1);
-					}
-					if (agid && agid == bgid) {
-						// Insert subtree/group into group
-						for each (var tab in tabs) {
-							tk.setGID(tab, agid);
-							tab.setAttribute("outoforder", "true");
-						}
-						// Inherit indentation
-						var app = afterTab.getAttribute("possibleparent");
-						// Only copy possibleparent if afterTab's possibleparent is in the same group as it
-						var parent = tk.getTabById(app);
-						if (parent && parent.getAttribute("groupid") == agid) {
-							for each (var tab in tabs) {
-								if (tab.originalTreeLevel <= tabs[0].originalTreeLevel) {
-									tab.setAttribute("possibleparent", app); // TODO=P3: TJS For consistency, use a temporary parent attribute so it's reset by sorts etc. (ditto above)
-								}
-							}
-						}
-					}
-					else if (shiftDragSubtree && tk.autoGroupNewTabs) {
-						// Make the subtree into a new group
-						var newgid = ":oG-draggedSubtree-" + tk.generateId(); // As it is a subtree it must be an opener group
-						for each (var tab in tabs)
-							tk.setGID(tab, newgid);
-					}
-					
-					if (shiftDragSubtree) {
-						// Make sure old group isn't now a singleton
-						var group = tk.getGroupById(ogid);
-						if (group.length == 1)
-							tk.removeGID(group[0], true);
-					}
-				}
-				return;
-			}
-			
-			// [Copying a single tab within/across windows, or moving a tab across windows]
-			// TODO=P4: GCODE Allow Accel-dropping onto current tab (instead of having to drop onto the neighbouring tab)
-			if (copyNotMove || oldTab.parentNode != _tabContainer) {
-				if (oldTab.parentNode == _tabContainer) // Copying one tab (possibly from a different window)
-					tk.addingTab("related", oldTab, true);
-				else // Moving a tab from a different window
-					tk.addingTab("unrelated", null, true);
-				
-				var newTab = tk._duplicateTab(oldTab);
-				if (oldTab.parentNode != _tabContainer)
-					gBrowser.selectedTab = newTab;
-				
-				gBrowser.moveTabTo(newTab, newIndex);
-				tk.addingTabOver();
-				
-				if (agid && agid == bgid) {
-					tk.setGID(newTab, agid);
-					newTab.setAttribute("outoforder", "true");
-					
-					var app = afterTab.getAttribute("possibleparent");
-					// Only copy possibleparent if afterTab's possibleparent is in the same group as it
-					var parent = tk.getTabById(app);
-					if (parent && parent.getAttribute("groupid") == agid)
-						newTab.setAttribute("possibleparent", app);
-					else
-						newTab.setAttribute("possibleparent", oldTab.getAttribute("possibleparent"));
-				}
-				
-				if (!copyNotMove) {
-					oldTab.ownerDocument.defaultView.gBrowser.removeTab(oldTab);
-					window.focus();
-				}
-				return;
-			}
-			
-			// [Just dragging the one tab]
-			if (newIndex == oldTab._tPos) 
-				return;
-			
-			var reverse = (newIndex < oldTab._tPos);
-			
-			// Make the actual move
-			gBrowser.moveTabTo(oldTab, reverse ? newIndex : newIndex - 1);
-			
-			// See if it's been dragged into a group
-			if (agid && agid == bgid) {
-				tk.setGID(oldTab, agid) // Join the group
-				oldTab.setAttribute("outoforder", "true");
-				
-				var app = afterTab.getAttribute("possibleparent");
-				// Only copy possibleparent if afterTab's possibleparent is in the same group as it
-				var parent = tk.getTabById(app);
-				if (parent && parent.getAttribute("groupid") == agid)
-					oldTab.setAttribute("possibleparent", app);
-			}
-			else if (ogid && agid != ogid && bgid != ogid) {
-				tk.removeGID(oldTab);
-			}
-			
-			// Make sure the old group isn't now a singleton
-			if (ogid) {
-				if (_previousSibling && _previousSibling.getAttribute("groupid") == ogid
-					&& (!_previousSibling.previousSibling || _previousSibling.previousSibling.getAttribute("groupid") != ogid)
-					&& (!_previousSibling.nextSibling || _previousSibling.nextSibling.getAttribute("groupid") != ogid))
-				{
-					tk.removeGID(_previousSibling, true);
-				}
-				else if (_nextSibling && _nextSibling.getAttribute("groupid") == ogid
-					&& (!_nextSibling.previousSibling || _nextSibling.previousSibling.getAttribute("groupid") != ogid)
-					&& (!_nextSibling.nextSibling || _nextSibling.nextSibling.getAttribute("groupid") != ogid))
-				{
-					tk.removeGID(_nextSibling, true);
-				}
-			}
-			
-			return;
-		}
-		else {
-			gBrowser._pre_tk_onDrop(aEvent, aXferData, aDragSession);
-		}
-	};
 	this._onDrop = function _onDrop(aEvent) { // [Fx3.5+]
 		
 		var dt = aEvent.dataTransfer;
@@ -4832,10 +4574,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabSelect", tk.positionedTabbar_onTabSelect, false);
 		_tabContainer.addEventListener("TabMove", tk.positionedTabbar_onTabSelect, false); // In case a tab is moved out of sight
 		
-		gBrowser.mStrip.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
+		_tabContainer.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
 		gBrowser.mStrip.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
 		gBrowser.mStrip.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
-		gBrowser.mStrip.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
+		gBrowser.parentNode.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
 		
 	};
 	this.initListeners.push(this.initTabbarPosition);
@@ -4871,7 +4613,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 	};
 	this.positionedTabbar_onResize = function positionedTabbar_onResize(event) {
-		var width = parseInt(gBrowser.mStrip.width);
+		var width = parseInt(_tabBar.width != "" ? _tabBar.width : 250);	//temp default value, MEDIC!!
 		_prefs.setIntPref("tabSidebarWidth", Math.min(width, 576)); // Upper limit on default width so can't be wider than maximised browser window, even on 800x600 screen
 	};
 	this.positionedTabbar_onMouseover = function positionedTabbar_onMouseover(event) {
@@ -4880,16 +4622,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			return;
 		
 		// Increment counter, so __collapse can tell if there has been a mouseover since the timer was started
-		gBrowser.mStrip.tkLastMouseover = (gBrowser.mStrip.tkLastMouseover || 0) + 1;
+		_tabBar.tkLastMouseover = (_tabBar.tkLastMouseover || 0) + 1;
 		
-		if (gBrowser.mStrip.hasAttribute("collapsed")) {
+		if (_tabBar.collapsed) {
 			// Ensure tab bar has sensible width if we're showing it on hover (this
 			// way it's ok to collapse it by dragging the splitter to zero width)
-			if (parseInt(gBrowser.mStrip.width) < 100)
-				gBrowser.mStrip.width = 200;
+			if (parseInt(_tabBar.width) < 100)
+				_tabBar.width = 200;
 			
 			// Show tab bar
-			gBrowser.mStrip.removeAttribute("collapsed");
+			_tabBar.collapsed = false;
 		}
 	};
 	this.positionedTabbar_onMouseout = function positionedTabbar_onMouseout(event) {
@@ -4900,29 +4642,34 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		window.clearTimeout(tk.positionedTabbar_collapseTimer);
 		tk.positionedTabbar_collapseTimer = window.setTimeout(function __collapse(lastMouseover) {
 			if (document.getElementById("tabkit-splitter").getAttribute("state") == "collapsed"
-				&& lastMouseover == gBrowser.mStrip.tkLastMouseover)
+				&& lastMouseover == _tabBar.tkLastMouseover)
 			{
-				gBrowser.mStrip.setAttribute("collapsed", "true");
+				_tabBar.collapsed = true;
 			}
-		}, 333, gBrowser.mStrip.tkLastMouseover);
+		}, 333, _tabBar.tkLastMouseover);
 	};
 	this.positionedTabbar_onToggleCollapse = function positionedTabbar_onToggleCollapse(event) {
+		tk.log("positionedTabbar_onToggleCollapse start");
+		tk.log(event.attrName);
 		if (event.attrName != "collapsed")
 			return;
+		tk.log("positionedTabbar_onToggleCollapse event.attrName == 'collapsed'");
 		
 		if (event.attrChange == MutationEvent.ADDITION) {
+			event.target.collapsed = false;	//target = appcontent
+			_tabBar.collapsed = true;
 			var curpos = parseInt(_tabInnerBox.mVerticalScrollbar.getAttribute("curpos"));
 			// It returns 0 when collapsed, so don't restore this (and it will
 			// default to 0 when re-expanded anyway, so we don't need to restore it)
 			if (!isNaN(curpos) && curpos > 0)
-				gBrowser.mStrip.tkScrollPos = curpos;
+				_tabBar.tkScrollPos = curpos;
 		}
 		else if (event.attrChange == MutationEvent.REMOVAL) {
 			window.setTimeout(function __restoreScrollPosition() {
-				if ("tkScrollPos" in gBrowser.mStrip && _tabInnerBox.mVerticalScrollbar) {
+				if ("tkScrollPos" in _tabBar && _tabInnerBox.mVerticalScrollbar) {
 					// Restore the old scroll position, as collapsing the tab bar will have reset it
-					_tabInnerBox.mVerticalScrollbar.setAttribute("curpos", gBrowser.mStrip.tkScrollPos);
-					delete gBrowser.mStrip.tkScrollPos;
+					_tabInnerBox.mVerticalScrollbar.setAttribute("curpos", _tabBar.tkScrollPos);
+					delete _tabBar.tkScrollPos;
 				}
 			}, 50); // TODO: TJS Find more reliable way of setting this than 50 ms timeout...
 		}
@@ -5084,7 +4831,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				splitter.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
 				splitter.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
 				
-				gBrowser.mStrip.width = _prefs.getIntPref("tabSidebarWidth");
+				_tabBar.width = _prefs.getIntPref("tabSidebarWidth");
 				for (var i = 0; i < _tabs.length; i++)
 					_tabs[i].maxWidth = null;
 				tk.setTabMinWidth(0);
