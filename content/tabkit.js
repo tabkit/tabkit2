@@ -4154,13 +4154,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 	};
 	this._onDrop = function _onDrop(aEvent) { // [Fx3.5+]
-		tk.log("_onDrop runs");
 		
 		var dt = aEvent.dataTransfer;
 		var dropEffect = dt.dropEffect;
-		if (dropEffect == "link")
-			return gBrowser.old_onDrop(aEvent);
+		// if (dropEffect == "link")
+			// return gBrowser.old_onDrop(aEvent);
 		var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+		
 		if (!draggedTab)
 			return; // not our drop then (see original _onDrop)
 		
@@ -4206,8 +4206,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var tabs;
 		var shiftDragSubtree;
 		if (dGid && (aEvent.shiftKey && _prefs.getBoolPref("shiftDragGroups")
-					 || draggedTab.hasAttribute("groupcollapsed")))
-		{
+					 || draggedTab.hasAttribute("groupcollapsed"))) {
 			// User wants to drag a group/subtree
 			
 			shiftDragSubtree = _prefs.getBoolPref("shiftDragSubtrees")
@@ -4220,8 +4219,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				tabs = tk.getSubtreeFromTab(draggedTab);
 				if (tabs.length < 2)
 					shiftDragSubtree = false;
-			}
-			if (!shiftDragSubtree) {
+			} else {
 				tabs = tk.getGroupFromTab(draggedTab);
 				// Calculate the treeLevels - we'll need these when copying
 				// possibleparents (getSubtreeFromTab normally does this)
@@ -4385,18 +4383,19 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.chosenNewIndex = null;
 	this.preInitTabDragModifications = function preInitTabDragModifications(event) {
 		// Allow setting the next value returned by this via tk.chosenNewIndex
-		tk.addMethodHook([
-			"gBrowser.mTabContainer._getDropIndex",//{
-			null,
+		//comment by Pika, for dragging tab
+		// tk.addMethodHook([
+			// "gBrowser.mTabContainer._getDropIndex",//{
+			// null,
 			
-			'{',
-			'{ \
-			if (typeof tk.chosenNewIndex == "number") { \
-				var newIndex = tabkit.chosenNewIndex; \
-				tabkit.chosenNewIndex = null; \
-				return newIndex; \
-			}'
-		]);//}
+			// '{',
+			// '{ \
+			// if (typeof tk.chosenNewIndex == "number") { \
+				// var newIndex = tabkit.chosenNewIndex; \
+				// tabkit.chosenNewIndex = null; \
+				// return newIndex; \
+			// }'
+		// ]);//}
 		
 		if ("_onDrop" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
@@ -4408,23 +4407,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				// See _onDragOver replacement
 				'this.mTabDropIndicatorBar.collapsed = true;',
 				'this.mTabDropIndicatorBar.style.display = "none";'
-			]);//}
-		}
-		else if("onDrop" in gBrowser) { // [Fx3-]
-			// Allow Accel-dragging a url onto a tab to create a new tab instead of replacing it
-			tk.addMethodHook([
-				"gBrowser.onDrop",//{
-				null,
-				
-				/if \(document\.getBindingParent\(aEvent\.originalTarget\)\.localName != "tab"\) \{\s+this\.loadOneTab\(getShortcutOrURI\(url\), null, null, null, bgLoad, false\);/,
-				'/*[Fx2only]*/if (document.getBindingParent(aEvent.originalTarget).localName != "tab" || \
-					(navigator.platform.indexOf("Mac") == -1 ? aEvent.ctrlKey : aEvent.metaKey)) \
-				{ \
-					newIndex = this.getNewIndex(aEvent); \
-					tabkit.addingTab("unrelated", null, true); \
-					newTab = this.loadOneTab(getShortcutOrURI(url), null, null, null, bgLoad, false); \
-					tabkit.addingTabOver(); \
-					this.moveTabTo(newTab, newIndex);'
 			]);//}
 		}
 		else {// [Fx4+]
@@ -4441,50 +4423,88 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'this.mTabDropIndicatorBar.style.display = "none";'
 			]);//}
 		}
-		else if("onDragExit" in gBrowser) { // [Fx3-]
-			tk.addMethodHook([
-				"gBrowser.onDragExit",//{
-				null,
-				
-				// See _onDragOver replacement
-				'this.mTabDropIndicatorBar.collapsed = true;',
-				'this.mTabDropIndicatorBar.style.display = "none";'
-			]);//}
-		}
 		else {// [Fx4+]
 			tk.debug("preInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
 		}
 		
-		if ("onDragOver" in gBrowser) { // [Fx3-]
-			tk.addMethodHook([
-				'gBrowser.onDragOver',//{
-				null,
+		//Pika test on dragging tab start
+		gBrowser.mTabContainer.addEventListener("dragstart", function(event) {//What's the use of this?
+			tk.log("dragstart start");
+			if (event.target.localName == "tab") {
+				var draggedTab = event.target;
+				var draggedTabs = gBrowser.contextTabsOf(draggedTab);
+				draggedTabs.splice(draggedTabs.indexOf(draggedTab), 1);
+				draggedTabs.unshift(draggedTab);
+
+				var dt = event.dataTransfer;
+				draggedTabs.forEach(function(aTab, aIndex) {
+					dt.mozSetDataAt(TAB_DROP_TYPE, aTab, aIndex);
+					dt.mozSetDataAt("text/x-moz-text-internal", aTab.linkedBrowser.currentURI.spec, aIndex);
+				});
+			}
+		}, true);
+		gBrowser.mTabContainer.addEventListener("dragover", function(event) {//need review MEDIC!
+			var ind = this._tabDropIndicator.parentNode;
+			// if (!this.hasAttribute("multirow")) {
+				// ind.style.position = "";
+				// return;
+			// }
+			ind.style.position = "fixed";
+			ind.style.zIndex = 100;
+
+			var newIndex = this._getDropIndex(event);
+			var tab = this.childNodes[newIndex < this.childNodes.length ? newIndex : newIndex - 1];
+			var ltr = getComputedStyle(this, null).direction == "ltr";
+			var isVertical = gBrowser.hasAttribute("vertitabbar");
+			if (isVertical) {//Vertical
+				var [start, end] = ltr ? ["top", "bottom"] : ["bottom", "top"];
+				var startPos = this.getBoundingClientRect()[start];
+				if (tab.boxObject.screenX > event.screenX && newIndex > 0) {
+					tab = this.childNodes[newIndex - 1];
+					startPos += tab.getBoundingClientRect()[end] - this.mTabstrip._scrollbox.getBoundingClientRect()[start];
+				}
+				ind.style[start] = startPos - ind.clientHeight / 2 * (ltr ? 1 : -1) + "px";
 				
-				'var isTabDrag = aDragSession.sourceNode.parentNode == this.mTabContainer;',
-				'/*[Fx2only]*/var isTabDrag = aDragSession.sourceNode && aDragSession.sourceNode.localName == "tab";',
-				
-				/var isTabDrag = aDragSession\.sourceNode &&\s+aDragSession\.sourceNode\.parentNode == this\.mTabContainer;/,
-				'/*[Fx3only]*/var isTabDrag = aDragSession.sourceNode && aDragSession.sourceNode.localName == "tab";'
-				
-				// Not necessary in Fx3.5+
-			]);//}
-		}
-		
-		//Pika test on dragging start
+			}
+			else {//Horizontal
+				var [start, end] = ltr ? ["left", "right"] : ["right", "left"];
+				var startPos = this.getBoundingClientRect()[start];
+				if (tab.boxObject.screenY > event.screenY && newIndex > 0) {
+					tab = this.childNodes[newIndex - 1];
+					startPos += tab.getBoundingClientRect()[end] - this.mTabstrip._scrollbox.getBoundingClientRect()[start];
+				}
+				ind.style[start] = startPos - ind.clientWidth / 2 * (ltr ? 1 : -1) + "px";
+			}
+			
+
+			ind.style.top = tab.getBoundingClientRect().top + "px";
+			ind.style.lineHeight = tab.getBoundingClientRect().height + "px";
+			ind.firstChild.style.verticalAlign = "bottom";
+			this._tabDropIndicator.collapsed = false;
+		}, true);
+
+		gBrowser.mTabContainer.addEventListener("dragexit", function(event) {
+			this._tabDropIndicator.collapsed = true;
+		}, true);
+
+		gBrowser.mTabContainer.addEventListener("dragend", function(event) {
+			this._tabDropIndicator.collapsed = true;
+		}, true);
+
 		//this event handler can run completely
-		gBrowser.mTabContainer.addEventListener("dragover", function(event) {
-			var tab = event.target.localName == "tab" ? event.target : null;
-			if (!tab || tab.hasAttribute("pinned"))
+		gBrowser.mTabContainer.addEventListener("dragover", function(event) {//setAttribute for after use I guess?
+			var targetTab = event.target.localName == "tab" ? event.target : null;
+			if (!targetTab || targetTab.hasAttribute("pinned"))
 				return;
 
 			var dt = event.dataTransfer;
 			var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-			if (!draggedTab || draggedTab == tab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != this)
+			if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != this)
 				return;
 
 			var dropEffect = dt.dropEffect;
 			if (dropEffect == "link" || dropEffect == "copy") {
-				tab.removeAttribute("dragover");
+				targetTab.removeAttribute("dragover");
 				return;
 			}
 
@@ -4492,62 +4512,19 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			var [position, size] = isVertical ? ["screenY", "height"] : ["screenX", "width"];
 			var [start, end] = isVertical ? ["top", "bottom"] : ["left", "right"];
 
-			if (event.screenX < tab.boxObject.screenX + tab.boxObject.width * .25)
-				tab.setAttribute("dragover", start);
-			else if (event.screenX > tab.boxObject.screenX + tab.boxObject.width * .75)
-				tab.setAttribute("dragover", end);
+			if (event.position < targetTab.boxObject.position + targetTab.boxObject.size * .5)
+				targetTab.setAttribute("dragover", start);
+			else if (event.position > targetTab.boxObject.position + targetTab.boxObject.size * .5)
+				targetTab.setAttribute("dragover", end);
 			else {
-				tab.setAttribute("dragover", "center");
-				(this._tabDropIndicator || gBrowser.mTabDropIndicatorBar).collapsed = true;
+				targetTab.setAttribute("dragover", "center");
+				// this._tabDropIndicator.collapsed = true;
 				event.preventDefault();
 				event.stopPropagation();
 			}
 		}, true);
 		
-		gBrowser.mTabContainer.addEventListener("drop", function(event) {
-			tk.log("Drop 1");
-			var tab = event.target.localName == "tab" ? event.target : null;
-			if (!tab || !tab.hasAttribute("dragover"))
-				return;
-
-			tk.log("Drop 2");
-			var move;
-			switch(tab.getAttribute("dragover")) {
-				case "left":
-				case "top":
-					if (!tab.hasAttribute("group-first") || tab.getAttribute("group-collapsed") == "true")
-						return;
-					move = "before";
-					break;
-				case "right":
-				case "bottom":
-					if (!tab.hasAttribute("group-last") || tab.getAttribute("group-collapsed") == "true")
-						return;
-					move = "after";
-					break;
-				default:
-					move = "group";
-					break;
-			}
-			tk.log("Drop 3");
-
-			tab.removeAttribute("dragover");
-			(this._tabDropIndicator || gBrowser.mTabDropIndicatorBar).collapsed = true;
-			event.stopPropagation();
-			tk.log("Drop 4");
-
-			var dt = event.dataTransfer;
-			var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-			var draggedTabs = [draggedTab];
-			for (var i = 1; i < dt.mozItemCount; i++) {
-				var tab = dt.mozGetDataAt(TAB_DROP_TYPE, i);
-				if (tab._tPos < draggedTab._tPos)
-					draggedTabs.splice(-1, 0, tab);
-				else
-					draggedTabs.push(tab);
-			}
-			tk.log("Drop 5");
-		}, true);
+		// gBrowser.mTabContainer.addEventListener("drop", tk._onDrop, true);
 	};
 	this.preInitListeners.push(this.preInitTabDragModifications);
 	this.postInitTabDragModifications = function postInitTabDragModifications(event) { // TODO=P4: TJS Test
@@ -4555,16 +4532,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			gBrowser.old_onDrop = gBrowser._onDrop;
 			gBrowser._onDrop = tk._onDrop;
 		}
-		else if("onDrop" in gBrowser) { // [Fx3-]
-			gBrowser._pre_tk_onDrop = gBrowser.onDrop;
-			gBrowser.onDrop = tk.onDrop;
-		}
 		else {// [Fx4+]
 			tk.debug("postInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
 		}
 		
 	};
 	this.postInitListeners.push(this.postInitTabDragModifications);
+	
+	this._getDropIndex = function _getDropIndex(event) {	//since the default functions sucks on vertical mode
+		
+	}
 	
 
 	
@@ -5338,28 +5315,29 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 
 	/// Method hooks:
-	this.earlyMethodHooks.push([
-		"gBrowser.mTabContainer._getDropIndex",//{
-		null,
-		'{',
-		'{ \
-		var verticalTabs = this.hasAttribute("vertitabbar"); \
-		var multiRow = this.mTabContainer.getAttribute("multirow") == "true";',
+	//comment by Pika, for dragging tab
+	// this.earlyMethodHooks.push([
+		// "gBrowser.mTabContainer._getDropIndex",//{
+		// null,
+		// '{',
+		// '{ \
+		// var verticalTabs = this.hasAttribute("vertitabbar"); \
+		// var multiRow = this.mTabContainer.getAttribute("multirow") == "true";',
 		
-		'aEvent.screenX < this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2', // ltr
-		'verticalTabs ? aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height / 2 \
-					  : (multiRow && aEvent.screenY < this.mTabs[i].boxObject.screenY) \
-						|| (aEvent.screenX < this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2 \
-							&& (aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height \
-								|| !multiRow))',
+		// 'aEvent.screenX < this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2', // ltr
+		// 'verticalTabs ? aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height / 2 \
+					  // : (multiRow && aEvent.screenY < this.mTabs[i].boxObject.screenY) \
+						// || (aEvent.screenX < this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2 \
+							// && (aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height \
+								// || !multiRow))',
 		
-		'aEvent.screenX > this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2', // rtl
-		'verticalTabs ? aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height / 2 \
-					  : (multiRow && aEvent.screenY < this.mTabs[i].boxObject.screenY) \
-						|| (aEvent.screenX > this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2 \
-							&& (aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height \
-								|| !multiRow))'
-	]);//}
+		// 'aEvent.screenX > this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2', // rtl
+		// 'verticalTabs ? aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height / 2 \
+					  // : (multiRow && aEvent.screenY < this.mTabs[i].boxObject.screenY) \
+						// || (aEvent.screenX > this.mTabs[i].boxObject.screenX + this.mTabs[i].boxObject.width / 2 \
+							// && (aEvent.screenY < this.mTabs[i].boxObject.screenY + this.mTabs[i].boxObject.height \
+								// || !multiRow))'
+	// ]);//}
 	
 	// TODO=P4: GCODE Prevent inappropriate indicator wrap around when dragging to end of row
 	this.postInitTabDragIndicator = function postInitTabDragIndicator(event) {
