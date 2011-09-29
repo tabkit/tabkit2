@@ -1178,9 +1178,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		tk.detectTheme();
 		
 		// Add event listeners:
-		tk.log("before addEventListener TabOpen");
 		_tabContainer.addEventListener("TabOpen", tk.sortgroup_onTabAdded, false);
-		tk.log("after addEventListener TabOpen");
 		_tabContainer.addEventListener("TabSelect", tk.sortgroup_onTabSelect, true);
 		gBrowser.addEventListener("DOMContentLoaded", tk.sortgroup_onTabLoading, true);
 		gBrowser.addEventListener("load", tk.sortgroup_onTabLoaded, true);
@@ -1625,7 +1623,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				tk.addingTabsOver();
 				return;
 			}
-			//tk.log("addingTabOver"); //Pika:too many log entries
 		}
 		catch (ex) {
 			tk.dump(ex);
@@ -3854,13 +3851,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 
 	/// Method Hooks
-	// Fix strict warning when moving tab to end of tab bar - https://bugzilla.mozilla.org/show_bug.cgi?id=347683#c9
-	this.earlyMethodHooks.push([
-		"gBrowser.moveTabTo",//{
-		null,
-		'this.mTabContainer.insertBefore(aTab, this.mTabContainer.childNodes[aIndex]);',
-		'/*[Fx2only]*/this.mTabContainer.insertBefore(aTab, this.mTabContainer.childNodes.item(aIndex));'
-	]);//}
 	
 	//TODO=P4: GCODE Show warning when tabs are skipped because their group is collapsed
 	
@@ -4126,7 +4116,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}, 200);
 	};
 	
-	this.chosenNewIndex = null;
+	// this.chosenNewIndex = null;
 	this.preInitTabDragModifications = function preInitTabDragModifications(event) {
 		// Allow setting the next value returned by this via tk.chosenNewIndex
 		//comment by Pika, for dragging tab
@@ -4208,15 +4198,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			var end = isVertical ? "bottom" : "right";
 			
 			//DO NOT reuse newIndex
-			tk.log("event = "+eval("event."+position));
-			tk.log("position = "+(eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2")));
 			if (eval("event."+position) <= (eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2"))) {
 				ind.style.top = targetTab.getBoundingClientRect().top - targetTab.boxObject.height + "px";
 			}
 			else {
 				ind.style.top = targetTab.getBoundingClientRect().top + "px";
 			}
-			tk.log("ind.style.top = "+ind.style.top);
 			ind.style.lineHeight = targetTab.getBoundingClientRect().height + "px";
 			ind.firstChild.style.verticalAlign = "bottom";
 			this._tabDropIndicator.collapsed = false;
@@ -4227,12 +4214,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 		// These would supress the drop indicator, should be deleted if confirmed no use
 		gBrowser.mTabContainer.addEventListener("dragexit", function(event) {
-			tk.log("dragexit run");
 			this._tabDropIndicator.collapsed = true;
 		}, true);
 
 		gBrowser.mTabContainer.addEventListener("dragend", function(event) {
-			tk.log("dragend run");
 			this._tabDropIndicator.collapsed = true;
 		}, true);
 
@@ -4290,13 +4275,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 	this.preInitListeners.push(this.preInitTabDragModifications);
 	this.postInitTabDragModifications = function postInitTabDragModifications(event) { // TODO=P4: TJS Test
-		if ("_onDrop" in gBrowser) { // [Fx3.5+]
-			gBrowser.old_onDrop = gBrowser._onDrop;
-			gBrowser._onDrop = tk._onDrop;
-		}
-		else {// [Fx4+]
-			tk.debug("postInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
-		}
+		// if ("_onDrop" in gBrowser) { // [Fx3.5+]
+			// gBrowser.old_onDrop = gBrowser._onDrop;
+			// gBrowser._onDrop = tk._onDrop;
+		// }
+		// else {// [Fx4+]
+			// tk.debug("postInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
+		// }
 		
 	};
 	this.postInitListeners.push(this.postInitTabDragModifications);
@@ -4538,24 +4523,73 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	// See globalPreInitNewTabsByDefault in tabkit-global.js
 	
 	this.postInitNewTabsByDefault = function postInitNewTabsByDefault(event) {
-		if ("BrowserLoadURL" in window) { // [Fx3-]
+		// [Fx3.5+]
+		tk.addMethodHook([
+			'gURLBar.handleCommand',//{
+			null,
+			'aTriggeringEvent.altKey',
+			'(aTriggeringEvent.altKey ^ gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.addressBar"))'
+		]);//}
+		
+		// [Fx4+]
+		if ("PlacesUIUtils" in window) {
 			tk.addMethodHook([
-				'BrowserLoadURL',//{
+				'PlacesUIUtils._openNodeIn',
 				null,
-				'aTriggeringEvent.altKey',
-				'(aTriggeringEvent.altKey ^ gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.addressBar"))'
-			]);//}
-		}
-		else { // [Fx3.5+]
-			tk.addMethodHook([
-				'gURLBar.handleCommand',//{
-				null,
-				'aTriggeringEvent.altKey',
-				'(aTriggeringEvent.altKey ^ gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.addressBar"))'
-			]);//}
+				'aWindow.openUILinkIn(aNode.uri, aWhere);',
+				'aWindow.openUILinkIn(aNode.uri, tk.returnWhereWhenOpenPlaces(aWhere, aNode));'
+			]);
+			tk.debug("Hooked?");
+			
+			document.getElementById('placesContext_open').removeAttribute('default');
+			document.getElementById('placesContext_open:newtab').setAttribute('default', true);
 		}
 	};
 	this.postInitListeners.push(this.postInitNewTabsByDefault);
+	
+	this.returnWhereWhenOpenPlaces = function returnWhereWhenOpenPlaces(aWhere, aNode) {
+		
+		if (!gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places"))
+			return aWhere;
+		
+/* 		if ( // clicking on folder
+			aEvent &&
+			(
+				( // tree
+					aEvent.target.localName == 'treechildren' &&
+					aEvent.currentTarget.selectedNode &&
+					!PlacesUtils.nodeIsURI(aEvent.currentTarget.selectedNode) &&
+					PlacesUtils.nodeIsContainer(aEvent.currentTarget.selectedNode)
+				) ||
+				( // toolbar, menu
+					aEvent.originalTarget &&
+					aEvent.originalTarget.node &&
+					PlacesUtils.nodeIsContainer(aEvent.originalTarget.node)
+				)
+			)
+		)
+		tk.debug("clicking on folder");return aWhere; */
+		
+		if ((aWhere == "tab")  || (aWhere == "tabshifted")
+			|| (aNode.uri.indexOf('javascript:') == 0) /* bookmarklets*/) {
+			// tk.debug("return current");
+			return "current";
+		}
+		else {
+			var w = getTopWin();
+			var browser = w ? w.getBrowser().tabContainer.selectedItem.linkedBrowser : w;
+			// tk.debug(browser.contentTitle);
+			// tk.debug(browser.webNavigation.currentURI.spec);
+			if (aWhere == "current"
+				 && (!browser
+				 || browser.webNavigation.currentURI.spec != "about:blank"
+				 || browser.webProgress.isLoadingDocument)
+				 ) {
+				// tk.debug("return tab");
+				return "tab";
+			}
+		}
+	};
 	
 	//}##########################
 	//{=== Tab Min Width
@@ -4607,9 +4641,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		var tabbarPosition = _prefs.getIntPref("tabbarPosition");
 		if (tabbarPosition != tk.Positions.TOP) {
-			tk.log("Before move");
 			tk.moveTabbar(tabbarPosition);
-			tk.log("After move");
 		}
 		tk.addPrefListener("tabbarPosition", tk.moveTabbar);
 
@@ -4670,8 +4702,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (_tabBar.collapsed) {
 			// Ensure tab bar has sensible width if we're showing it on hover (this
 			// way it's ok to collapse it by dragging the splitter to zero width)
-			if (parseInt(_tabBar.width) < 100)
-				_tabBar.width = 200;
+			_tabBar.width = Math.min(200, parseInt(_tabBar.width));
 			
 			// Show tab bar
 			_tabBar.collapsed = false;
@@ -4692,11 +4723,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}, 333, _tabBar.tkLastMouseover);
 	};
 	this.positionedTabbar_onToggleCollapse = function positionedTabbar_onToggleCollapse(event) {
-		tk.log("positionedTabbar_onToggleCollapse start");
-		tk.log(event.attrName);
 		if (event.attrName != "collapsed")
 			return;
-		tk.log("positionedTabbar_onToggleCollapse event.attrName == 'collapsed'");
 		
 		if (event.attrChange == MutationEvent.ADDITION) {
 			event.target.collapsed = false;	//target = appcontent
