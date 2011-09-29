@@ -4586,7 +4586,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				 || browser.webProgress.isLoadingDocument)
 				 ) {
 				// tk.debug("return tab");
-				return "tab";
+				return "tabshifted";
 			}
 		}
 	};
