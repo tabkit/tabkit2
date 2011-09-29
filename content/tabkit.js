@@ -1739,18 +1739,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		{ d: 5, n: "BM_onCommand",		  t: "newtab" }, //BM_onCommand [[[1. loadOneTab 2. openUILinkIn 3. PU_openNodeIn 4. PU_openNodeWithEvent 5. BM_onCommand]]]
 		{ d: 5, n: "ondragdrop",			t: "newtab" }, //newTabButtonObserver.onDrop [[[1. loadOneTab 2. openNewTabWith 3.  4.  5. ondragdrop]]] // Could make unrelated if from a different window?
 		{ d: 4, n: "middleMousePaste",	  t: "newtab" }, //middleMousePaste
-		{ d: 4, n: "BrowserLoadURL",		t: "newtab" }, //[Fx3-] BrowserLoadURL [[[1. loadOneTab 2. openUILinkIn 3. openUILink 4. BrowserLoadURL 5. handleURLBarCommand 6. onclick]]]
 		{ d: 4, n: "handleCommand",		 t: "newtab" }, //[Fx3.5+] gURLBar.handleCommand [[[1.loadOneTab 2. openUILinkIn 3. openUILink 4. handleCommand 5. onclick]]]
 		{ d: 2, n: "BrowserOpenTab",		t: "newtab" }, //BrowserOpenTab [[[1. loadOneTab 2. BrowserOpenTab 3. oncommand]]] // Amongst other traces
 		{ d: 2, n: "delayedOpenTab",		t: "newtab" }, //delayedOpenTab
-		{ d: 2, n: "BrowserLoadURL",		t: "newtab" }, //[Fx3-] BrowserLoadURL [[[1. loadOneTab 2. BrowserLoadURL 3. handleURLBarCommand 4.  5. anonymous 6. fireEvent 7. onTextEntered]]]
 		{ d: 2, n: "handleCommand",		 t: "newtab" }, //[Fx3.5+] gURLBar.handleCommand [[[1.loadOneTab 2. handleCommand 3. anonymous 4. fireEvent 5. onTextEntered]]]
-		{ d: 3, n: "doSearch",			  t: "newtab" }, //[Fx3only] BrowserSearch.searchBar.doSearch [[[1. loadOneTab 2. openUILinkIn 3. doSearch 4. handleSearchCommand 5. onTextEntered 6. handleEnter 7. onKeyPress]]] // (note: simple replacement wouldn't work if searchbar was added after opening window
-		 /* comment by Pika, Fx2 related
-		{ d: 2, n: "doSearch",			  t: "newtab" }, //[Fx2only] BrowserSearch.getSearchBar().doSearch [[[1. loadOneTab 2. doSearch 3. handleSearchCommand 4. onTextEntered 5. handleEnter 6. onKeyPress 7. onxblkeypress]]] // (note: simple replacement wouldn't work if searchbar was added after opening window
-		*/
 		{ d: 1, n: "_endRemoveTab",		 t: "newtab" }, //[Fx3.5+] gBrowser._endRemoveTab [[[1. _endRemoveTab 2. removeTab 3. removeCurrentTab 4. BrowserCloseTabOrWindow 5. oncommand]]]
-		{ d: 1, n: "removeTab",			 t: "newtab" }, //[Fx3-] gBrowser.removeTab [[[1. removeTab 2. onTabClick 3. onclick]]]
 		
 		{ d: 4, n: "openReleaseNotes",	  t: "unrelated" }, //openReleaseNotes [[[1. loadOneTab 2. openUILinkIn 3. openUILink 4. openReleaseNotes 5. anonymous 6. checkForMiddleClick 7. onclick]]]
 		
@@ -3895,22 +3888,27 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		return gBrowser.loadOneTab(gBrowser.getBrowserForTab(aTab).currentURI.spec); // [Fx3- since browser.sessionstore.enabled always on in 3.5+]
 	};
 	
-	this._onDrop = function _onDrop(aEvent) { // [Fx3.5+]
-		
-		var dt = aEvent.dataTransfer;
+	this._onDrop = function _onDrop(event) { // [Fx4+]
+		var dt = event.dataTransfer;
 		var dropEffect = dt.dropEffect;
 		// if (dropEffect == "link")
-			// return gBrowser.old_onDrop(aEvent);
-		var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+			// return gBrowser.old_onDrop(event);
 		
-		if (!draggedTab)
-			return; // not our drop then (see original _onDrop)
+		var targetTab = event.target.localName == "tab" ? event.target : null;
+		if (!targetTab || targetTab.hasAttribute("pinned"))
+			return;
+
+		var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+		if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != this)
+			return;
+		
+		this._tabDropIndicator.collapsed = true;
 		
 		var dGid = draggedTab.getAttribute("groupid");
 		var dPrev = draggedTab.previousSibling;
 		var dNext = draggedTab.nextSibling;
 		
-		var newIndex = gBrowser.mTabContainer._getDropIndex(aEvent);
+		var newIndex = tk._getDropIndex(event);
 		var beforeTab = newIndex > 0 ? _tabs[newIndex - 1] : null;
 		var afterTab = newIndex < _tabs.length ? _tabs[newIndex] : null;
 		var bGid = beforeTab ? beforeTab.getAttribute("groupid") : null;
@@ -3947,7 +3945,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Determine if we're dealing with one tab or a group/subtree
 		var tabs;
 		var shiftDragSubtree;
-		if (dGid && (aEvent.shiftKey && _prefs.getBoolPref("shiftDragGroups")
+		if (dGid && (event.shiftKey && _prefs.getBoolPref("shiftDragGroups")
 					 || draggedTab.hasAttribute("groupcollapsed"))) {
 			// User wants to drag a group/subtree
 			
@@ -3991,9 +3989,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				else
 					tk.addingTab("unrelated", null, true);
 				
-				tk.chosenNewIndex = newIndex;
-				aEvent.tab = tab;
-				gBrowser.old_onDrop(aEvent);
+				// tk.chosenNewIndex = newIndex;
+				// event.tab = tab;
+				// gBrowser.old_onDrop(event);
+				gBrowser.moveTabTo(tab, newIndex);
 				
 				newTabs.unshift(tk.addedTabs[0]);
 				
@@ -4004,16 +4003,21 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			else {
 				// Tab will be moved directly
 				
-				tk.chosenNewIndex = newIndex;
+				// tk.chosenNewIndex = newIndex;
 				if (tab._tPos < newIndex)
 					newIndex--;
-				aEvent.tab = tab;
-				gBrowser.old_onDrop(aEvent);
+				// event.tab = tab;
+				// gBrowser.old_onDrop(event);
+				gBrowser.moveTabTo(tab, newIndex);
 				
 				newTabs.unshift(tab); // Although not strictly a new tab, this allows copy and move to reuse code later
 			}
 			newTabs[0].originalTreeLevel = singleTab ? 0 : tab.treeLevel; // Save the treeLevels
 		}
+		
+		event.preventDefault();
+		event.stopPropagation();
+		
 		if (dropEffect == "copy" && draggedTab.parentNode != _tabContainer)
 			gBrowser.selectedTab = newTabs[0]; // TODO=P3: TJS Is this necessary?
 		
@@ -4139,7 +4143,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			// }'
 		// ]);//}
 		
-		if ("_onDrop" in gBrowser) { // [Fx3.5+]
+		/* if ("_onDrop" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
 				"gBrowser._onDrop",//{
 				null,
@@ -4153,9 +4157,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		else {// [Fx4+]
 			tk.debug("preInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
-		}
+		} */
 		
-		if ("_onDragLeave" in gBrowser) { // [Fx3.5+]
+		/* if ("_onDragLeave" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
 				"gBrowser._onDragLeave",//{
 				null,
@@ -4167,11 +4171,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		else {// [Fx4+]
 			tk.debug("preInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
-		}
+		} */
 		
-		//Pika test on dragging tab start
+		//Pika test on dragging tab for Fx4+
 		gBrowser.mTabContainer.addEventListener("dragstart", function(event) {//What's the use of this?
-			tk.log("dragstart start");
 			if (event.target.localName == "tab") {
 				var draggedTab = event.target;
 				var draggedTabs = gBrowser.contextTabsOf(draggedTab);
@@ -4185,7 +4188,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				});
 			}
 		}, true);
-		gBrowser.mTabContainer.addEventListener("dragover", function(event) {//need review MEDIC!
+		gBrowser.mTabContainer.addEventListener("dragover", function(event) {//for drop indicator
 			var ind = this._tabDropIndicator.parentNode;
 			// if (!this.hasAttribute("multirow")) {
 				// ind.style.position = "";
@@ -4194,47 +4197,47 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			ind.style.position = "fixed";
 			ind.style.zIndex = 100;
 
-			var newIndex = this._getDropIndex(event);
-			var tab = this.childNodes[newIndex < this.childNodes.length ? newIndex : newIndex - 1];
+			var newIndex = tk._getDropIndex(event);
+			var targetTab = this.childNodes[newIndex < this.childNodes.length ? newIndex : newIndex - 1];
 			var ltr = getComputedStyle(this, null).direction == "ltr";
 			var isVertical = gBrowser.hasAttribute("vertitabbar");
-			if (isVertical) {//Vertical
-				var [start, end] = ltr ? ["top", "bottom"] : ["bottom", "top"];
-				var startPos = this.getBoundingClientRect()[start];
-				if (tab.boxObject.screenX > event.screenX && newIndex > 0) {
-					tab = this.childNodes[newIndex - 1];
-					startPos += tab.getBoundingClientRect()[end] - this.mTabstrip._scrollbox.getBoundingClientRect()[start];
-				}
-				ind.style[start] = startPos - ind.clientHeight / 2 * (ltr ? 1 : -1) + "px";
-				
-			}
-			else {//Horizontal
-				var [start, end] = ltr ? ["left", "right"] : ["right", "left"];
-				var startPos = this.getBoundingClientRect()[start];
-				if (tab.boxObject.screenY > event.screenY && newIndex > 0) {
-					tab = this.childNodes[newIndex - 1];
-					startPos += tab.getBoundingClientRect()[end] - this.mTabstrip._scrollbox.getBoundingClientRect()[start];
-				}
-				ind.style[start] = startPos - ind.clientWidth / 2 * (ltr ? 1 : -1) + "px";
-			}
 			
-
-			ind.style.top = tab.getBoundingClientRect().top + "px";
-			ind.style.lineHeight = tab.getBoundingClientRect().height + "px";
+			var position = isVertical ? "screenY" : "screenX";
+			var size = isVertical ? "height" : "width";
+			var start = isVertical ? "top" : "left";
+			var end = isVertical ? "bottom" : "right";
+			
+			//DO NOT reuse newIndex
+			tk.log("event = "+eval("event."+position));
+			tk.log("position = "+(eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2")));
+			if (eval("event."+position) <= (eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2"))) {
+				ind.style.top = targetTab.getBoundingClientRect().top - targetTab.boxObject.height + "px";
+			}
+			else {
+				ind.style.top = targetTab.getBoundingClientRect().top + "px";
+			}
+			tk.log("ind.style.top = "+ind.style.top);
+			ind.style.lineHeight = targetTab.getBoundingClientRect().height + "px";
 			ind.firstChild.style.verticalAlign = "bottom";
 			this._tabDropIndicator.collapsed = false;
+			
+			event.preventDefault();
+			event.stopPropagation();
 		}, true);
 
+		// These would supress the drop indicator, should be deleted if confirmed no use
 		gBrowser.mTabContainer.addEventListener("dragexit", function(event) {
+			tk.log("dragexit run");
 			this._tabDropIndicator.collapsed = true;
 		}, true);
 
 		gBrowser.mTabContainer.addEventListener("dragend", function(event) {
+			tk.log("dragend run");
 			this._tabDropIndicator.collapsed = true;
 		}, true);
 
-		//this event handler can run completely
-		gBrowser.mTabContainer.addEventListener("dragover", function(event) {//setAttribute for after use I guess?
+		//contain important logic, but no use itself
+		/* gBrowser.mTabContainer.addEventListener("dragover", function(event) {//setAttribute for after use I guess?
 			var targetTab = event.target.localName == "tab" ? event.target : null;
 			if (!targetTab || targetTab.hasAttribute("pinned"))
 				return;
@@ -4250,23 +4253,40 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				return;
 			}
 
-			var isVertical = this.orient == "vertical";
-			var [position, size] = isVertical ? ["screenY", "height"] : ["screenX", "width"];
-			var [start, end] = isVertical ? ["top", "bottom"] : ["left", "right"];
+			var isVertical = gBrowser.hasAttribute("vertitabbar");
+			var position = isVertical ? "screenY" : "screenX";
+			var size = isVertical ? "height" : "width";
+			var start = isVertical ? "top" : "left";
+			var end = isVertical ? "bottom" : "right";
 
-			if (event.position < targetTab.boxObject.position + targetTab.boxObject.size * .5)
+			// tk.log("event.screenX = "+event.screenX);
+			// tk.log("targetTab.boxObject.screenX = "+targetTab.boxObject.screenX);
+			// tk.log("targetTab.boxObject.width = "+targetTab.boxObject.width);
+			
+			// tk.log("event.screenY = "+event.screenY);
+			// tk.log("targetTab.boxObject.screenY = "+targetTab.boxObject.screenY);
+			// tk.log("targetTab.boxObject.height = "+targetTab.boxObject.height);
+			
+			// tk.log("event.position = "+eval("event."+position));
+			// tk.log("targetTab.boxObject.position = "+eval("targetTab.boxObject."+position));
+			// tk.log("targetTab.boxObject.size = "+eval("targetTab.boxObject."+size));
+			
+			// tk.log("targetTab.boxObject.position + targetTab.boxObject.size * .25 = "+(eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" * .25")));
+			// tk.log("targetTab.boxObject.position + targetTab.boxObject.size * .75 = "+(eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" * .75")));
+			if (eval("event."+position) <= (eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2"))) {
 				targetTab.setAttribute("dragover", start);
-			else if (event.position > targetTab.boxObject.position + targetTab.boxObject.size * .5)
+			} else if (eval("event."+position) > (eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2"))) {
 				targetTab.setAttribute("dragover", end);
-			else {
+			} else {
+				//Dead Code MEDIC!
 				targetTab.setAttribute("dragover", "center");
 				// this._tabDropIndicator.collapsed = true;
 				event.preventDefault();
 				event.stopPropagation();
 			}
-		}, true);
+		}, true);  */
 		
-		// gBrowser.mTabContainer.addEventListener("drop", tk._onDrop, true);
+		gBrowser.mTabContainer.addEventListener("drop", tk._onDrop, true);
 	};
 	this.preInitListeners.push(this.preInitTabDragModifications);
 	this.postInitTabDragModifications = function postInitTabDragModifications(event) { // TODO=P4: TJS Test
@@ -4282,7 +4302,30 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.postInitListeners.push(this.postInitTabDragModifications);
 	
 	this._getDropIndex = function _getDropIndex(event) {	//since the default functions sucks on vertical mode
+		var targetTab = event.target.localName == "tab" ? event.target : null;
+		if (!targetTab || targetTab.hasAttribute("pinned"))
+			return;
 		
+		var dt = event.dataTransfer;
+		var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+		if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != _tabContainer)
+			return;
+		
+		var isVertical = gBrowser.hasAttribute("vertitabbar");
+		var position = isVertical ? "screenY" : "screenX";
+		var size = isVertical ? "height" : "width";
+		var start = isVertical ? "top" : "left";
+		var end = isVertical ? "bottom" : "right";
+
+		var resultIndex = 0;
+		var targetPos = targetTab._tPos;
+		if (eval("event."+position) <= (eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2"))) {
+			resultIndex = targetPos;
+		}
+		else {
+			resultIndex = targetPos + 1;
+		}
+		return resultIndex;
 	}
 	
 
