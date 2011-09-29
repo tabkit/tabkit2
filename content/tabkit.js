@@ -4702,7 +4702,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (_tabBar.collapsed) {
 			// Ensure tab bar has sensible width if we're showing it on hover (this
 			// way it's ok to collapse it by dragging the splitter to zero width)
-			_tabBar.width = Math.min(200, parseInt(_tabBar.width));
+			_tabBar.width = Math.max(200, parseInt(_tabBar.width));
 			
 			// Show tab bar
 			_tabBar.collapsed = false;
