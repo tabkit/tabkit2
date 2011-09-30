@@ -4654,10 +4654,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		gBrowser.mStrip.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
 		gBrowser.parentNode.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
 		
+		//Special bug workaround by Pika
+		_tabContainer.addEventListener("TabClose", tk.bug608589workaround, true);
 	};
 	this.initListeners.push(this.initTabbarPosition);
 
 	/// Event listeners:
+	this.bug608589workaround = function bug608589workaround(event) {
+		//As stated in bug 608589, if animation is enabled,
+		// there is a chance the animation cannot finish and the tab will disappear but not closed(since waiting for animation)
+		// I can still reproduce this problem up to firefox nightly 10
+		// this workaround will stay here until a real fix is released
+		if (gPrefService.getBoolPref("browser.tabs.animate") == true)
+			gPrefService.setBoolPref("browser.tabs.animate",false);
+	}
 	this.positionedTabbar_onTabOpen = function positionedTabbar_onTabOpen(event) {
 		if (gBrowser.hasAttribute("vertitabbar") && document.getElementById("tabkit-splitter")) {
 			var tab = event.target;
