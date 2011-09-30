@@ -835,7 +835,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		_tabContainer = gBrowser.mTabContainer;
 		_tabstrip = _tabContainer.mTabstrip;
-		_tabInnerBox = document.getAnonymousElementByAttribute(_tabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+		_tabInnerBox = document.getAnonymousElementByAttribute(_tabContainer, "class", "box-inherit scrollbox-innerbox");
 		_tabs = gBrowser.mTabs;
 		_tabBar = document.getElementById("TabsToolbar");
 	};
@@ -4539,7 +4539,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'aWindow.openUILinkIn(aNode.uri, aWhere);',
 				'aWindow.openUILinkIn(aNode.uri, tk.returnWhereWhenOpenPlaces(aWhere, aNode));'
 			]);
-			tk.debug("Hooked?");
 			
 			document.getElementById('placesContext_open').removeAttribute('default');
 			document.getElementById('placesContext_open:newtab').setAttribute('default', true);
@@ -4895,6 +4894,17 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Toggle the splitter as appropriate
 		var splitter = document.getElementById("tabkit-splitter");
 		if (flipOrient) {
+			// Remove any space or flexible space in tab bar(which makes vertical tab bar works strange)
+			var nodesToRemove = [];
+			for (var i = 0; i < tabsToolbar.children.length; i++) {
+				var thisNode = tabsToolbar.children.item(i);
+				if (thisNode.localName == "toolbarspacer" || thisNode.localName == "toolbarspring") {
+					nodesToRemove.push(thisNode);
+					thisNode.parentNode.removeChild(thisNode);	//if you remove here you affect the length and index of after objects, the next one will escape check, so need to decrease index
+					i--;
+				}
+			}
+			
 			if (!splitter) {
 				/*comment by Pika
 				tabHbox.flex = "1";
