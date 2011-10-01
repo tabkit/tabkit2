@@ -3492,7 +3492,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			for (var i = 0; i < nodes.length; i++) {
 				//edit by Pika, coloring for Fx4+
 				nodes[i].style.setProperty(styleToSet, bgColor, "important");
-				nodes[i].style.setProperty("color", bgColor?"black":"", "important");
+				// nodes[i].style.setProperty("color", bgColor?"black":"", "important");
+				//Issue 9
+				nodes[i].style.setProperty("color", "black", "important");
 			}
 			
 			// Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
