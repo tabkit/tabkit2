@@ -3509,8 +3509,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			for (var i = 0; i < nodes.length; i++) {
 				//edit by Pika, coloring for Fx4+
 				nodes[i].style.setProperty(styleToSet, bgColor, "important");
-				// nodes[i].style.setProperty("color", bgColor?"black":"", "important");
-				//Issue 9
 				nodes[i].style.setProperty("color", "black", "important");
 			}
 			
@@ -3528,6 +3526,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 	};
 
+	this.setTabsColorBlack = function setTabsColorBlack(event) {
+		var tabs = gBrowser.tabs;
+		for (var i = 0; i<tabs.length; i++)
+			tabs[i].style.setProperty("color", "black", "important");
+	}
+	
 	this.colorAllTabsMenuItem = function colorAllTabsMenuItem(tab, menuItem) {
 		// TODO=P4: GCODE Fx3: Make All Tabs prettier (since we mess things up a little by setting -moz-appearance: none)
 		try {
@@ -3581,6 +3585,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.mAllTabsPopup.addEventListener("popupshowing", tk.colorAllTabsMenu, false);
 		_tabContainer.addEventListener("TabClose", tk.colorAllTabsMenu, false);
 		_tabContainer.addEventListener("TabSelect", tk.colorAllTabsMenu, false);
+		_tabContainer.addEventListener("TabSelect", tk.setTabsColorBlack, false);
 			
 		if ("LastTab" in window && window.LastTab && LastTab.Browser && LastTab.Browser.OnTabMenuShowing) {
 			tk.appendMethodCode('LastTab.Browser.OnTabMenuShowing',//{
