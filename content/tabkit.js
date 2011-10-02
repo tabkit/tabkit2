@@ -1864,16 +1864,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		
 		// Color tabs-bottom (see also colorizeTab, and note that tabs-bottom is hidden during multirow mode)
-		if (_tabContainer.getAttribute("colortabnotlabel") == "true" && _tabContainer.getAttribute("multirow") != "true") {
-			var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
-			if (tabsBottom) {
-				var bgColor = document.getAnonymousNodes(tab)[0].style.backgroundColor;
-				tabsBottom.style.setProperty("background-color", bgColor, "important");
-			}
-			else {
-				tk.debug("sortgroup_onTabSelect: Couldn't find tabs-bottom");
-			}
-		}
+		// if (_tabContainer.getAttribute("colortabnotlabel") == "true" && _tabContainer.getAttribute("multirow") != "true") {
+			// var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
+			// if (tabsBottom) {
+				// var bgColor = document.getAnonymousNodes(tab)[0].style.backgroundColor;
+				// tabsBottom.style.setProperty("background-color", bgColor, "important");
+			// }
+			// else {
+				// tk.debug("sortgroup_onTabSelect: Couldn't find tabs-bottom");
+			// }
+		// }
 	};
 	
 	// TODO=P3: GCODE Call updateAutoCollapse on restore if selected before the groupid is restored
@@ -3513,13 +3513,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 			
 			// Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
-			if (tab.getAttribute("selected") == "true" && _tabContainer.getAttribute("colortabnotlabel") == "true") {
-				var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
-				if (tabsBottom)
-					tabsBottom.style.setProperty("background-color", bgColor, "important");
-				else
-					tk.debug("colorizeTab: Couldn't find tabs-bottom");
-			}
+			// if (tab.getAttribute("selected") == "true" && _tabContainer.getAttribute("colortabnotlabel") == "true") {
+				// var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
+				// if (tabsBottom)
+					// tabsBottom.style.setProperty("background-color", bgColor, "important");
+				// else
+					// tk.debug("colorizeTab: Couldn't find tabs-bottom");
+			// }
 		}
 		catch (ex) {
 			tk.dump(ex);
@@ -5967,6 +5967,33 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			gBrowser.selectedTab = firstTab;
 	};
 
+	//}##########################
+	//{=== Modification for Fx4+
+	//|##########################
+	this.postInitFx4Modifications = function postInitFx4Modifications(event) {
+		// Not sure if pinned tab works in horizontal mode, but still BAM!
+		tk.addMethodHook([
+			"gBrowser.pinTab",
+			null,
+			'if (aTab.pinned)',
+			'alert("Sorry, but Tabkit 2 does not support App Tabs"); return; \
+			$&',
+		]);
+		
+		// Disable Panorama, why use Panorama when you have Tabkit?
+		tk.addMethodHook([
+			"TabView.toggle",
+			null,
+			'if (this.isVisible())',
+			'alert("Sorry, but Tabkit 2 does not support Panorama. Why use Panorama when you have Tabkit? :)"); return; \
+			$&',
+		]);
+		//Also need to disable certain menu item(s)
+		var context_tabViewMenu = document.getElementById("context_tabViewMenu");
+		context_tabViewMenu.disabled = true;
+	}
+	
+	this.postInitListeners.push(this.postInitFx4Modifications);
 	//}##########################
 	//{### Debug Aids
 	//|##########################
