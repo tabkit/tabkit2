@@ -1153,7 +1153,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 	/// Initialisation:
 	this.initSortingAndGrouping = function initSortingAndGrouping(event) {
-		tk.log("initSortingAndGrouping");
+
 		// Persist Attributes
 		if (_ss) {
 				_ss.persistTabAttribute("tabid");
@@ -1174,7 +1174,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 		}
 		
-		tk.log("initSortingAndGrouping 873493");
 		tk.detectTheme();
 		
 		// Add event listeners:
@@ -1188,9 +1187,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabMove", tk.sortgroup_onTabMoved, false);
 		_tabContainer.addEventListener("TabClose", tk.sortgroup_onTabRemoved, false);
 		
-		gBrowser.mStrip.addEventListener("mousedown", tk.sortgroup_onTabMousedown, true);
-		gBrowser.mStrip.addEventListener("click", tk.sortgroup_onClickTab, true);
-		gBrowser.mStrip.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
+		// gBrowser.mStrip.addEventListener("mousedown", tk.sortgroup_onTabMousedown, true);
+		// gBrowser.mStrip.addEventListener("click", tk.sortgroup_onClickTab, true);
+		// gBrowser.mStrip.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
+		
+		gBrowser.tabContainer.addEventListener("mousedown", tk.sortgroup_onTabMousedown, true);
+		gBrowser.tabContainer.addEventListener("click", tk.sortgroup_onClickTab, true);
+		gBrowser.tabContainer.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
 		
 		tk.addPrefListener("forceThemeCompatibility", tk.detectTheme);
 		tk.addPrefListener("colorTabNotLabel", tk.detectTheme);
@@ -1216,8 +1219,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}, 0);
 		
 		// Move Sorting and Grouping menu to the tab context menu (from the Tools menu)
-		var tabContextMenu = gBrowser.mStrip.getElementsByAttribute("anonid", "tabContextMenu")[0];
+		var tabContextMenu = _tabContainer.contextMenu;
 		tabContextMenu.insertBefore(document.getElementById("menu_tabkit-sortgroup"), tabContextMenu.childNodes[1]);
+		
+		// Fixed Issue 11 by Pika
+		// After each tab selecting/switching the whole list of tabs is called against gBrowser.showTab (Source not found, guessed to be Panorama)
+		// So this method hook disallows those collapsed and hidden tabs to be expanded by that unknown source
+		tk.addMethodHook([
+			"gBrowser.showTab",
+			null,
+			'if (aTab.hidden) {',
+			' \
+			$& \
+			if(aTab.hasAttribute("groupcollapsed")) return;',
+		]);
 	};
 	this.initListeners.push(this.initSortingAndGrouping);
 
@@ -2727,8 +2742,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		else {
 			for each (var tab in group) {
 				tab.setAttribute("groupcollapsed", "true");
-				if (tab != contextTab)
+				if (tab != contextTab) {
 					tk.tabSetHidden(tab, true); // visibility of a tab */
+				}
+
 			}
 		}
 		
@@ -4119,7 +4136,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 	
 	// this.chosenNewIndex = null;
-	this.preInitTabDragModifications = function preInitTabDragModifications(event) {
+	this.preInitTabDragModifications = function preInitTabDragModifications(event) {	
 		// Allow setting the next value returned by this via tk.chosenNewIndex
 		//comment by Pika, for dragging tab
 		// tk.addMethodHook([
@@ -4435,7 +4452,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		_tabContainer.addEventListener("click", tk.protectedTabs_onClick, true);
 		
-		var tabContextMenu = gBrowser.mStrip.getElementsByAttribute("anonid", "tabContextMenu")[0];
+		var tabContextMenu = _tabContainer.contextMenu;
 		tabContextMenu.addEventListener("popupshowing", tk.protectedTabs_updateContextMenu, false);
 		
 		tk.context_closeTab = document.getElementById("context_closeTab");
@@ -4651,8 +4668,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabMove", tk.positionedTabbar_onTabSelect, false); // In case a tab is moved out of sight
 		
 		_tabContainer.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
-		gBrowser.mStrip.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
-		gBrowser.mStrip.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
+		gBrowser.tabContainer.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
+		gBrowser.tabContainer.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
 		gBrowser.parentNode.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
 		
 		//Special bug workaround by Pika
@@ -5532,7 +5549,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("mouseout", tk.cancelTabHoverGesture, false);
 		
 		// Move Close Tab Before/After to the tab context menu (from the Tools menu)
-		var tabContextMenu = gBrowser.mStrip.getElementsByAttribute("anonid", "tabContextMenu")[0];
+		var tabContextMenu = _tabContainer.contextMenu;
 		for (var i = 0; i < tabContextMenu.childNodes.length; i++) {
 			var el = tabContextMenu.childNodes[i];
 			if (el.getAttribute("oncommand").indexOf("removeAllTabsBut") != -1) {

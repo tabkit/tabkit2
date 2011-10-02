@@ -38,19 +38,19 @@
 	<command id="cmd_tabkit-sortgroup-newtabs-autoGroup" oncommand="tabkit.toggleAutoGroupNewTabs();"/>
 	
 	
-	<command id="cmd_tabkit-sortgroup-tab-newTabHere" oncommand="tabkit.openNewTabHere(gBrowser.mContextTab);"/>
-	<command id="cmd_tabkit-sortgroup-tab-duplicateTab" oncommand="tabkit.duplicateTab(gBrowser.mContextTab);"/>
-	<command id="cmd_tabkit-sortgroup-tab-makeGroup" oncommand="tabkit.makeGroup(gBrowser.mContextTab);"/>
+	<command id="cmd_tabkit-sortgroup-tab-newTabHere" oncommand="tabkit.openNewTabHere(TabContextMenu.contextTab);"/>
+	<command id="cmd_tabkit-sortgroup-tab-duplicateTab" oncommand="tabkit.duplicateTab(TabContextMenu.contextTab);"/>
+	<command id="cmd_tabkit-sortgroup-tab-makeGroup" oncommand="tabkit.makeGroup(TabContextMenu.contextTab);"/>
 	
-	<command id="cmd_tabkit-tab-toggleProtected" oncommand="tabkit.toggleProtected(gBrowser.mContextTab);"/>
-	<command id="cmd_tabkit-tab-toggleUnread" oncommand="tabkit.toggleUnread(gBrowser.mContextTab);"/>
+	<command id="cmd_tabkit-tab-toggleProtected" oncommand="tabkit.toggleProtected(TabContextMenu.contextTab);"/>
+	<command id="cmd_tabkit-tab-toggleUnread" oncommand="tabkit.toggleUnread(TabContextMenu.contextTab);"/>
 	
 	
-	<command id="cmd_tabkit-sortgroup-group-collapseExpand" oncommand="tabkit.toggleGroupCollapsed(gBrowser.mContextTab);"/>
-	<command id="cmd_tabkit-sortgroup-group-bookmark" oncommand="tabkit.bookmarkGroup(gBrowser.mContextTab);"/>
-	<command id="cmd_tabkit-sortgroup-group-close" oncommand="tabkit.closeGroup(gBrowser.mContextTab);"/>
-	<command id="cmd_tabkit-sortgroup-group-closeChildren" oncommand="tabkit.closeChildren(gBrowser.mContextTab);"/>
-	<command id="cmd_tabkit-sortgroup-group-ungroup" oncommand="tabkit.ungroupGroup(gBrowser.mContextTab);"/>
+	<command id="cmd_tabkit-sortgroup-group-collapseExpand" oncommand="tabkit.toggleGroupCollapsed(TabContextMenu.contextTab);"/>
+	<command id="cmd_tabkit-sortgroup-group-bookmark" oncommand="tabkit.bookmarkGroup(TabContextMenu.contextTab);"/>
+	<command id="cmd_tabkit-sortgroup-group-close" oncommand="tabkit.closeGroup(TabContextMenu.contextTab);"/>
+	<command id="cmd_tabkit-sortgroup-group-closeChildren" oncommand="tabkit.closeChildren(TabContextMenu.contextTab);"/>
+	<command id="cmd_tabkit-sortgroup-group-ungroup" oncommand="tabkit.ungroupGroup(TabContextMenu.contextTab);"/>
 	
 	<command id="cmd_tabkit-options" oncommand="tabkit.openOptions();"/>
 </commandset>
@@ -153,19 +153,19 @@
 	<menuitem label="&closeTabsToLeft.label;" accesskey="&closeTabsToLeft.accesskey;"
 		id="menu_tabkit-closeTabsToLeft" class="menu_tabkit-closeBeforeAfter-horizontal"
 		tbattr="tabbrowser-multiple"
-		oncommand="tabkit.removeTabsBefore(gBrowser.mContextTab);"/>
+		oncommand="tabkit.removeTabsBefore(TabContextMenu.contextTab);"/>
 	<menuitem label="&closeTabsToRight.label;" accesskey="&closeTabsToRight.accesskey;"
 		id="menu_tabkit-closeTabsToRight" class="menu_tabkit-closeBeforeAfter-horizontal"
 		tbattr="tabbrowser-multiple"
-		oncommand="tabkit.removeTabsAfter(gBrowser.mContextTab);"/>
+		oncommand="tabkit.removeTabsAfter(TabContextMenu.contextTab);"/>
 	<menuitem label="&closeTabsAbove.label;" accesskey="&closeTabsAbove.accesskey;"
 		id="menu_tabkit-closeTabsAbove" class="menu_tabkit-closeBeforeAfter-vertical"
 		tbattr="tabbrowser-multiple"
-		oncommand="tabkit.removeTabsBefore(gBrowser.mContextTab);"/>
+		oncommand="tabkit.removeTabsBefore(TabContextMenu.contextTab);"/>
 	<menuitem label="&closeTabsBelow.label;" accesskey="&closeTabsBelow.accesskey;"
 		id="menu_tabkit-closeTabsBelow" class="menu_tabkit-closeBeforeAfter-vertical"
 		tbattr="tabbrowser-multiple"
-		oncommand="tabkit.removeTabsAfter(gBrowser.mContextTab);"/>
+		oncommand="tabkit.removeTabsAfter(TabContextMenu.contextTab);"/>
 </menupopup>
 
 <!--
