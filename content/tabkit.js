@@ -3503,7 +3503,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			//add by Pika, coloring for Fx4+
 			var styleToSet;
 			if (bgColor != "")
-				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,.9)").replace("@HSL_Bottom",bgColor);
+				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,.7)").replace("@HSL_Bottom",bgColor);
+			else
+				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,.2)").replace("@HSL_Bottom","hsla(0, 0%, 100%,.5)");
 			styleToSet = "background-image";
 			
 			for (var i = 0; i < nodes.length; i++) {
