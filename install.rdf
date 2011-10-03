@@ -14,7 +14,7 @@
 				   <em:developer>Roman Beslik</em:developer>
 					<em:description>Tab grouping, multi-rows, tree view, and other tweaks. Firefox 4+ compatible!!</em:description>
 					<em:homepageURL>http://groups.google.com/group/tabkit-2nd-edition</em:homepageURL>
-					<em:iconURL>chrome://tabkit/skin/tabkit.png</em:iconURL>
+					<em:iconURL>chrome://tabkit/skin/tabkit2-logo.png</em:iconURL>
 					<em:optionsURL>chrome://tabkit/content/settings.xul</em:optionsURL>
 					<em:contributor>Fans of Tabkit</em:contributor>
 					<em:contributor>John Mellor</em:contributor>
