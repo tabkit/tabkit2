@@ -239,7 +239,7 @@
  {
 	-moz-box-align: stretch !important; /* Make sure tabs fill width */
 	background-image: none !important; /* Background was designed for repeat-x, and looks ugly when tiled vertically */
-	width: 250px;/*Temporary for better look, should be removed @ release <--MEDIC-->*/
+	/*width: 250px;/*Temporary for better look, should be removed @ release <--MEDIC-->*/
 }
 /* Cosmetic: hide tab side images */
 #content[vertitabbar] .tabbrowser-tab .tab-image-left/*[Fx2only] (and apparently Fx3/Mac)*/,

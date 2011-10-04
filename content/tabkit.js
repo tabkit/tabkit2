@@ -517,7 +517,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			*/
 			return;
 		}
-
+		
 		var container = element.parentNode;
 		var firstChild = container.firstChild;
 		tk.log("scrollToElement "+firstChild.nodeName);
@@ -835,7 +835,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		_tabContainer = gBrowser.tabContainer;
 		_tabstrip = _tabContainer.mTabstrip;
-		_tabInnerBox = document.getAnonymousElementByAttribute(_tabContainer, "class", "box-inherit scrollbox-innerbox");
+		_tabInnerBox = document.getAnonymousElementByAttribute(_tabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
 		_tabs = gBrowser.tabs;
 		_tabBar = document.getElementById("TabsToolbar");
 	};
@@ -4690,7 +4690,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// there is a chance the animation cannot finish and the tab will disappear but not closed(since waiting for animation)
 		// I can still reproduce this problem up to firefox nightly 10
 		// this workaround will stay here until a real fix is released
-		if (gPrefService.getBoolPref("browser.tabs.animate") == true)
+		if (gPrefService.getBoolPref("browser.tabs.animate"))
 			gPrefService.setBoolPref("browser.tabs.animate",false);
 	}
 	this.positionedTabbar_onTabOpen = function positionedTabbar_onTabOpen(event) {
@@ -4702,7 +4702,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			
 			// Ensure newly opened tabs can be seen (even if, in some cases, this may put the selected tab offscreen - TODO=P4: GCODE Make sure not to move selected tab offscreen if it is onscreen)
 			window.setTimeout(function() {
-				tk.scrollToElement(_tabInnerBox, tab);
+				tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 			}, 0);
 		}
 	};
@@ -4719,7 +4719,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 			
 			// Ensure selected tabs become visible (and the tabs before/after if scrollOneExtra)
-			tk.scrollToElement(_tabInnerBox, tab);
+			// tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
+			//Must use direct call instead of shortcut, or will cause error
+			tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 		}
 	};
 	this.positionedTabbar_onResize = function positionedTabbar_onResize(event) {
@@ -5166,7 +5168,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (_tabContainer.getAttribute("multirow") == "true") {
 			var tab = gBrowser.selectedTab;
 
-			tk.scrollToElement(_tabInnerBox, tab);
+			tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 
 			// Tabs on different rows shouldn't get before/afterselected attributes
 			if (tab.previousSibling != null && tab.boxObject.y != tab.previousSibling.boxObject.y) {
