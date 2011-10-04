@@ -4705,6 +4705,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 			}, 0);
 		}
+		// make all ungrouped tabs white
+		// this could be buggy and/or impact performance
+		tk.colorizeTab(tab);
 	};
 	this.positionedTabbar_onTabSelect = function positionedTabbar_onTabSelect(event) {
 		if (gBrowser.hasAttribute("vertitabbar")) {
@@ -4722,10 +4725,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			// tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 			//Must use direct call instead of shortcut, or will cause error
 			tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
-			
-			// make all ungrouped tabs white
-			// this could be buggy and/or impact performance
-			tk.colorizeTab(tab);
 		}
 	};
 	this.positionedTabbar_onResize = function positionedTabbar_onResize(event) {
