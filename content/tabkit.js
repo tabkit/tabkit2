@@ -4907,8 +4907,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			appcontent.parentNode.insertBefore(tabsToolbar, appcontent);
 		}
 		else if (pos == tk.Positions.TOP) {
+			var searchBox = document.getElementById("tabkit-filtertabs-box");
+			var checkPtI = 1;
 			a = document.getElementById("toolbar-menubar");
-			a.parentNode.insertBefore(tabsToolbar, a);
+			tk.debug("searchBox chk pt " + checkPtI++);
+			tk.debug("searchBox.previousSibling = "+(searchBox?searchBox.previousSibling:null));
+			tk.debug("searchBox.nextSibling = "+(searchBox?searchBox.nextSibling:null));
+			a.parentNode.insertBefore(tabsToolbar, a);//search box bug source!!
+			tk.debug("searchBox chk pt " + checkPtI++);
+			tk.debug("searchBox.previousSibling = "+(searchBox?searchBox.previousSibling:null));
+			tk.debug("searchBox.nextSibling = "+(searchBox?searchBox.nextSibling:null));
 		}
 		else if (pos == tk.Positions.BOTTOM) {
 			a = document.getElementById("browser-bottombox");
@@ -4926,11 +4934,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var splitter = document.getElementById("tabkit-splitter");
 		if (flipOrient) {
 			// Remove any space or flexible space in tab bar(which makes vertical tab bar works strange)
-			var nodesToRemove = [];
 			for (var i = 0; i < tabsToolbar.children.length; i++) {
 				var thisNode = tabsToolbar.children.item(i);
 				if (thisNode.localName == "toolbarspacer" || thisNode.localName == "toolbarspring") {
-					nodesToRemove.push(thisNode);
 					thisNode.parentNode.removeChild(thisNode);	//if you remove here you affect the length and index of after objects, the next one will escape check, so need to decrease index
 					i--;
 				}
@@ -4955,7 +4961,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				
 				_tabBar.width = _prefs.getIntPref("tabSidebarWidth");
 				for (var i = 0; i < _tabs.length; i++)
-					_tabs[i].maxWidth = null;
+					_tabs[i].maxWidth = 9999;
 				tk.setTabMinWidth(0);
 				gBrowser.mTabBox.addEventListener("resize", tk.positionedTabbar_onResize, false);
 			}
