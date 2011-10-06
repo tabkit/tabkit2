@@ -4611,7 +4611,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				 || browser.webProgress.isLoadingDocument)
 				 ) {
 				// tk.debug("return tab");
-				return "tabshifted";
+				return "tab";
 			}
 		}
 	};
@@ -4674,7 +4674,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabSelect", tk.positionedTabbar_onTabSelect, false);
 		_tabContainer.addEventListener("TabMove", tk.positionedTabbar_onTabSelect, false); // In case a tab is moved out of sight
 		
-		_tabContainer.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
+		_tabBar.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
 		gBrowser.tabContainer.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
 		gBrowser.tabContainer.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
 		gBrowser.parentNode.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
@@ -4961,7 +4961,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				
 				_tabBar.width = _prefs.getIntPref("tabSidebarWidth");
 				for (var i = 0; i < _tabs.length; i++)
-					_tabs[i].maxWidth = 9999;
+					_tabs[i].maxWidth = null;
 				tk.setTabMinWidth(0);
 				gBrowser.mTabBox.addEventListener("resize", tk.positionedTabbar_onResize, false);
 			}
