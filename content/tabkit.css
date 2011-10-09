@@ -253,7 +253,7 @@
 /*Add by Pika Start*/
 #TabsToolbar[vertitabbar] .tabbrowser-tab {
 	-moz-box-align: stretch !important; 
-	max-width: 9999px;/* Make sure tabs fill width */
+	max-width: 9999px !important;/* Make sure tabs fill width */
 }
 
 /* Make background-color not transparent */

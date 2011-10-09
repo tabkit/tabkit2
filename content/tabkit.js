@@ -3235,15 +3235,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var stack = [];
 		var maxlevel = _prefs.getIntPref("maxTreeLevel");
 		var indent = _prefs.getIntPref("indentAmount");
-		for each (var t in group) {
-			var pp = t.getAttribute("possibleparent");
+		for each (var tab in group) {
+			var pp = tab.getAttribute("possibleparent");
 			if (pp) {
 				for (var i = stack.length - 1; i >= 0; i--) {
 					if (stack[i] == pp) {
-						stack.push(t.getAttribute("tabid"));
-						t.treeLevel = Math.min(i + 1, maxlevel); // For external use, e.g. dragging subtrees
-						if (!groupcollapsed && subtreesEnabled)
-							t.style.setProperty("margin-left", (indent * t.treeLevel) + "px", "important");
+						stack.push(tab.getAttribute("tabid"));
+						tab.treeLevel = Math.min(i + 1, maxlevel); // For external use, e.g. dragging subtrees
+						if (!groupcollapsed && subtreesEnabled) {
+							tab.style.setProperty("margin-left", (indent * tab.treeLevel) + "px", "important");
+						}
 						break;
 					}
 					stack.pop();
@@ -3251,9 +3252,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				if (i >= 0)
 					continue;
 			}
-			t.treeLevel = 0;
-			t.style.marginLeft = "";
-			stack = [ t.getAttribute("tabid") ];
+			tab.treeLevel = 0;
+			tab.style.marginLeft = "";
+			stack = [ tab.getAttribute("tabid") ];
 		}
 	};
 	this.toggleIndentedTree = function toggleIndentedTree() {
@@ -5272,58 +5273,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'rect = this.tabContainer.getBoundingClientRect()'
 			]);//}
 		}
-		else if("onDragOver" in gBrowser) { //if ("onDragOver" in gBrowser) [Fx3-]
-			tk.addMethodHook([
-				"gBrowser.onDragOver",//{
-				null,
-				'ib.boxObject.x + ib.boxObject.width',
-				'gBrowser.boxObject.width',
-				
-				'ind.style.marginLeft = newMarginLeft + "px";',
-				'/*[Fx2only]*/if (gBrowser.hasAttribute("vertitabbar")) { \
-					var targetIndex = newIndex == this.tabs.length ? newIndex-1 : newIndex; \
-					newMarginLeft = Math.floor(this.mStrip.width / 2); \
-					if (gBrowser.getAttribute("vertitabbar") == "reverse") \
-						newMarginLeft += this.tabs[targetIndex].linkedBrowser.boxObject.width; \
-				} \
-				$&',
-				
-				'ind.style.marginRight = newMarginRight + "px";',
-				'/*[Fx2only]*/if (gBrowser.hasAttribute("vertitabbar")) { \
-					var targetIndex = newIndex == this.tabs.length ? newIndex-1 : newIndex; \
-					newMarginRight = Math.floor(this.mStrip.width / 2); \
-					if (gBrowser.getAttribute("vertitabbar") == "reverse") \
-						newMarginRight += this.tabs[targetIndex].linkedBrowser.boxObject.width; \
-				} \
-				$&',
-				
-				/ind\.style\.marginRight = newMarginRight \+ "px";\s+\}/,
-				'/*[Fx2only]*/$& \
-				if (newIndex == this.tabs.length) \
-					ib.style.top = (this.tabs[newIndex-1].boxObject.screenY - this.tabs[0].boxObject.screenY + (gBrowser.hasAttribute("vertitabbar") ? this.tabs[newIndex-1].boxObject.height : 0)) + "px"; \
-				else \
-					ib.style.top = (this.tabs[newIndex].boxObject.screenY - this.tabs[0].boxObject.screenY) + "px";',
-				
-				'ind.style.MozMarginStart = newMargin + "px";',
-				'/*[Fx3only]*/if (gBrowser.hasAttribute("vertitabbar")) { \
-					var targetIndex = newIndex == this.tabs.length ? newIndex-1 : newIndex; \
-					newMargin = Math.floor(this.mStrip.width / 2); \
-				} \
-				ib.style.display = "none"; \
-				$&',
-				// Note: we set it to display:none before moving it because otherwise Fx3 forgot to repaint over the old location!
-				'ind.style.MozMarginStart = newMargin + "px";',
-				'/*[Fx3only]*/$& \
-				if (newIndex == this.tabs.length) \
-					ib.style.top = (this.tabs[newIndex-1].boxObject.screenY - this.tabs[0].boxObject.screenY + (gBrowser.hasAttribute("vertitabbar") ? this.tabs[newIndex-1].boxObject.height : 0)) + "px"; \
-				else \
-					ib.style.top = (this.tabs[newIndex].boxObject.screenY - this.tabs[0].boxObject.screenY) + "px"; \
-				ib.style.display = null;',
-				// See _onDragOver replacement above
-				'ib.collapsed = !aDragSession.canDrop;',
-				'ib.style.display = aDragSession.canDrop ? "-moz-box" : "none";'
-			]);//}
-		}
 		else {// [Fx4+]
 			tk.debug("postInitTabDragIndicator Fx4 Version Unavailable, Developer come!!");
 		}
@@ -5337,15 +5286,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'$& \
 				 && aEvent.screenY >= sourceNode.boxObject.screenY \
 				 && aEvent.screenY <= sourceNode.boxObject.screenY + sourceNode.boxObject.height'
-			]);//}
-		}
-		else if("canDrop" in gBrowser) { //if ("canDrop" in gBrowser) [Fx3-]
-			// canDrop override breaks multirow, but is only relevant for single row anyway (as multirow hides tabs-bottom), see https://bugzilla.mozilla.org/show_bug.cgi?id=333791#c38
-			tk.addMethodHook([
-				"gBrowser.canDrop",//{
-				null,
-				'{',
-				'{ if (this.tabContainer.getAttribute("multirow") == "true" || gBrowser.hasAttribute("vertitabbar")) return true;'
 			]);//}
 		}
 		else {// [Fx4+]
@@ -6011,6 +5951,15 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		//Also need to disable certain menu item(s)
 		var context_tabViewMenu = document.getElementById("context_tabViewMenu");
 		context_tabViewMenu.disabled = true;
+		
+		// Issue 22, some weird behavior by the new animation related functions which mess with tabs' maxWidth
+		tk.addMethodHook([
+			'gBrowser.tabContainer._lockTabSizing',
+			null,
+			
+			'tab.style.setProperty("max-width", tabWidth, "important");',
+			''
+		]);
 	}
 	
 	this.postInitListeners.push(this.postInitFx4Modifications);
