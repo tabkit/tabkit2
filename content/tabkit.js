@@ -501,7 +501,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 	// TODO=P4: GCODE scrollOneExtra should also apply with a single-row horizontal tab bar
 	// TODO=P3: GCODE Could always keep selected tab in centre of tabbar instead (whether horizontal or vertical?)
-	this.scrollToElement = function scrollToElement(overflowPane, element) { // TODO-P6: TJS cleanup code? [based on toomanytabs]
+	this.scrollToElement = function scrollToElement(overflowPane, targetItem) { // TODO-P6: TJS cleanup code? [based on toomanytabs]
 		var scrollbar = overflowPane.mVerticalScrollbar;
 		if (!scrollbar) {
 			/*
@@ -518,7 +518,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			return;
 		}
 		
-		var container = element.parentNode;
+		var container = targetItem.parentNode;
 		var firstChild = container.firstChild;
 		// tk.log("scrollToElement "+firstChild.nodeName);
 		while (firstChild.hidden) // visibility of a tab
@@ -533,18 +533,19 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			curpos = 0;
 		}
 		var firstY = firstChild.boxObject.y;
-		var elemY = element.boxObject.y;
+		var targetY = targetItem.boxObject.y;
 		var lastY = lastChild.boxObject.y;
-		var height = element.boxObject.height;
-		var relY = elemY - firstY;
+		var height = targetItem.boxObject.height;
+		var relativeY = targetY - firstY;
 		var paneHeight = overflowPane.boxObject.height;
 
+		
 		// Make sure overflowPane is never scrolled halfway across elements at both the top and bottom
 		if ((lastY - firstY) % height == 0 && curpos % height != 0 && (curpos + paneHeight + firstY - lastY) % height != 0) {
 			curpos = height * Math.round(curpos / height);
 		}
 
-		var minpos = relY;
+		var minpos = relativeY;
 		if (_prefs.getBoolPref("scrollOneExtra") && minpos > 0 && lastY - firstY > height) {
 			minpos -= height;
 		}
@@ -552,15 +553,19 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			curpos = minpos; // Set it to minpos
 		}
 		else {
-			var maxpos = relY + height - paneHeight;
-			if (_prefs.getBoolPref("scrollOneExtra") && lastY > elemY && lastY - firstY > height) {
+			var maxpos = relativeY + height - paneHeight;
+			// tk.debug("relativeY = "+relativeY);
+			// tk.debug("height = "+height);
+			// tk.debug("paneHeight = "+paneHeight);
+			// tk.debug("maxpos = "+maxpos);
+			// tk.debug("curpos = "+curpos);
+			if (_prefs.getBoolPref("scrollOneExtra") && targetY < lastY && lastY - firstY > height) {
 				maxpos += height;
 			}
 			if (maxpos > curpos) {
 				curpos = maxpos; // Set it to maxpos
 			}
 		}
-		
 		scrollbar.setAttribute("curpos", curpos);
 	};
 
@@ -3321,7 +3326,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (colorTabNotLabel) {
 			if (_tabContainer.getAttribute("colortabnotlabel") != "true") {
 				_tabContainer.setAttribute("colortabnotlabel", "true");
-			tk.log("delme 9263492 "+_tabs.length);
 				for (var i = 0; i < _tabs.length; i++) {
 					var t = _tabs[i];
 					t.ownerDocument.getAnonymousElementByAttribute(t, "class", "tab-text tab-label").style.backgroundColor = null;
@@ -4724,7 +4728,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			// Ensure selected tabs become visible (and the tabs before/after if scrollOneExtra)
 			// tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 			//Must use direct call instead of shortcut, or will cause error
-			tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
+			// tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
+			window.setTimeout(function() {
+				tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
+			}, 50);	//this timeout has to be after TabOpen to make it work normally (it seems)
 		}
 	};
 	this.positionedTabbar_onResize = function positionedTabbar_onResize(event) {
