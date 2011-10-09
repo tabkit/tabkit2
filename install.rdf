@@ -9,7 +9,7 @@
 	<RDF:Description RDF:about="urn:mozilla:install-manifest">
 					<em:id>tabkit2@pikachuexe.amateur.hk</em:id>
 					<em:name>Tab Kit 2nd Edition</em:name>
-					<em:version>0.9.1.36</em:version>
+					<em:version>0.9.2.40</em:version>
 					<em:creator>PikachuEXE</em:creator>
 				   <em:developer>Roman Beslik</em:developer>
 					<em:description>Tab grouping, multi-rows, tree view, and other tweaks. Firefox 4+ compatible!!</em:description>
