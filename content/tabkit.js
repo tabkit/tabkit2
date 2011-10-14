@@ -1,14 +1,15 @@
 /**
- * Tab Kit - http://code.google.com/p/tabkit
+ * TabKit 2nd Edition(TabKit 2 for short) - http://code.google.com/p/tabkit-2nd-edition/
  * Copyright (c) 2007-2010 John Mellor
+ * Copyright (c) 2011 Leung Ho Kuen
  * 
- * This file is part of Tab Kit.
+ * This file is part of TabKit 2.
  * Tab Kit is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  * 
- * Tab Kit is distributed in the hope that it will be useful,
+ * TabKit 2 is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -4634,7 +4635,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Pref Listener/method:
 	// Note: this is also used by multi-row tabs
 	this.resetTabMinWidth = function resetTabMinWidth(pref) {
-		tk.setTabMinWidth(gPrefService.getIntPref("browser.tabs.tabMinWidth"));
+		tk.setTabMinWidth(Math.max(gPrefService.getIntPref("browser.tabs.tabMinWidth"), 100));	//Minimum minWidth of tab is 100, a built-in CSS rule
 	};
 
 	/// Methods:
@@ -5083,7 +5084,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				if (newTabButton && newTabButton.className == "tabs-newtab-button")
 					visibleTabs++; // Treat the new tab button as a tab for our purposes
 				var availWidth = _tabstrip._scrollbox.boxObject.width;
-				var tabsPerRow = Math.floor(availWidth / gPrefService.getIntPref("browser.tabs.tabMinWidth"));
+				var tabsPerRow = Math.floor(availWidth / Math.max(gPrefService.getIntPref("browser.tabs.tabMinWidth"), 100));	//Minimum minWidth of tab is 100, a built-in CSS rule
 				var rows = Math.ceil(visibleTabs / tabsPerRow);
 			}
 			if (rows > 1) {
