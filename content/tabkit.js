@@ -2096,7 +2096,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 			
 			if (tab.hasAttribute("groupid")) {
-				tk.colorizeTab(tab); // Maintain tab color
+				// tk.colorizeTab(tab); // Maintain tab color
 			}
 			else if (tk.ignoreOvers == 0) {
 				// See if this tab needs grouping (but don't move it!)
@@ -2106,7 +2106,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				tk.addedTabs = [tab];
 				tk.addingTabOver();
 			}
-			
+			tk.colorizeTab(tab); // Maintain tab color
 			tk.updateIndents();
 			
 			delete tab.groupNotChecked;
@@ -2884,7 +2884,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				// TODO=P4: TJS Make sure we only fall back to the old code in Firefox 2
 			}
 			catch (ex) {
-				if (Cc["@mozilla.org/network/effective-tld-service;1"]) // Don't bother logging this error on Fx2, as the Effective TLD Service doesn't exist
+				if (uri.asciiSpec != "chrome://speeddial/content/speeddial.xul") // Don't bother logging this error on Fx2, as the Effective TLD Service doesn't exist
 					tk.debug("Error using nsIEffectiveTLDService:\n"+ex);
 				
 				var parts = /^(.*\.)?(([^.]+)\.[^.]{2,8}\.(?:a[ru]|c[kory]|do|eg|fj|gu|i[dl]|k[hr]|lb|m[moty]|n[ipz]|p[aey]|sv|t[hr]|u[gky]|ve|yu|za))$|^(.*\.)?(([^.]+)\.[^.0-9]{2,})$|^(.*)$/i.exec(uri.asciiHost);
