@@ -1,14 +1,14 @@
 <!ENTITY firstRunWizard.title "Tab Kit First Run Wizard">
 
-<!ENTITY layoutChoice.desc "Please choose which tab bar layout you would like to use. You can change this later by going to Tools -&gt; Add-ons, selecting Tab Kit, clicking Options, then under the Tab Bar panel adjust 'The tab bar should be shown [...] of the window' and 'Show the tab bar on multiple rows' as appropriate.">
+<!ENTITY layoutChoice.desc "請選擇你想要的分頁顯示位置，你可隨時在設定中改變更改位置">
 
-<!ENTITY treeTabs.label "Tree Tabs (recommended)">
-<!ENTITY treeTabs.desc "Show tab bar as a tree along the left edge of the window">
+<!ENTITY treeTabs.label "樹型分頁顯示 (建議)">
+<!ENTITY treeTabs.desc "分頁會在左邊以樹型顯示(如有分組)">
 
-<!ENTITY multiRowTabs.label "Multi-row Tabs">
-<!ENTITY multiRowTabs.desc "Show tab bar in normal (top) position, on multiple rows if necessary">
+<!ENTITY multiRowTabs.label "多行分頁顯示(橫向)">
+<!ENTITY multiRowTabs.desc "用起來跟平常差不多，但當分頁太多會自動增加行數">
 
-<!ENTITY normalTabs.label "Normal Tabs">
-<!ENTITY normalTabs.desc "Show tab bar as normal without Tab Kit">
+<!ENTITY normalTabs.label "普通顯示">
+<!ENTITY normalTabs.desc "跟平時一樣，但其他功能(如滑鼠手勢)仍會運作">
 
-<!ENTITY documentation.text "N.B. The best way to get started with Tab Kit is probably to read through the Options menu (Tools -&gt; Add-ons -&gt; Tab Kit -&gt; Options), which lists all the features available. Tab Kit also adds a submenu to the tab right-click menu with some useful commands. More comprehensive documentation is in the works (help appreciated!)">
+<!ENTITY documentation.text "安裝後最好立即到設定裡看看所有選擇，有些功能需要到設定打開啊！另外在分頁上按右鍵也會有不少功能">

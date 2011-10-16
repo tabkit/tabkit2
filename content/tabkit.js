@@ -630,11 +630,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	];
 	
 	/// Private Globals:
-	 /* comment by Pika, Fx2 related
-	var _isFx2;
-	*/
-	var _isFx3;
-	var _isFx4;		//added by Pika, it means FF4 or later, since the layout is not changed much (And I don't want it to change again!)
+	//var _isFx3;
+	//var _isFx4;		//added by Pika, it means FF4 or later, since the layout is not changed much (And I don't want it to change again!)
 	
 	/// Methods:
 	this.tryListener = function tryListener(type, listener, event) {
@@ -656,11 +653,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		window.removeEventListener("DOMContentLoaded", tk.onDOMContentLoaded, false);
 		
 		// Find what version of Firefox we're using TODO=P4: TJS+GCODE Do this in a less hacky way. Or better still, just drop support for Fx2
-		 /* comment by Pika, Fx2 related
-		_isFx2 = !(_isFx3 = (document.getElementById("browser-stack") == null));
-		*/
-		_isFx3 = (document.getElementById("browser-stack") == null);
-		_isFx4 = (document.getElementById("TabsToolbar") != null);	//add by Pika, only FF4+ got TabsToolBar
+
+		//_isFx3 = (document.getElementById("browser-stack") == null);
+		//_isFx4 = (document.getElementById("TabsToolbar") != null);	//add by Pika, only FF4+ got TabsToolBar
 		
 		// Check compatibility with existing addons (only in Fx3+, as extensions.enabledItems doesn't exist before that, and not in Fx4+ since _em is unavailable)
 		if (_prefs.getBoolPref("checkCompatibility")
@@ -982,9 +977,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			for (var i = 2; i < hook.length; ) {
 				var newCode = code.replace(hook[i++], hook[i++]);
 				if (newCode == code) {
-					if ((!tk.startsWith(hook[i-1], "/*[Fx3only]*/") || _isFx3)
-					 // comment by Pika, Fx2 related
-					 //&& (!tk.startsWith(hook[i-1], "/*[Fx2only]*/") || _isFx2)
+					if ((tk.startsWith(hook[i-1], "/*[Fx3only]*/")/* || _isFx3*/)
 					 )
 					{
 						tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
@@ -1348,11 +1341,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	// See globalPreInitSortingAndGroupingMethodHooks in tabkit-global.js
 	
 	this.postInitSortingAndGroupingMethodHooks = function postInitSortingAndGroupingMethodHooks(event) {
-		 /* comment by Pika, Fx2 related
-		if ("openselectedlinks" in window && window.openselectedlinks && window.openselectedlinks.goCol) // [Fx2only] (or at least I haven't seen any updated versions of this)
-			tk.wrapMethodCode('window.openselectedlinks.goCol', 'tabkit.addingTabs(gBrowser.selectedTab); try {', '} finally { tabkit.addingTabsOver(); }');
-		*/
-		
 		// Give mlb_common.Utils.openUrlInNewTab a function name so it can be detected by sourceTypes!
 		if ("mlb_common" in window && "Utils" in mlb_common && "openUrlInNewTab" in mlb_common.Utils)
 			tk.addMethodHook([
@@ -2778,33 +2766,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			});
 			PlacesUIUtils.showMinimalAddMultiBookmarkUI(uris);
 		}
-		 /* comment by Pika, Fx2 related
-		else if ("addBookmarkForTabBrowser" in window) { // [Fx2only]
-			// Based on addBookmarkForTabBrowser
-			var tabsInfo = [];
-			const browsers = gBrowser.browsers;
-			for (var i = 0; i < group.length; i++) {
-				var webNav = group[i].linkedBrowser.webNavigation;
-				var url = webNav.currentURI.spec;
-				var name = "";
-				var charSet, description;
-				try {
-					var doc = webNav.document;
-					name = doc.title || url;
-					charSet = doc.characterSet;
-					description = BookmarksUtils.getDescriptionFromDocument(doc);
-				}
-				catch (ex) {
-					name = url;
-				}
-				tabsInfo[i] = { name: name, url: url, charset: charSet, description: description };
-			}
-			var dialogArgs = { name: gNavigatorBundle.getString("bookmarkAllTabsDefault") };
-			dialogArgs.bBookmarkAllTabs = true;
-			dialogArgs.objGroup = tabsInfo;
-			openDialog("chrome://browser/content/bookmarks/addBookmark2.xul", "", BROWSER_ADD_BM_FEATURES, dialogArgs);
-		}
-		*/
 		else {
 			tk.dump("Places detection failed.");
 		}
@@ -3276,10 +3237,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		const goodThemes = { // Themes that work well
 			// TODO=P4: GCODE Keep testing themes...
 			"classic/1.0"	  : { platform: /Win32/ }, // Default Windows theme ("Strata" in Fx3, "Firefox (default)" in Fx2)
-			 /* comment by Pika, Fx2 related
-			"BlueIce"		  : {}, // [Fx2only]
-			"MidnightFox"	  : {}, // [Fx2only]
-			*/
 			"abstractPCNightly": {},			 // Abstract Classic
 			"abstract_zune"	: { dark: true }, // Abstract Zune		 (n.b. current tab has solid black bg that hides groups)
 			"aero_fox"		 : { dark: true }, // Aero Fox			  (n.b. current tab has solid black bg that hides groups)
@@ -3339,12 +3296,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			_tabContainer.removeAttribute("colortabnotlabel");
 			for (var i = 0; i < _tabs.length; i++) {
 				var t = _tabs[i];
-				 /* comment by Pika, Fx2 related
-				if (gBrowser.mCurrentTab.boxObject.firstChild.className.indexOf("tab-image-") == 0) // [Fx2only]
-					var nodes = t.ownerDocument.getAnonymousNodes(t);
-				else // [Fx3only]
-				*/
-					var nodes = [ t ];
+				var nodes = [ t ];
 				for (var j = 0; j < nodes.length; j++)
 					nodes[j].style.backgroundColor = null;
 				tk.colorizeTab(t);
@@ -3497,10 +3449,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			
 			// Background colors are reset on tab move (and close then restore), hence the listeners
 			if (_tabContainer.getAttribute("colortabnotlabel") == "true") { // This is set at the start of initSortingAndGrouping
-				if (gBrowser.mCurrentTab.boxObject.firstChild.className.indexOf("tab-image-") == 0) // [Fx2only]
-					var nodes = tab.ownerDocument.getAnonymousNodes(tab);
-				else // [Fx3only]
-					var nodes = [ tab ];
+				var nodes = [ tab ];
 			}
 			else {
 				var nodes = [ tabText ];
@@ -3543,10 +3492,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.colorAllTabsMenuItem = function colorAllTabsMenuItem(tab, menuItem) {
 		// TODO=P4: GCODE Fx3: Make All Tabs prettier (since we mess things up a little by setting -moz-appearance: none)
 		try {
-			/* comment by Pika, Fx2 related
-			var isFx2 = (gBrowser.mCurrentTab.boxObject.firstChild.className.indexOf("tab-image-") == 0);
-			 // [Fx2only] and [Fx3only]
-			*/
 			var bgSample = tab;//new line by Pika, Fx2 related
 			if (gBrowser.tabContainer.getAttribute("colortabnotlabel") == "true") {
 				menuItem.style.backgroundColor = bgSample.style.backgroundColor;
@@ -3557,10 +3502,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				var bgStyle = window.getComputedStyle(bgSample, null);
 				menuItem.style.backgroundColor = bgStyle.backgroundColor;
 			}
-			 /* comment by Pika, Fx2 related
-			if (!isFx2)
-			*/
-				menuItem.style.MozAppearance = "none";
+			menuItem.style.MozAppearance = "none";
 			window.setTimeout(function __colorAllTabsMenuText(tab, menuItem) {
 				try {
 					var menuText = document.getAnonymousElementByAttribute(menuItem, "class", "menu-iconic-text");
@@ -4244,7 +4186,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			event.stopPropagation();
 		}, true);
 
-		// These would supress the drop indicator, should be deleted if confirmed no use
 		gBrowser.tabContainer.addEventListener("dragexit", function(event) {
 			this._tabDropIndicator.collapsed = true;
 		}, true);
@@ -4469,18 +4410,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		tabContextMenu.addEventListener("popupshowing", tk.protectedTabs_updateContextMenu, false);
 		
 		tk.context_closeTab = document.getElementById("context_closeTab");
-		 /* comment by Pika, Fx2 related
-		if (!tk.context_closeTab) { //[Fx2only]
-			for (var i = 0; i < tabContextMenu.childNodes.length; i++) {
-				var el = tabContextMenu.childNodes[i];
-				if (el.getAttribute("oncommand").indexOf("tabbrowser.removeTab(tabbrowser.mContextTab)") != -1) {
-					tk.context_closeTab = el;
-					return;
-				}
-			}
-			tk.dump("Could not find tabbrowser.removeTab(tabbrowser.mContextTab)");
-		}
-		*/
+		 
 	};
 	this.initListeners.push(this.initProtectedTabs);
 	
@@ -4865,52 +4795,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Calculate new direction attribute
 		var flipDirection = (pos == tk.Positions.RIGHT || pos == tk.Positions.BOTTOM);
 
-		/* comment by Pika
-		// Get some nodes
-		var tabBox = gBrowser.mTabBox;
-		var tabsStack = document.getAnonymousElementByAttribute(_tabContainer, "class", "tabs-stack");
-		var tabVbox = null;
-		var tabHbox = tabsStack.getElementsByAttribute("class", "tabs-container");
-		//Pika: cannot reach here, 1 of 4 lines above has problem
-		if (tabHbox.length == 1) { // [Fx3only]
-			tabHbox = tabHbox[0];
-		}
-		else { // [Fx2only]
-			tabVbox = tabsStack.getElementsByTagName("vbox")[1];
-			tabHbox = tabVbox.getElementsByTagName("hbox")[0];
-		}
-		tk.log("Before array");
-		var normallyHorizontal = [
-			gBrowser,
-			gBrowser.mStrip,
-			_tabContainer,
-			tabsStack,
-			tabHbox,
-			_tabstrip,
-			_tabstrip._scrollbox,
-			_tabInnerBox,
-			tabBox.getElementsByTagNameNS(XUL_NS, "tabpanels")[0]
-		];
-		var normallyVertical = [
-			tabBox
-		];
-
-		if (tabVbox) // [Fx2only]
-			normallyVertical.push(tabVbox);
-		tk.log("after Tabbox");
-		
-
-		// Set new attributes
-		tabBox.dir = flipDirection ? "reverse" : "normal"
-
-		// Set orient attributes last or stuff messes up
-		for each (var node in normallyHorizontal)
-			node.orient = fromHorizontal;
-		for each (var node in normallyVertical)
-			node.orient = fromVertical;
-		tk.log("After for each");
-		*/
-
 		// Now activate our css
 		if (pos == tk.Positions.LEFT || pos == tk.Positions.RIGHT) {
 			appcontent.parentNode.insertBefore(tabsToolbar, appcontent);
@@ -4952,17 +4836,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 			
 			if (!splitter) {
-				/*comment by Pika
-				tabHbox.flex = "1";
-				tabHbox.align = "stretch";
-				*/
 				splitter = document.createElementNS(XUL_NS, "splitter");
 				splitter.id = "tabkit-splitter";
 				splitter.setAttribute("collapse", "before");
 				var grippy = document.createElementNS(XUL_NS, "grippy");
 				grippy.id = "tabkit-grippy";
 				splitter.appendChild(grippy);
-				//gBrowser.mTabBox.insertBefore(splitter, gBrowser.mPanelContainer);//comment by Pika
 				appcontent.parentNode.insertBefore(splitter, appcontent);//add by Pika
 				
 				splitter.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
@@ -4981,15 +4860,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			if ("toggleIndentedTree" in tk)
 				tk.toggleIndentedTree();
 			if (splitter) {
-				/*comment by Pika
-				tabHbox.removeAttribute("flex");
-				tabHbox.removeAttribute("align");
-				*/
 				gBrowser.mTabBox.removeEventListener("resize", tk.positionedTabbar_onResize, false);
 				for (var i = 0; i < _tabs.length; i++)
 					_tabs[i].maxWidth = 250;
 				tk.resetTabMinWidth();
-				//gBrowser.mTabBox.removeChild(splitter);//comment by Pika
 				appcontent.parentNode.removeChild(splitter);//add by Pika
 			}
 		}
@@ -5025,21 +4899,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var oldIndicatorBar = gBrowser.mTabBox.firstChild;
 		var oldIndicator = oldIndicatorBar.firstChild;
 		var oldBarStyle = tk.getCSSRule(".tab-drop-indicator-bar").style /*[Fx3only]*/ 
-		 /* comment by Pika, Fx2 related
-		|| window.getComputedStyle(oldIndicatorBar, null); //[Fx2only]
-		*/
-		var oldStyle = tk.getCSSRule(".tab-drop-indicator").style /*[Fx3only]*/  /* comment by Pika, Fx2 related
-		|| window.getComputedStyle(oldIndicator, null); //[Fx2only]*/
+		var oldStyle = tk.getCSSRule(".tab-drop-indicator").style /*[Fx3only]*/
 		var newDropIndicatorBar = document.createElementNS(XUL_NS, "hbox");
 		var newDropIndicator = document.createElementNS(XUL_NS, "hbox");
 		newDropIndicatorBar.id = "tabkit-tab-drop-indicator-bar";
 		//newDropIndicatorBar.setAttribute("dragging", oldIndicatorBar.getAttribute("dragging")); // This shouldn't be the case
 		if (oldIndicatorBar.hasAttribute("collapsed")) // [Fx3only]
 			newDropIndicatorBar.setAttribute("collapsed", "true");
-		/* comment by Pika, Fx2 related
-		else // [Fx2only]
-			newDropIndicatorBar.setAttribute("dragging", "false");
-		*/
 		newDropIndicator.setAttribute("mousethrough", "always");
 		newDropIndicatorBar.style.height = oldBarStyle.height;
 		newDropIndicatorBar.style.marginTop = oldBarStyle.marginTop;
@@ -5225,7 +5091,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	
 	// TODO=P4: GCODE Prevent inappropriate indicator wrap around when dragging to end of row
 	this.postInitTabDragIndicator = function postInitTabDragIndicator(event) {
-		if ("_onDragOver" in gBrowser) { // [Fx3.5]
+/* 		if ("_onDragOver" in gBrowser) { // [Fx3.5]
 			if (gBrowser._onDragOver.toString().indexOf("ib.getBoundingClientRect().right") != -1) { // [Fx3.6+]
 				tk.addMethodHook([
 					"gBrowser._onDragOver",
@@ -5291,7 +5157,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		else {// [Fx4+]
 			tk.debug("postInitTabDragModifications Fx4 Version Unavailable, Developer come!!");
-		}
+		} */
 	};
 	this.postInitListeners.push(this.postInitTabDragIndicator);
 
@@ -5973,7 +5839,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		return eval(exp);
 	};
 	
-	this.preInitDebugAids = function preInitDebugAids(event) {
+	//Cannot find this extension, so no use
+	/* this.preInitDebugAids = function preInitDebugAids(event) {
 		// quickprompt requires my (currently unreleased) QuickPrompt extension (I use this for debugging)
 		if ("quickprompt" in window) {
 			window.tkprompt = function tkprompt() {
@@ -5982,7 +5849,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			document.getElementById("cmd_quickPrompt").setAttribute("oncommand", "tkprompt()");
 		}
 	};
-	this.preInitListeners.push(this.preInitDebugAids);
+	this.preInitListeners.push(this.preInitDebugAids); */
 
 	//}##########################
 	//|##########################
