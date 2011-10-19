@@ -3429,7 +3429,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.colorizeTab = function colorizeTab(tab) {
 		try {
 			var gid = tab.getAttribute("groupid");
-				
 			if (gid) {
 				var bgColor = tk.getWindowValue("knownColor:" + gid);
 				if (!bgColor) {
@@ -3444,9 +3443,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			else {
 				var bgColor = "";
 			}
-			
 			var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label");
-			
 			// Background colors are reset on tab move (and close then restore), hence the listeners
 			if (_tabContainer.getAttribute("colortabnotlabel") == "true") { // This is set at the start of initSortingAndGrouping
 				var nodes = [ tab ];
@@ -3454,21 +3451,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			else {
 				var nodes = [ tabText ];
 			}
-			
 			//add by Pika, coloring for Fx4+
 			var styleToSet;
-			if (bgColor != "")
-				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,.7)").replace("@HSL_Bottom",bgColor);
-			else
-				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,.2)").replace("@HSL_Bottom","hsla(0, 0%, 100%,.5)");
+			if (bgColor != "") {
+				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top",bgColor).replace("@HSL_Bottom",bgColor);
+			}
+			else {
+				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,1)").replace("@HSL_Bottom","hsla(0, 0%, 100%,1)");
+			}
 			styleToSet = "background-image";
-			
 			for (var i = 0; i < nodes.length; i++) {
 				//edit by Pika, coloring for Fx4+
 				nodes[i].style.setProperty(styleToSet, bgColor, "important");
 				nodes[i].style.setProperty("color", "black", "important");
 			}
-			
 			// Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
 			// if (tab.getAttribute("selected") == "true" && _tabContainer.getAttribute("colortabnotlabel") == "true") {
 				// var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
@@ -4630,8 +4626,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			gPrefService.setBoolPref("browser.tabs.animate",false);
 	}
 	this.positionedTabbar_onTabOpen = function positionedTabbar_onTabOpen(event) {
+		var tab = event.target;
 		if (gBrowser.hasAttribute("vertitabbar") && document.getElementById("tabkit-splitter")) {
-			var tab = event.target;
 			
 			tab.maxWidth = null;
 			tab.minWidth = 0;
@@ -4656,6 +4652,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			if (tab.nextSibling != null) {
 				tab.nextSibling.removeAttribute("afterselected");
 			}
+			
+			tk.colorizeTab(tab);
 			
 			// Ensure selected tabs become visible (and the tabs before/after if scrollOneExtra)
 			// tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
