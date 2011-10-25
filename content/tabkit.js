@@ -828,11 +828,15 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	
 	/// Initialisation:
 	this.preInitShortcuts = function preInitShortcuts(event) {
-		tk.assert('window.location == "chrome://browser/content/browser.xul"', function(e) eval(e), "preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
+		//tk.assert('window.location == "chrome://browser/content/browser.xul"', function(e) eval(e), "preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
+		if(window.location != "chrome://browser/content/browser.xul")
+			tk.dump("preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
 		
 		// Make sure we can use gBrowser from now on if this is a browser window
 		getBrowser();
-		tk.assert('gBrowser', function(e) eval(e), "gBrowser must not be null after preInitShortcuts!");
+		//tk.assert('gBrowser', function(e) eval(e), "gBrowser must not be null after preInitShortcuts!");
+		if(!gBrowser)
+			tk.dump("gBrowser must not be null after preInitShortcuts!");
 		
 		_tabContainer = gBrowser.tabContainer;
 		_tabstrip = _tabContainer.mTabstrip;
@@ -1998,8 +2002,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		// Delay __sortgroup_onTabRestored timers until sortgroup_onSSTabRestoring stops getting called
 		for each (var lt in _sortgroup_onSSTabRestoring_timers) {
-			window.clearTimeout(lt.t);
-			lt.t = window.setTimeout(lt.l, 100);
+			window.clearTimeout(lt.timeout);
+			lt.timeout = window.setTimeout(function(lt) {lt.listener();}, 100, lt);
 		}
 		
 		// TODO=P4: GCODE Check tabs are restored correctly (and test groupcollapsed and hidden)
@@ -2094,9 +2098,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					}
 				}
 			}
-			
+			tk.log("before colorize tabs");
 			if (tab.hasAttribute("groupid")) {
-				// tk.colorizeTab(tab); // Maintain tab color
+				tk.colorizeTab(tab); // Maintain tab color
 			}
 			else if (tk.ignoreOvers == 0) {
 				// See if this tab needs grouping (but don't move it!)
@@ -2111,7 +2115,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			
 			delete tab.groupNotChecked;
 		});
-		_sortgroup_onSSTabRestoring_timers.push({l:listener, t:window.setTimeout(listener, 100)}); // TODO=P5: TJS Tweak timeout - lower values cause less jumping, but may slow down restoring an entire window
+		_sortgroup_onSSTabRestoring_timers.push({listener:listener, timeout:window.setTimeout(function(listener) {listener();}, 100, listener)}); // TODO=P5: TJS Tweak timeout - lower values cause less jumping, but may slow down restoring an entire window
 	};
 	
 	this.sortgroup_onTabMoved = function sortgroup_onTabMoved(event) {
@@ -3452,18 +3456,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				var nodes = [ tabText ];
 			}
 			//add by Pika, coloring for Fx4+
-			var styleToSet;
 			if (bgColor != "") {
 				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top",bgColor).replace("@HSL_Bottom",bgColor);
 			}
 			else {
-				bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,1)").replace("@HSL_Bottom","hsla(0, 0%, 100%,1)");
+				// bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,1)").replace("@HSL_Bottom","hsla(0, 0%, 100%,1)");
 			}
-			styleToSet = "background-image";
 			for (var i = 0; i < nodes.length; i++) {
 				//edit by Pika, coloring for Fx4+
-				nodes[i].style.setProperty(styleToSet, bgColor, "important");
-				nodes[i].style.setProperty("color", "black", "important");
+				nodes[i].style.setProperty("background-image", bgColor, "important");
+				// nodes[i].style.setProperty("color", "black", "important");
 			}
 			// Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
 			// if (tab.getAttribute("selected") == "true" && _tabContainer.getAttribute("colortabnotlabel") == "true") {
@@ -4168,12 +4170,23 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			var end = isVertical ? "bottom" : "right";
 			
 			//DO NOT reuse newIndex
-			if (eval("event."+position) <= (eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2"))) {
-				ind.style.top = targetTab.getBoundingClientRect().top - targetTab.boxObject.height + "px";
+			if (isVertical) {
+				if (event.screenY <= targetTab.boxObject.screenY + targetTab.boxObject.height / 2) {
+					ind.style.top = targetTab.getBoundingClientRect().top - targetTab.boxObject.height + "px";
+				}
+				else {
+					ind.style.top = targetTab.getBoundingClientRect().top + "px";
+				}
 			}
 			else {
-				ind.style.top = targetTab.getBoundingClientRect().top + "px";
+				if (event.screenX <= targetTab.boxObject.screenX + targetTab.boxObject.width / 2) {
+					ind.style.left = targetTab.getBoundingClientRect().left - targetTab.boxObject.width + "px";
+				}
+				else {
+					ind.style.left = targetTab.getBoundingClientRect().left + "px";
+				}
 			}
+			
 			ind.style.lineHeight = targetTab.getBoundingClientRect().height + "px";
 			ind.firstChild.style.verticalAlign = "bottom";
 			this._tabDropIndicator.collapsed = false;
@@ -4273,12 +4286,23 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 		var resultIndex = 0;
 		var targetPos = targetTab._tPos;
-		if (eval("event."+position) <= (eval("targetTab.boxObject."+position) + eval("targetTab.boxObject."+size+" /2"))) {
-			resultIndex = targetPos;
+		if (isVertical) {
+			if (event.screenY <= targetTab.boxObject.screenY + targetTab.boxObject.height / 2) {
+				resultIndex = targetPos;
+			}
+			else {
+				resultIndex = targetPos + 1;
+			}
 		}
 		else {
-			resultIndex = targetPos + 1;
+			if (event.screenX <= targetTab.boxObject.screenX + targetTab.boxObject.width / 2) {
+				resultIndex = targetPos;
+			}
+			else {
+				resultIndex = targetPos + 1;
+			}
 		}
+		
 		return resultIndex;
 	}
 	
@@ -4639,11 +4663,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		// make all ungrouped tabs white
 		// this could be buggy and/or impact performance
-		tk.colorizeTab(tab);
+		// tk.colorizeTab(tab);
 	};
 	this.positionedTabbar_onTabSelect = function positionedTabbar_onTabSelect(event) {
+		var tab = gBrowser.selectedTab;
 		if (gBrowser.hasAttribute("vertitabbar")) {
-			var tab = gBrowser.selectedTab;
+			
 			
 			// Tabs on different rows shouldn't get before/afterselected attributes
 			if (tab.previousSibling != null) {
@@ -4653,7 +4678,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				tab.nextSibling.removeAttribute("afterselected");
 			}
 			
-			tk.colorizeTab(tab);
+			
 			
 			// Ensure selected tabs become visible (and the tabs before/after if scrollOneExtra)
 			// tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
@@ -4663,6 +4688,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 			}, 50);	//this timeout has to be after TabOpen to make it work normally (it seems)
 		}
+		tk.colorizeTab(tab);
 	};
 	this.positionedTabbar_onResize = function positionedTabbar_onResize(event) {
 		var width = parseInt(_tabBar.width != "" ? _tabBar.width : 250);	//temp default value, MEDIC!!
@@ -4887,7 +4913,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		document.addEventListener("SSTabRestoring", tk.updateMultiRowTabs, false); // "hidden" attributes might be restored!
 		window.addEventListener("resize", tk.updateMultiRowTabs, false);
 		tk.appendMethodCode("tk.toggleGroupCollapsed", 'tk.updateMultiRowTabs();');
-
+		
 		_tabContainer.addEventListener("TabSelect", tk.multiRow_onTabSelect, false);
 		_tabContainer.addEventListener("TabMove", tk.multiRow_onTabSelect, false); // In case a tab is moved out of sight
 		
@@ -4896,8 +4922,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Setup new drop indicator (this way it can be moved up and down as well as left and right)
 		var oldIndicatorBar = gBrowser.mTabBox.firstChild;
 		var oldIndicator = oldIndicatorBar.firstChild;
-		var oldBarStyle = tk.getCSSRule(".tab-drop-indicator-bar").style /*[Fx3only]*/ 
-		var oldStyle = tk.getCSSRule(".tab-drop-indicator").style /*[Fx3only]*/
+		var oldBarStyle = tk.getCSSRule(".tab-drop-indicator-bar").style //[Fx3only] 
+		var oldStyle = tk.getCSSRule(".tab-drop-indicator").style //[Fx3only]
 		var newDropIndicatorBar = document.createElementNS(XUL_NS, "hbox");
 		var newDropIndicator = document.createElementNS(XUL_NS, "hbox");
 		newDropIndicatorBar.id = "tabkit-tab-drop-indicator-bar";
@@ -5833,9 +5859,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	//|##########################
 
 	// Allows external access to private members of tabkit to aid debugging
-	this._eval = function _eval(exp) {
-		return eval(exp);
-	};
+	// this._eval = function _eval(exp) {
+		// return eval(exp);
+	// };
 	
 	//Cannot find this extension, so no use
 	/* this.preInitDebugAids = function preInitDebugAids(event) {
