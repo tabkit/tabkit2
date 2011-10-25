@@ -1,14 +1,14 @@
-<!ENTITY firstRunWizard.title "Tab Kit First Run Wizard">
+ï»¿<!ENTITY firstRunWizard.title "Tab Kit First Run Wizard">
 
-<!ENTITY layoutChoice.desc "½Ð¿ï¾Ü§A·Q­nªº¤À­¶Åã¥Ü¦ì¸m¡A§A¥iÀH®É¦b³]©w¤¤§ïÅÜ§ó§ï¦ì¸m">
+<!ENTITY layoutChoice.desc "è«‹é¸æ“‡ä½ æƒ³è¦çš„åˆ†é é¡¯ç¤ºä½ç½®ï¼Œä½ å¯éš¨æ™‚åœ¨è¨­å®šä¸­æ”¹è®Šæ›´æ”¹ä½ç½®">
 
-<!ENTITY treeTabs.label "¾ð«¬¤À­¶Åã¥Ü («ØÄ³)">
-<!ENTITY treeTabs.desc "¤À­¶·|¦b¥ªÃä¥H¾ð«¬Åã¥Ü(¦p¦³¤À²Õ)">
+<!ENTITY treeTabs.label "æ¨¹åž‹åˆ†é é¡¯ç¤º (å»ºè­°)">
+<!ENTITY treeTabs.desc "åˆ†é æœƒåœ¨å·¦é‚Šä»¥æ¨¹åž‹é¡¯ç¤º(å¦‚æœ‰åˆ†çµ„)">
 
-<!ENTITY multiRowTabs.label "¦h¦æ¤À­¶Åã¥Ü(¾î¦V)">
-<!ENTITY multiRowTabs.desc "¥Î°_¨Ó¸ò¥­±`®t¤£¦h¡A¦ý·í¤À­¶¤Ó¦h·|¦Û°Ê¼W¥[¦æ¼Æ">
+<!ENTITY multiRowTabs.label "å¤šè¡Œåˆ†é é¡¯ç¤º(æ©«å‘)">
+<!ENTITY multiRowTabs.desc "ç”¨èµ·ä¾†è·Ÿå¹³å¸¸å·®ä¸å¤šï¼Œä½†ç•¶åˆ†é å¤ªå¤šæœƒè‡ªå‹•å¢žåŠ è¡Œæ•¸">
 
-<!ENTITY normalTabs.label "´¶³qÅã¥Ü">
-<!ENTITY normalTabs.desc "¸ò¥­®É¤@¼Ë¡A¦ý¨ä¥L¥\¯à(¦p·Æ¹«¤â¶Õ)¤´·|¹B§@">
+<!ENTITY normalTabs.label "æ™®é€šé¡¯ç¤º">
+<!ENTITY normalTabs.desc "è·Ÿå¹³æ™‚ä¸€æ¨£ï¼Œä½†å…¶ä»–åŠŸèƒ½(å¦‚æ»‘é¼ æ‰‹å‹¢)ä»æœƒé‹ä½œ">
 
-<!ENTITY documentation.text "¦w¸Ë«á³Ì¦n¥ß§Y¨ì³]©w¸Ì¬Ý¬Ý©Ò¦³¿ï¾Ü¡A¦³¨Ç¥\¯à»Ý­n¨ì³]©w¥´¶}°Ú¡I¥t¥~¦b¤À­¶¤W«ö¥kÁä¤]·|¦³¤£¤Ö¥\¯à">
+<!ENTITY documentation.text "å®‰è£å¾Œæœ€å¥½ç«‹å³åˆ°è¨­å®šè£¡çœ‹çœ‹æ‰€æœ‰é¸æ“‡ï¼Œæœ‰äº›åŠŸèƒ½éœ€è¦åˆ°è¨­å®šæ‰“é–‹å•Šï¼å¦å¤–åœ¨åˆ†é ä¸ŠæŒ‰å³éµä¹Ÿæœƒæœ‰ä¸å°‘åŠŸèƒ½">

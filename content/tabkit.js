@@ -972,13 +972,27 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Methods:
 	this.addMethodHook = function addMethodHook(hook) {
 		try {
+			var namespaces = hook[0].split(".");
+
+			try {
+				// try to get the target function without eval
+				var object = window;
+				while (namespaces.length > 1) {
+					object = object[namespaces.shift()];
+				}
+			}
+			catch (e) {
+			  throw TypeError(hook[0] + " is not a function");
+			}
 			// Make backup, if requested
-			if (hook[1])
-				eval(hook[1] + "=" + hook[0]);
+			// if (hook[1])
+				// window[hook[1]] + "=" + hook[0]);
 				
-			var code = eval(hook[0] + ".toString()");
+			// var code = eval(hook[0] + ".toString()");
+			var method = namespaces.pop();
+			var code = object[method].toString();
 			
-			for (var i = 2; i < hook.length; ) {
+			for (var i = 1; i < hook.length; ) {
 				var newCode = code.replace(hook[i++], hook[i++]);
 				if (newCode == code) {
 					if ((tk.startsWith(hook[i-1], "/*[Fx3only]*/")/* || _isFx3*/)
@@ -992,7 +1006,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				}
 			}
 			
-			eval(hook[0] + "=" + code);
+			eval(hook[0]+"="+code);
 		}
 		catch (ex) {
 			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex, ex);
@@ -1001,16 +1015,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 	// TODO=P4: GCODE prepend/append/wrapMethodCode could be done without modifying the actual method to preserve closures
 	this.prependMethodCode = function prependMethodCode(methodname, codestring) {
-		tk.addMethodHook([methodname, null, '{', '{' + codestring]);
+		tk.addMethodHook([methodname, '{', '{' + codestring]);
 	};
 
 	this.appendMethodCode = function appendMethodCode(methodname, codestring) {
-		tk.addMethodHook([methodname, null, /\}$/, codestring + '}']);
+		tk.addMethodHook([methodname, /\}$/, codestring + '}']);
 	};
 
 	this.wrapMethodCode = function wrapMethodCode(methodname, startcode, endcode) {
-		//tk.addMethodHook([methodname, null, /\{([^]*)\}$/, '{' + startcode + '$&' + endcode + '}']);
-		tk.addMethodHook([methodname, null, '{', '{' + startcode, /\}$/, endcode + '}']);
+		//tk.addMethodHook([methodname, /\{([^]*)\}$/, '{' + startcode + '$&' + endcode + '}']);
+		tk.addMethodHook([methodname, '{', '{' + startcode, /\}$/, endcode + '}']);
 	};
 
 	//}##########################
@@ -1230,7 +1244,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// So this method hook disallows those collapsed and hidden tabs to be expanded by that unknown source
 		tk.addMethodHook([
 			"gBrowser.showTab",
-			null,
+			
 			'if (aTab.hidden) {',
 			' \
 			$& \
@@ -1253,7 +1267,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Calculate a stack in addTab, since event listeners can't get to it anymore due to https://bugzilla.mozilla.org/show_bug.cgi?id=390488 (fixed now, but kept this way for compatibility)
 		tk.addMethodHook([
 			'gBrowser.addTab',
-			null,
+			
 			't.dispatchEvent(evt);',
 			'if (tabkit.sourceTypes.length) { \
 				evt.stack = [ arguments.callee ]; \
@@ -1349,7 +1363,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if ("mlb_common" in window && "Utils" in mlb_common && "openUrlInNewTab" in mlb_common.Utils)
 			tk.addMethodHook([
 				'mlb_common.Utils.openUrlInNewTab',
-				null,
 				
 				'function (',
 				'function mlb_common_Utils_openUrlInNewTab('
@@ -2098,7 +2111,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					}
 				}
 			}
-			tk.log("before colorize tabs");
 			if (tab.hasAttribute("groupid")) {
 				tk.colorizeTab(tab); // Maintain tab color
 			}
@@ -2360,8 +2372,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.preInitBlurTabModifications = function preInitBlurTabModifications(event) {
 		if ("_blurTab" in gBrowser) { // [Fx3.5b4+]
 			tk.addMethodHook([
-				"gBrowser._blurTab",//{
-				null,
+				"gBrowser._blurTab",
 				
 				'var tab = aTab;',
 				'if (tabkit.chosenNextTab != null) { \
@@ -2373,8 +2384,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		else if ("_endRemoveTab" in gBrowser) { // [Fx3.1b3]
 			tk.addMethodHook([
-				"gBrowser._endRemoveTab",//{
-				null,
+				"gBrowser._endRemoveTab",
 				
 				'newIndex = index == length ? index - 1 : index;',
 				'newIndex = tabkit.pickNextIndex(index, length); \
@@ -2383,8 +2393,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		else { // [Fx3-]
 			tk.addMethodHook([
-				"gBrowser.removeTab",//{
-				null,
+				"gBrowser.removeTab",
 				
 				/newIndex = \(?index == l - 1\)? \? index - 1 : index;/,
 				'newIndex = tabkit.pickNextIndex(index, l - 1); \
@@ -4093,8 +4102,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Allow setting the next value returned by this via tk.chosenNewIndex
 		//comment by Pika, for dragging tab
 		// tk.addMethodHook([
-			// "gBrowser.tabContainer._getDropIndex",//{
-			// null,
+			// "gBrowser.tabContainer._getDropIndex",
 			
 			// '{',
 			// '{ \
@@ -4107,8 +4115,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		/* if ("_onDrop" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
-				"gBrowser._onDrop",//{
-				null,
+				"gBrowser._onDrop",
+				
 				// Lets us pass arbitrary dragged tabs to _onDrop
 				'dt.mozGetDataAt(TAB_DROP_TYPE, 0)',
 				'("tab" in aEvent ? aEvent.tab : $&)',
@@ -4123,8 +4131,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		/* if ("_onDragLeave" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
-				"gBrowser._onDragLeave",//{
-				null,
+				"gBrowser._onDragLeave",
 				
 				// See _onDragOver replacement
 				'this.mTabDropIndicatorBar.collapsed = true;',
@@ -4507,8 +4514,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.postInitNewTabsByDefault = function postInitNewTabsByDefault(event) {
 		// [Fx3.5+]
 		tk.addMethodHook([
-			'gURLBar.handleCommand',//{
-			null,
+			'gURLBar.handleCommand',
+			
 			'aTriggeringEvent.altKey',
 			'(aTriggeringEvent.altKey ^ gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.addressBar"))'
 		]);//}
@@ -4517,7 +4524,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if ("PlacesUIUtils" in window) {
 			tk.addMethodHook([
 				'PlacesUIUtils._openNodeIn',
-				null,
+				
 				'aWindow.openUILinkIn(aNode.uri, aWhere);',
 				'aWindow.openUILinkIn(aNode.uri, tk.returnWhereWhenOpenPlaces(aWhere, aNode));'
 			]);
@@ -5119,7 +5126,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			if (gBrowser._onDragOver.toString().indexOf("ib.getBoundingClientRect().right") != -1) { // [Fx3.6+]
 				tk.addMethodHook([
 					"gBrowser._onDragOver",
-					null,
+					
 					'ib.getBoundingClientRect().right',
 					'gBrowser.clientWidth'
 				]);
@@ -5127,14 +5134,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			else { // [Fx3.5only]
 				tk.addMethodHook([
 					"gBrowser._onDragOver",
-					null,
+					
 					'ib.boxObject.x + ib.boxObject.width',
 					'gBrowser.boxObject.width'
 				]);
 			}
 			tk.addMethodHook([
-				"gBrowser._onDragOver",//{
-				null,
+				"gBrowser._onDragOver",
 				
 				// See below
 				'ib.collapsed = "true";',
@@ -5170,8 +5176,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		if ("_setEffectAllowedForDataTransfer" in gBrowser) { // [Fx3.5+]
 			tk.addMethodHook([
-				"gBrowser._setEffectAllowedForDataTransfer",//{
-				null,
+				"gBrowser._setEffectAllowedForDataTransfer",
 				
 				/aEvent\.screenX\s*>=\s*sourceNode\.boxObject\.screenX\s*&&\s*aEvent\.screenX\s*<=\s*sourceNode\.boxObject\.screenX\s*\+\s*sourceNode\.boxObject\.width/,
 				'$& \
@@ -5825,7 +5830,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Not sure if pinned tab works in horizontal mode, but still BAM!
 		tk.addMethodHook([
 			"gBrowser.pinTab",
-			null,
+			
 			'if (aTab.pinned)',
 			'alert("Sorry, but Tabkit 2 does not support App Tabs"); return; \
 			$&',
@@ -5834,7 +5839,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Disable Panorama, why use Panorama when you have Tabkit?
 		tk.addMethodHook([
 			"TabView.toggle",
-			null,
+			
 			'if (this.isVisible())',
 			'alert("Sorry, but Tabkit 2 does not support Panorama. Why use Panorama when you have Tabkit? :)"); return; \
 			$&',
@@ -5846,7 +5851,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Issue 22, some weird behavior by the new animation related functions which mess with tabs' maxWidth
 		tk.addMethodHook([
 			'gBrowser.tabContainer._lockTabSizing',
-			null,
 			
 			'tab.style.setProperty("max-width", tabWidth, "important");',
 			''

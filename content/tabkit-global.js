@@ -153,41 +153,59 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     /// Methods:
     this.addMethodHook = function addMethodHook(hook) {
         try {
-            if (hook[1])
-                eval(hook[1] + "=" + hook[0]);
+			var namespaces = hook[0].split(".");
 
-            var code = eval(hook[0] + ".toString()");
-            
-            for (var i = 2; i < hook.length; ) {
-                var newCode = code.replace(hook[i++], hook[i++]);
-                if (newCode == code)
-                    tkGlobal.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n"
-                                 + uneval(hook[i - 2])
-                                 + "\nwith:\n"
-                                 + uneval(hook[i - 1]));
-                else
-                    code = newCode;
-            }
-            
-            eval(hook[0] + "=" + code);
-        }
-        catch (ex) {
-            tkGlobal.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex, ex);
-        }
+			try {
+				// try to get the target function without eval
+				var object = window;
+				while (namespaces.length > 1) {
+					object = object[namespaces.shift()];
+				}
+			}
+			catch (e) {
+			  throw TypeError(hook[0] + " is not a function");
+			}
+			// Make backup, if requested
+			// if (hook[1])
+				// window[hook[1]] + "=" + hook[0]);
+				
+			// var code = eval(hook[0] + ".toString()");
+			var method = namespaces.pop();
+			var code = object[method].toString();
+			
+			for (var i = 1; i < hook.length; ) {
+				var newCode = code.replace(hook[i++], hook[i++]);
+				if (newCode == code) {
+					if ((tk.startsWith(hook[i-1], "/*[Fx3only]*/")/* || _isFx3*/)
+					 )
+					{
+						tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
+					}
+				}
+				else {
+					code = newCode;
+				}
+			}
+			
+			eval(hook[0]+"="+code);
+		}
+		catch (ex) {
+			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex, ex);
+		}
     };
 
     // TODO=P4: prepend/append/wrapMethodCode could be done without modifying the actual method to preserve closures
     this.prependMethodCode = function prependMethodCode(methodname, codestring) {
-        tkGlobal.addMethodHook([methodname, null, '{', '{' + codestring]);
+        tkGlobal.addMethodHook([methodname, '{', '{' + codestring]);
     };
 
     this.appendMethodCode = function appendMethodCode(methodname, codestring) {
-        tkGlobal.addMethodHook([methodname, null, /\}$/, codestring + '}']);
+        tkGlobal.addMethodHook([methodname, /\}$/, codestring + '}']);
     };
 
     this.wrapMethodCode = function wrapMethodCode(methodname, startcode, endcode) {
-        //tkGlobal.addMethodHook([methodname, null, /\{([^]*)\}$/, '{' + startcode + '$&' + endcode + '}']);
-        tkGlobal.addMethodHook([methodname, null, '{', '{' + startcode, /\}$/, endcode + '}']);
+        //tkGlobal.addMethodHook([methodname, /\{([^]*)\}$/, '{' + startcode + '$&' + endcode + '}']);
+        tkGlobal.addMethodHook([methodname, '{', '{' + startcode, /\}$/, endcode + '}']);
     };
 
     //}##########################
@@ -204,7 +222,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
             
             tkGlobal.addMethodHook([
                 'BookmarksCommand.openGroupBookmark',
-                null,
+				
                 'if (aTargetBrowser == "current" || aTargetBrowser == "tab") {',
                 'if (aTargetBrowser == "current" || aTargetBrowser == "tab") { \
                     var URIs = []; \
@@ -237,13 +255,13 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     if ("PlacesUIUtils" in window) { // [Fx3+]
         tkGlobal.addMethodHook([//{
             'PlacesUIUtils.openNodeWithEvent',
-            null,
+			
             'this.openNodeIn(aNode, whereToOpenLink(aEvent));',
             'this.openNodeIn(aNode, whereToOpenLink(aEvent), aEvent);'
         ]);//}
         tkGlobal.addMethodHook([//{
             'PlacesUIUtils.openNodeIn',
-            null,
+			
             'openUILinkIn(aNode.uri, aWhere);',
             'if (arguments.length == 3 && gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places")) { \
                 if (aWhere == "tab" || /^\\s*javascript:/.test(aNode.uri)) { \
