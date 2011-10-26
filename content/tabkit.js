@@ -2371,7 +2371,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	// Tab close focus direction
 	this.preInitBlurTabModifications = function preInitBlurTabModifications(event) {
 		if ("_blurTab" in gBrowser) { // [Fx3.5b4+]
-			tk.addMethodHook([
+			tk.addMethodHook([//{
 				"gBrowser._blurTab",
 				
 				'var tab = aTab;',
@@ -2383,7 +2383,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			]);//}
 		}
 		else if ("_endRemoveTab" in gBrowser) { // [Fx3.1b3]
-			tk.addMethodHook([
+			tk.addMethodHook([//{
 				"gBrowser._endRemoveTab",
 				
 				'newIndex = index == length ? index - 1 : index;',
@@ -2392,7 +2392,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			]);//}
 		}
 		else { // [Fx3-]
-			tk.addMethodHook([
+			tk.addMethodHook([//{
 				"gBrowser.removeTab",
 				
 				/newIndex = \(?index == l - 1\)? \? index - 1 : index;/,
@@ -4101,7 +4101,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.preInitTabDragModifications = function preInitTabDragModifications(event) {	
 		// Allow setting the next value returned by this via tk.chosenNewIndex
 		//comment by Pika, for dragging tab
-		// tk.addMethodHook([
+		// tk.addMethodHook([//{
 			// "gBrowser.tabContainer._getDropIndex",
 			
 			// '{',
@@ -4114,7 +4114,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// ]);//}
 		
 		/* if ("_onDrop" in gBrowser) { // [Fx3.5+]
-			tk.addMethodHook([
+			tk.addMethodHook([//{
 				"gBrowser._onDrop",
 				
 				// Lets us pass arbitrary dragged tabs to _onDrop
@@ -4130,7 +4130,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		} */
 		
 		/* if ("_onDragLeave" in gBrowser) { // [Fx3.5+]
-			tk.addMethodHook([
+			tk.addMethodHook([//{
 				"gBrowser._onDragLeave",
 				
 				// See _onDragOver replacement
@@ -4513,7 +4513,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	
 	this.postInitNewTabsByDefault = function postInitNewTabsByDefault(event) {
 		// [Fx3.5+]
-		tk.addMethodHook([
+		tk.addMethodHook([//{
 			'gURLBar.handleCommand',
 			
 			'aTriggeringEvent.altKey',
@@ -5401,7 +5401,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		gBrowser.addEventListener("draggesture", tk.onMouseDragGesture, true);
 		gBrowser.addEventListener("mouseout", tk.onMouseOutGesture, false);
 		//gBrowser.mPanelContainer.addEventListener("DOMMouseScroll", tk.onRMBWheelGesture, true);
-		gBrowser.tabContainer.addEventListener("DOMMouseScroll", tk.onRMBWheelGesture, true);
+		gBrowser.addEventListener("DOMMouseScroll", tk.onRMBWheelGesture, true);
 		//_tabInnerBox.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
 		//_tabContainer.mTabstripClosebutton.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
 		gBrowser.tabContainer.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
