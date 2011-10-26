@@ -257,7 +257,7 @@
 }
 
 /* Make background-color not transparent */
-#TabsToolbar[vertitabbar] .tabbrowser-tabs {
+#TabsToolbar .tabbrowser-tabs {
 	background-color: -moz-Dialog !important;
 	/* -moz-appearance: -moz-win-browsertabbar-toolbox !important; */
 }
