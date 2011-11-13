@@ -995,11 +995,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			for (var i = 1; i < hook.length; ) {
 				var newCode = code.replace(hook[i++], hook[i++]);
 				if (newCode == code) {
-					if ((tk.startsWith(hook[i-1], "/*[Fx3only]*/")/* || _isFx3*/)
-					 )
-					{
-						tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
-					}
+					tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
 				}
 				else {
 					code = newCode;
@@ -1009,7 +1005,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			eval(hook[0]+"="+code);
 		}
 		catch (ex) {
-			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex, ex);
+			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex + "\nCode: "+code.substring(0,150), ex);
 		}
 	};
 
@@ -4584,8 +4580,18 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	//|##########################
 
 	/// Initialisation:
+	
+	var tabWidthStyleSheet = null;	//for storing stylesheet for tab minWidth rule
+	
 	this.initTabMinWidth = function initTabMinWidth(event) {
 		tk.addGlobalPrefListener("browser.tabs.tabMinWidth", tk.resetTabMinWidth);
+		var ss = document.styleSheets;
+		for (let i = ss.length - 1; i >= 0; i--) {
+			if (ss[i].href == "chrome://tabkit/content/variable.css") {
+				tk.tabWidthStyleSheet = ss[i];
+				break;
+			}
+		}
 	};
 	this.initListeners.push(this.initTabMinWidth);
 
@@ -4598,9 +4604,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Methods:
 	// Note: this is also used by multi-row tabs
 	this.setTabMinWidth = function setTabMinWidth(minWidth) {
-		_tabContainer.mTabMinWidth = minWidth;
+		// _tabContainer.mTabMinWidth = minWidth;
 		for (var i = 0; i < _tabs.length; i++) {
 			_tabs[i].minWidth = minWidth;
+			//the index may change, also be noticed first rule start @ 1, [0] is always undefined, don't ask me why, idk
+			var style = tk.tabWidthStyleSheet.cssRules[1].style;
+			style.setProperty("min-width", minWidth + "px", "important");
 		}
 		_tabContainer.adjustTabstrip();
 	};
@@ -4919,7 +4928,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		tk.addDelayedEventListener(_tabContainer, "TabClose", tk.updateMultiRowTabs);
 		document.addEventListener("SSTabRestoring", tk.updateMultiRowTabs, false); // "hidden" attributes might be restored!
 		window.addEventListener("resize", tk.updateMultiRowTabs, false);
-		tk.appendMethodCode("tk.toggleGroupCollapsed", 'tk.updateMultiRowTabs();');
+		tk.appendMethodCode("tabkit.toggleGroupCollapsed", 'tabkit.updateMultiRowTabs();');
 		
 		_tabContainer.addEventListener("TabSelect", tk.multiRow_onTabSelect, false);
 		_tabContainer.addEventListener("TabMove", tk.multiRow_onTabSelect, false); // In case a tab is moved out of sight
@@ -4979,10 +4988,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 						visibleTabs--;
 				var newTabButton = _tabs[_tabs.length-1].boxObject.nextSibling; // [Fx3.5+]
 				if (newTabButton && newTabButton.className == "tabs-newtab-button")
-					visibleTabs++; // Treat the new tab button as a tab for our purposes
+					// visibleTabs++; // Treat the new tab button as a tab for our purposes	//seems not needed in FF4+
+				var minWidth = gPrefService.getIntPref("browser.tabs.tabMinWidth");
 				var availWidth = _tabstrip._scrollbox.boxObject.width;
-				var tabsPerRow = Math.floor(availWidth / Math.max(gPrefService.getIntPref("browser.tabs.tabMinWidth"), 100));	//Minimum minWidth of tab is 100, a built-in CSS rule
+				var tabsPerRow = Math.floor(availWidth / Math.max(minWidth, 100));	//Minimum minWidth of tab is 100, a built-in CSS rule
 				var rows = Math.ceil(visibleTabs / tabsPerRow);
+				tk.log("availWidth: "+availWidth+" tabsPerRow: "+tabsPerRow+" rows: "+rows);
 			}
 			if (rows > 1) {
 				// Enable multi-row tabs
@@ -5028,7 +5039,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					_tabstrip.style.setProperty("max-height", 24 * rows + "px", "important");
 				}
 
-				tk.setTabMinWidth(availWidth / tabsPerRow);
+				tk.setTabMinWidth(minWidth);
+				// tk.setTabMinWidth(availWidth / tabsPerRow);
 				
 				if (rows > maxRows)
 					tk.multiRow_onTabSelect(); // Check if we need to scroll

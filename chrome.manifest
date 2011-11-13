@@ -15,3 +15,5 @@ locale	tabkit	de locale/de/
 locale	tabkit	fr-FR locale/fr-FR/
 
 skin	tabkit	classic/1.0	skin/classic/
+
+style chrome://browser/content/browser.xul chrome://tabkit/content/variable.css

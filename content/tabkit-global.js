@@ -176,11 +176,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
 			for (var i = 1; i < hook.length; ) {
 				var newCode = code.replace(hook[i++], hook[i++]);
 				if (newCode == code) {
-					if ((tk.startsWith(hook[i-1], "/*[Fx3only]*/")/* || _isFx3*/)
-					 )
-					{
-						tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
-					}
+					tkGlobal.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
 				}
 				else {
 					code = newCode;
