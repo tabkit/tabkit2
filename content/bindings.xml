@@ -16,12 +16,14 @@
 			else
 				this.parentNode.mVerticalScrollbar = this;
 		]]></constructor>
-		<destructor><![CDATA[
+		<destructor><!--
+		<![CDATA[
 			if (this.orient == 'horizontal')
 				this.parentNode.mHorizontalScrollbar = null;
 			else
 				this.parentNode.mVerticalScrollbar = null;
-		]]></destructor>
+		]]>
+		--></destructor>
 	</implementation>
 </binding>
 

@@ -2955,7 +2955,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	// Allow easy access to the initial uri a tab is loading
 	this.earlyMethodHooks.push([
 		"gBrowser.addTab",//{
-		null,
 		'b.loadURIWithFlags(aURI',
 		't.initialURI = aURI; $&'
 	]);//}
@@ -4987,8 +4986,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					if (_tabs[i].hidden) // visibility of a tab
 						visibleTabs--;
 				var newTabButton = _tabs[_tabs.length-1].boxObject.nextSibling; // [Fx3.5+]
-				if (newTabButton && newTabButton.className == "tabs-newtab-button")
-					// visibleTabs++; // Treat the new tab button as a tab for our purposes	//seems not needed in FF4+
+				//seems not needed in FF4+
+				// if (newTabButton && newTabButton.className == "tabs-newtab-button")
+					// visibleTabs++; // Treat the new tab button as a tab for our purposes
 				var minWidth = gPrefService.getIntPref("browser.tabs.tabMinWidth");
 				var availWidth = _tabstrip._scrollbox.boxObject.width;
 				var tabsPerRow = Math.floor(availWidth / Math.max(minWidth, 100));	//Minimum minWidth of tab is 100, a built-in CSS rule
@@ -5625,7 +5625,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Method hooks:
 	this.earlyMethodHooks.push([
 		'gBrowser.warnAboutClosingTabs',//{
-		null,
 		'numTabs = this.tabContainer.childNodes.length;',
 		'numTabs = (typeof aAll == "number" ? aAll : this.tabContainer.childNodes.length);'
 	]);//}
