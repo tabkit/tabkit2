@@ -5508,7 +5508,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (!event.isTrusted || event.target != event.currentTarget) // n.b. this refers to gBrowser, not tabkit!
 			return;
 
-		_mousedown[0] = _mousedown[2] = false;
+		// _mousedown[0] = _mousedown[2] = false;	//comment it for fixing Issue 23(RMBWheelGesture not work after one scroll)
+		_mousedown[0] = false;
 	};
 
 	this.onRMBWheelGesture = function onRMBWheelGesture(event) {
