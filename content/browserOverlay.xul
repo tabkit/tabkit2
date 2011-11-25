@@ -170,7 +170,7 @@
 
 <!--
 comment by Pika, functions exists in FF6, reported by beroal
-Related code in JS file is not removed until stable version is produced MEDIC!
+Related code in JS file is not removed until stable version is produced MEDIC!-->
 <popup id="contentAreaContextMenu">
 	<menuitem id="context_tabkit-openselectedtextlinks" label="Open Selected Text Links" accesskey="P" hidden="true"
 		insertafter="context-openlinkintab" oncommand="window.setTimeout(tabkit.openSelectedLinks, 1, this);"/>
@@ -179,6 +179,6 @@ Related code in JS file is not removed until stable version is produced MEDIC!
 	<menuitem id="context_tabkit-opentopselectedlinks" label="Open Main Selected Links" accesskey="M" hidden="true"
 		insertafter="context-openlinkintab" oncommand="window.setTimeout(tabkit.openSelectedLinks, 1, this);"/>
 </popup>
--->
+
 
 </overlay>
