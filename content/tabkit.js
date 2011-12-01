@@ -3469,7 +3469,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			for (var i = 0; i < nodes.length; i++) {
 				//edit by Pika, coloring for Fx4+
 				nodes[i].style.setProperty("background-image", bgColor, "important");
-				nodes[i].style.setProperty("color", "black", "important");
+				// nodes[i].style.setProperty("color", "black", "important");		//oh turns out setTabsColorBlack is doing it already
 			}
 			// Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
 			// if (tab.getAttribute("selected") == "true" && _tabContainer.getAttribute("colortabnotlabel") == "true") {
@@ -3486,9 +3486,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 
 	this.setTabsColorBlack = function setTabsColorBlack(event) {
-		var tabs = gBrowser.tabs;
-		for (var i = 0; i<tabs.length; i++)
-			tabs[i].style.setProperty("color", "black", "important");
+		for (var i = 0; i<_tabs.length; i++)
+			_tabs[i].style.setProperty("color", "black", "important");
 	}
 	
 	this.colorAllTabsMenuItem = function colorAllTabsMenuItem(tab, menuItem) {
@@ -3496,13 +3495,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		try {
 			var bgSample = tab;//new line by Pika, Fx2 related
 			if (gBrowser.tabContainer.getAttribute("colortabnotlabel") == "true") {
-				menuItem.style.backgroundColor = bgSample.style.backgroundColor;
+				menuItem.style.backgroundImage = bgSample.style.backgroundImage;
 			}
 			else if ((gBrowser.tabContainer.hasAttribute("highlightunread") && !tab.hasAttribute("read"))
 					 || (gBrowser.tabContainer.hasAttribute("emphasizecurrent") && tab.getAttribute("selected") == "true"))
 			{
 				var bgStyle = window.getComputedStyle(bgSample, null);
-				menuItem.style.backgroundColor = bgStyle.backgroundColor;
+				menuItem.style.backgroundImage = bgStyle.backgroundImage;
 			}
 			menuItem.style.MozAppearance = "none";
 			window.setTimeout(function __colorAllTabsMenuText(tab, menuItem) {
@@ -3538,20 +3537,35 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("TabClose", tk.colorAllTabsMenu, false);
 		_tabContainer.addEventListener("TabSelect", tk.colorAllTabsMenu, false);
 		_tabContainer.addEventListener("TabSelect", tk.setTabsColorBlack, false);
-			
-		if ("LastTab" in window && window.LastTab && LastTab.Browser && LastTab.Browser.OnTabMenuShowing) {
-			tk.appendMethodCode('LastTab.Browser.OnTabMenuShowing',//{
-				'for (var i = 0; i < menu.childNodes.length; i++) { \
-					var menuItem = menu.childNodes[i]; \
-					if (LastTab.Preference.TabMenuSortMethod == LastTab.TabMenuSortMethod.MostRecent) \
-							var tab = LastTab.Browser.TabHistory[menuItem.value]; \
-					else \
-						var tab = gBrowser.tabs[menuItem.value]; \
-					tab.mCorrespondingMenuitem = menuItem; \
-				} \
-				tabkit.colorAllTabsMenu();'
-			);//}
-		}
+		
+		//Need to run at the first time or they will missed out
+		tk.setTabsColorBlack(event);
+		tk.colorAllTabsMenu(event);
+		
+		
+		// if ("LastTab" in window && window.LastTab && LastTab.Browser && LastTab.Browser.OnTabMenuShowing) {
+			// tk.appendMethodCode('LastTab.Browser.OnTabMenuShowing',//{
+				// 'for (var i = 0; i < menu.childNodes.length; i++) { \
+					// var menuItem = menu.childNodes[i]; \
+					// if (LastTab.Preference.TabMenuSortMethod == LastTab.TabMenuSortMethod.MostRecent) \
+							// var tab = LastTab.Browser.TabHistory[menuItem.value]; \
+					// else \
+						// var tab = gBrowser.tabs[menuItem.value]; \
+					// tab.mCorrespondingMenuitem = menuItem; \
+				// } \
+				// tabkit.colorAllTabsMenu();'
+			// );//}
+		// }
+		
+		//FF4+ Code Modification for coloring AllTabsPopup
+		if (gBrowser.tabContainer._createTabMenuItem)
+			tk.addMethodHook([
+				'gBrowser.tabContainer._createTabMenuItem',
+				
+				'return menuItem;',
+				'tabkit.colorAllTabsMenuItem(aTab, menuitem); \
+				$&'
+			]);
 	};
 	this.postInitListeners.push(this.postInitAllTabsMenuColors);
 
@@ -4521,7 +4535,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'PlacesUIUtils._openNodeIn',
 				
 				'aWindow.openUILinkIn(aNode.uri, aWhere);',
-				'aWindow.openUILinkIn(aNode.uri, tk.returnWhereWhenOpenPlaces(aWhere, aNode));'
+				'aWindow.openUILinkIn(aNode.uri, tabkit.returnWhereWhenOpenPlaces(aWhere, aNode));'
 			]);
 			
 			document.getElementById('placesContext_open').removeAttribute('default');

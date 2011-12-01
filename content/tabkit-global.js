@@ -279,7 +279,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
         ]);//}
     }
     };
-    this.globalPreInitListeners.push(this.globalPreInitNewTabsByDefault);
+    // this.globalPreInitListeners.push(this.globalPreInitNewTabsByDefault);
 
     //}##########################
     //|##########################
