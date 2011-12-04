@@ -5004,10 +5004,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				// if (newTabButton && newTabButton.className == "tabs-newtab-button")
 					// visibleTabs++; // Treat the new tab button as a tab for our purposes
 				var minWidth = gPrefService.getIntPref("browser.tabs.tabMinWidth");
-				var availWidth = _tabstrip._scrollbox.boxObject.width;
+				var availWidth = _tabContainer.mTabstrip._scrollbox.boxObject.width;
 				var tabsPerRow = Math.floor(availWidth / Math.max(minWidth, 100));	//Minimum minWidth of tab is 100, a built-in CSS rule
 				var rows = Math.ceil(visibleTabs / tabsPerRow);
-				tk.log("availWidth: "+availWidth+" tabsPerRow: "+tabsPerRow+" rows: "+rows);
 			}
 			if (rows > 1) {
 				// Enable multi-row tabs
@@ -5256,6 +5255,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		checkbox.setAttribute("oncommand", "tabkit.filterTabs(document.getElementById('tabkit-filtertabs-query').value)");
 		checkbox.setAttribute("collapsed", "true");
 		vbox.appendChild(checkbox);
+		
+		//Option for on/off search bar
+		tk.mapBoolPrefToAttribute("disableSearchBar", document.getElementById("tabkit-filtertabs-box"), "hidden");
 	};
 	this.initListeners.push(this.initSearchBar);
 	
@@ -5388,6 +5390,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.initHighlightUnreadTabs = function initHighlightUnreadTabs(event) {
 		tk.mapBoolPrefToAttribute("highlightUnreadTabs", _tabContainer, "highlightunread");
 		tk.mapBoolPrefToAttribute("emphasizeCurrentTab", _tabContainer, "emphasizecurrent");
+		tk.mapBoolPrefToAttribute("boldCurrentTab", _tabContainer, "boldcurrent");
 
 		_tabContainer.addEventListener("TabSelect", tk.tabRead, false);
 
@@ -5881,6 +5884,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			'tab.style.setProperty("max-width", tabWidth, "important");',
 			''
 		]);
+		
+		//Workaround for Issue 9
+		tk.mapBoolPrefToAttribute("solidBackground", _tabContainer, "solidbackground");
 	};
 	this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
 		window.addEventListener("mouseover", tk.onMouseOverTabEffect, false);

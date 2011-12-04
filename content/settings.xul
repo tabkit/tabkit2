@@ -82,7 +82,10 @@
 			
 			<preference id="highlightunreadtabs-pref" name="extensions.tabkit.highlightUnreadTabs" type="bool"/>
 			<preference id="emphasizecurrenttab-pref" name="extensions.tabkit.emphasizeCurrentTab" type="bool"/>
+			<preference id="boldcurrenttab-pref" name="extensions.tabkit.boldCurrentTab" type="bool"/>
 			<preference id="emphasizeprotectedtabs-pref" name="extensions.tabkit.emphasizeProtectedTabs" type="bool"/>
+			<preference id="disablesearchbar-pref" name="extensions.tabkit.disableSearchBar" type="bool"/>
+			<preference id="solidbackground-pref" name="extensions.tabkit.solidBackground" type="bool"/>
 			
 			<preference id="forcethemecompatibility-pref" name="extensions.tabkit.forceThemeCompatibility" type="int"/>
 			<preference id="colortabnotlabel-pref" name="extensions.tabkit.colorTabNotLabel" type="bool"/>
@@ -116,8 +119,14 @@
 					accesskey="&highlightUnreadTabs.accesskey;" preference="highlightunreadtabs-pref"/>
 			<checkbox id="emphasizecurrenttab" label="&emphasizeCurrentTab.label;"
 					accesskey="&emphasizeCurrentTab.accesskey;" preference="emphasizecurrenttab-pref"/>
+			<checkbox id="boldcurrenttab" label="&boldCurrentTab.label;"
+					accesskey="&boldCurrentTab.accesskey;" preference="boldcurrenttab-pref"/>
 			<checkbox id="emphasizeprotectedtabs" label="&emphasizeProtectedTabs.label;"
 					accesskey="&emphasizeProtectedTabs.accesskey;" preference="emphasizeprotectedtabs-pref"/>
+			<checkbox id="disablesearchbar" label="&disableSearchBar.label;"
+					accesskey="&disableSearchBar.accesskey;" preference="disablesearchbar-pref"/>
+			<checkbox id="solidbackground" label="&solidBackground.label;"
+					accesskey="&solidBackground.accesskey;" preference="solidbackground-pref"/>
 		</groupbox>
 		
 		<groupbox><caption label="&coloring.caption;"/>

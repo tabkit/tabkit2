@@ -21,7 +21,10 @@ pref("extensions.tabkit.indentedTree", true);
 //--- Appearance ---
 pref("extensions.tabkit.highlightUnreadTabs", true);
 pref("extensions.tabkit.emphasizeCurrentTab", false);
+pref("extensions.tabkit.boldCurrentTab", false);
 pref("extensions.tabkit.emphasizeProtectedTabs", true);
+pref("extensions.tabkit.disableSearchBar", false);
+pref("extensions.tabkit.solidBackground", false);
 
 //--- Advanced ---
 pref("extensions.tabkit.forceThemeCompatibility", 1); // 0: Never, 1: Auto, 2: Always

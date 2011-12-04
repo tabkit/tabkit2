@@ -85,30 +85,33 @@ function resetAll() {
 }
 
 function disableAll() {
-    resetAll();
-    document.getElementById("multiplerows").checked = false;
-    toggleMultipleRows();
+	resetAll();
+	document.getElementById("multiplerows").checked = false;
+	toggleMultipleRows();
 
-    document.getElementById("tabbarposition-pref").value = 0;
-    document.getElementById("sidebarposition-pref").value = 1;
+	document.getElementById("tabbarposition-pref").value = 0;
+	document.getElementById("sidebarposition-pref").value = 1;
 	
-    document.getElementById("highlightunreadtabs-pref").value = false;
-    document.getElementById("emphasizeprotectedtabs-pref").value = false;
-    document.getElementById("forcethemecompatibility-pref").value = 0;
+	document.getElementById("highlightunreadtabs-pref").value = false;
+	document.getElementById("emphasizeprotectedtabs-pref").value = false;
+	document.getElementById("boldcurrenttab-pref").value = false;
+	document.getElementById("forcethemecompatibility-pref").value = 0;
+	document.getElementById("disablesearchbar-pref").value = false;
+	document.getElementById("solidbackground-pref").value = false;
 
-    document.getElementById("tabwheeltabswitch-pref").value = false;
-    document.getElementById("lmbrmbbackforward-pref").value = false;
-    document.getElementById("doubleclickcollapseexpand-pref").value = false;
-    document.getElementById("acceldragcopy-pref").value = false;
-    document.getElementById("shiftdraggroups-pref").value = false;
-    document.getElementById("scrollbarsnotarrows-pref").value = false;
-    document.getElementById("scrolloneextra-pref").value = false;
-    document.getElementById("openselectedlinks-pref").value = false;
+	document.getElementById("tabwheeltabswitch-pref").value = false;
+	document.getElementById("lmbrmbbackforward-pref").value = false;
+	document.getElementById("doubleclickcollapseexpand-pref").value = false;
+	document.getElementById("acceldragcopy-pref").value = false;
+	document.getElementById("shiftdraggroups-pref").value = false;
+	document.getElementById("scrollbarsnotarrows-pref").value = false;
+	document.getElementById("scrolloneextra-pref").value = false;
+	document.getElementById("openselectedlinks-pref").value = false;
 
-    document.getElementById("autogroupnewtabs-pref").value = false;
-    document.getElementById("newtabposition-pref").value = 0;
-    document.getElementById("lastactivesort-pref").value = "creation";
-    document.getElementById("customcloseorder-pref").value = 4;
+	document.getElementById("autogroupnewtabs-pref").value = false;
+	document.getElementById("newtabposition-pref").value = 0;
+	document.getElementById("lastactivesort-pref").value = "creation";
+	document.getElementById("customcloseorder-pref").value = 4;
 
-    document.getElementById("closebeforeafternotother-pref").value = false;
+	document.getElementById("closebeforeafternotother-pref").value = false;
 }
