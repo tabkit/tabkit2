@@ -54,6 +54,12 @@
 <!ENTITY emphasizeCurrentTab.accesskey "A">
 <!ENTITY emphasizeProtectedTabs.label "Geschützte Tabs grün markieren">
 <!ENTITY emphasizeProtectedTabs.accesskey "G">
+<!ENTITY boldCurrentTab.label "Make current tab text bold">
+<!ENTITY boldCurrentTab.accesskey "B">
+<!ENTITY disableSearchBar.label "Disable Search Bar">
+<!ENTITY disableSearchBar.accesskey "D">
+<!ENTITY solidBackground.label "Solid Background (non-Transparent)">
+<!ENTITY solidBackground.accesskey "S">
 
 <!ENTITY coloring.caption "Tab-Einfärbung">
 <!ENTITY forceThemeCompatibility.label "Theme-Kompatibilität:">

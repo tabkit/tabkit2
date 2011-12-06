@@ -54,6 +54,12 @@
 <!ENTITY emphasizeCurrentTab.accesskey "E">
 <!ENTITY emphasizeProtectedTabs.label "用绿色强调强调显示受保护的标签页">
 <!ENTITY emphasizeProtectedTabs.accesskey "P">
+<!ENTITY boldCurrentTab.label "Make current tab text bold">
+<!ENTITY boldCurrentTab.accesskey "B">
+<!ENTITY disableSearchBar.label "Disable Search Bar">
+<!ENTITY disableSearchBar.accesskey "D">
+<!ENTITY solidBackground.label "Solid Background (non-Transparent)">
+<!ENTITY solidBackground.accesskey "S">
 
 <!ENTITY coloring.caption "标签配色">
 <!ENTITY forceThemeCompatibility.label "与主题的兼容方式:">

@@ -54,6 +54,12 @@
 <!ENTITY emphasizeCurrentTab.accesskey "к">
 <!ENTITY emphasizeProtectedTabs.label "Подсвечивать защищенные вкладки зелёным">
 <!ENTITY emphasizeProtectedTabs.accesskey "щ">
+<!ENTITY boldCurrentTab.label "Make current tab text bold">
+<!ENTITY boldCurrentTab.accesskey "B">
+<!ENTITY disableSearchBar.label "Disable Search Bar">
+<!ENTITY disableSearchBar.accesskey "D">
+<!ENTITY solidBackground.label "Solid Background (non-Transparent)">
+<!ENTITY solidBackground.accesskey "S">
 
 <!ENTITY coloring.caption "Расцветка вкладок">
 <!ENTITY forceThemeCompatibility.label "Совместимость с темами:">

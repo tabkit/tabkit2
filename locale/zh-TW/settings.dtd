@@ -52,8 +52,14 @@
 <!ENTITY highlightUnreadTabs.accesskey "H">
 <!ENTITY emphasizeCurrentTab.label "強調當前的分頁">
 <!ENTITY emphasizeCurrentTab.accesskey "E">
-<!ENTITY emphasizeProtectedTabs.label "Emphasize protected tabs in green">
+<!ENTITY emphasizeProtectedTabs.label "用綠色強調受保護的分頁">
 <!ENTITY emphasizeProtectedTabs.accesskey "P">
+<!ENTITY boldCurrentTab.label "令當前分頁的字體變粗">
+<!ENTITY boldCurrentTab.accesskey "B">
+<!ENTITY disableSearchBar.label "停用分頁搜尋框">
+<!ENTITY disableSearchBar.accesskey "D">
+<!ENTITY solidBackground.label "不透明的分頁背景">
+<!ENTITY solidBackground.accesskey "S">
 
 <!ENTITY coloring.caption "Tab Coloring">
 <!ENTITY forceThemeCompatibility.label "Theme compatibility:">

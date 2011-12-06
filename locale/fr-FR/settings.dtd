@@ -54,6 +54,12 @@
 <!ENTITY emphasizeCurrentTab.accesskey "E">
 <!ENTITY emphasizeProtectedTabs.label "Mettre en valeur les onglets protégés en vert">
 <!ENTITY emphasizeProtectedTabs.accesskey "P">
+<!ENTITY boldCurrentTab.label "Make current tab text bold">
+<!ENTITY boldCurrentTab.accesskey "B">
+<!ENTITY disableSearchBar.label "Disable Search Bar">
+<!ENTITY disableSearchBar.accesskey "D">
+<!ENTITY solidBackground.label "Solid Background (non-Transparent)">
+<!ENTITY solidBackground.accesskey "S">
 
 <!ENTITY coloring.caption "Mise en couleur des onglets">
 <!ENTITY forceThemeCompatibility.label "Compatibilité des thèmes :">
