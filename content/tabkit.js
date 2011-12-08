@@ -970,10 +970,17 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.postInitListeners.push(this.postInitMethodHooks);
 
 	/// Methods:
-	this.addMethodHook = function addMethodHook(hook) {
-		try {
+	/* parameter: length 3 array
+	hook[0] : full path for the method
+	hook[1] : old code
+	hook[2] : new code, use $& for writing old code(instead of copying)*/
+    this.addMethodHook = function addMethodHook(hook) {
+        try {
+			if (hook.length != 3)
+				tk.dump("Who is so silly to use addMethodHook without reading the description!", null);return;
+			
 			var namespaces = hook[0].split(".");
-
+			
 			try {
 				// try to get the target function without eval
 				var object = window;
@@ -992,17 +999,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			var method = namespaces.pop();
 			var code = object[method].toString();
 			
-			for (var i = 1; i < hook.length; ) {
-				var newCode = code.replace(hook[i++], hook[i++]);
-				if (newCode == code) {
-					tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
-				}
-				else {
-					code = newCode;
-				}
+			var newCode = code.replace(hook[1], hook[2]);
+			if (newCode == code) {
+				tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[1]) + "\nwith:\n" + uneval(hook[2]));
 			}
-			
-			eval(hook[0]+"="+code);
+			else {
+				eval(hook[0]+"="+newCode);
+			}
 		}
 		catch (ex) {
 			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex + "\nCode: "+code.substring(0,150), ex);
@@ -4532,10 +4535,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// [Fx4+]
 		if ("PlacesUIUtils" in window) {
 			tk.addMethodHook([
-				'PlacesUIUtils._openNodeIn',
+				'PlacesUIUtils.openNodeIn',
 				
-				'aWindow.openUILinkIn(aNode.uri, aWhere);',
-				'aWindow.openUILinkIn(aNode.uri, tabkit.returnWhereWhenOpenPlaces(aWhere, aNode));'
+				'this._openNodeIn(aNode, aWhere, window);',
+				'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(aWhere, aNode), window);'
+			]);
+			tk.addMethodHook([
+				'PlacesUIUtils.openNodeWithEvent',
+				
+				'this._openNodeIn(aNode, window.whereToOpenLink(aEvent), window);',
+				'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(window.whereToOpenLink(aEvent), aNode), window);'
 			]);
 			
 			document.getElementById('placesContext_open').removeAttribute('default');
@@ -4545,7 +4554,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.postInitListeners.push(this.postInitNewTabsByDefault);
 	
 	this.returnWhereWhenOpenPlaces = function returnWhereWhenOpenPlaces(aWhere, aNode) {
-		
 		if (!gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places"))
 			return aWhere;
 		

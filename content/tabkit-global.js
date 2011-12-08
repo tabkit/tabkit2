@@ -151,8 +151,15 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     //|##########################
 
     /// Methods:
+	/* parameter: length 3 array
+	hook[0] : full path for the method
+	hook[1] : old code
+	hook[2] : new code, use $& for writing old code(instead of copying)*/
     this.addMethodHook = function addMethodHook(hook) {
         try {
+			if (hook.length != 3)
+				tk.dump("Who is so silly to use addMethodHook without reading the description!", null);return;
+			
 			var namespaces = hook[0].split(".");
 
 			try {
@@ -173,17 +180,13 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
 			var method = namespaces.pop();
 			var code = object[method].toString();
 			
-			for (var i = 1; i < hook.length; ) {
-				var newCode = code.replace(hook[i++], hook[i++]);
-				if (newCode == code) {
-					tkGlobal.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i - 2]) + "\nwith:\n" + uneval(hook[i - 1]));
-				}
-				else {
-					code = newCode;
-				}
+			var newCode = code.replace(hook[1], hook[2]);
+			if (newCode == code) {
+				tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[1]) + "\nwith:\n" + uneval(hook[2]));
 			}
-			
-			eval(hook[0]+"="+code);
+			else {
+				eval(hook[0]+"="+newCode);
+			}
 		}
 		catch (ex) {
 			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex, ex);
@@ -252,14 +255,14 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
         tkGlobal.addMethodHook([//{
             'PlacesUIUtils.openNodeWithEvent',
 			
-            'this.openNodeIn(aNode, whereToOpenLink(aEvent));',
-            'this.openNodeIn(aNode, whereToOpenLink(aEvent), aEvent);'
+            'this._openNodeIn(aNode, window.whereToOpenLink(aEvent), window);',
+            'this._openNodeIn(aNode, window.whereToOpenLink(aEvent), window, aEvent);'
         ]);//}
         tkGlobal.addMethodHook([//{
-            'PlacesUIUtils.openNodeIn',
+            'PlacesUIUtils._openNodeIn',
 			
             'openUILinkIn(aNode.uri, aWhere);',
-            'if (arguments.length == 3 && gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places")) { \
+            'if (arguments.length == 4 && gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places")) { \
                 if (aWhere == "tab" || /^\\s*javascript:/.test(aNode.uri)) { \
                     aWhere = "current"; \
                 } \
