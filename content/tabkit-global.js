@@ -154,11 +154,14 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
 	/* parameter: length 3 array
 	hook[0] : full path for the method
 	hook[1] : old code
-	hook[2] : new code, use $& for writing old code(instead of copying)*/
+	hook[2] : new code, use $& for writing old code(instead of copying)
+	hook[3] : as hook[1]
+	hook[4] : as hook[2]
+	so on...*/
     this.addMethodHook = function addMethodHook(hook) {
         try {
-			if (hook.length != 3)
-				tk.dump("Who is so silly to use addMethodHook without reading the description!", null);return;
+			if (hook.length % 2 != 1)
+				tkGlobal.dump("Who use addMethodHook without reading the description!\n"+hook[0]+"\n"+hook[1]+"\n"+hook[2]+"\n", null);
 			
 			var namespaces = hook[0].split(".");
 
@@ -180,16 +183,20 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
 			var method = namespaces.pop();
 			var code = object[method].toString();
 			
-			var newCode = code.replace(hook[1], hook[2]);
-			if (newCode == code) {
-				tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[1]) + "\nwith:\n" + uneval(hook[2]));
+			for (var i = 1;i < hook.length;) {
+				var newCode = code.replace(hook[i++], hook[i++]);
+				if (newCode == code) {
+					tkGlobal.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i-2]) + "\nwith:\n" + uneval(hook[i-1]));
+				}
+				else {
+					code = newCode;
+				}
 			}
-			else {
-				eval(hook[0]+"="+newCode);
-			}
+			
+			eval(hook[0]+"="+code);
 		}
 		catch (ex) {
-			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex, ex);
+			tkGlobal.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex, ex);
 		}
     };
 

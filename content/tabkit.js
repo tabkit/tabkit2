@@ -285,7 +285,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	
 	// Make sure we can use gPrefService from now on (even if this isn't a browser window!)
 	if (typeof gPrefService == "undefined" || !gPrefService)
-		gPrefService = Cc["@mozilla.org/preferences-service;1"].
+		var gPrefService = Cc["@mozilla.org/preferences-service;1"].
 					   getService(Ci.nsIPrefBranch);
 	
 	/// Private globals:
@@ -777,6 +777,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}, 0);
 	};
 
+
 	//}##########################
 	//{### CSS
 	//|##########################
@@ -845,7 +846,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabBar = document.getElementById("TabsToolbar");
 	};
 	this.preInitListeners.push(this.preInitShortcuts);
-
+	
 	//}##########################
 	//{### Prefs Observers
 	//|##########################
@@ -973,12 +974,15 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/* parameter: length 3 array
 	hook[0] : full path for the method
 	hook[1] : old code
-	hook[2] : new code, use $& for writing old code(instead of copying)*/
+	hook[2] : new code, use $& for writing old code(instead of copying)
+	hook[3] : as hook[1]
+	hook[4] : as hook[2]
+	so on...*/
     this.addMethodHook = function addMethodHook(hook) {
         try {
-			if (hook.length != 3)
-				tk.dump("Who is so silly to use addMethodHook without reading the description!", null);return;
-			
+			if (hook.length % 2 != 1)
+				tk.dump("Who use addMethodHook without reading the description!\n"+hook[0]+"\n"+hook[1]+"\n"+hook[2]+"\n", null);
+				
 			var namespaces = hook[0].split(".");
 			
 			try {
@@ -999,13 +1003,17 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			var method = namespaces.pop();
 			var code = object[method].toString();
 			
-			var newCode = code.replace(hook[1], hook[2]);
-			if (newCode == code) {
-				tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[1]) + "\nwith:\n" + uneval(hook[2]));
+			for (var i = 1;i < hook.length;) {
+				var newCode = code.replace(hook[i++], hook[i++]);
+				if (newCode == code) {
+					tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i-2]) + "\nwith:\n" + uneval(hook[i-1]));
+				}
+				else {
+					code = newCode;
+				}
 			}
-			else {
-				eval(hook[0]+"="+newCode);
-			}
+			
+			eval(hook[0]+"="+code);
 		}
 		catch (ex) {
 			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex + "\nCode: "+code.substring(0,150), ex);
@@ -3850,14 +3858,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	// Show all tab titles in tooltip - one per line - when hovering over a collapsed group (instead of just the visible tab)
 	this.earlyMethodHooks.push([
 		"gBrowser.createTooltip",//{
-		null,
-		'event.target.setAttribute("label", tn.getAttribute("label"));',
-		'if (tn.hasAttribute("groupcollapsed")) { \
-			event.target.setAttribute("label", tabkit.getGroupFromTab(tn).map(function __getLabel(tab) { \
-				return tab == tn ? "> " + tab.label : " - " + tab.label; \
-			}).join("\\n")); \
-		} \
-		else $&'
+		
+		'tab.getAttribute("label")',
+		'(tab.hasAttribute("groupcollapsed") ? tabkit.getGroupFromTab(tab).map(function __getLabel(ctab) { \
+				return ctab == tab ? "> " + tab.label : " - " + tab.label; \
+			}).join("\\n") \
+		 : $&)'
 	]);//}
 
 	/// Implement Bug 298571 - support tab duplication (using ctrl) on tab drag and drop
@@ -4547,8 +4553,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(window.whereToOpenLink(aEvent), aNode), window);'
 			]);
 			
-			document.getElementById('placesContext_open').removeAttribute('default');
-			document.getElementById('placesContext_open:newtab').setAttribute('default', true);
+			// document.getElementById('placesContext_open').removeAttribute('default');
+			// document.getElementById('placesContext_open:newtab').setAttribute('default', true);
 		}
 	};
 	this.postInitListeners.push(this.postInitNewTabsByDefault);
@@ -4581,7 +4587,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			return "current";
 		}
 		else {
-			var w = getTopWin();
+			// var w = getTopWin();
+			var w = Components.classes["@mozilla.org/browser/browserglue;1"].getService(Components.interfaces.nsIBrowserGlue).getMostRecentBrowserWindow();
 			var browser = w ? w.getBrowser().tabContainer.selectedItem.linkedBrowser : w;
 			// tk.debug(browser.contentTitle);
 			// tk.debug(browser.webNavigation.currentURI.spec);
@@ -5649,11 +5656,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 	
 	/// Method hooks:
-	this.earlyMethodHooks.push([
+	/* this.earlyMethodHooks.push([
 		'gBrowser.warnAboutClosingTabs',//{
+		
 		'numTabs = this.tabContainer.childNodes.length;',
 		'numTabs = (typeof aAll == "number" ? aAll : this.tabContainer.childNodes.length);'
-	]);//}
+	]);//} */
 	
 	//}##########################
 	//{=== Scrollbars not arrows
@@ -5920,6 +5928,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		event.target.style.setProperty('opacity','','important');
 	};
+	
 	//}##########################
 	//{### Debug Aids
 	//|##########################
