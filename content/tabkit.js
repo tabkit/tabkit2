@@ -3861,7 +3861,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		'tab.getAttribute("label")',
 		'(tab.hasAttribute("groupcollapsed") ? tabkit.getGroupFromTab(tab).map(function __getLabel(ctab) { \
-				return ctab == tab ? "> " + tab.label : " - " + tab.label; \
+				return ctab == tab ? "> " + ctab.label : " - " + ctab.label; \
 			}).join("\\n") \
 		 : $&)'
 	]);//}
