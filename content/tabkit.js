@@ -1014,6 +1014,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 			
 			eval(hook[0]+"="+code);
+			// object[method] = new function(code);
 		}
 		catch (ex) {
 			tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex + "\nCode: "+code.substring(0,150), ex);
@@ -4626,13 +4627,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Pref Listener/method:
 	// Note: this is also used by multi-row tabs
 	this.resetTabMinWidth = function resetTabMinWidth(pref) {
-		tk.setTabMinWidth(Math.max(gPrefService.getIntPref("browser.tabs.tabMinWidth"), 100));	//Minimum minWidth of tab is 100, a built-in CSS rule
+		tk.setTabMinWidth(gPrefService.getIntPref("browser.tabs.tabMinWidth"));	//Minimum minWidth of tab is 100, a built-in CSS rule
 	};
 
 	/// Methods:
 	// Note: this is also used by multi-row tabs
 	this.setTabMinWidth = function setTabMinWidth(minWidth) {
 		// _tabContainer.mTabMinWidth = minWidth;
+		minWidth = Math.max(minWidth, 100);
 		for (var i = 0; i < _tabs.length; i++) {
 			_tabs[i].minWidth = minWidth;
 			//the index may change, also be noticed first rule start @ 1, [0] is always undefined, don't ask me why, idk
@@ -4917,7 +4919,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				
 				_tabBar.width = _prefs.getIntPref("tabSidebarWidth");
 				for (var i = 0; i < _tabs.length; i++)
-					_tabs[i].maxWidth = null;
+					_tabs[i].maxWidth = 9999;
 				tk.setTabMinWidth(0);
 				gBrowser.mTabBox.addEventListener("resize", tk.positionedTabbar_onResize, false);
 			}

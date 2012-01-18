@@ -5,14 +5,13 @@
 	<RDF:Description RDF:about="rdf:#$qrzWX2"
 					em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
 					em:minVersion="4.0"
-					em:maxVersion="8.*" />
+					em:maxVersion="20.*" />
 	<RDF:Description RDF:about="urn:mozilla:install-manifest">
 					<em:type>2</em:type>
 					<em:id>tabkit2@pikachuexe.amateur.hk</em:id>
 					<em:name>TabKit 2nd Edition</em:name>
 					<em:version>0.9.8.68</em:version>
 					<em:creator>PikachuEXE</em:creator>
-					<em:developer>Roman Beslik</em:developer>
 					<em:developer>John Mellor</em:developer>
 					<em:contributor>Ivor Hewitt</em:contributor>
 					<em:contributor>Fans of Tab Kit</em:contributor>
