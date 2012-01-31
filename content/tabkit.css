@@ -45,12 +45,13 @@
 
 
 /* Italicize unread tabs */
+/* Issue 46 saids this is overkill
 .tabbrowser-tabs[highlightunread] .tabbrowser-tab:not([read]) .tab-text {
 	font-style: italic !important;
 }
 .tabbrowser-tabs[highlightunread] .tabbrowser-tab[read] .tab-text {
-	font-style: normal !important; /* just in case themes use italic by default! */
-}
+	font-style: normal !important; /* just in case themes use italic by default! 
+}*/
 
 /* Highlight unread tabs */
 /* If Sorting and Grouping sets "colortabnotlabel" we do the opposite */
