@@ -321,21 +321,15 @@
  * Close Tabs Before and Close Tabs After *
  ******************************************/
 
-.menu_tabkit-closeBeforeAfter-horizontal, .menu_tabkit-closeBeforeAfter-vertical {
+.menu_tabkit-closeBeforeAfter-horizontal {
 	display: none !important;
 }
-#content[closebeforeafternotother] .tabbrowser-strip menuitem[oncommand*="removeAllTabsBut"] {
+/* Hide "Close Other Tabs" */
+#mainPopupSet[closebeforeafternotother] #context_closeOtherTabs {
 	display: none !important;
 }
-#content[closebeforeafternotother] .menu_tabkit-closeBeforeAfter-horizontal {
+#mainPopupSet[closebeforeafternotother] .menu_tabkit-closeBeforeAfter-horizontal {
 	display: -moz-box !important;
-}
-#content[closebeforeafternotother][vertitabbar] .menu_tabkit-closeBeforeAfter-horizontal {
-	display: none !important;
-}
-#content[closebeforeafternotother][vertitabbar] .menu_tabkit-closeBeforeAfter-vertical {
-	display: -moz-box !important;
-}
 
 /******************
  * Multi-row tabs *

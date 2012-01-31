@@ -1248,7 +1248,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}, 0);
 		
 		// Move Sorting and Grouping menu to the tab context menu (from the Tools menu)
-		var tabContextMenu = _tabContainer.contextMenu;
+		var tabContextMenu = gBrowser.tabContextMenu;
 		tabContextMenu.insertBefore(document.getElementById("menu_tabkit-sortgroup"), tabContextMenu.childNodes[1]);
 		
 		// Fixed Issue 11 by Pika
@@ -5460,21 +5460,18 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		_tabContainer.addEventListener("mouseout", tk.cancelTabHoverGesture, false);
 		
 		// Move Close Tab Before/After to the tab context menu (from the Tools menu)
-		var tabContextMenu = _tabContainer.contextMenu;
-		for (var i = 0; i < tabContextMenu.childNodes.length; i++) {
-			var el = tabContextMenu.childNodes[i];
-			if (el.getAttribute("oncommand").indexOf("removeAllTabsBut") != -1) {
-				tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToLeft"), el);
-				tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToRight"), el);
-				tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsAbove"), el);
-				tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsBelow"), el);
-				
-				tk.mapBoolPrefToAttribute("closeBeforeAfterNotOther", gBrowser, "closebeforeafternotother");
-				
-				return;
-			}
+		var tabContextMenu = gBrowser.tabContextMenu;
+		var closeAllTabsButButton = document.getElementById("context_closeOtherTabs");
+		if (closeAllTabsButButton){
+			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToLeft"), closeAllTabsButButton);
+			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToRight"), closeAllTabsButButton);
+			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsAbove"), closeAllTabsButButton);
+			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsBelow"), closeAllTabsButButton);
+			
+			tk.mapBoolPrefToAttribute("closeBeforeAfterNotOther", document.getElementById("mainPopupSet"), "closebeforeafternotother");
 		}
-		tk.dump("Could not find removeAllTabsBut");
+		else
+			tk.dump("Could not find removeAllTabsBut");
 	};
 	this.initListeners.push(this.initMouseGestures);
 
