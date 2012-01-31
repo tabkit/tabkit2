@@ -630,8 +630,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	];
 	
 	/// Private Globals:
-	//var _isFx3;
-	//var _isFx4;		//added by Pika, it means FF4 or later, since the layout is not changed much (And I don't want it to change again!)
 	
 	/// Methods:
 	this.tryListener = function tryListener(type, listener, event) {
@@ -653,9 +651,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		window.removeEventListener("DOMContentLoaded", tk.onDOMContentLoaded, false);
 		
 		// Find what version of Firefox we're using TODO=P4: TJS+GCODE Do this in a less hacky way. Or better still, just drop support for Fx2
-
-		//_isFx3 = (document.getElementById("browser-stack") == null);
-		//_isFx4 = (document.getElementById("TabsToolbar") != null);	//add by Pika, only FF4+ got TabsToolBar
 		
 		// Check compatibility with existing addons (only in Fx3+, as extensions.enabledItems doesn't exist before that, and not in Fx4+ since _em is unavailable)
 		if (_prefs.getBoolPref("checkCompatibility")
@@ -820,6 +815,15 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	//{### Useful shortcuts
 	//|##########################
 
+	/* 
+	PikachuEXE: 
+	There are so many minor bugs are caused by these shortcuts
+	I am not talking about not using them at all
+	But avoid using them when you call something dynamic
+	For example, if a scrollbar only appears (created) when there are too many tabs, 
+	you should avoid calling its parent through shortcuts, since the "shortcut" seems to be "outdated"
+	*/
+	
 	/// Private Globals:
 	var _tabContainer;
 	var _tabstrip;
@@ -5562,7 +5566,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var name = event.originalTarget.localName;
 		if (name == "scrollbar" || name == "scrollbarbutton" || name == "slider" || name == "thumb") {
 			// Scrollwheeling above an overflow scrollbar should still scroll 3 lines if vertical or 2 lines if multi-row tab bar
-			var scrollbar = _tabInnerBox.mVerticalScrollbar;
+			var innerBox = document.getAnonymousElementByAttribute(_tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+			var scrollbar = innerBox.mVerticalScrollbar;
 			if (!scrollbar) {
 				tk.dump("tabInnerBox.mVerticalScrollbar is null - so what scrollbar did we scroll over?!");
 				return;
