@@ -9,7 +9,6 @@
 	<prefpane id="tabbar-pane" label="&tabbar.title;" image="chrome://tabkit/skin/prefs-tabbar.png">
 		<preferences>
 			<preference id="tabbarposition-pref" name="extensions.tabkit.tabbarPosition" type="int"/>
-			<preference id="sidebarposition-pref" name="extensions.tabkit.sidebarPosition" type="int"/>
 			
 			<preference id="tabrows-pref" name="extensions.tabkit.tabRows" type="int"/>
 			
@@ -34,18 +33,6 @@
 				<label control="tabbarposition" value="&tabbarPosition.label2;"/>
 			</row>
 			
-			<row align="center">
-				<label control="sidebarposition" value="&sidebarPosition.label1;" accesskey="&sidebarPosition.accesskey;"/>
-				<menulist id="sidebarposition" preference="sidebarposition-pref">
-				<menupopup>
-					<menuitem value="0" label="&sidebarPosition.top.label;"/>
-					<menuitem value="1" label="&sidebarPosition.left.label;"/>
-					<menuitem value="2" label="&sidebarPosition.right.label;"/>
-					<menuitem value="3" label="&sidebarPosition.bottom.label;"/>
-				</menupopup>
-				</menulist>
-				<label control="sidebarposition" value="&sidebarPosition.label2;"/>
-			</row>
 			</rows>
 			</grid>
 		</groupbox>

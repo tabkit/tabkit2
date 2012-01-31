@@ -20,7 +20,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     
     // Make sure we can use gPrefService from now on (even if this isn't a browser window!)
     if (typeof gPrefService == "undefined" || !gPrefService)
-        gPrefService = Cc["@mozilla.org/preferences-service;1"].
+        var gPrefService = Cc["@mozilla.org/preferences-service;1"].
                        getService(Ci.nsIPrefBranch);
     
     /// Private globals:

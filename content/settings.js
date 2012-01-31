@@ -90,7 +90,6 @@ function disableAll() {
 	toggleMultipleRows();
 
 	document.getElementById("tabbarposition-pref").value = 0;
-	document.getElementById("sidebarposition-pref").value = 1;
 	
 	document.getElementById("highlightunreadtabs-pref").value = false;
 	document.getElementById("emphasizeprotectedtabs-pref").value = false;

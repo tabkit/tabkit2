@@ -190,7 +190,7 @@
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox,/*[sinceFx4]*/
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox,/*[sinceFx4]*/
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox > .scrollbox-innerbox/*[sinceFx4]*/
- {
+{
 	-moz-box-orient: vertical !important;
 	max-height: none !important;	
 }
@@ -330,7 +330,7 @@
 }
 #mainPopupSet[closebeforeafternotother] .menu_tabkit-closeBeforeAfter-horizontal {
 	display: -moz-box !important;
-
+}
 /******************
  * Multi-row tabs *
  ******************/

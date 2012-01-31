@@ -801,9 +801,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				var cssRule = styleSheet.cssRules[j];
 				if ("selectorText" in cssRule && cssRule.selectorText && cssRule.selectorText.toLowerCase() == ruleName) {
 					if (deleteIt) {
-						styleSheet.deleteRule(ii);
+						styleSheet.deleteRule(j);
 						return true;
 					}
+					
 					return cssRule;
 				}
 			}
@@ -4665,12 +4666,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Initialisation:
 	this.initTabbarPosition = function initTabbarPosition(event) {
 		
-		var sidebarPosition = _prefs.getIntPref("sidebarPosition");
-		if (sidebarPosition != tk.Positions.LEFT)
-			tk.moveSidebar(sidebarPosition);
-		tk.addPrefListener("sidebarPosition", tk.moveSidebar);
-		
 		var tabbarPosition = _prefs.getIntPref("tabbarPosition");
+		
+		if (tabbarPosition == tk.Positions.LEFT)
+			tk.moveSidebar();
+		tk.addPrefListener("tabbarPosition", tk.moveSidebar);
+		
 		if (tabbarPosition != tk.Positions.TOP) {
 			tk.moveTabbar(tabbarPosition);
 		}
@@ -4801,17 +4802,21 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 
 	/// Methods:
-	this.moveSidebar = function moveSidebar(pos) {
-		if (typeof pos != "number") pos = _prefs.getIntPref("sidebarPosition");
+	this.moveSidebar = function moveSidebar(tabbarPosition) {
+		if (typeof tabbarPosition != "number") tabbarPosition = _prefs.getIntPref("tabbarPosition");
+		
+		// Strange behavior when put on top or bottom, remove those options
+		var sidebarPosition = tk.Positions.LEFT
+		if (tabbarPosition == tk.Positions.LEFT)
+			sidebarPosition = tk.Positions.RIGHT
 
 		// Calculate new orient attributes
-		var flipOrient = (pos == tk.Positions.TOP || pos == tk.Positions.BOTTOM);
-		var fromHorizontal = flipOrient ? "vertical" : "horizontal";
-		var fromVertical = flipOrient ? "horizontal" : "vertical";
-		var fromNormal = flipOrient ? "reverse" : "normal";
+		var fromHorizontal = "horizontal";
+		var fromVertical = "vertical";
+		var fromNormal = "normal";
 
 		// Calculate new direction attribute
-		var flipDirection = (pos == tk.Positions.RIGHT || pos == tk.Positions.BOTTOM);
+		var flipDirection = (sidebarPosition == tk.Positions.RIGHT);
 
 		// Get some nodes
 		var browser = document.getElementById("browser");
@@ -4837,7 +4842,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		for each (var node in normallyNormal) 
 			node.dir = fromNormal;
 		
-		sidebarHeader.pack = (flipOrient ? "end" : "start");
+		sidebarHeader.pack = "start";
 
 		// Set orient attributes last or stuff messes up
 		for each (var node in normallyHorizontal)
@@ -4876,11 +4881,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		else if (pos == tk.Positions.TOP) {
 			var searchBox = document.getElementById("tabkit-filtertabs-box");
 			var checkPtI = 1;
-			a = document.getElementById("toolbar-menubar");
+			var menubar = document.getElementById("toolbar-menubar");
 			tk.debug("searchBox chk pt " + checkPtI++);
 			tk.debug("searchBox.previousSibling = "+(searchBox?searchBox.previousSibling:null));
 			tk.debug("searchBox.nextSibling = "+(searchBox?searchBox.nextSibling:null));
-			a.parentNode.insertBefore(tabsToolbar, a);//search box bug source!!
+			menubar.parentNode.insertBefore(tabsToolbar, menubar);//search box bug source!!
 			tk.debug("searchBox chk pt " + checkPtI++);
 			tk.debug("searchBox.previousSibling = "+(searchBox?searchBox.previousSibling:null));
 			tk.debug("searchBox.nextSibling = "+(searchBox?searchBox.nextSibling:null));
@@ -4969,41 +4974,38 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		tk.updateMultiRowTabs();
 		
+		// PikachuEXE: I have given up the drop indicator in multirow mode
 		// Setup new drop indicator (this way it can be moved up and down as well as left and right)
-		var oldIndicatorBar = gBrowser.mTabBox.firstChild;
-		var oldIndicator = oldIndicatorBar.firstChild;
-		var oldBarStyle = tk.getCSSRule(".tab-drop-indicator-bar").style //[Fx3only] 
-		var oldStyle = tk.getCSSRule(".tab-drop-indicator").style //[Fx3only]
-		var newDropIndicatorBar = document.createElementNS(XUL_NS, "hbox");
-		var newDropIndicator = document.createElementNS(XUL_NS, "hbox");
-		newDropIndicatorBar.id = "tabkit-tab-drop-indicator-bar";
-		//newDropIndicatorBar.setAttribute("dragging", oldIndicatorBar.getAttribute("dragging")); // This shouldn't be the case
-		if (oldIndicatorBar.hasAttribute("collapsed")) // [Fx3only]
-			newDropIndicatorBar.setAttribute("collapsed", "true");
-		newDropIndicator.setAttribute("mousethrough", "always");
-		newDropIndicatorBar.style.height = oldBarStyle.height;
-		newDropIndicatorBar.style.marginTop = oldBarStyle.marginTop;
-		newDropIndicatorBar.style.position = "relative";
-		newDropIndicatorBar.style.top = newDropIndicatorBar.style.left = "0";
-		newDropIndicator.style.height = oldStyle.height;
-		newDropIndicator.style.width = oldStyle.width;
-		newDropIndicator.style.marginBottom = oldStyle.marginBottom;
-		newDropIndicator.style.position = "relative";
-		newDropIndicator.style.backgroundColor = oldStyle.backgroundColor; // Probably unnecessary
-		newDropIndicator.style.backgroundImage = oldStyle.backgroundImage;
-		newDropIndicator.style.backgroundRepeat = oldStyle.backgroundRepeat;
-		newDropIndicator.style.backgroundAttachment = oldStyle.backgroundAttachment; // Probably unnecessary
-		newDropIndicator.style.backgroundPosition = "50% 50%"; // This cannot be gotten from oldStyle, see https://bugzilla.mozilla.org/show_bug.cgi?id=316981
-		newDropIndicatorBar.appendChild(newDropIndicator);
-		var stack = document.getElementById("browser-stack"); // [Fx2only]
-		if (!stack) // [Fx3only]
-			stack = document.getAnonymousElementByAttribute(_tabContainer, "class", "tabs-stack");
-		stack.appendChild(newDropIndicatorBar);
-		gBrowser.__defineGetter__("mTabDropIndicatorBar", function __get_mTabDropIndicatorBar() {
-			return document.getElementById("tabkit-tab-drop-indicator-bar");
-		});
-		oldIndicatorBar.removeAttribute("dragging");
-		oldIndicatorBar.setAttribute("collapsed", "true");
+		// var oldIndicatorBar = gBrowser.mTabBox.firstChild;
+		// var oldIndicator = oldIndicatorBar.firstChild;
+		// var oldBarStyle = tk.getCSSRule(".tab-drop-indicator-bar").style //[Fx3only] 
+		// var oldStyle = tk.getCSSRule(".tab-drop-indicator").style //[Fx3only]
+		// var newDropIndicatorBar = document.createElementNS(XUL_NS, "hbox");
+		// var newDropIndicator = document.createElementNS(XUL_NS, "hbox");
+		// newDropIndicatorBar.id = "tabkit-tab-drop-indicator-bar";
+		// if (oldIndicatorBar.hasAttribute("collapsed")) // [Fx3only]
+			// newDropIndicatorBar.setAttribute("collapsed", "true");
+		// newDropIndicator.setAttribute("mousethrough", "always");
+		// newDropIndicatorBar.style.height = oldBarStyle.height;
+		// newDropIndicatorBar.style.marginTop = oldBarStyle.marginTop;
+		// newDropIndicatorBar.style.position = "relative";
+		// newDropIndicatorBar.style.top = newDropIndicatorBar.style.left = "0";
+		// newDropIndicator.style.height = oldStyle.height;
+		// newDropIndicator.style.width = oldStyle.width;
+		// newDropIndicator.style.marginBottom = oldStyle.marginBottom;
+		// newDropIndicator.style.position = "relative";
+		// newDropIndicator.style.backgroundColor = oldStyle.backgroundColor; // Probably unnecessary
+		// newDropIndicator.style.backgroundImage = oldStyle.backgroundImage;
+		// newDropIndicator.style.backgroundRepeat = oldStyle.backgroundRepeat;
+		// newDropIndicator.style.backgroundAttachment = oldStyle.backgroundAttachment; // Probably unnecessary
+		// newDropIndicator.style.backgroundPosition = "50% 50%"; // This cannot be gotten from oldStyle, see https://bugzilla.mozilla.org/show_bug.cgi?id=316981
+		// newDropIndicatorBar.appendChild(newDropIndicator);
+		// stack.appendChild(newDropIndicatorBar);
+		// gBrowser.__defineGetter__("mTabDropIndicatorBar", function __get_mTabDropIndicatorBar() {
+			// return document.getElementById("tabkit-tab-drop-indicator-bar");
+		// });
+		// oldIndicatorBar.removeAttribute("dragging");
+		// oldIndicatorBar.setAttribute("collapsed", "true");
 	};
 	this.initListeners.push(this.initMultiRowTabs);
 
@@ -5465,8 +5467,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (closeAllTabsButButton){
 			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToLeft"), closeAllTabsButButton);
 			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToRight"), closeAllTabsButButton);
-			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsAbove"), closeAllTabsButButton);
-			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsBelow"), closeAllTabsButButton);
 			
 			tk.mapBoolPrefToAttribute("closeBeforeAfterNotOther", document.getElementById("mainPopupSet"), "closebeforeafternotother");
 		}
