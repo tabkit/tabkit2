@@ -1004,7 +1004,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				// window[hook[1]] + "=" + hook[0]);
 				
 			var code = eval(hook[0] + ".toString()");
-			var method = namespaces.pop();
+			// var method = namespaces.pop();
 			// var code = object[method].toString();
 			
 			for (var i = 1;i < hook.length;) {
