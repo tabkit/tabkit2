@@ -987,25 +987,25 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			if (hook.length % 2 != 1)
 				tk.dump("Who use addMethodHook without reading the description!\n"+hook[0]+"\n"+hook[1]+"\n"+hook[2]+"\n", null);
 				
-			var namespaces = hook[0].split(".");
+			// var namespaces = hook[0].split(".");
 			
-			try {
+			// try {
 				// try to get the target function without eval
-				var object = window;
-				while (namespaces.length > 1) {
-					object = object[namespaces.shift()];
-				}
-			}
-			catch (e) {
-			  throw TypeError(hook[0] + " is not a function");
-			}
+				// var object = window;
+				// while (namespaces.length > 1) {
+					// object = object[namespaces.shift()];
+				// }
+			// }
+			// catch (e) {
+			  // throw TypeError(hook[0] + " is not a function");
+			// }
 			// Make backup, if requested
 			// if (hook[1])
 				// window[hook[1]] + "=" + hook[0]);
 				
-			// var code = eval(hook[0] + ".toString()");
+			var code = eval(hook[0] + ".toString()");
 			var method = namespaces.pop();
-			var code = object[method].toString();
+			// var code = object[method].toString();
 			
 			for (var i = 1;i < hook.length;) {
 				var newCode = code.replace(hook[i++], hook[i++]);
