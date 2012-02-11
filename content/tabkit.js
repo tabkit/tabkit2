@@ -1,7 +1,7 @@
 /**
  * TabKit 2nd Edition(TabKit 2 for short) - http://code.google.com/p/tabkit-2nd-edition/
  * Copyright (c) 2007-2010 John Mellor
- * Copyright (c) 2011 Leung Ho Kuen
+ * Copyright (c) 2011-2012 Leung Ho Kuen <pikachuexe@gmail.com>
  * 
  * This file is part of TabKit 2.
  * Tab Kit is free software; you can redistribute it and/or
@@ -1265,6 +1265,19 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			$& \
 			if(aTab.hasAttribute("groupcollapsed")) return;',
 		]);
+		
+		// Fix: Faviconize is now ignored on grouped tabs (Issue 51)
+		// First injected statement required a leading space to make it work, don't know why (probably JS syntax)
+		if (faviconize.quickFav.dblclick) {
+			tk.addMethodHook(['faviconize.quickFav.dblclick',
+				
+				'faviconize.toggle(e.target);',
+				' tabkit.debug("faviconize hacked");\
+				if (tab.hasAttribute("groupid") && tabkit.localPrefService.getBoolPref("doubleClickCollapseExpand")) \
+					{ var tab = e.target; tabkit.debug("faviconize cancelled"); return; } \
+				else \
+					$&'])
+		}
 	};
 	this.initListeners.push(this.initSortingAndGrouping);
 
@@ -4169,20 +4182,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		} */
 		
 		//Pika test on dragging tab for Fx4+
-		gBrowser.tabContainer.addEventListener("dragstart", function(event) {//What's the use of this?
-			if (event.target.localName == "tab") {
-				var draggedTab = event.target;
-				var draggedTabs = gBrowser.contextTabsOf(draggedTab);
-				draggedTabs.splice(draggedTabs.indexOf(draggedTab), 1);
-				draggedTabs.unshift(draggedTab);
+		// gBrowser.tabContainer.addEventListener("dragstart", function(event) {//What's the use of this?
+			// if (event.target.localName == "tab") {
+				// var draggedTab = event.target;
+				// var draggedTabs = gBrowser.contextTabsOf(draggedTab);
+				// draggedTabs.splice(draggedTabs.indexOf(draggedTab), 1);
+				// draggedTabs.unshift(draggedTab);
 
-				var dt = event.dataTransfer;
-				draggedTabs.forEach(function(aTab, aIndex) {
-					dt.mozSetDataAt(TAB_DROP_TYPE, aTab, aIndex);
-					dt.mozSetDataAt("text/x-moz-text-internal", aTab.linkedBrowser.currentURI.spec, aIndex);
-				});
-			}
-		}, true);
+				// var dt = event.dataTransfer;
+				// draggedTabs.forEach(function(aTab, aIndex) {
+					// dt.mozSetDataAt(TAB_DROP_TYPE, aTab, aIndex);
+					// dt.mozSetDataAt("text/x-moz-text-internal", aTab.linkedBrowser.currentURI.spec, aIndex);
+				// });
+			// }
+		// }, true);
 		gBrowser.tabContainer.addEventListener("dragover", function(event) {//for drop indicator
 			var ind = this._tabDropIndicator.parentNode;
 			// if (!this.hasAttribute("multirow")) {
