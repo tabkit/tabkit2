@@ -309,6 +309,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	var _prefs = Cc["@mozilla.org/preferences-service;1"]
 				 .getService(Ci.nsIPrefService)
 				 .getBranch(PREF_BRANCH);
+	 
+	this.localPrefService = _prefs;
 	
 	var _ps = Cc["@mozilla.org/embedcomp/prompt-service;1"]
 			  .getService(Ci.nsIPromptService);
@@ -4864,8 +4866,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
 		var appcontent = document.getElementById("appcontent");
 
-		//End Edit by Pika
-
 		// Calculate new orient attributes
 		var flipOrient = (pos == tk.Positions.LEFT || pos == tk.Positions.RIGHT);
 		var fromHorizontal = flipOrient ? "vertical" : "horizontal";
@@ -5563,7 +5563,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var name = event.originalTarget.localName;
 		if (name == "scrollbar" || name == "scrollbarbutton" || name == "slider" || name == "thumb") {
 			// Scrollwheeling above an overflow scrollbar should still scroll 3 lines if vertical or 2 lines if multi-row tab bar
-			var innerBox = document.getAnonymousElementByAttribute(_tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+			var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
 			var scrollbar = innerBox.mVerticalScrollbar;
 			if (!scrollbar) {
 				tk.dump("tabInnerBox.mVerticalScrollbar is null - so what scrollbar did we scroll over?!");
@@ -5572,7 +5572,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			
 			if (gBrowser.hasAttribute("vertitabbar"))
 				var delta = (Math.abs(event.detail) != 1 ? event.detail : (event.detail < 0 ? -3 : 3)) * 24;
-			else if (_tabContainer.getAttribute("multirow") == "true")
+			else if (gBrowser.tabContainer.getAttribute("multirow") == "true")
 				var delta = event.detail < 0 ? -48 : 48; // 2*24
 			else
 				return;
@@ -5890,7 +5890,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			"TabView.toggle",
 			
 			'if (this.isVisible())',
-			'alert("Sorry, but Tabkit 2 does not support Panorama. Why use Panorama when you have Tabkit? :)"); return; \
+			'{ alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)"); return; } \
 			$&',
 		]);
 		//Also need to disable certain menu item(s)
@@ -5904,6 +5904,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			'tab.style.setProperty("max-width", tabWidth, "important");',
 			''
 		]);
+		
+		// Issue 47, Ban TabsOnTop if tab bar is not on top
+		tk.prependMethodCode(
+			'TabsOnTop.toggle',
+			'if (!this.enabled && tabkit.localPrefService.getIntPref("tabbarPosition") != tabkit.Positions.TOP) \
+			{ alert("Sorry, but Tabkit 2 cannot allow you to enable TabsOnTop unless the tab bar is on top"); return; }'
+		);
 		
 		//Workaround for Issue 9
 		tk.mapBoolPrefToAttribute("solidBackground", _tabContainer, "solidbackground");
