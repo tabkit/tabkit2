@@ -2800,7 +2800,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			return;
 		}
 		
-		if ("gBookmarkAllTabsHandler" in window) { // [Fx3only]
+		if ("showMinimalAddMultiBookmarkUI" in PlacesUIUtils) { 
 			// Based on PlacesCommandHook.bookmarkCurrentPages
 			var uris = group.map(function __getUri(tab) {
 					return tab.linkedBrowser.webNavigation.currentURI;
