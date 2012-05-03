@@ -2800,15 +2800,26 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			return;
 		}
 		
-		if ("showMinimalAddMultiBookmarkUI" in PlacesUIUtils) { 
+		if ("showBookmarkDialog" in PlacesUIUtils) { 
 			// Based on PlacesCommandHook.bookmarkCurrentPages
-			var uris = group.map(function __getUri(tab) {
+			var aURIList = group.map(function __getUri(tab) {
 					return tab.linkedBrowser.webNavigation.currentURI;
 			});
-			PlacesUIUtils.showMinimalAddMultiBookmarkUI(uris);
+			//Since Firefox removed the API
+			//Got to do it ourselves (copied from old version of Firefox (showMinimalAddMultiBookmarkUI)
+			//Comment: Why they remove the API?
+			if (aURIList.length == 0)
+				throw("bookmarkGroup expects a list of nsIURI objects");
+			var info = {
+				action: "add",
+				type: "folder",
+				hiddenRows: ["description"],
+				URIList: aURIList
+			};
+			PlacesUIUtils.showBookmarkDialog(info, undefined, true);
 		}
 		else {
-			tk.dump("Places detection failed.");
+			tk.dump("showBookmarkDialog NOT in PlacesUIUtils.");
 		}
 	};
 	this.closeGroup = function closeGroup(contextTab) {
@@ -4719,7 +4730,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		var tab = event.target;
 		if (gBrowser.hasAttribute("vertitabbar") && document.getElementById("tabkit-splitter")) {
 			
-			tab.maxWidth = null;
+			tab.maxWidth = 9999;
 			tab.minWidth = 0;
 			
 			// Ensure newly opened tabs can be seen (even if, in some cases, this may put the selected tab offscreen - TODO=P4: GCODE Make sure not to move selected tab offscreen if it is onscreen)
@@ -5891,13 +5902,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	//|##########################
 	this.postInitFx4Modifications = function postInitFx4Modifications(event) {
 		// Not sure if pinned tab works in horizontal mode, but still BAM!
-		tk.addMethodHook([
-			"gBrowser.pinTab",
+		// tk.addMethodHook([
+			// "gBrowser.pinTab",
 			
-			'if (aTab.pinned)',
-			'alert("Sorry, but Tabkit 2 does not support App Tabs"); return; \
-			$&',
-		]);
+			// 'if (aTab.pinned)',
+			// 'alert("Sorry, but Tabkit 2 does not support App Tabs"); return; \
+			// $&',
+		// ]);
 		
 		// Disable Panorama, why use Panorama when you have Tabkit?
 		tk.addMethodHook([
