@@ -15,6 +15,8 @@
 			<preference id="indentedtree-pref" name="extensions.tabkit.indentedTree" type="bool"/>
 			<preference id="maxtreelevel-pref" name="extensions.tabkit.maxTreeLevel" type="int"/>
 			<preference id="indentamount-pref" name="extensions.tabkit.indentAmount" type="int"/>
+			
+			<preference id="dpivalue-pref" name="extensions.tabkit.DPIValue" type="int"/>
 		</preferences>
 		
 		<groupbox><caption label="&panels.caption;"/>
@@ -58,6 +60,13 @@
 				<label control="indentamount" value="&indentAmount.label1;"/>
 				<textbox id="indentamount" type="number" min="1" max="150" preference="indentamount-pref"/>
 				<label control="indentamount" value="&indentAmount.label2;" accesskey="&indentAmount.accesskey;"/>
+			</hbox>
+		</groupbox>
+		
+		<groupbox id="dpisettings"><caption label="&DPISettings.caption;"/>
+			<hbox class="indent" align="center">
+				<label control="dpivalue" value="&DPIValue.label;" accesskey="&DPIValue.accesskey;"/>
+				<textbox id="dpivalue" type="number" min="96" max="192" preference="dpivalue-pref"/>
 			</hbox>
 		</groupbox>
 	</prefpane>

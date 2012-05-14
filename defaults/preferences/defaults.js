@@ -1,7 +1,7 @@
 //{ ### Tab Bar ###
 //--- Panels---
 pref("extensions.tabkit.tabbarPosition", 1); // 0: Top, 1: Left, 2: Right, 3: Bottom
-pref("extensions.tabkit.sidebarPosition", 2); // 0: Top, 1: Left, 2: Right, 3: Bottom
+//pref("extensions.tabkit.sidebarPosition", 2); // 0: Top, 1: Left, 2: Right, 3: Bottom
 
 //--- Horizontal Tab Bar --- (disable as appropriate)
 pref("extensions.tabkit.tabRows", 3); // 1 to disable

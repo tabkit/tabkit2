@@ -5002,6 +5002,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		tk.updateMultiRowTabs();
 		
+		//{=== Multi-row drop indicator
+		
 		// PikachuEXE: I have given up the drop indicator in multirow mode
 		// Setup new drop indicator (this way it can be moved up and down as well as left and right)
 		// var oldIndicatorBar = gBrowser.mTabBox.firstChild;
@@ -5034,6 +5036,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// });
 		// oldIndicatorBar.removeAttribute("dragging");
 		// oldIndicatorBar.setAttribute("collapsed", "true");
+		
+		//}
 	};
 	this.initListeners.push(this.initMultiRowTabs);
 
@@ -5969,6 +5973,41 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		event.target.style.setProperty('opacity','','important');
 	};
 	
+	//}##########################
+	//{=== DPI
+	//|##########################
+	
+	//Private Constant
+	var _DPI_MIN = 96;
+	var _DPI_MAX = 192;
+	
+	this.initDPI = function initDPI(event) {
+		tk.addPrefListener("DPIValue", tk.updateComponentSizeByDPI);
+	};
+	this.initListeners.push(this.initDPI);
+	
+	this.updateComponentSizeByDPI = function updateComponentSizeByDPI() {
+		
+		var DPIValue = _prefs.getIntPref("DPIValue");
+		
+		tk.debug('DPIValue before = ' + DPIValue);
+		
+		// auto fix out of range value
+		if (DPIValue < _DPI_MIN) {
+			_prefs.setIntPref("DPIValue",_DPI_MIN);
+			DPIValue = _DPI_MIN;
+		}
+		if (DPIValue > _DPI_MAX) {
+			_prefs.setIntPref("DPIValue",_DPI_MAX);
+			DPIValue = _DPI_MAX;
+		}
+		
+		// calculate and set value for "layout.css.devPixelsPerPx"
+		var result = DPIValue / 96; //Result always relative to 96, not changable (unless Firefox did it)
+		tk.debug('DPIValue after = ' + DPIValue);
+		tk.debug('Going to set layout.css.devPixelsPerPx to ' + result);
+		gPrefService.setCharPref("layout.css.devPixelsPerPx", result.toFixed(2));
+	};
 	//}##########################
 	//{### Debug Aids
 	//|##########################

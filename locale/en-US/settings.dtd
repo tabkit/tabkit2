@@ -34,6 +34,10 @@
 <!ENTITY indentAmount.accesskey "P">
 <!ENTITY indentAmount.label2 "pixels">
 
+<!ENTITY DPISettings.caption "DPI related">
+<!ENTITY DPIValue.label "Indent child tabs (show the tab bar as a tree)">
+<!ENTITY DPIValue.accesskey "D">
+
 <!ENTITY tabs.title "Tabs">
 
 <!ENTITY tabs.caption "Tabs">
