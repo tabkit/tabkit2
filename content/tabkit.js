@@ -818,18 +818,22 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	//{### Useful shortcuts
 	//|##########################
 
-	/* 
+	/* Warning on using shortcuts!!!!
 	PikachuEXE: 
 	There are so many minor bugs are caused by these shortcuts
 	I am not talking about not using them at all
 	But avoid using them when you call something dynamic
 	For example, if a scrollbar only appears (created) when there are too many tabs, 
 	you should avoid calling its parent through shortcuts, since the "shortcut" seems to be "outdated"
+	
+	2012-05-14: _tabstrip cause Multirow buggy, hence shortcut removed (_tabContainer seems fine though)
 	*/
+	
+	
 	
 	/// Private Globals:
 	var _tabContainer;
-	var _tabstrip;
+	//var _tabstrip;
 	var _tabInnerBox;
 	var _tabs;
 	var _tabBar;
@@ -847,8 +851,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			tk.dump("gBrowser must not be null after preInitShortcuts!");
 		
 		_tabContainer = gBrowser.tabContainer;
-		_tabstrip = _tabContainer.mTabstrip;
-		_tabInnerBox = document.getAnonymousElementByAttribute(_tabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+		//_tabstrip = _tabContainer.mTabstrip;
+		_tabInnerBox = document.getAnonymousElementByAttribute(_tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
 		_tabs = gBrowser.tabs;
 		_tabBar = document.getElementById("TabsToolbar");
 	};
@@ -4980,8 +4984,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 	/// Initialisation:
 	this.initMultiRowTabs = function initMultiRowTabs(event) {
-		_tabstrip.addEventListener("overflow", tk._preventMultiRowFlowEvent, true);
-		_tabstrip.addEventListener("underflow", tk._preventMultiRowFlowEvent, true);
+		_tabContainer.mTabstrip.addEventListener("overflow", tk._preventMultiRowFlowEvent, true);
+		_tabContainer.mTabstrip.addEventListener("underflow", tk._preventMultiRowFlowEvent, true);
 		
 		tk.addPrefListener("tabRows", tk.updateMultiRowTabs);
 		tk.addPrefListener("tabbarPosition", tk.updateMultiRowTabs);
@@ -5060,7 +5064,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				if (_tabContainer.getAttribute("multirow") != "true") {
 					_tabContainer.setAttribute("multirow", "true");
 					try {
-						_tabstrip._scrollBoxObject.scrollTo(0,0);
+						_tabContainer.mTabstrip._scrollBoxObject.scrollTo(0,0);
 					}
 					catch (ex) {}
 				}
@@ -5070,8 +5074,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					_tabContainer.setAttribute("multirowscroll", "true");
 
 					// TODO=P3: GCODE Make sure tab borders and padding are properly taken into account...
-					_tabstrip.style.setProperty("min-height", 24 * maxRows + "px", "important");
-					_tabstrip.style.setProperty("max-height", 24 * maxRows + "px", "important");
+					_tabContainer.mTabstrip.style.setProperty("min-height", 24 * maxRows + "px", "important");
+					_tabContainer.mTabstrip.style.setProperty("max-height", 24 * maxRows + "px", "important");
 
 					var scrollbar = _tabInnerBox.mVerticalScrollbar;
 					try {
@@ -5095,8 +5099,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				else {
 					_tabContainer.removeAttribute("multirowscroll");
 
-					_tabstrip.style.setProperty("min-height", 24 * rows + "px", "important");
-					_tabstrip.style.setProperty("max-height", 24 * rows + "px", "important");
+					_tabContainer.mTabstrip.style.setProperty("min-height", 24 * rows + "px", "important");
+					_tabContainer.mTabstrip.style.setProperty("max-height", 24 * rows + "px", "important");
 				}
 
 				tk.setTabMinWidth(minWidth);
@@ -5126,15 +5130,15 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			if (needsScrolling) {
 				try {
 					if (gBrowser.selectedTab.nextSibling && _prefs.getBoolPref("scrollOneExtra")) {
-						_tabstrip._scrollBoxObject.ensureElementIsVisible(gBrowser.selectedTab.nextSibling);
+						_tabContainer.mTabstrip._scrollBoxObject.ensureElementIsVisible(gBrowser.selectedTab.nextSibling);
 					}
-					_tabstrip._scrollBoxObject.ensureElementIsVisible(gBrowser.selectedTab);
+					_tabContainer.mTabstrip._scrollBoxObject.ensureElementIsVisible(gBrowser.selectedTab);
 				}
 				catch (ex) {}
 			}
 			
-			_tabstrip.style.removeProperty("min-height");
-			_tabstrip.style.removeProperty("max-height");
+			_tabContainer.mTabstrip.style.removeProperty("min-height");
+			_tabContainer.mTabstrip.style.removeProperty("max-height");
 		}
 	};
 
