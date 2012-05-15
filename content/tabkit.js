@@ -1276,11 +1276,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			tk.addMethodHook(['faviconize.quickFav.dblclick',
 				
 				'faviconize.toggle(e.target);',
-				' tabkit.debug("faviconize hacked");\
+				' tabkit.debug("faviconize hacked"); \
+				var tab = e.target; \
 				if (tab.hasAttribute("groupid") && tabkit.localPrefService.getBoolPref("doubleClickCollapseExpand")) \
-					{ var tab = e.target; tabkit.debug("faviconize cancelled"); return; } \
+					{ tabkit.debug("faviconize cancelled"); return; } \
 				else \
-					$&'])
+					{ $& }'])
 		}
 	};
 	this.initListeners.push(this.initSortingAndGrouping);
@@ -2779,13 +2780,23 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 		}
 		else {
+			var firstTab = group[0];	//I think this is the first tab right?
+			
+			var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") == "selected" ? contextTab : firstTab;	//which tab to show? decision here
+			
 			for each (var tab in group) {
 				tab.setAttribute("groupcollapsed", "true");
-				if (tab != contextTab) {
+				if (tab != targetTab) {
+					
+					//select context tab if not selected (prevent not completely collepesed group)
+					if (tab == gBrowser.selectedTab)
+						gBrowser.selectedTab = targetTab;
+					
 					tk.tabSetHidden(tab, true); // visibility of a tab */
 				}
-
 			}
+			
+			
 		}
 		
 		tk.updateIndents();

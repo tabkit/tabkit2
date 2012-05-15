@@ -132,6 +132,10 @@
 <!ENTITY lastActiveGrouping.opener.label "by opener (recommended)">
 <!ENTITY autoCollapse.label "Automatically collapse inactive groups">
 <!ENTITY autoCollapse.accesskey "U">
+<!ENTITY collapsedGroupVisibleTab.label "Tab visible in collapsed group*:">
+<!ENTITY collapsedGroupVisibleTab.accesskey "C">
+<!ENTITY collapsedGroupVisibleTab.selected.label "Selected tab (Right click target/Current tab in group)">
+<!ENTITY collapsedGroupVisibleTab.first.label "First tab in group">
 
 <!ENTITY positioningTabs.caption "Positioning Tabs">
 <!ENTITY newTabPosition.label "Ungrouped new tabs should be positioned*">

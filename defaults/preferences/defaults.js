@@ -1,5 +1,5 @@
 //{ ### Tab Bar ###
-//--- Panels---
+//--- Panels ---
 pref("extensions.tabkit.tabbarPosition", 1); // 0: Top, 1: Left, 2: Right, 3: Bottom
 //pref("extensions.tabkit.sidebarPosition", 2); // 0: Top, 1: Left, 2: Right, 3: Bottom
 
@@ -10,6 +10,9 @@ pref("extensions.tabkit.tabRows", 3); // 1 to disable
 pref("extensions.tabkit.indentedTree", true);
     pref("extensions.tabkit.maxTreeLevel", 5);
     pref("extensions.tabkit.indentAmount", 19);
+
+//--- DPI value ---
+pref("extensions.tabkit.DPIValue", 96);
 //}
 
 
@@ -67,6 +70,7 @@ pref("extensions.tabkit.openSelectedLinks.showAll", false);
 pref("extensions.tabkit.autoGroupNewTabs", true);
     pref("extensions.tabkit.lastActiveGrouping", "opener"); // domain or opener
 pref("extensions.tabkit.autoCollapse", false);
+pref("extensions.tabkit.collapsedGroupVisibleTab", "selected"); //selected or first
 
 //--- Positioning Tabs ---
 pref("extensions.tabkit.newTabPosition", 1); // 2: By last sort, 1: Next to current, 0: At far right

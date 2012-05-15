@@ -254,6 +254,8 @@
 			
 			<preference id="customcloseorder-pref" name="extensions.tabkit.customCloseOrder" type="int"/>
 			<preference id="selectowneronclose-pref" name="browser.tabs.selectOwnerOnClose" type="bool"/>
+			
+			<preference id="collapsedgroupvisibletab-pref" name="extensions.tabkit.collapsedGroupVisibleTab" type="string"/>
 		</preferences>
 		
 		<groupbox><caption label="&groupingTabs.caption;"/>
@@ -270,6 +272,15 @@
 			</hbox>
 			<checkbox id="autocollapse" label="&autoCollapse.label;"
 					accesskey="&autoCollapse.accesskey;" preference="autocollapse-pref"/>
+			<hbox align="center">
+				<label control="collapsedgroupvisibletab" value="&collapsedGroupVisibleTab.label;" accesskey="&collapsedGroupVisibleTab.accesskey;"/>
+				<menulist id="collapsedgroupvisibletab" preference="collapsedgroupvisibletab-pref">
+				<menupopup>
+					<menuitem value="selected" label="&collapsedGroupVisibleTab.selected.label;"/>
+					<menuitem value="first" label="&collapsedGroupVisibleTab.first.label;"/>
+				</menupopup>
+				</menulist>
+			</hbox>
 		</groupbox>
 		
 		<groupbox><caption label="&positioningTabs.caption;"/>
