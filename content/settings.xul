@@ -94,7 +94,7 @@
 		<groupbox><caption label="&tabs.caption;"/>
 			<hbox align="center">
 				<label control="tabminwidth" value="&tabMinWidth.label1;" accesskey="&tabMinWidth.accesskey;"/>
-				<textbox id="tabminwidth" type="number" min="1" max="250" preference="tabminwidth-pref"/>
+				<textbox id="tabminwidth" type="number" min="100" max="250" preference="tabminwidth-pref"/>
 				<label control="tabminwidth" value="&tabMinWidth.label2;"/>
 			</hbox>
 			<hbox align="center">
