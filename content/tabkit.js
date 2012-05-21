@@ -1272,7 +1272,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		// Fix: Faviconize is now ignored on grouped tabs (Issue 51)
 		// First injected statement required a leading space to make it work, don't know why (probably JS syntax)
-		if (faviconize.quickFav.dblclick) {
+		if (faviconize && faviconize.quickFav && faviconize.quickFav.dblclick) {
 			tk.addMethodHook(['faviconize.quickFav.dblclick',
 				
 				'faviconize.toggle(e.target);',
@@ -5962,6 +5962,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
 		window.addEventListener("mouseover", tk.onMouseOverTabEffect, false);
 		window.addEventListener("mouseout", tk.onMouseOutTabEffect, false);
+		
+		window.addEventListener("fullscreen", tk.onFullScreenToggle, false);
 	};
 	this.postInitListeners.push(this.postInitFx4Modifications);
 	this.postInitListeners.push(this.postInitFx4TabEffects);
@@ -5983,6 +5985,26 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		event.target.style.setProperty('opacity','','important');
 	};
+	
+	// Good for HTML5 full screen video viewing
+	this.onFullScreenToggle = function onFullScreenToggle(event) {
+		var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
+		var isFullScreen = tabsToolbar.getAttribute("inFullscreen");
+		var splitter = document.getElementById("tabkit-splitter");
+		
+		if (splitter) {	//only collapsed splitter in vertical mode
+			if (isFullScreen) {
+				tk.debug("gonna set splitter collapsed");
+				splitter.setAttribute("state","collapsed");
+			}
+			else {
+				tk.debug("gonna set splitter open");
+				splitter.setAttribute("state","open");
+				tabsToolbar.removeAttribute("collapsed");
+			}
+		}
+	};
+		
 	
 	//}##########################
 	//{=== DPI
