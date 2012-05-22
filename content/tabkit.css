@@ -10,7 +10,7 @@
  ************************************************************/
 
 .tabbrowser-tabs scrollbar { /*[Fx2only], due to https://bugzilla.mozilla.org/show_bug.cgi?id=369676 - in Fx3 we do this using ua.css*/
-	-moz-binding: url(chrome://tabkit/content/bindings.xml#scrollbar);
+	-moz-binding: url("chrome://tabkit/content/bindings.xml#scrollbar");
 }
 
 /*************************

@@ -1272,7 +1272,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		// Fix: Faviconize is now ignored on grouped tabs (Issue 51)
 		// First injected statement required a leading space to make it work, don't know why (probably JS syntax)
-		if (faviconize && faviconize.quickFav && faviconize.quickFav.dblclick) {
+		if (typeof faviconize !== 'undefined' && typeof faviconize.quickFav !== 'undefined' && typeof faviconize.quickFav.dblclick !== 'undefined') {
 			tk.addMethodHook(['faviconize.quickFav.dblclick',
 				
 				'faviconize.toggle(e.target);',
@@ -3903,8 +3903,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	//TODO=P4: GCODE Show warning when tabs are skipped because their group is collapsed
 	
 	// Show all tab titles in tooltip - one per line - when hovering over a collapsed group (instead of just the visible tab)
-	this.earlyMethodHooks.push([
-		"gBrowser.createTooltip",//{
+	this.earlyMethodHooks.push([//{
+		"gBrowser.createTooltip",
 		
 		'tab.getAttribute("label")',
 		'(tab.hasAttribute("groupcollapsed") ? tabkit.getGroupFromTab(tab).map(function __getLabel(ctab) { \
@@ -4821,10 +4821,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (event.attrName != "collapsed")
 			return;
 		
+		var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+		var scrollbar = innerBox.mVerticalScrollbar;
+		
 		if (event.attrChange == MutationEvent.ADDITION) {
 			event.target.collapsed = false;	//target = appcontent
 			_tabBar.collapsed = true;
-			var curpos = parseInt(_tabInnerBox.mVerticalScrollbar.getAttribute("curpos"));
+			var curpos = parseInt(scrollbar.getAttribute("curpos"));
 			// It returns 0 when collapsed, so don't restore this (and it will
 			// default to 0 when re-expanded anyway, so we don't need to restore it)
 			if (!isNaN(curpos) && curpos > 0)
@@ -4832,7 +4835,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 		else if (event.attrChange == MutationEvent.REMOVAL) {
 			window.setTimeout(function __restoreScrollPosition() {
-				if ("tkScrollPos" in _tabBar && _tabInnerBox.mVerticalScrollbar) {
+				if ("tkScrollPos" in _tabBar && scrollbar) {
 					// Restore the old scroll position, as collapsing the tab bar will have reset it
 					_tabInnerBox.mVerticalScrollbar.setAttribute("curpos", _tabBar.tkScrollPos);
 					delete _tabBar.tkScrollPos;
@@ -5092,7 +5095,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					_tabContainer.mTabstrip.style.setProperty("min-height", 24 * maxRows + "px", "important");
 					_tabContainer.mTabstrip.style.setProperty("max-height", 24 * maxRows + "px", "important");
 
-					var scrollbar = _tabInnerBox.mVerticalScrollbar;
+					var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+					var scrollbar = innerBox.mVerticalScrollbar;
 					try {
 						scrollbar.removeEventListener("DOMAttrModified", tk.preventChangeOfAttributes, true);
 					}
@@ -5158,7 +5162,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	};
 
 	this.preventChangeOfAttributes = function preventChangeOfAttributes(event) {
-		var scrollbar = _tabInnerBox.mVerticalScrollbar;
+		var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+		var scrollbar = innerBox.mVerticalScrollbar;
 		if (event.attrName == "increment") {
 			//event.preventDefault(); // does not work for this event...
 			scrollbar.setAttribute("increment", 24);

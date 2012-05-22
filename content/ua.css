@@ -3,5 +3,5 @@
  ************************************************************/
 
 .tabbrowser-tabs scrollbar { /*[Fx3only] - in Fx2 we just use the main tabkit.css for this*/
-	-moz-binding: url(chrome://tabkit/content/bindings.xml#scrollbar);
+	-moz-binding: url("chrome://tabkit/content/bindings.xml#scrollbar");
 }
