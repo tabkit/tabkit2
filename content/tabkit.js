@@ -4600,6 +4600,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(window.whereToOpenLink(aEvent), aNode), window);'
 			]);
 			
+			tk.addMethodHook([
+				'PlacesUIUtils._openNodeIn',
+				
+				'if (aWhere == "current" && isBookmark)',
+				'if ((aWhere == "current" || (aWhere == "tab" && tabkit.localPrefService.getBoolPref("openTabsFrom.places"))) && isBookmark)'
+			]);
+			
 			// document.getElementById('placesContext_open').removeAttribute('default');
 			// document.getElementById('placesContext_open:newtab').setAttribute('default', true);
 		}

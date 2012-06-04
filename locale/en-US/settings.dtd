@@ -173,7 +173,7 @@
 
 <!ENTITY advanced.title "Advanced">
 
-<!ENTITY openTabsFrom.caption "Open Tabs By Default From:">
+<!ENTITY openTabsFrom.caption "Open New Tabs By Default From:">
 <!ENTITY addressBar.label "Address bar">
 <!ENTITY addressBar.accesskey "A">
 <!ENTITY searchBar.label "Search bar">
