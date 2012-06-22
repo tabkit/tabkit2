@@ -34,6 +34,10 @@
 <!ENTITY indentAmount.accesskey "P">
 <!ENTITY indentAmount.label2 "pixels">
 
+<!ENTITY DPISettings.caption "DPI liés">
+<!ENTITY DPIValue.label "Votre valeur actuelle DPI">
+<!ENTITY DPIValue.accesskey "D">
+
 <!ENTITY tabs.title "Onglets">
 
 <!ENTITY tabs.caption "Onglets">
@@ -128,6 +132,10 @@
 <!ENTITY lastActiveGrouping.opener.label "par origine (recommandé)">
 <!ENTITY autoCollapse.label "Replier automatiquement les groupes inactifs">
 <!ENTITY autoCollapse.accesskey "U">
+<!ENTITY collapsedGroupVisibleTab.label "Tab visible dans le groupe s'est effondré*:">
+<!ENTITY collapsedGroupVisibleTab.accesskey "C">
+<!ENTITY collapsedGroupVisibleTab.selected.label "Onglet sélectionné">
+<!ENTITY collapsedGroupVisibleTab.first.label "Premier onglet dans le groupe">
 
 <!ENTITY positioningTabs.caption "Positionnement des onglets">
 <!ENTITY newTabPosition.label "Les nouveaux onglets non groupés sont à positionner*">

@@ -34,6 +34,10 @@
 <!ENTITY indentAmount.accesskey "P">
 <!ENTITY indentAmount.label2 "像素">
 
+<!ENTITY DPISettings.caption "DPI 相關">
+<!ENTITY DPIValue.label "你現在使用的DPI值">
+<!ENTITY DPIValue.accesskey "D">
+
 <!ENTITY tabs.title "分頁">
 
 <!ENTITY tabs.caption "分頁">
@@ -128,6 +132,10 @@
 <!ENTITY lastActiveGrouping.opener.label "依開啟者">
 <!ENTITY autoCollapse.label "自動摺疊閒置群組">
 <!ENTITY autoCollapse.accesskey "U">
+<!ENTITY collapsedGroupVisibleTab.label "摺疊群組中顯示的分頁*:">
+<!ENTITY collapsedGroupVisibleTab.accesskey "C">
+<!ENTITY collapsedGroupVisibleTab.selected.label "被選擇的分頁">
+<!ENTITY collapsedGroupVisibleTab.first.label "群組中第一分頁">
 
 <!ENTITY positioningTabs.caption "分頁位置">
 <!ENTITY newTabPosition.label "新的分頁應位於*">

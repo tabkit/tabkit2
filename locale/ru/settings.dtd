@@ -34,6 +34,10 @@
 <!ENTITY indentAmount.accesskey "п">
 <!ENTITY indentAmount.label2 "пикселей">
 
+<!ENTITY DPISettings.caption "DPI связанных">
+<!ENTITY DPIValue.label "Ваше текущее значение DPI">
+<!ENTITY DPIValue.accesskey "D">
+
 <!ENTITY tabs.title "Вкладки">
 
 <!ENTITY tabs.caption "Вкладки">
@@ -128,6 +132,10 @@
 <!ENTITY lastActiveGrouping.opener.label "вкладке-предку">
 <!ENTITY autoCollapse.label "Сворачивать неактивные группы автоматически">
 <!ENTITY autoCollapse.accesskey "в">
+<!ENTITY collapsedGroupVisibleTab.label "Вкладка отображается в свернутом группы*:">
+<!ENTITY collapsedGroupVisibleTab.accesskey "C">
+<!ENTITY collapsedGroupVisibleTab.selected.label "Выбранный вкладки">
+<!ENTITY collapsedGroupVisibleTab.first.label "Первая вкладка в группу">
 
 <!ENTITY positioningTabs.caption "Расположение вкладок">
 <!ENTITY newTabPosition.label "Новые вкладки не в группах располагаются*">

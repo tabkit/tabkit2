@@ -34,6 +34,10 @@
 <!ENTITY indentAmount.accesskey "P">
 <!ENTITY indentAmount.label2 "像素">
 
+<!ENTITY DPISettings.caption "DPI 相关">
+<!ENTITY DPIValue.label "您当前的DPI值">
+<!ENTITY DPIValue.accesskey "D">
+
 <!ENTITY tabs.title "标签">
 
 <!ENTITY tabs.caption "标签">
@@ -128,6 +132,10 @@
 <!ENTITY lastActiveGrouping.opener.label "根据标签页被打开的位置(推荐)">
 <!ENTITY autoCollapse.label "自动收缩非活动的编组">
 <!ENTITY autoCollapse.accesskey "U">
+<!ENTITY collapsedGroupVisibleTab.label "倒塌组中可见标签*:">
+<!ENTITY collapsedGroupVisibleTab.accesskey "C">
+<!ENTITY collapsedGroupVisibleTab.selected.label "选定的标签">
+<!ENTITY collapsedGroupVisibleTab.first.label "编组中第一标签">
 
 <!ENTITY positioningTabs.caption "标签放置">
 <!ENTITY newTabPosition.label "未编组的新建标签应被放置于*">

@@ -34,6 +34,10 @@
 <!ENTITY indentAmount.accesskey "P">
 <!ENTITY indentAmount.label2 "Pixel">
 
+<!ENTITY DPISettings.caption "DPI-verwandten">
+<!ENTITY DPIValue.label "Ihre aktuelle DPI-Wert">
+<!ENTITY DPIValue.accesskey "D">
+
 <!ENTITY tabs.title "Tabs">
 
 <!ENTITY tabs.caption "Tabs">
@@ -128,6 +132,10 @@
 <!ENTITY lastActiveGrouping.opener.label "des Öffners">
 <!ENTITY autoCollapse.label "Inaktive Gruppen automatisch einklappen">
 <!ENTITY autoCollapse.accesskey "U">
+<!ENTITY collapsedGroupVisibleTab.label "Tab sichtbar in eingestürzten Gruppe*:">
+<!ENTITY collapsedGroupVisibleTab.accesskey "C">
+<!ENTITY collapsedGroupVisibleTab.selected.label "Ausgewählte Registerkarte">
+<!ENTITY collapsedGroupVisibleTab.first.label "Erste Reiter in der Gruppe">
 
 <!ENTITY positioningTabs.caption "Tab-Platzierung">
 <!ENTITY newTabPosition.label "Einzelne neue Tabs platzieren:*">
