@@ -64,6 +64,7 @@
 <!ENTITY disableSearchBar.accesskey "D">
 <!ENTITY solidBackground.label "Solid Background (non-Transparent)">
 <!ENTITY solidBackground.accesskey "S">
+<!ENTITY disableTabGroupColor.label "Отключить окраски группу вкладок (требуется перезагрузка)">
 
 <!ENTITY coloring.caption "Расцветка вкладок">
 <!ENTITY forceThemeCompatibility.label "Совместимость с темами:">

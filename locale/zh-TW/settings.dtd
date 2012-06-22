@@ -64,6 +64,7 @@
 <!ENTITY disableSearchBar.accesskey "D">
 <!ENTITY solidBackground.label "不透明的分頁背景">
 <!ENTITY solidBackground.accesskey "S">
+<!ENTITY disableTabGroupColor.label "禁用分頁組著色（需要重新啟動）">
 
 <!ENTITY coloring.caption "Tab Coloring">
 <!ENTITY forceThemeCompatibility.label "Theme compatibility:">

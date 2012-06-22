@@ -64,6 +64,7 @@
 <!ENTITY disableSearchBar.accesskey "D">
 <!ENTITY solidBackground.label "Solid Background (non-Transparent)">
 <!ENTITY solidBackground.accesskey "S">
+<!ENTITY disableTabGroupColor.label "Disable tab group coloring (require restart)">
 
 <!ENTITY coloring.caption "Tab Coloring">
 <!ENTITY forceThemeCompatibility.label "Theme compatibility:">

@@ -3494,6 +3494,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	
 	this.colorizeTab = function colorizeTab(tab) {
 		try {
+			//New option to disable coloring
+			if (_prefs.getBoolPref("disableTabGroupColor")) {
+				return;
+			}
+			
 			var gid = tab.getAttribute("groupid");
 			if (gid) {
 				var bgColor = tk.getWindowValue("knownColor:" + gid);

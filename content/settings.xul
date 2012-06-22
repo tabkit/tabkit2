@@ -82,6 +82,7 @@
 			<preference id="emphasizeprotectedtabs-pref" name="extensions.tabkit.emphasizeProtectedTabs" type="bool"/>
 			<preference id="disablesearchbar-pref" name="extensions.tabkit.disableSearchBar" type="bool"/>
 			<preference id="solidbackground-pref" name="extensions.tabkit.solidBackground" type="bool"/>
+			<preference id="disabletabgroupcolor-pref" name="extensions.tabkit.disableTabGroupColor" type="bool"/>
 			
 			<preference id="forcethemecompatibility-pref" name="extensions.tabkit.forceThemeCompatibility" type="int"/>
 			<preference id="colortabnotlabel-pref" name="extensions.tabkit.colorTabNotLabel" type="bool"/>
@@ -123,6 +124,8 @@
 					accesskey="&disableSearchBar.accesskey;" preference="disablesearchbar-pref"/>
 			<checkbox id="solidbackground" label="&solidBackground.label;"
 					accesskey="&solidBackground.accesskey;" preference="solidbackground-pref"/>
+			<checkbox id="disabletabgroupcolor" label="&disableTabGroupColor.label;"
+					preference="disabletabgroupcolor-pref"/>
 		</groupbox>
 		
 		<groupbox><caption label="&coloring.caption;"/>

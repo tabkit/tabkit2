@@ -28,6 +28,7 @@ pref("extensions.tabkit.boldCurrentTab", false);
 pref("extensions.tabkit.emphasizeProtectedTabs", true);
 pref("extensions.tabkit.disableSearchBar", false);
 pref("extensions.tabkit.solidBackground", false);
+pref("extensions.tabkit.disableTabGroupColor", false);
 
 //--- Advanced ---
 pref("extensions.tabkit.forceThemeCompatibility", 1); // 0: Never, 1: Auto, 2: Always

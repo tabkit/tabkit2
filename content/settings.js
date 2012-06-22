@@ -97,6 +97,7 @@ function disableAll() {
 	document.getElementById("forcethemecompatibility-pref").value = 0;
 	document.getElementById("disablesearchbar-pref").value = false;
 	document.getElementById("solidbackground-pref").value = false;
+	document.getElementById("disabletabgroupcolor-pref").value = false;
 
 	document.getElementById("tabwheeltabswitch-pref").value = false;
 	document.getElementById("lmbrmbbackforward-pref").value = false;

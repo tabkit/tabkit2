@@ -64,6 +64,7 @@
 <!ENTITY disableSearchBar.accesskey "D">
 <!ENTITY solidBackground.label "Solid Background (non-Transparent)">
 <!ENTITY solidBackground.accesskey "S">
+<!ENTITY disableTabGroupColor.label "Désactiver coloration groupe d'onglets (nécessite un redémarrage)">
 
 <!ENTITY coloring.caption "Mise en couleur des onglets">
 <!ENTITY forceThemeCompatibility.label "Compatibilité des thèmes :">
