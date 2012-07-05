@@ -18,8 +18,9 @@ pref("extensions.tabkit.DPIValue", 96);
 
 //{ ### Tabs ###
 //--- Tabs ---
-//pref("browser.tabs.tabMinWidth", 100);
-//pref("browser.tabs.closeButtons", 1); // 0: Active tab only, 1: All tabs, 2: None, 3: Button at end of tab strip
+// Original author commented it making it buggy in new versions, so I just uncomment them - Pika
+pref("browser.tabs.tabMinWidth", 100);
+pref("browser.tabs.closeButtons", 1); // 0: Active tab only, 1: All tabs, 2: None, 3: Button at end of tab strip
 
 //--- Appearance ---
 pref("extensions.tabkit.highlightUnreadTabs", true);
