@@ -88,23 +88,24 @@
 					<menuitem id="menu_tabkit-sortgroup-ungroupAll" label="&ungroupAll.label;" accesskey="&ungroupAll.accesskey;"
 						command="cmd_tabkit-sortgroup-ungroupAll"/>
 					
+				</menupopup>
+			</menu>
+			
+			
+			
+			<menu id="menu_tabkit-sortgroup-newtabs" label="&newTabs.label;" accesskey="&newTabs.accesskey;">
+				<menupopup>
+					<menuitem id="menu_tabkit-sortgroup-newtabs-lastSort" label="&lastSort.label;" accesskey="&lastSort.accesskey;"
+						type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-lastSort"/>
+					<menuitem id="menu_tabkit-sortgroup-newtabs-nextToCurrent" label="&nextToCurrent.label;" accesskey="&nextToCurrent.accesskey;"
+						type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-nextToCurrent"/><!-- Could vary actual label according to preference -->
+					<menuitem id="menu_tabkit-sortgroup-newtabs-farRight" label="&farRight.label;" accesskey="&farRight.accesskey;"
+						type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-farRight"/>
+					
 					<menuseparator/>
 					
-					<menu id="menu_tabkit-sortgroup-newtabs" label="&newTabs.label;" accesskey="&newTabs.accesskey;">
-						<menupopup>
-							<menuitem id="menu_tabkit-sortgroup-newtabs-lastSort" label="&lastSort.label;" accesskey="&lastSort.accesskey;"
-								type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-lastSort"/>
-							<menuitem id="menu_tabkit-sortgroup-newtabs-nextToCurrent" label="&nextToCurrent.label;" accesskey="&nextToCurrent.accesskey;"
-								type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-nextToCurrent"/><!-- Could vary actual label according to preference -->
-							<menuitem id="menu_tabkit-sortgroup-newtabs-farRight" label="&farRight.label;" accesskey="&farRight.accesskey;"
-								type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-farRight"/>
-							
-							<menuseparator/>
-							
-							<menuitem id="menu_tabkit-sortgroup-newtabs-autoGroup" label="&autoGroup.label;" accesskey="&autoGroup.accesskey;"
-								type="checkbox" command="cmd_tabkit-sortgroup-newtabs-autoGroup"/>
-						</menupopup>
-					</menu>
+					<menuitem id="menu_tabkit-sortgroup-newtabs-autoGroup" label="&autoGroup.label;" accesskey="&autoGroup.accesskey;"
+						type="checkbox" command="cmd_tabkit-sortgroup-newtabs-autoGroup"/>
 				</menupopup>
 			</menu>
 			
@@ -156,6 +157,14 @@
 		oncommand="tabkit.removeTabsBefore(TabContextMenu.contextTab);"/>
 	<menuitem label="&closeTabsToRight.label;" accesskey="&closeTabsToRight.accesskey;"
 		id="menu_tabkit-closeTabsToRight" class="menu_tabkit-closeBeforeAfter-horizontal"
+		tbattr="tabbrowser-multiple"
+		oncommand="tabkit.removeTabsAfter(TabContextMenu.contextTab);"/>
+	<menuitem label="&closeTabsAbove.label;" accesskey="&closeTabsAbove.accesskey;"
+		id="menu_tabkit-closeTabsAbove" class="menu_tabkit-closeBeforeAfter-vertical"
+		tbattr="tabbrowser-multiple"
+		oncommand="tabkit.removeTabsBefore(TabContextMenu.contextTab);"/>
+	<menuitem label="&closeTabsBelow.label;" accesskey="&closeTabsBelow.accesskey;"
+		id="menu_tabkit-closeTabsBelow" class="menu_tabkit-closeBeforeAfter-vertical"
 		tbattr="tabbrowser-multiple"
 		oncommand="tabkit.removeTabsAfter(TabContextMenu.contextTab);"/>
 	

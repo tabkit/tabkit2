@@ -4955,6 +4955,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		tabsToolbar.removeAttribute("horiztabbar");
 		tabsToolbar.removeAttribute("vertitabbar");
 		tabsToolbar.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", flipDirection ? "reverse" : "normal");
+		//add one more to mainPopupSet
+		var mainPopupSet = document.getElementById("mainPopupSet");
+		mainPopupSet.removeAttribute("horiztabbar");
+		mainPopupSet.removeAttribute("vertitabbar");
+		mainPopupSet.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", flipDirection ? "reverse" : "normal");
 		
 		// Toggle the splitter as appropriate
 		var splitter = document.getElementById("tabkit-splitter");
@@ -5527,6 +5532,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		if (closeAllTabsButButton){
 			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToLeft"), closeAllTabsButButton);
 			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsToRight"), closeAllTabsButButton);
+			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsAbove"), closeAllTabsButButton);
+			tabContextMenu.insertBefore(document.getElementById("menu_tabkit-closeTabsBelow"), closeAllTabsButButton);
 			
 			tk.mapBoolPrefToAttribute("closeBeforeAfterNotOther", document.getElementById("mainPopupSet"), "closebeforeafternotother");
 		}

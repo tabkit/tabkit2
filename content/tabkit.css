@@ -321,7 +321,7 @@
  * Close Tabs Before and Close Tabs After *
  ******************************************/
 
-.menu_tabkit-closeBeforeAfter-horizontal {
+.menu_tabkit-closeBeforeAfter-horizontal, .menu_tabkit-closeBeforeAfter-vertical {
 	display: none !important;
 }
 /* Hide "Close Other Tabs" */
@@ -329,6 +329,12 @@
 	display: none !important;
 }
 #mainPopupSet[closebeforeafternotother] .menu_tabkit-closeBeforeAfter-horizontal {
+	display: -moz-box !important;
+}
+#mainPopupSet[closebeforeafternotother][vertitabbar] .menu_tabkit-closeBeforeAfter-horizontal {
+	display: none !important;
+}
+#mainPopupSet[closebeforeafternotother][vertitabbar] .menu_tabkit-closeBeforeAfter-vertical {
 	display: -moz-box !important;
 }
 /******************
