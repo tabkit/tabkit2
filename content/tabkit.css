@@ -410,6 +410,11 @@
 	display: none !important;
 }
 
+/* Override the default height rule for TabsToolbar in Mac version Firefox */
+#TabsToolbar {
+	height: auto !important;
+}
+
 /*************************
  * Scrollbars not arrows *
  *************************/
