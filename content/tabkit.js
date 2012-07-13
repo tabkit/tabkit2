@@ -4671,7 +4671,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	var tabWidthStyleSheet = null;	//for storing stylesheet for tab minWidth rule
 	
 	this.initTabMinWidth = function initTabMinWidth(event) {
-		tk.addGlobalPrefListener("browser.tabs.tabMinWidth", tk.resetTabMinWidth);
+		tk.addGlobalPrefListener("extensions.tabkit.tabs.tabMinWidth", tk.resetTabMinWidth);
 		var ss = document.styleSheets;
 		for (let i = ss.length - 1; i >= 0; i--) {
 			if (ss[i].href == "chrome://tabkit/content/variable.css") {
@@ -4685,7 +4685,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Pref Listener/method:
 	// Note: this is also used by multi-row tabs
 	this.resetTabMinWidth = function resetTabMinWidth(pref) {
-		tk.setTabMinWidth(gPrefService.getIntPref("browser.tabs.tabMinWidth"));	//Minimum minWidth of tab is 100, a built-in CSS rule
+		tk.setTabMinWidth(gPrefService.getIntPref("extensions.tabkit.tabs.tabMinWidth"));	//Minimum minWidth of tab is 100, a built-in CSS rule
 	};
 
 	/// Methods:
@@ -5020,8 +5020,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		
 		tk.addPrefListener("tabRows", tk.updateMultiRowTabs);
 		tk.addPrefListener("tabbarPosition", tk.updateMultiRowTabs);
-		tk.addGlobalPrefListener("browser.tabs.tabMinWidth", tk.updateMultiRowTabs);
-		tk.addGlobalPrefListener("browser.tabs.closeButtons", tk.updateMultiRowTabs);
+		tk.addGlobalPrefListener("extensions.tabkit.tabs.tabMinWidth", tk.updateMultiRowTabs);
+		tk.addGlobalPrefListener("extensions.tabkit.tabs.closeButtons", tk.updateMultiRowTabs);
 		_tabContainer.addEventListener("TabOpen", tk.updateMultiRowTabs, false);
 		tk.addDelayedEventListener(_tabContainer, "TabClose", tk.updateMultiRowTabs);
 		document.addEventListener("SSTabRestoring", tk.updateMultiRowTabs, false); // "hidden" attributes might be restored!

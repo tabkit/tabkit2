@@ -73,8 +73,8 @@
 
 	<prefpane id="tabs-pane" label="&tabs.title;" image="chrome://tabkit/skin/prefs-tabs.png">
 		<preferences>
-			<preference id="tabminwidth-pref" name="browser.tabs.tabMinWidth" type="int"/>
-			<preference id="closebuttons-pref" name="browser.tabs.closeButtons" type="int"/>
+			<preference id="tabminwidth-pref" name="extensions.tabkit.tabs.tabMinWidth" type="int"/>
+			<preference id="closebuttons-pref" name="extensions.tabkit.tabs.closeButtons" type="int"/>
 			
 			<preference id="highlightunreadtabs-pref" name="extensions.tabkit.highlightUnreadTabs" type="bool"/>
 			<preference id="emphasizecurrenttab-pref" name="extensions.tabkit.emphasizeCurrentTab" type="bool"/>
