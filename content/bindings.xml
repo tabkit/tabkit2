@@ -8,9 +8,6 @@
   <binding id="scrollbar" extends="chrome://global/content/bindings/scrollbar.xml#scrollbar">
 	<implementation>
 		<constructor><![CDATA[
-			if (navigator.platform.indexOf('Mac') != -1)
-				this.initScrollbar();
-
 			if (this.orient == 'horizontal')
 				this.parentNode.mHorizontalScrollbar = this;
 			else
