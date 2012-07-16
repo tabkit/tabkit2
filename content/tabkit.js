@@ -4246,6 +4246,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			var start = isVertical ? "top" : "left";
 			var end = isVertical ? "bottom" : "right";
 			
+			//When dragging over the tab itself, targetTab is undefined, so should just exit here
+			if (typeof targetTab == "undefined" || !targetTab) {
+				return;
+			}
+			
 			//DO NOT reuse newIndex
 			if (isVertical) {
 				if (event.screenY <= targetTab.boxObject.screenY + targetTab.boxObject.height / 2) {
