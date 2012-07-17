@@ -20,10 +20,11 @@ namespace :tk2 do
     input_filenames = included
     no_of_files = input_filenames.size
 
+    path = "../product/"
     zipfile_name = "tabkit2 #{version}.xpi"
     puts "About to build #{zipfile_name} with #{no_of_files} files"
 
-    Zip::ZipFile.open(zipfile_name, Zip::ZipFile::CREATE) do |zipfile|
+    Zip::ZipFile.open("#{path}#{zipfile_name}", Zip::ZipFile::CREATE) do |zipfile|
       input_filenames.each do |filename|
         # Two arguments:
         # - The name of the file as it will appear in the archive
