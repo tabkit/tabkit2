@@ -1946,7 +1946,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		else {
 			var visible = [];
 			for each (var t in group) {
-				t.setAttribute("groupcollapsed", true);
 				if (!t.hidden) // visibility of a tab
 					visible.push(t);
 				if (fixIndents)
@@ -1958,9 +1957,22 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 			else if (visible.length > 1) {
 				visible.sort(tk.compareTabViewedExceptUnread);
-				tk.tabSetHidden(visible.pop(), false); // visibility of a tab
+				
+				//1. hide them all first
 				for each (var t in visible)
 					tk.tabSetHidden(t, true); // visibility of a tab
+					
+				//2. decide which to show: First tab in group or last viewed tab
+				var firstTab = group[0];
+				var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") == "selected" ? visible.pop() : firstTab;	//which tab to show? decision here
+				
+				//3. show it
+				tk.tabSetHidden(targetTab, false); // visibility of a tab
+				
+			}
+			for each (var t in group) {
+				//The attribute application must at last to avoid being blocked by a fix for Issue 11
+				t.setAttribute("groupcollapsed", true);
 			}
 		}
 	};
@@ -2780,8 +2792,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 		}
 		else {
-			var firstTab = group[0];	//I think this is the first tab right?
-			
+			var firstTab = group[0];
 			var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") == "selected" ? contextTab : firstTab;	//which tab to show? decision here
 			
 			for each (var tab in group) {
