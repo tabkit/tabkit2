@@ -2842,7 +2842,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				hiddenRows: ["description"],
 				URIList: aURIList
 			};
-			PlacesUIUtils.showBookmarkDialog(info, undefined, true);
+			PlacesUIUtils.showBookmarkDialog(info, window.top, true);
 		}
 		else {
 			tk.dump("showBookmarkDialog NOT in PlacesUIUtils.");
