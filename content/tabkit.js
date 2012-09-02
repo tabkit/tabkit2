@@ -522,6 +522,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 
 		var container = targetItem.parentNode;
+
+		// Sometimes it is null, Don't know what happen
+		// Just ignore it at he moment
+		if (container == null) return;
+
 		var firstChild = container.firstChild;
 		// tk.log("scrollToElement "+firstChild.nodeName);
 		while (firstChild.hidden) // visibility of a tab
