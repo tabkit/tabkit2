@@ -1878,7 +1878,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 
 			if (!tk.nextType) {
-				tk.dump("No nextType for added tab: " + tid + "\nStack ="
+				tk.debug("No nextType for added tab: " + tid + "\nStack ="
 						  + event.stack.map(function __getName(f, i) {
 								return " " + i + ": " + f.name;
 							}));
