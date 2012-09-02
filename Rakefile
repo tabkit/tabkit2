@@ -4,12 +4,12 @@ require 'zip/zip'
 namespace :tk2 do
   desc "Tabkit build script"
   task :build , :version do |t, args|
-    
+
     version = args[:version]
-    
+
     # ["content/bindings.xml"]
     everything = Dir.glob "**/*"
-    
+
     excluded_regexp = /(\.(xpi|zip)|Rakefile)$/i
     included = everything.select do |path|
       path !~ excluded_regexp
@@ -21,6 +21,9 @@ namespace :tk2 do
     no_of_files = input_filenames.size
 
     path = "../product/"
+    # Create Dir if not exist
+    Dir.mkdir(path) unless File.exists?(path)
+
     zipfile_name = "tabkit2 #{version}.xpi"
     puts "About to build #{zipfile_name} with #{no_of_files} files"
 
@@ -32,7 +35,7 @@ namespace :tk2 do
         zipfile.add(filename, filename)
       end
     end
-    
+
     puts "#{zipfile_name} Built"
   end
 end
