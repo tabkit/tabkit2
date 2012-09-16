@@ -1314,7 +1314,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			'if (tabkit.sourceTypes.length) { \
 				evt.stack = [ arguments.callee ]; \
 				evt.stackDepth = 0; \
-				while (evt.stackDepth < tabkit.sourceTypes[0].d) { \
+				while (evt.stackDepth < tabkit.sourceTypes[0].depth) { \
 					var prev = evt.stack[evt.stackDepth].caller; \
 					if (prev) { \
 						evt.stack.push(prev); \
@@ -1324,6 +1324,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 						break; \
 					} \
 				} \
+				evt.shouldBeFromSS = false; \
+				if (aSkipAnimation) {evt.shouldBeFromSS = true;} \
 			} \
 			$&'
 		]);
@@ -1415,6 +1417,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	/// Methods dealing with new tabs:
 	this.addingTab = function addingTab(type, parent, dontMoveNextTab) {
 		try {
+			// Already got type?
+			// Then ignore addingTabOver processing
 			if (tk.nextType) {
 				tk.ignoreOvers++;
 				return;
@@ -1430,6 +1434,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		}
 	};
 
+	// For adding one tab
+	// There is another function named addingTabsOver for multiple tabs
 	this.addingTabOver = function addingTabOver() {
 		try {
 			if (tk.ignoreOvers > 0) {
@@ -1439,6 +1445,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 			if (tk.addedTabs.length == 1) {
 				var type = tk.nextType;
+				// unrelated tab has no parent
+				// The first tab restored from session also has no parent
 				var parent = (type == "unrelated" || type == "sessionrestore") ? null : tk.nextParent;
 				var tab = tk.addedTabs.pop();
 
@@ -1788,35 +1796,35 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 	// Note: This can't replace cases where an explicit parent tab must be set
 	// TODO=P4: GCODE Use sourceTypes for more tab sources
 	this.sourceTypes = [ // TODO=P3: TJS Store full stack signatures here (even if only the last element is used)
-		{ d: 5, n: "goup_up",			   t: "related" }, //postInit: if ("goup_up" in window && window.goup_up) tk.wrapMethodCode('window.goup_up', 'tabkit.addingTab("related"); try {', '} finally { tabkit.addingTabOver(); }');
-		{ d: 4, n: "diggerLoadURL",		 t: "related" }, //diggerLoadURL
-		{ d: 3, n: "mlb_common_Utils_openUrlInNewTab", t: "related" }, //Mouseless Browsing mlb_common.Utils.openUrlInNewTab (but only after Tab Kit assigns a name to the function in postInitSortingAndGroupingMethodHooks!) [[[1. win_open 2. open 3. mlb_common_Utils_openUrlInNewTab 4.  5. ]]]
-		{ d: 3, n: "activateLinks",		 t: "related" }, //Snap Links Plus [[[1. openTabs 2. executeAction 3. activateLinks 4. eventMouseUp]]]
-		{ d: 3, n: "gotoHistoryIndex",	  t: "related" }, //gotoHistoryIndex [[[1. loadOneTab 2. openUILinkIn 3. gotoHistoryIndex 4. anonymous 5. checkForMiddleClick 6. onclick]]]
-		{ d: 3, n: "BrowserBack",		   t: "related" }, //BrowserBack [[[1. loadOneTab 2. openUILinkIn 3. BrowserBack 4. anonymous 5. checkForMiddleClick 6. onclick]]]
-		{ d: 3, n: "BrowserForward",		t: "related" }, //BrowserForward [[[1. loadOneTab 2. openUILinkIn 3. BrowserForward 4. anonymous 5. checkForMiddleClick 6. onclick]]]
-		{ d: 3, n: "BrowserReloadOrDuplicate", t: "related" }, //BrowserReloadOrDuplicate [[[1. loadOneTab 2. openUILinkIn 3. BrowserReloadOrDuplicate 4. anonymous 5. checkForMiddleClick]]]]
-		{ d: 2, n: "BrowserSearch_search",  t: "related" }, //BrowserSearch.loadSearch
-		{ d: 3, n: "handleLinkClick",	   t: "related" }, //handleLinkClick [[[1. loadOneTab 2. openNewTabWith 3. handleLinkClick 4. contentAreaClick 5. onclick]]]
-		{ d: 1, n: "webdeveloper_generateDocument", t: "related" }, //webdeveloper_generateDocument (WebDeveloper extension)
-		{ d: 1, n: "openSelectedLinks",	 t: "related" }, //Tab Kit openSelectedLinks [[[1: openSelectedLinks]]]
+		{ depth: 5, name: "goup_up",			   type: "related" }, //postInitype: if ("goup_up" in window && window.goup_up) tk.wrapMethodCode('window.goup_up', 'tabkit.addingTab("related"); try {', '} finally { tabkit.addingTabOver(); }');
+		{ depth: 4, name: "diggerLoadURL",		 type: "related" }, //diggerLoadURL
+		{ depth: 3, name: "mlb_common_Utils_openUrlInNewTab", type: "related" }, //Mouseless Browsing mlb_common.Utils.openUrlInNewTab (but only after Tab Kit assigns a name to the function in postInitSortingAndGroupingMethodHooks!) [[[1. win_open 2. open 3. mlb_common_Utils_openUrlInNewTab 4.  5. ]]]
+		{ depth: 3, name: "activateLinks",		 type: "related" }, //Snap Links Plus [[[1. openTabs 2. executeAction 3. activateLinks 4. eventMouseUp]]]
+		{ depth: 3, name: "gotoHistoryIndex",	  type: "related" }, //gotoHistoryIndex [[[1. loadOneTab 2. openUILinkIn 3. gotoHistoryIndex 4. anonymous 5. checkForMiddleClick 6. onclick]]]
+		{ depth: 3, name: "BrowserBack",		   type: "related" }, //BrowserBack [[[1. loadOneTab 2. openUILinkIn 3. BrowserBack 4. anonymous 5. checkForMiddleClick 6. onclick]]]
+		{ depth: 3, name: "BrowserForward",		type: "related" }, //BrowserForward [[[1. loadOneTab 2. openUILinkIn 3. BrowserForward 4. anonymous 5. checkForMiddleClick 6. onclick]]]
+		{ depth: 3, name: "BrowserReloadOrDuplicate", type: "related" }, //BrowserReloadOrDuplicate [[[1. loadOneTab 2. openUILinkIn 3. BrowserReloadOrDuplicate 4. anonymous 5. checkForMiddleClick]]]]
+		{ depth: 2, name: "BrowserSearch_search",  type: "related" }, //BrowserSearch.loadSearch
+		{ depth: 3, name: "handleLinkClick",	   type: "related" }, //handleLinkClick [[[1. loadOneTab 2. openNewTabWith 3. handleLinkClick 4. contentAreaClick 5. onclick]]]
+		{ depth: 1, name: "webdeveloper_generateDocument", type: "related" }, //webdeveloper_generateDocument (WebDeveloper extension)
+		{ depth: 1, name: "openSelectedLinks",	 type: "related" }, //Tab Kit openSelectedLinks [[[1: openSelectedLinks]]]
 
-		{ d: 5, n: "BM_onCommand",		  t: "newtab" }, //BM_onCommand [[[1. loadOneTab 2. openUILinkIn 3. PU_openNodeIn 4. PU_openNodeWithEvent 5. BM_onCommand]]]
-		{ d: 5, n: "ondragdrop",			t: "newtab" }, //newTabButtonObserver.onDrop [[[1. loadOneTab 2. openNewTabWith 3.  4.  5. ondragdrop]]] // Could make unrelated if from a different window?
-		{ d: 4, n: "middleMousePaste",	  t: "newtab" }, //middleMousePaste
-		{ d: 4, n: "handleCommand",		 t: "newtab" }, //[Fx3.5+] gURLBar.handleCommand [[[1.loadOneTab 2. openUILinkIn 3. openUILink 4. handleCommand 5. onclick]]]
-		{ d: 2, n: "BrowserOpenTab",		t: "newtab" }, //BrowserOpenTab [[[1. loadOneTab 2. BrowserOpenTab 3. oncommand]]] // Amongst other traces
-		{ d: 2, n: "delayedOpenTab",		t: "newtab" }, //delayedOpenTab
-		{ d: 2, n: "handleCommand",		 t: "newtab" }, //[Fx3.5+] gURLBar.handleCommand [[[1.loadOneTab 2. handleCommand 3. anonymous 4. fireEvent 5. onTextEntered]]]
-		{ d: 1, n: "_endRemoveTab",		 t: "newtab" }, //[Fx3.5+] gBrowser._endRemoveTab [[[1. _endRemoveTab 2. removeTab 3. removeCurrentTab 4. BrowserCloseTabOrWindow 5. oncommand]]]
+		{ depth: 5, name: "BM_onCommand",		  type: "newtab" }, //BM_onCommand [[[1. loadOneTab 2. openUILinkIn 3. PU_openNodeIn 4. PU_openNodeWithEvent 5. BM_onCommand]]]
+		{ depth: 5, name: "ondragdrop",			type: "newtab" }, //newTabButtonObserver.onDrop [[[1. loadOneTab 2. openNewTabWith 3.  4.  5. ondragdrop]]] // Could make unrelated if from a different window?
+		{ depth: 4, name: "middleMousePaste",	  type: "newtab" }, //middleMousePaste
+		{ depth: 4, name: "handleCommand",		 type: "newtab" }, //[Fx3.5+] gURLBar.handleCommand [[[1.loadOneTab 2. openUILinkIn 3. openUILink 4. handleCommand 5. onclick]]]
+		{ depth: 2, name: "BrowserOpenTab",		type: "newtab" }, //BrowserOpenTab [[[1. loadOneTab 2. BrowserOpenTab 3. oncommand]]] // Amongst other traces
+		{ depth: 2, name: "delayedOpenTab",		type: "newtab" }, //delayedOpenTab
+		{ depth: 2, name: "handleCommand",		 type: "newtab" }, //[Fx3.5+] gURLBar.handleCommand [[[1.loadOneTab 2. handleCommand 3. anonymous 4. fireEvent 5. onTextEntered]]]
+		{ depth: 1, name: "_endRemoveTab",		 type: "newtab" }, //[Fx3.5+] gBrowser._endRemoveTab [[[1. _endRemoveTab 2. removeTab 3. removeCurrentTab 4. BrowserCloseTabOrWindow 5. oncommand]]]
 
-		{ d: 4, n: "openReleaseNotes",	  t: "unrelated" }, //openReleaseNotes [[[1. loadOneTab 2. openUILinkIn 3. openUILink 4. openReleaseNotes 5. anonymous 6. checkForMiddleClick 7. onclick]]]
+		{ depth: 4, name: "openReleaseNotes",	  type: "unrelated" }, //openReleaseNotes [[[1. loadOneTab 2. openUILinkIn 3. openUILink 4. openReleaseNotes 5. anonymous 6. checkForMiddleClick 7. onclick]]]
 
-		{ d: 1, n: "sss_duplicateTab",	  t: "sessionrestore", m: true }, //sss_duplicateTab [[[1. sss_duplicateTab 2. duplicateTab ...]]]
-		{ d: 1, n: "sss_undoCloseTab",	  t: "sessionrestore", m: true }, //sss_undoCloseTab [[[1. sss_undoCloseTab 2. undoCloseTab 3. undoCloseTab 4. oncommand]]]
-		{ d: 1, n: "sss_restoreWindow",	 t: "sessionrestore", m: true }  //sss_restoreWindow
+		{ depth: 1, name: "sss_duplicateTab",	  type: "sessionrestore", DontMoveTab: true }, //sss_duplicateTab [[[1. sss_duplicateTab 2. duplicateTab ...]]]
+		{ depth: 1, name: "sss_undoCloseTab",	  type: "sessionrestore", DontMoveTab: true }, //sss_undoCloseTab [[[1. sss_undoCloseTab 2. undoCloseTab 3. undoCloseTab 4. oncommand]]]
+		{ depth: 1, name: "sss_restoreWindow",	 type: "sessionrestore", DontMoveTab: true }  //sss_restoreWindow, Firefox 14 or below
 	];
-	this.sourceTypes.sort(function __compareSourceDepths(a, b) { return b.d - a.d; }); // Sort by decreasing d(epth)
+	this.sourceTypes.sort(function __compareSourceDepths(a, b) { return b.depth - a.depth; }); // Sort by decreasing d(epth)
 
 	/// Event Handlers:
 	this.sortgroup_onTabAdded = function sortgroup_onTabAdded(event) {
@@ -1844,7 +1852,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 		}
 		else if (!("fromInitSortingAndGrouping" in event)) {
-			if (tk.sourceTypes.length && event.stackDepth) {
+			if (event.stack) {
 				var stack = event.stack;
 				var depth = event.stackDepth;
 				/*
@@ -1852,7 +1860,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				var stack = [ arguments.callee.caller.caller ];
 				var depth = 0;
 				// Note that sourceTypes is sorted in order of decreasing d
-				while (depth < tk.sourceTypes[0].d) {
+				while (depth < tk.sourceTypes[0].depth) {
 					var prev = stack[depth].caller;
 					if (prev) {
 						stack.push(prev);
@@ -1865,27 +1873,44 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				*/
 				for (var i = 0; i < tk.sourceTypes.length; i++) {
 					var st = tk.sourceTypes[i];
-					if (st.d > depth)
+					if (st.depth > depth)
 						continue;
-					while (st.d < depth)
-						depth--;
-					if (stack[depth].name == st.n) {
-						tk.nextType = st.t;
-						tk.dontMoveNextTab = ("m" in st && st.m);
+					while (st.depth < depth)
+						depth--; 
+					if (stack[depth].name == st.name) {
+						tk.nextType = st.type;
+						tk.dontMoveNextTab = ("DontMoveTab" in st && st.DontMoveTab);
+						tk.debug('sourceType matched is: '+st.type+' & function name is: '+st.name);
 						break;
 					}
 				}
-			}
-
-			if (!tk.nextType) {
-				tk.debug("No nextType for added tab: " + tid + "\nStack ="
-						  + event.stack.map(function __getName(f, i) {
-								return " " + i + ": " + f.name;
-							}));
-				// TODO=P2: GCODE Make default nextType depend on whether the tab was opened in the foreground or background, for better compatibility with extensions that open tabs (this may have to be done by seeing if the tab gets selected...)
-				tk.nextType = "newtab";
-				//tk.nextType = "unrelated";
-				//tk.dontMoveNextTab = true;
+				
+				// Special treatment for Firefox 15 or above for session restore
+				// But only work for restoring a window, not for restoring a tab
+				if (event.shouldBeFromSS == true) {
+					// When skipAnimation params in addTab is true
+					// We assume it's from session restore, or you find me a better solution
+					tk.nextType = 'sessionrestore';
+					tk.dontMoveNextTab = true;
+				}
+				
+				// Debug
+				tk.debug("Logging Stack for added tab: " + tid + "\nStack ="
+					  + event.stack.map(function __getName(f, i) {
+							return " " + i + ": " + f.name + ' & sourceType matched is: ' + tk.nextType;
+						}));
+				
+				// Should be buggy is this statement is true
+				if (!tk.nextType) {
+					tk.debug("No nextType for added tab: " + tid + "\nStack ="
+							  + event.stack.map(function __getName(f, i) {
+									return " " + i + ": " + f.name;
+								}));
+					// TODO=P2: GCODE Make default nextType depend on whether the tab was opened in the foreground or background, for better compatibility with extensions that open tabs (this may have to be done by seeing if the tab gets selected...)
+					tk.nextType = "newtab";
+					//tk.nextType = "unrelated";
+					//tk.dontMoveNextTab = true;
+				}
 			}
 
 			tk.nextParent = gBrowser.selectedTab;
