@@ -102,7 +102,6 @@ function disableAll() {
 	document.getElementById("tabwheeltabswitch-pref").value = false;
 	document.getElementById("lmbrmbbackforward-pref").value = false;
 	document.getElementById("doubleclickcollapseexpand-pref").value = false;
-	document.getElementById("acceldragcopy-pref").value = false;
 	document.getElementById("shiftdraggroups-pref").value = false;
 	document.getElementById("scrollbarsnotarrows-pref").value = false;
 	document.getElementById("scrolloneextra-pref").value = false;

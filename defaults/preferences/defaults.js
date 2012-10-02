@@ -54,7 +54,6 @@ pref("extensions.tabkit.gestures.lmbRmbBackForward", true);
 pref("extensions.tabkit.doubleClickCollapseExpand", true);
 
 //--- Tab Dragging---
-pref("extensions.tabkit.accelDragCopy", true);
 pref("extensions.tabkit.shiftDragGroups", true);
     pref("extensions.tabkit.shiftDragSubtrees", false);
 

@@ -188,7 +188,6 @@
 			<preference id="lmbrmbbackforward-pref" name="extensions.tabkit.gestures.lmbRmbBackForward" type="bool"/>
 			<preference id="doubleclickcollapseexpand-pref" name="extensions.tabkit.doubleClickCollapseExpand" type="bool"/>
 			
-			<preference id="acceldragcopy-pref" name="extensions.tabkit.accelDragCopy" type="bool"/>
 			<preference id="shiftdraggroups-pref" name="extensions.tabkit.shiftDragGroups" type="bool"/>
 			<preference id="shiftdragsubtrees-pref" name="extensions.tabkit.shiftDragSubtrees" type="bool"/>
 			
@@ -216,8 +215,6 @@
 		</groupbox>
 		
 		<groupbox><caption label="&dragging.caption;"/>
-			<checkbox id="acceldragcopy" label="&accelDragCopy.label;"
-					accesskey="&accelDragCopy.accesskey;" preference="acceldragcopy-pref"/>
 			<checkbox id="shiftdraggroups" label="&shiftDragGroups.label;"
 					accesskey="&shiftDragGroups.accesskey;" preference="shiftdraggroups-pref"/>
 			<vbox class="indent">
