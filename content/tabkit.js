@@ -1880,7 +1880,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					if (stack[depth].name == st.name) {
 						tk.nextType = st.type;
 						tk.dontMoveNextTab = ("DontMoveTab" in st && st.DontMoveTab);
-						tk.debug('sourceType matched is: '+st.type+' & function name is: '+st.name);
+						// tk.debug('sourceType matched is: '+st.type+' & function name is: '+st.name);
 						break;
 					}
 				}
@@ -1895,10 +1895,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				}
 				
 				// Debug
-				tk.debug("Logging Stack for added tab: " + tid + "\nStack ="
-					  + event.stack.map(function __getName(f, i) {
-							return " " + i + ": " + f.name + ' & sourceType matched is: ' + tk.nextType;
-						}));
+				// tk.debug("Logging Stack for added tab: " + tid + "\nStack ="
+					  // + event.stack.map(function __getName(f, i) {
+							// return " " + i + ": " + f.name + ' & sourceType matched is: ' + tk.nextType;
+						// }));
 				
 				// Should be buggy is this statement is true
 				if (!tk.nextType) {
@@ -3990,7 +3990,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 		this._tabDropIndicator.collapsed = true;
 
-		var dGid = draggedTab.getAttribute("groupid");
+		var draggedGid = draggedTab.getAttribute("groupid");
 		var dPrev = draggedTab.previousSibling;
 		var dNext = draggedTab.nextSibling;
 
@@ -4031,7 +4031,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 		// Determine if we're dealing with one tab or a group/subtree
 		var tabs;
 		var shiftDragSubtree;
-		if (dGid && (event.shiftKey && _prefs.getBoolPref("shiftDragGroups")
+		if (draggedGid && (event.shiftKey && _prefs.getBoolPref("shiftDragGroups")
 					 || draggedTab.hasAttribute("groupcollapsed"))) {
 			// User wants to drag a group/subtree
 
@@ -4078,9 +4078,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 				// tk.chosenNewIndex = newIndex;
 				// event.tab = tab;
 				// gBrowser.old_onDrop(event);
-				gBrowser.moveTabTo(tab, newIndex);
+                var copiedTab = tk._duplicateTab(tab)
+				gBrowser.moveTabTo(copiedTab, newIndex);
 
-				newTabs.unshift(tk.addedTabs[0]);
+				newTabs.unshift(copiedTab);
 
 				tk.addingTabOver();
 				if (singleTab && draggedTab == beforeTab)
@@ -4116,14 +4117,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					tabIdMapping[tabs[i].getAttribute("tabid")] = newTabs[i].getAttribute("tabid");
 
 			// Group/indent the new/moved tabs
-			var nGid;
+			var newGid;
 			var app;
 			var draggedIntoGroup = (aGid && aGid == bGid);
-			if (draggedIntoGroup || dGid && (aGid == dGid || bGid == dGid)) {
-				if (aGid == dGid || bGid == dGid)
-					nGid = dGid; // We're in the same group we were before
+			if (draggedIntoGroup || draggedGid && (aGid == draggedGid || bGid == draggedGid)) {
+				if (aGid == draggedGid || bGid == draggedGid)
+					newGid = draggedGid; // We're in the same group we were before
 				else
-					nGid = aGid; // Copy enclosing groupid
+					newGid = aGid; // Copy enclosing groupid
 
 				if (aGid) {
 					// Inherit enclosing indentation (possibleparent)
@@ -4142,24 +4143,24 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			}
 			else if (copyOrFromAnotherWindow /*&& !singleTab*/) {
 				// Create a new groupid
-				nGid = ":oG-copiedGroupOrSubtree-" + tk.generateId();
+				newGid = ":oG-copiedGroupOrSubtree-" + tk.generateId();
 
 				app = null;
 			}
 			else {
 				if (shiftDragSubtree)
-					nGid = ":oG-draggedSubtree-" + tk.generateId(); // Maintain subtree by creating a new opener group // TODO=P5: GCODE No need if the subtree was the entire group
+					newGid = ":oG-draggedSubtree-" + tk.generateId(); // Maintain subtree by creating a new opener group // TODO=P5: GCODE No need if the subtree was the entire group
 				else
-					nGid = null; // Just keep existing groupid
+					newGid = null; // Just keep existing groupid
 
 				app = null;
 			}
 			for (var i = 0; i < newTabs.length; i++) {
 				var newTab = newTabs[i];
 
-				// Apply nGid
-				if (nGid) {
-					tk.setGID(newTab, nGid);
+				// Apply newGid
+				if (newGid) {
+					tk.setGID(newTab, newGid);
 					if (draggedIntoGroup)
 						newTab.setAttribute("outoforder", "true");
 				}
@@ -4181,17 +4182,17 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 			// Make sure the old group isn't now a singleton
 			if (singleTab) {
-				if (dGid) {
+				if (draggedGid) {
 					// TODO=P4: TJS Refactor out into a checkIfSingleton method
-					if (dPrev && dPrev.getAttribute("groupid") == dGid
-						&& (!dPrev.previousSibling || dPrev.previousSibling.getAttribute("groupid") != dGid)
-						&& (!dPrev.nextSibling || dPrev.nextSibling.getAttribute("groupid") != dGid))
+					if (dPrev && dPrev.getAttribute("groupid") == draggedGid
+						&& (!dPrev.previousSibling || dPrev.previousSibling.getAttribute("groupid") != draggedGid)
+						&& (!dPrev.nextSibling || dPrev.nextSibling.getAttribute("groupid") != draggedGid))
 					{
 						tk.removeGID(dPrev, true);
 					}
-					else if (dNext && dNext.getAttribute("groupid") == dGid
-						&& (!dNext.previousSibling || dNext.previousSibling.getAttribute("groupid") != dGid)
-						&& (!dNext.nextSibling || dNext.nextSibling.getAttribute("groupid") != dGid))
+					else if (dNext && dNext.getAttribute("groupid") == draggedGid
+						&& (!dNext.previousSibling || dNext.previousSibling.getAttribute("groupid") != draggedGid)
+						&& (!dNext.nextSibling || dNext.nextSibling.getAttribute("groupid") != draggedGid))
 					{
 						tk.removeGID(dNext, true);
 					}
@@ -4200,7 +4201,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 			else if (!copyOrFromAnotherWindow) {
 				if (shiftDragSubtree) {
 					// Make sure old group isn't now a singleton
-					var group = tk.getGroupById(dGid);
+					var group = tk.getGroupById(draggedGid);
 					if (group.length == 1)
 						tk.removeGID(group[0], true);
 				}
