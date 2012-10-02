@@ -6,6 +6,7 @@ namespace :tk2 do
   task :build , :version do |t, args|
 
     version = args[:version]
+    version ||= Time.now.strftime("%F") # incase someone forgot to put in version or lazy, put in today's day
 
     # ["content/bindings.xml"]
     everything = Dir.glob "**/*"
@@ -14,20 +15,18 @@ namespace :tk2 do
     included = everything.select do |path|
       path !~ excluded_regexp
     end
-    #excluded = Dir.glob "**/*.{zip,xpi}"
-    #included = everything - excluded
 
     input_filenames = included
     no_of_files = input_filenames.size
 
-    path = "../product/"
+    path = "product"
     # Create Dir if not exist
     Dir.mkdir(path) unless File.exists?(path)
 
     zipfile_name = "tabkit2 #{version}.xpi"
     puts "About to build #{zipfile_name} with #{no_of_files} files"
 
-    Zip::ZipFile.open("#{path}#{zipfile_name}", Zip::ZipFile::CREATE) do |zipfile|
+    Zip::ZipFile.open(File.join(path, zipfile_name), Zip::ZipFile::CREATE) do |zipfile|
       input_filenames.each do |filename|
         # Two arguments:
         # - The name of the file as it will appear in the archive
