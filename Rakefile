@@ -15,8 +15,6 @@ task :build , :version do |t, args|
   included = everything.select do |path|
     path !~ excluded_regexp
   end
-    #excluded = Dir.glob "**/*.{zip,xpi}"
-    #included = everything - excluded
 
   input_filenames = included
   no_of_files = input_filenames.size
