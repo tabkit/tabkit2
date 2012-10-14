@@ -12,11 +12,6 @@
 
 <script type="application/x-javascript" src="chrome://tabkit/content/tabkit.js"/>
 
-<script type="application/x-javascript"><![CDATA[
-	window.addEventListener("DOMContentLoaded", tabkit.onDOMContentLoaded, false);
-	window.addEventListener("load", tabkit.onLoad, false);
-]]></script>
-
 <commandset id="mainCommandSet">
 	<command id="cmd_tabkit-sortgroup-sortByUri" oncommand="tabkit.sortByUri();"/>
 	<command id="cmd_tabkit-sortgroup-sortByLastLoaded" oncommand="tabkit.sortByLastLoaded();"/>
@@ -24,34 +19,34 @@
 	<command id="cmd_tabkit-sortgroup-sortByCreation" oncommand="tabkit.sortByCreation();"/>
 	<command id="cmd_tabkit-sortgroup-sortByOrigin" oncommand="tabkit.sortByOrigin();"/>
 	<command id="cmd_tabkit-sortgroup-sortByTitle" oncommand="tabkit.sortByTitle();"/>
-	
+
 	<command id="cmd_tabkit-sortgroup-groupByDomain" oncommand="tabkit.toggleGroupByDomain();"/>
 	<command id="cmd_tabkit-sortgroup-groupByOpener" oncommand="tabkit.toggleGroupByOpener();"/>
-	
+
 	<command id="cmd_tabkit-sortgroup-ungroupAll" oncommand="tabkit.ungroupAll();"/>
-	
-	
+
+
 	<command id="cmd_tabkit-sortgroup-newtabs-farRight" oncommand="tabkit.placeNewTabsAtFarRight();"/>
 	<command id="cmd_tabkit-sortgroup-newtabs-nextToCurrent" oncommand="tabkit.placeNewTabsNextToCurrent();"/>
 	<command id="cmd_tabkit-sortgroup-newtabs-lastSort" oncommand="tabkit.placeNewTabsByLastSort();"/>
-	
+
 	<command id="cmd_tabkit-sortgroup-newtabs-autoGroup" oncommand="tabkit.toggleAutoGroupNewTabs();"/>
-	
-	
+
+
 	<command id="cmd_tabkit-sortgroup-tab-newTabHere" oncommand="tabkit.openNewTabHere(TabContextMenu.contextTab);"/>
 	<command id="cmd_tabkit-sortgroup-tab-duplicateTab" oncommand="tabkit.duplicateTab(TabContextMenu.contextTab);"/>
 	<command id="cmd_tabkit-sortgroup-tab-makeGroup" oncommand="tabkit.makeGroup(TabContextMenu.contextTab);"/>
-	
+
 	<command id="cmd_tabkit-tab-toggleProtected" oncommand="tabkit.toggleProtected(TabContextMenu.contextTab);"/>
 	<command id="cmd_tabkit-tab-toggleUnread" oncommand="tabkit.toggleUnread(TabContextMenu.contextTab);"/>
-	
-	
+
+
 	<command id="cmd_tabkit-sortgroup-group-collapseExpand" oncommand="tabkit.toggleGroupCollapsed(TabContextMenu.contextTab);"/>
 	<command id="cmd_tabkit-sortgroup-group-bookmark" oncommand="tabkit.bookmarkGroup(TabContextMenu.contextTab);"/>
 	<command id="cmd_tabkit-sortgroup-group-close" oncommand="tabkit.closeGroup(TabContextMenu.contextTab);"/>
 	<command id="cmd_tabkit-sortgroup-group-closeChildren" oncommand="tabkit.closeChildren(TabContextMenu.contextTab);"/>
 	<command id="cmd_tabkit-sortgroup-group-ungroup" oncommand="tabkit.ungroupGroup(TabContextMenu.contextTab);"/>
-	
+
 	<command id="cmd_tabkit-options" oncommand="tabkit.openOptions();"/>
 </commandset>
 
@@ -77,22 +72,22 @@
 						type="radio" name="radio_tabkit-sortTabs" command="cmd_tabkit-sortgroup-sortByOrigin"/>
 					<menuitem id="menu_tabkit-sortgroup-sortByTitle" label="&sortByTitle.label;" accesskey="&sortByTitle.accesskey;"
 						type="radio" name="radio_tabkit-sortTabs" command="cmd_tabkit-sortgroup-sortByTitle"/>
-					
+
 					<menuseparator/>
-					
+
 					<menuitem id="menu_tabkit-sortgroup-groupByDomain" label="&groupByDomain.label;" accesskey="&groupByDomain.accesskey;"
 						type="checkbox" command="cmd_tabkit-sortgroup-groupByDomain"/>
 					<menuitem id="menu_tabkit-sortgroup-groupByOpener" label="&groupByOpener.label;" accesskey="&groupByOpener.accesskey;"
 						type="checkbox" command="cmd_tabkit-sortgroup-groupByOpener"/>
-					
+
 					<menuitem id="menu_tabkit-sortgroup-ungroupAll" label="&ungroupAll.label;" accesskey="&ungroupAll.accesskey;"
 						command="cmd_tabkit-sortgroup-ungroupAll"/>
-					
+
 				</menupopup>
 			</menu>
-			
-			
-			
+
+
+
 			<menu id="menu_tabkit-sortgroup-newtabs" label="&newTabs.label;" accesskey="&newTabs.accesskey;">
 				<menupopup>
 					<menuitem id="menu_tabkit-sortgroup-newtabs-lastSort" label="&lastSort.label;" accesskey="&lastSort.accesskey;"
@@ -101,19 +96,19 @@
 						type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-nextToCurrent"/><!-- Could vary actual label according to preference -->
 					<menuitem id="menu_tabkit-sortgroup-newtabs-farRight" label="&farRight.label;" accesskey="&farRight.accesskey;"
 						type="radio" name="radio_tabkit-newTabs" command="cmd_tabkit-sortgroup-newtabs-farRight"/>
-					
+
 					<menuseparator/>
-					
+
 					<menuitem id="menu_tabkit-sortgroup-newtabs-autoGroup" label="&autoGroup.label;" accesskey="&autoGroup.accesskey;"
 						type="checkbox" command="cmd_tabkit-sortgroup-newtabs-autoGroup"/>
 				</menupopup>
 			</menu>
-			
+
 			<menuseparator/>
-			
+
 			<menuitem id="menu_tabkit-sortgroup-tab-caption" label="&tab.caption;" disabled="true"
 				style="font-size: 80%; background: none !important; -moz-appearance: none;"/>
-			
+
 			<menuitem id="menu_tabkit-sortgroup-tab-newTabHere" label="&newTabHere.label;" accesskey="&newTabHere.accesskey;"
 				command="cmd_tabkit-sortgroup-tab-newTabHere"/>
 			<menuitem id="menu_tabkit-sortgroup-tab-duplicateTab" label="&duplicateTab.label;" accesskey="&duplicateTab.accesskey;"
@@ -124,12 +119,12 @@
 				type="checkbox" command="cmd_tabkit-tab-toggleProtected"/>
 			<menuitem id="menu_tabkit-tab-toggleUnread" label="&toggleUnread.label;" accesskey="&toggleUnread.accesskey;"
 				command="cmd_tabkit-tab-toggleUnread"/>
-			
+
 			<menuseparator groupsonly="true"/>
-			
+
 			<menuitem id="menu_tabkit-sortgroup-group-caption" label="&group.caption;" disabled="true"
 				style="font-size: 80%; background: none !important; -moz-appearance: none;" groupsonly="true"/>
-			
+
 			<menuitem id="menu_tabkit-sortgroup-group-collapse" label="&collapse.label;" accesskey="&collapse.accesskey;"
 				command="cmd_tabkit-sortgroup-group-collapseExpand" groupsonly="true"/>
 			<menuitem id="menu_tabkit-sortgroup-group-expand" label="&expand.label;" accesskey="&expand.accesskey;"
@@ -143,14 +138,14 @@
 				command="cmd_tabkit-sortgroup-group-closeChildren" acceltext="&closeChildren.acceltext;" groupsonly="true"/>
 			<menuitem id="menu_tabkit-sortgroup-group-ungroup" label="&ungroup.label;" accesskey="&ungroup.accesskey;"
 				command="cmd_tabkit-sortgroup-group-ungroup" groupsonly="true"/>
-			
+
 			<menuseparator/>
-			
+
 			<menuitem id="menu_tabkit-options" label="&options.label;" accesskey="&options.accesskey;"
 				command="cmd_tabkit-options"/>
 		</menupopup>
 	</menu>
-	
+
 	<menuitem label="&closeTabsToLeft.label;" accesskey="&closeTabsToLeft.accesskey;"
 		id="menu_tabkit-closeTabsToLeft" class="menu_tabkit-closeBeforeAfter-horizontal"
 		tbattr="tabbrowser-multiple"
@@ -167,7 +162,7 @@
 		id="menu_tabkit-closeTabsBelow" class="menu_tabkit-closeBeforeAfter-vertical"
 		tbattr="tabbrowser-multiple"
 		oncommand="tabkit.removeTabsAfter(TabContextMenu.contextTab);"/>
-	
+
 </menupopup>
 
 <!--

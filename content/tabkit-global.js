@@ -3,30 +3,30 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     //|##########################
     //{### Basic Constants
     //|##########################
-    
+
     /// Private globals:
     const tkGlobal = this;
-    
+
     const PREF_BRANCH = "extensions.tabkit.";
-    
+
     const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-    
+
     const Cc = Components.classes;
     const Ci = Components.interfaces;
 
     //}##########################
     //{### Services
     //|##########################
-    
+
     // Make sure we can use gPrefService from now on (even if this isn't a browser window!)
     if (typeof gPrefService == "undefined" || !gPrefService)
         var gPrefService = Cc["@mozilla.org/preferences-service;1"].
                        getService(Ci.nsIPrefBranch);
-    
+
     /// Private globals:
     var _console = Cc["@mozilla.org/consoleservice;1"]
                    .getService(Ci.nsIConsoleService);
-    
+
     var _prefs = Cc["@mozilla.org/preferences-service;1"]
                  .getService(Ci.nsIPrefService)
                  .getBranch(PREF_BRANCH);
@@ -34,7 +34,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     //}##########################
     //{### Utility Functions
     //|##########################
-    
+
     // A log of all reported errors is kept, in case the Error Console loses them!
     this.logs = {
         dump: [],
@@ -77,7 +77,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
         catch (ex) {
         }
     };
-    
+
     // For logging information (no line numbers, call stack, etc.)
     this.log = function log(message) {
         try {
@@ -90,11 +90,11 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
         catch (ex) {
         }
     };
-    
+
     this.startsWith = function startsWith(str, start) {
         return str.indexOf(start) == 0;
     };
-    
+
     this.quickStack = function quickStack() {
         // Intended mainly for outputting to the console
         var func = arguments.callee.caller.caller;
@@ -109,11 +109,11 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     //}##########################
     //{### Initialisation
     //|##########################
-    
+
     /// Globals:
     this.globalPreInitListeners = [
     ];
-    
+
     /// Methods:
     this.tryListener = function tryListener(type, listener, event) {
         try {
@@ -136,7 +136,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     this.onDOMContentLoaded_global = function onDOMContentLoaded_global(event) {
         if (event.originalTarget != document)
             return;
-        
+
         window.removeEventListener("DOMContentLoaded", tkGlobal.onDOMContentLoaded_global, false);
 
         // Run module global early initialisation code (before any init* listeners, and before most extensions):
@@ -162,7 +162,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
         try {
 			if (hook.length % 2 != 1)
 				tkGlobal.dump("Who use addMethodHook without reading the description!\n"+hook[0]+"\n"+hook[1]+"\n"+hook[2]+"\n", null);
-			
+
 			var namespaces = hook[0].split(".");
 
 			try {
@@ -178,11 +178,11 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
 			// Make backup, if requested
 			// if (hook[1])
 				// window[hook[1]] + "=" + hook[0]);
-				
+
 			// var code = eval(hook[0] + ".toString()");
 			var method = namespaces.pop();
 			var code = object[method].toString();
-			
+
 			for (var i = 1;i < hook.length;) {
 				var newCode = code.replace(hook[i++], hook[i++]);
 				if (newCode == code) {
@@ -192,7 +192,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
 					code = newCode;
 				}
 			}
-			
+
 			eval(hook[0]+"="+code);
 		}
 		catch (ex) {
@@ -217,7 +217,7 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     //}##########################
     //{>>> Sorting & Grouping
     //|##########################
-    
+
     this.globalPreInitSortingAndGroupingMethodHooks = function globalPreInitSortingAndGroupingMethodHooks(event) {
         if ("BookmarksCommand" in window) { // [Fx2only] // TODO=P4: Fx3: bookmarks are now unrelated - does that matter?
             tkGlobal.wrapMethodCode(
@@ -225,10 +225,10 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
                 'var topWin; if (aTargetBrowser.indexOf("tab") != -1) topWin = getTopWin(); if (topWin && topWin.tabkit) topWin.tabkit.addingTab("bookmark"); try {',
                 '} finally { if (topWin && topWin.tabkit) topWin.tabkit.addingTabOver(); }'
             );
-            
+
             tkGlobal.addMethodHook([
                 'BookmarksCommand.openGroupBookmark',
-				
+
                 'if (aTargetBrowser == "current" || aTargetBrowser == "tab") {',
                 'if (aTargetBrowser == "current" || aTargetBrowser == "tab") { \
                     var URIs = []; \
@@ -256,18 +256,18 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     //}##########################
     //{=== New tabs by default
     //|##########################
-    
+
     this.globalPreInitNewTabsByDefault = function globalPreInitNewTabsByDefault(event) {
     if ("PlacesUIUtils" in window) { // [Fx3+]
         tkGlobal.addMethodHook([//{
             'PlacesUIUtils.openNodeWithEvent',
-			
+
             'this._openNodeIn(aNode, window.whereToOpenLink(aEvent), window);',
             'this._openNodeIn(aNode, window.whereToOpenLink(aEvent), window, aEvent);'
         ]);//}
         tkGlobal.addMethodHook([//{
             'PlacesUIUtils._openNodeIn',
-			
+
             'openUILinkIn(aNode.uri, aWhere);',
             'if (arguments.length == 4 && gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places")) { \
                 if (aWhere == "tab" || /^\\s*javascript:/.test(aNode.uri)) { \
@@ -294,4 +294,6 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
     //}##########################
     //|##########################
 
-}
+};
+
+window.addEventListener("DOMContentLoaded", tabkitGlobal.onDOMContentLoaded_global, false);

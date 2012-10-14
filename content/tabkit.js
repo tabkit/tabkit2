@@ -1876,7 +1876,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					if (st.depth > depth)
 						continue;
 					while (st.depth < depth)
-						depth--; 
+						depth--;
 					if (stack[depth].name == st.name) {
 						tk.nextType = st.type;
 						tk.dontMoveNextTab = ("DontMoveTab" in st && st.DontMoveTab);
@@ -1884,7 +1884,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 						break;
 					}
 				}
-				
+
 				// Special treatment for Firefox 15 or above for session restore
 				// But only work for restoring a window, not for restoring a tab
 				if (event.shouldBeFromSS == true) {
@@ -1893,13 +1893,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 					tk.nextType = 'sessionrestore';
 					tk.dontMoveNextTab = true;
 				}
-				
+
 				// Debug
 				// tk.debug("Logging Stack for added tab: " + tid + "\nStack ="
 					  // + event.stack.map(function __getName(f, i) {
 							// return " " + i + ": " + f.name + ' & sourceType matched is: ' + tk.nextType;
 						// }));
-				
+
 				// Should be buggy is this statement is true
 				if (!tk.nextType) {
 					tk.debug("No nextType for added tab: " + tid + "\nStack ="
@@ -6147,3 +6147,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
 }; // End of tabkit object
 
+
+window.addEventListener("DOMContentLoaded", tabkit.onDOMContentLoaded, false);
+window.addEventListener("load", tabkit.onLoad, false);
