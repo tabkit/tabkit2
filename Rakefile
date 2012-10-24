@@ -11,7 +11,7 @@ task :build , :version do |t, args|
   # ["content/bindings.xml"]
   everything = Dir.glob "**/*"
 
-  excluded_regexp = /(\.(xpi|zip)|Rakefile)$/i
+  excluded_regexp = /(\.(xpi|zip)|Rakefile|Gemfile.*)$/i
   included = everything.select do |path|
     path !~ excluded_regexp
   end
