@@ -2886,12 +2886,21 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.closeGroup = function closeGroup(contextTab) {
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
+
     for each (var tab in tk.getGroupFromTab(contextTab))
       gBrowser.removeTab(tab);
+  };
+  this.closeSubGroup = function closeSubGroup(contextTab) {
+    if (!contextTab)
+      contextTab = gBrowser.selectedTab;
+
+    this.closeChildren(contextTab);
+    gBrowser.removeTab(contextTab);
   };
   this.closeChildren = function closeChildren(contextTab) {
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
+
     for each (var tab in tk.getSubtreeFromTab(contextTab))
       if (tab != contextTab) // Don't close parent
         gBrowser.removeTab(tab);
@@ -2899,6 +2908,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.ungroupGroup = function ungroupGroup(contextTab) {
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
+
     for each (var tab in tk.getGroupFromTab(contextTab))
       tk.removeGID(tab);
   };
