@@ -11,26 +11,26 @@
   onload="onLoad();"
   ondialogaccept="return onOK();"
   windowtype="mozilla:tabkitFirstRunWizard">
-	
-	<script type="application/x-javascript" src="chrome://tabkit/content/firstRunWizard.js"/>
-	
-	<description style="max-width: 550px;">&layoutChoice.desc;</description>
-	
-	<radiogroup flex="1" style="overflow-y: auto;">
-		<radio id="treeTabs" label="&treeTabs.label;" selected="true"/>
-		<label control="treeTabs" value="&treeTabs.desc;"/>
-		<label control="treeTabs"><image src="chrome://tabkit/skin/treeTabs.png" style="width: 413px; border: 1px solid black;"/></label>
-		
-		<radio id="multiRowTabs" label="&multiRowTabs.label;"/>
-		<label control="multiRowTabs" value="&multiRowTabs.desc;"/>
-		<label control="multiRowTabs"><image src="chrome://tabkit/skin/multiRowTabs.png" style="width: 413px; border: 1px solid black;"/></label>
-		
-		<radio id="normalTabs" label="&normalTabs.label;"/>
-		<label control="normalTabs" value="&normalTabs.desc;"/>
-		<label control="normalTabs"><image src="chrome://tabkit/skin/normalTabs.png" style="width: 413px; border: 1px solid black;"/></label>
-	</radiogroup>
-	
-	<description style="max-width: 550px;">&documentation.text;</description>
-	
+
+  <script type="application/x-javascript" src="chrome://tabkit/content/firstRunWizard.js"/>
+
+  <description style="max-width: 550px;">&layoutChoice.desc;</description>
+
+  <radiogroup flex="1" style="overflow-y: auto;">
+    <radio id="treeTabs" label="&treeTabs.label;" selected="true"/>
+    <label control="treeTabs" value="&treeTabs.desc;"/>
+    <label control="treeTabs"><image src="chrome://tabkit/skin/treeTabs.png" style="width: 413px; border: 1px solid black;"/></label>
+
+    <radio id="multiRowTabs" label="&multiRowTabs.label;"/>
+    <label control="multiRowTabs" value="&multiRowTabs.desc;"/>
+    <label control="multiRowTabs"><image src="chrome://tabkit/skin/multiRowTabs.png" style="width: 413px; border: 1px solid black;"/></label>
+
+    <radio id="normalTabs" label="&normalTabs.label;"/>
+    <label control="normalTabs" value="&normalTabs.desc;"/>
+    <label control="normalTabs"><image src="chrome://tabkit/skin/normalTabs.png" style="width: 413px; border: 1px solid black;"/></label>
+  </radiogroup>
+
+  <description style="max-width: 550px;">&documentation.text;</description>
+
 </dialog>
 
