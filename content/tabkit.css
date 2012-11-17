@@ -2,7 +2,7 @@
  * Tab Kit
  * http://jomel.me.uk/software/firefox/tabkit/
  */
- 
+
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 /************************************************************
@@ -10,7 +10,7 @@
  ************************************************************/
 
 .tabbrowser-tabs scrollbar { /*[Fx2only], due to https://bugzilla.mozilla.org/show_bug.cgi?id=369676 - in Fx3 we do this using ua.css*/
-	-moz-binding: url("chrome://tabkit/content/bindings.xml#scrollbar");
+  -moz-binding: url("chrome://tabkit/content/bindings.xml#scrollbar");
 }
 
 /*************************
@@ -20,89 +20,89 @@
 /* Make sure tabs can be colored */
 /* (the alternative would have been to color them using a canvas, see ChromaTabs) */
 #content .tabbrowser-tabs[tk-forcethemecompatibility] .tabbrowser-tab {
-	-moz-appearance: none !important;
-	background: -moz-dialog url("chrome://tabkit/skin/tab-bkgnd.png") repeat-x !important;
-	color: -moz-dialogtext !important;
+  -moz-appearance: none !important;
+  background: -moz-dialog url("chrome://tabkit/skin/tab-bkgnd.png") repeat-x !important;
+  color: -moz-dialogtext !important;
 }
 #content .tabbrowser-tabs[tk-forcethemecompatibility] .tabbrowser-tab:not([selected="true"]):hover {
-	background-image: url("chrome://tabkit/skin/tab-hover-bkgnd.png") !important;
+  background-image: url("chrome://tabkit/skin/tab-hover-bkgnd.png") !important;
 }
 #content .tabbrowser-tabs[tk-forcethemecompatibility] .tabbrowser-tab[selected="true"] {
-	background-image: url("chrome://tabkit/skin/tab-active-bkgnd.png") !important;
+  background-image: url("chrome://tabkit/skin/tab-active-bkgnd.png") !important;
 }
 
 /* Tweaks for dark themes */
 #content .tabbrowser-tabs[tk-darktheme] {
-	background-color: black;
+  background-color: black;
 }
 #content .tabbrowser-tabs[tk-darktheme][tk-forcethemecompatibility] .tabbrowser-tab {
-	opacity: 0.9;
+  opacity: 0.9;
 }
 #content .tabbrowser-tabs[tk-darktheme][tk-forcethemecompatibility] .tabbrowser-tab:hover,
 #content .tabbrowser-tabs[tk-darktheme][tk-forcethemecompatibility] .tabbrowser-tab[selected="true"] {
-	opacity: 1.0;
+  opacity: 1.0;
 }
 
 
 /* Italicize unread tabs */
 /* Issue 46 saids this is overkill
 .tabbrowser-tabs[highlightunread] .tabbrowser-tab:not([read]) .tab-text {
-	font-style: italic !important;
+  font-style: italic !important;
 }
 .tabbrowser-tabs[highlightunread] .tabbrowser-tab[read] .tab-text {
-	font-style: normal !important; /* just in case themes use italic by default! 
+  font-style: normal !important; /* just in case themes use italic by default!
 }*/
 
 /* Highlight unread tabs */
 /* If Sorting and Grouping sets "colortabnotlabel" we do the opposite */
 #main-window > #browser-stack .tabbrowser-tabs[highlightunread]:not([colortabnotlabel]) .tabbrowser-tab:not([read]) > */*[Fx2only]*/,
 #main-window > #browser .tabbrowser-tabs[highlightunread]:not([colortabnotlabel]) .tabbrowser-tab:not([read])/*[Fx3only]*/ {
-	background-color: yellow !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
-	color: black !important;
+  background-color: yellow !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
+  color: black !important;
 }
 .tabbrowser-tabs[highlightunread][colortabnotlabel] .tabbrowser-tab:not([read]) .tab-text {
-	background-color: #ff6 !important;
-	color: black !important; /* We can't take the risk of them having a white on black theme */
+  background-color: #ff6 !important;
+  color: black !important; /* We can't take the risk of them having a white on black theme */
 }
 
 /* Highlight protected tabs */
 #main-window > #browser-stack .tabbrowser-tabs[emphasizeprotected]:not([colortabnotlabel]) .tabbrowser-tab[protected="true"] > */*[Fx2only]*/,
 #main-window > #browser .tabbrowser-tabs[emphasizeprotected]:not([colortabnotlabel]) .tabbrowser-tab[protected="true"]/*[Fx3only]*/ {
-	background-color: green !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
-	color: white !important;
+  background-color: green !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
+  color: white !important;
 }
 .tabbrowser-tabs[emphasizeprotected][colortabnotlabel] .tabbrowser-tab[protected="true"] .tab-text {
-	background-color: green !important;
-	color: white !important;
+  background-color: green !important;
+  color: white !important;
 }
 .tabbrowser-tab[protected="true"] .tab-close-button {
-	display: -moz-box !important; /* Display even if they're normally hidden */
-	list-style-image: url(chrome://tabkit/skin/Secure.png) !important; /* Show padlock instead of close button */
-	-moz-image-region: rect(1px, 15px, 15px, 1px) !important;
-	cursor: pointer !important; /* Since the image doesn't have a hover state */
+  display: -moz-box !important; /* Display even if they're normally hidden */
+  list-style-image: url(chrome://tabkit/skin/Secure.png) !important; /* Show padlock instead of close button */
+  -moz-image-region: rect(1px, 15px, 15px, 1px) !important;
+  cursor: pointer !important; /* Since the image doesn't have a hover state */
 }
 
 /* Highlight current tab */
 #main-window > #browser-stack .tabbrowser-tabs[emphasizecurrent]:not([colortabnotlabel]) .tabbrowser-tab[selected="true"] > */*[Fx2only]*/,
 #main-window > #browser .tabbrowser-tabs[emphasizecurrent]:not([colortabnotlabel]) .tabbrowser-tab[selected="true"]/*[Fx3only]*/ {
-	background-color: black !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
-	color: white !important;
+  background-color: black !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
+  color: white !important;
 }
 .tabbrowser-tabs[emphasizecurrent][colortabnotlabel] .tabbrowser-tab[selected="true"] .tab-text {
-	background-color: black !important;
-	color: white !important;
+  background-color: black !important;
+  color: white !important;
 }
 .tabbrowser-tabs[boldcurrent] .tabbrowser-tab[selected="true"] .tab-text {
-	font-weight:bold;
+  font-weight:bold;
 }
 
 
 /* Give tab labels pretty rounded borders */
 .tabbrowser-tabs[multirow="true"] .tabbrowser-tab .tab-text {
-	-moz-border-radius: 3px 3px 1px 1px;
+  -moz-border-radius: 3px 3px 1px 1px;
 }
 .tabbrowser-tabs[multirow="true"] .tabbrowser-tab[selected="true"] .tab-text {
-	-moz-border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
 }
 
 /******************************
@@ -119,41 +119,41 @@
 /* This is set by JS. If you set both they cancel out! Instead we actually force this to inherit. */
 /*#browser[vertisidebar="reverse"],
 #browser[horizsidebar="reverse"] {
-	-moz-box-direction: reverse !important;
+  -moz-box-direction: reverse !important;
 }*/
 #browser[vertisidebar], #browser[horizsidebar] {
-	direction: inherit;
+  direction: inherit;
 }
 
 #browser[horizsidebar],
 #browser[horizsidebar] > #sidebar-splitter,
 #browser[horizsidebar] > #sidebar-box > sidebarheader {
-	-moz-box-orient: vertical !important;
+  -moz-box-orient: vertical !important;
 }
 #browser[horizsidebar] > #sidebar-box,
 #browser[horizsidebar] > #appcontent {
-	-moz-box-orient: horizontal !important;
+  -moz-box-orient: horizontal !important;
 }
 
 #browser[horizsidebar] > #sidebar-box > sidebarheader {
-	-moz-box-pack: end !important;
-	border-left: 1px solid ThreeDHighlight !important;
-	margin-left: 1px !important;
+  -moz-box-pack: end !important;
+  border-left: 1px solid ThreeDHighlight !important;
+  margin-left: 1px !important;
 }
 #browser[horizsidebar] > #sidebar-box .tabs-closebutton > .toolbarbutton-icon {
-	padding: 4px 2px !important;
+  padding: 4px 2px !important;
 }
 #browser[horizsidebar] #sidebar-title {
-	display: none !important;
+  display: none !important;
 }
 #browser[horizsidebar] #sidebar-throbber {
-	margin-left: 4px !important;
+  margin-left: 4px !important;
 }
 #browser[horizsidebar] #sidebar {
-	width: inherit !important;
-	max-width: inherit !important;
-	height: 200px !important;
-	min-height: 150px !important;
+  width: inherit !important;
+  max-width: inherit !important;
+  height: 200px !important;
+  min-height: 150px !important;
 }
 
 /* Inspired by Stephen Clavering (clav): http://forums.mozillazine.org/viewtopic.php?p=238798#238798 */
@@ -167,13 +167,13 @@
 /* This is set by JS. If you set both they cancel out! */
 /*#content[horiztabbar="reverse"] > tabbox,
 #content[vertitabbar="reverse"] > tabbox {
-	-moz-box-direction: reverse !important;
+  -moz-box-direction: reverse !important;
 }*/
 
 #content[vertitabbar] > tabbox,
 #content[vertitabbar] .tabs-stack > vbox:last-child/*[Fx2only]*/ {
-	-moz-box-orient: horizontal !important;
-	max-height: none !important;
+  -moz-box-orient: horizontal !important;
+  max-height: none !important;
 }
 #content[vertitabbar],
 #content[vertitabbar] > tabbox > .tabbrowser-strip,
@@ -191,38 +191,38 @@
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox,/*[sinceFx4]*/
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox > scrollbox > .scrollbox-innerbox/*[sinceFx4]*/
 {
-	-moz-box-orient: vertical !important;
-	max-height: none !important;	
+  -moz-box-orient: vertical !important;
+  max-height: none !important;
 }
 
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbox-innerbox,
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox .scrollbox-innerbox/*[sinceFx4]*/ {
-	overflow-x: hidden !important;
-	overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 }
 
 /* Hide scrollbuttons since we're putting in a scrollbar */
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-up,
 #content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down-stack/*[Fx2only]*/,
-#content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down,/*[Fx3only]*/ 
+#content[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down,/*[Fx3only]*/
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-up,/*[sinceFx4]*/
 #TabsToolbar[vertitabbar] .tabbrowser-arrowscrollbox .scrollbutton-down/*[sinceFx4]*/ {
-	display: none !important;
+  display: none !important;
 }
 #content[vertitabbar] .tabbrowser-tab {
-	-moz-box-sizing: padding-box !important;
-	min-height: 24px !important;
-	max-height: 24px !important;
-	/*-moz-box-orient: horizontal !important;*/ /* not done by JS */
-	/*-moz-box-align: start !important;*/ /* not done by JS */
-	margin-top: 0 !important; /*[sinceFx3]*/
-	margin-bottom: 0 !important; /*[sinceFx3]*/
-	padding-top: 0 !important; /*[sinceFx3]*/
+  -moz-box-sizing: padding-box !important;
+  min-height: 24px !important;
+  max-height: 24px !important;
+  /*-moz-box-orient: horizontal !important;*/ /* not done by JS */
+  /*-moz-box-align: start !important;*/ /* not done by JS */
+  margin-top: 0 !important; /*[sinceFx3]*/
+  margin-bottom: 0 !important; /*[sinceFx3]*/
+  padding-top: 0 !important; /*[sinceFx3]*/
 }
 #TabsToolbar[vertitabbar] .tabbrowser-tab {
-	-moz-box-sizing: padding-box !important;
-	min-height: 27px !important;
-	max-height: 27px !important;
+  -moz-box-sizing: padding-box !important;
+  min-height: 27px !important;
+  max-height: 27px !important;
 }
 
 /* The All Tabs button is redundant in Firefox 2 since the vertical tab bar is
@@ -230,43 +230,43 @@
  * quickmenu, which is useful).
  */
 #content[vertitabbar] .tabs-alltabs-stack/*[Fx2only]*/ {
-	display: none; 
+  display: none;
 }
 
 /* Hide bottom border */
 #content[vertitabbar] .tabs-stack > vbox:first-child {
-	display: none !important;
+  display: none !important;
 }
 
 #content[vertitabbar] .tabbrowser-tabs,
 #TabsToolbar[vertitabbar] .tabbrowser-tabs/*[sinceFx4]*/ {
-	-moz-box-align: stretch !important; /* Make sure tabs fill width */
-	background-image: none !important; /* Background was designed for repeat-x, and looks ugly when tiled vertically */
+  -moz-box-align: stretch !important; /* Make sure tabs fill width */
+  background-image: none !important; /* Background was designed for repeat-x, and looks ugly when tiled vertically */
 }
 /* Cosmetic: hide tab side images */
 #content[vertitabbar] .tabbrowser-tab .tab-image-left/*[Fx2only] (and apparently Fx3/Mac)*/,
 #content[vertitabbar] .tabbrowser-tab .tab-image-right/*[Fx2only] (and apparently Fx3/Mac)*/ {
-	display: none !important;
+  display: none !important;
 }
 
 /* Hide splitter when tab bar is hidden */
 .tabbrowser-strip[collapsed="true"] + #tabkit-splitter:not([state="collapsed"]) {
-	visibility: collapse;
+  visibility: collapse;
 }
 
 /*Add by Pika Start*/
 #TabsToolbar[vertitabbar] .tabbrowser-tab {
-	-moz-box-align: stretch !important; 
-	max-width: 9999px !important;/* Make sure tabs fill width */
+  -moz-box-align: stretch !important;
+  max-width: 9999px !important;/* Make sure tabs fill width */
 }
 
 /* Make tab background-color solid */
 #TabsToolbar .tabbrowser-tabs .tabbrowser-tab {
-	background-color: -moz-Dialog !important;
+  background-color: -moz-Dialog !important;
 }
 /* Make tab bar background-color solid */
 #TabsToolbar .tabbrowser-tabs[solidbackground] {
-	background-color: -moz-Dialog !important;
+  background-color: -moz-Dialog !important;
 }
 
 /*Add by Pika End*/
@@ -276,16 +276,16 @@
  **************/
 
 #content:not([vertitabbar]) #tabkit-filtertabs-box {
-	-moz-box-orient: horizontal;
+  -moz-box-orient: horizontal;
 }
 #content[hidden="true"] #tabkit-filtertabs-box { /* Many users want it hidden */
-	display:none;
+  display:none;
 }
 #content:not([vertitabbar]) #tabkit-filtertabs-query:not([focused="true"]) {
-	width: 18px;
+  width: 18px;
 }
 #content:not([vertitabbar]) #tabkit-filtertabs-includetext {
-	display: none; /* I'd like to find a way of incorporating it, but have yet to find a neat way, so for now this option is only available when the tab bar is vertical */
+  display: none; /* I'd like to find a way of incorporating it, but have yet to find a neat way, so for now this option is only available when the tab bar is vertical */
 }
 
 /************************
@@ -293,28 +293,28 @@
  ************************/
 
 .tabbrowser-tab[groupcollapsed] {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* Show plus icon next to favicon for collapsed groups */
 .tabbrowser-tab[groupcollapsed] .tab-icon-image {
-	width: 32px;
-	border-left: 16px solid transparent;
-	background: none;
-	background-position: -13px 50%;
-	background-repeat: no-repeat;
-	background-image: url(chrome://tabkit/skin/twisty-clsd.png);
+  width: 32px;
+  border-left: 16px solid transparent;
+  background: none;
+  background-position: -13px 50%;
+  background-repeat: no-repeat;
+  background-image: url(chrome://tabkit/skin/twisty-clsd.png);
 }
 
 /* Override colors inherited from tabs */
 .tabs-alltabs-button > menupopup > menuitem:hover,
 .tabs-alltabs-button > menupopup > menuitem:hover > label {
-	color: HighlightText !important;
-	background-color: Highlight !important;
+  color: HighlightText !important;
+  background-color: Highlight !important;
 }
 
 #menu_tabkit-sortgroup label.menu-accel {
-	font-size: 80%;
+  font-size: 80%;
 }
 
 /******************************************
@@ -322,97 +322,97 @@
  ******************************************/
 
 .menu_tabkit-closeBeforeAfter-horizontal, .menu_tabkit-closeBeforeAfter-vertical {
-	display: none !important;
+  display: none !important;
 }
 /* Hide "Close Other Tabs" */
 #mainPopupSet[closebeforeafternotother] #context_closeOtherTabs {
-	display: none !important;
+  display: none !important;
 }
 #mainPopupSet[closebeforeafternotother] .menu_tabkit-closeBeforeAfter-horizontal {
-	display: -moz-box !important;
+  display: -moz-box !important;
 }
 #mainPopupSet[closebeforeafternotother][vertitabbar] .menu_tabkit-closeBeforeAfter-horizontal {
-	display: none !important;
+  display: none !important;
 }
 #mainPopupSet[closebeforeafternotother][vertitabbar] .menu_tabkit-closeBeforeAfter-vertical {
-	display: -moz-box !important;
+  display: -moz-box !important;
 }
 /******************
  * Multi-row tabs *
  ******************/
 
 #tabkit-tab-drop-indicator-bar {
-	height: 0 !important; /* Prevent moving mouse over indicator bar causing drop arrow to flash and drops to fail */
-	left: -5px !important; /* TODO=P3: [Fx3only] Hack as it was misaligned */
+  height: 0 !important; /* Prevent moving mouse over indicator bar causing drop arrow to flash and drops to fail */
+  left: -5px !important; /* TODO=P3: [Fx3only] Hack as it was misaligned */
 }
 #browser-stack #tabkit-tab-drop-indicator-bar {
-	left: 0 !important; /*[Fx2only] Undo hack*/
+  left: 0 !important; /*[Fx2only] Undo hack*/
 }
 #tabkit-tab-drop-indicator-bar[dragging="false"] { /*[Fx2only]*/
     display: none;
 }
 #tabkit-tab-drop-indicator-bar[collapsed="true"] { /*[Fx3+]*/
     display: none; /* So when switching from vertical tabs to multirow tabs the tabbar doesn't stay very tall */
-	visibility: visible; /* Removing the collapsed attribute caused the tab bar to scroll (?!?!), so now keep collapsed attribute permanently on and use display: -moz-box/none to show/hide it. */
+  visibility: visible; /* Removing the collapsed attribute caused the tab bar to scroll (?!?!), so now keep collapsed attribute permanently on and use display: -moz-box/none to show/hide it. */
 }
 #tabkit-tab-drop-indicator-bar > hbox {
-	margin-bottom: -14px !important; /* Prevent moving mouse over indicator bar causing drop arrow to flash and drops to fail */
+  margin-bottom: -14px !important; /* Prevent moving mouse over indicator bar causing drop arrow to flash and drops to fail */
 }
 
 .tabbrowser-tabs[multirow="true"] {
-	max-height: none !important;
+  max-height: none !important;
 }
 
 .tabbrowser-tabs[multirow] .tabbrowser-arrowscrollbox .scrollbutton-up,
 .tabbrowser-tabs[multirow] .tabbrowser-arrowscrollbox .scrollbutton-down-stack/*[Fx2only]*/,
 .tabbrowser-tabs[multirow] .tabbrowser-arrowscrollbox .scrollbutton-down/*[Fx3only]*/{
-	display: none !important;
+  display: none !important;
 }
 
 .tabbrowser-tabs[multirow="true"] .tabbrowser-arrowscrollbox .scrollbox-innerbox {
-	display: block !important; 
-	text-align: left !important;
+  display: block !important;
+  text-align: left !important;
 }
 
 .tabbrowser-tabs[multirow="true"][multirowscroll] .tabbrowser-arrowscrollbox .scrollbox-innerbox {
-	overflow-y: auto !important;
-	/* note that min/max-height will be set to 24*rows too */
+  overflow-y: auto !important;
+  /* note that min/max-height will be set to 24*rows too */
 }
 
 .tabbrowser-tabs[multirow] .tabbrowser-tab,
 .tabbrowser-tabs[multirow] .tabs-newtab-button/*[sinceFx3.5]*/ {
-	min-height: 24px !important;
-	max-height: 24px !important;
-	margin-top:           0   !important; /*[sinceFx3]*/
-	margin-bottom:        0   !important; /*[sinceFx3]*/
-	border-top-width:     1px !important; /*[sinceFx3.6]*/
-	border-bottom-width:  0   !important; /*[sinceFx3.6]*/
-	padding-top:          0   !important; /*[sinceFx3]*/
-	padding-bottom:       2px !important; /*[sinceFx3.6]*/
+  min-height: 24px !important;
+  max-height: 24px !important;
+  margin-top:           0   !important; /*[sinceFx3]*/
+  margin-bottom:        0   !important; /*[sinceFx3]*/
+  border-top-width:     1px !important; /*[sinceFx3.6]*/
+  border-bottom-width:  0   !important; /*[sinceFx3.6]*/
+  padding-top:          0   !important; /*[sinceFx3]*/
+  padding-bottom:       2px !important; /*[sinceFx3.6]*/
 }
 
 .tabbrowser-tabs[multirow] .tabs-newtab-button > image/*[sinceFx3.6]*/ {
-	height: 17px;
+  height: 17px;
 }
 
 /* Center All Tabs button */
 .tabbrowser-tabs .tabs-stack > vbox:last-child > hbox/*[Fx2only]*/,
 .tabbrowser-tabs .tabs-container/*[Fx3only]*/ {
-	-moz-box-align: center !important;
+  -moz-box-align: center !important;
 }
 .tabbrowser-tabs .tabs-alltabs-stack/*[Fx2only]*/,
 .tabbrowser-tabs .tabs-container > stack/*[Fx3only]*/ {
-	max-height: 29px !important;
+  max-height: 29px !important;
 }
 
 /* Hide bottom border as it doesn't work graphically with multiple rows of tabs TODO-P6: find a way to replace it? */
 .tabbrowser-tabs[multirow="true"] .tabs-bottom {
-	display: none !important;
+  display: none !important;
 }
 
 /* Override the default height rule for TabsToolbar in Mac version Firefox */
 #TabsToolbar {
-	height: auto !important;
+  height: auto !important;
 }
 
 /*************************
@@ -420,12 +420,12 @@
  *************************/
 
 #main-window[scrollbarsnotarrows] arrowscrollbox[orient="vertical"] > scrollbox > .scrollbox-innerbox {
-	overflow-x: hidden !important;
-	overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 }
 #main-window[scrollbarsnotarrows] arrowscrollbox[orient="vertical"] > .autorepeatbutton-up,
 #main-window[scrollbarsnotarrows] arrowscrollbox[orient="vertical"] > .autorepeatbutton-down {
-	display: none !important;
+  display: none !important;
 }
 
 /*****************************
@@ -433,11 +433,11 @@
  *****************************/
 
 #main-window[persona] {
-	background-repeat: repeat-y !important; /* Especially for vertical tab bar */
+  background-repeat: repeat-y !important; /* Especially for vertical tab bar */
 }
 #main-window[persona] .tabbrowser-tab {
-	opacity: 0.9 !important; /* Instead of default 0.6 */
+  opacity: 0.9 !important; /* Instead of default 0.6 */
 }
 #main-window[persona] .tabbrowser-tab[selected="true"] {
-	opacity: 1.0 !important; /* Instead of default 0.8 */
+  opacity: 1.0 !important; /* Instead of default 0.8 */
 }
