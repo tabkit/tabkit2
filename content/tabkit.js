@@ -2894,7 +2894,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
 
-    this.closeChildren(contextTab);
+    tk.closeChildren(contextTab);
     gBrowser.removeTab(contextTab);
   };
   this.closeChildren = function closeChildren(contextTab) {
