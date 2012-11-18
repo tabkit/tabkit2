@@ -5996,7 +5996,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     var uris = menuItem.tabkit_selectedLinks.filter(function __uriSecurityCheck(uri) {
       // URL Loading Security Check
       try {
-        _sm.checkLoadURIStr(menuItem.tabkit_linkSource, uri, _sm.STANDARD);
+        var linkSourceURI = _ios.newURI(menuItem.tabkit_linkSource, null, null);
+        var linkSourcePrinciple = _sm.getCodebasePrincipal(linkSourceURI);
+
+        _sm.checkLoadURIStrWithPrincipal(linkSourcePrinciple, uri, _sm.STANDARD);
         return true;
       }
       catch (ex) {
