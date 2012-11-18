@@ -995,8 +995,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   hook[3] : as hook[1]
   hook[4] : as hook[2]
   so on...*/
-    this.addMethodHook = function addMethodHook(hook) {
-        try {
+  this.addMethodHook = function addMethodHook(hook) {
+    try {
       if (hook.length % 2 != 1)
         tk.dump("Who use addMethodHook without reading the description!\n"+hook[0]+"\n"+hook[1]+"\n"+hook[2]+"\n", null);
 
@@ -1020,7 +1020,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       // var method = namespaces.pop();
       // var code = object[method].toString();
 
-      for (var i = 1;i < hook.length;) {
+      for (var i = 1; i < hook.length; ) {
         var newCode = code.replace(hook[i++], hook[i++]);
         if (newCode == code) {
           tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i-2]) + "\nwith:\n" + uneval(hook[i-1]));
