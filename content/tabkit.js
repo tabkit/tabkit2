@@ -2850,6 +2850,24 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     if (gBrowser.selectedTab.hidden) // visibility of a tab
       gBrowser.selectedTab = contextTab;
   };
+  // Cancel all the indent in a group
+  // Read updateIndents to see how indent work
+  this.flattenGroup = function flattenGroup(contextTab) {
+    if (!contextTab)
+      contextTab = gBrowser.selectedTab;
+
+    var group = tk.getGroupFromTab(contextTab);
+    if (!group) {
+      tk.dump("flattenGroup: Group was null for tab in pos " + contextTab._tPos);
+      return;
+    }
+
+    for each (var tab in group) {
+      tab.removeAttribute("possibleparent");
+      tab.treeLevel = 0;
+      tab.style.marginLeft = "";
+    }
+  };
   this.bookmarkGroup = function bookmarkGroup(contextTab) {
     // TODO=P3: GCODE Drag group/subtree onto bookmarks toolbar should create bookmark folder
     if (!contextTab)
