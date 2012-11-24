@@ -3,10 +3,21 @@ require 'zip/zip'
 
 
 desc "Tabkit build script"
-task :build , :version do |t, args|
+task :build, :version do |t, args|
+
+  ### Version
 
   version = args[:version]
-  version ||= Time.now.strftime("%F") # incase someone forgot to put in version or lazy, put in today's day
+
+  # Default read file from install.rdf
+  if version.nil?
+    meta_file = File.read('install.rdf')
+    version_from_file = meta_file.match(/<em:version>([\w\.]+)<\/em:version>/i)[1] # Match data in brackets start at one
+
+    version = version_from_file
+  end
+
+  ### Files to include
 
   # ["content/bindings.xml"]
   everything = Dir.glob "**/*"
@@ -19,14 +30,29 @@ task :build , :version do |t, args|
   input_filenames = included
   no_of_files = input_filenames.size
 
+  ### Folder
+
   path = "product"
   # Create Dir if not exist
   Dir.mkdir(path) unless File.exists?(path)
 
-  zipfile_name = "tabkit2 #{version}.xpi"
-  puts "About to build #{zipfile_name} with #{no_of_files} files"
+  ### File name
 
-  Zip::ZipFile.open(File.join(path, zipfile_name), Zip::ZipFile::CREATE) do |zipfile|
+  product_filename = "tabkit2 #{version}"
+  product_ext = '.xpi'
+  # To avoid override, add time after version
+  if File.exists?(File.join(path, "#{product_filename}#{product_ext}"))
+    product_filename << " - "
+    product_filename << Time.now.strftime("%F")
+  end
+
+  final_filename = "#{product_filename}#{product_ext}"
+
+  ### Zip
+
+  puts "About to build #{final_filename} with #{no_of_files} files"
+
+  Zip::ZipFile.open(File.join(path, final_filename), Zip::ZipFile::CREATE) do |zipfile|
     input_filenames.each do |filename|
       # Two arguments:
       # - The name of the file as it will appear in the archive
@@ -35,7 +61,7 @@ task :build , :version do |t, args|
     end
   end
 
-  puts "#{zipfile_name} Built"
+  puts "#{final_filename} Built"
 end
 
 task default: :build
