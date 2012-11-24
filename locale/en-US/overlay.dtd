@@ -83,6 +83,10 @@
 <!ENTITY expand.accesskey "E">
 <!ENTITY expand.acceltext "(E)">
 
+<!ENTITY flatten.label "Flatten Group">
+<!ENTITY flatten.accesskey "F">
+<!ENTITY flatten.acceltext "(F)">
+
 <!ENTITY bookmark.label "Bookmark Group">
 <!ENTITY bookmark.accesskey "B">
 <!ENTITY bookmark.acceltext "(B)">

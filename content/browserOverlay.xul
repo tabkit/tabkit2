@@ -42,6 +42,7 @@
 
 
   <command id="cmd_tabkit-sortgroup-group-collapseExpand" oncommand="tabkit.toggleGroupCollapsed(TabContextMenu.contextTab);"/>
+  <command id="cmd_tabkit-sortgroup-group-flatten" oncommand="tabkit.flattenGroup(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-bookmark" oncommand="tabkit.bookmarkGroup(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-close" oncommand="tabkit.closeGroup(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-closeSubGroup" oncommand="tabkit.closeSubGroup(TabContextMenu.contextTab);"/>
@@ -216,6 +217,12 @@
                 acceltext="&expand.acceltext;"
                 groupsonly="true"
                 collapsed="true"/>
+      <menuitem id="menu_tabkit-sortgroup-group-flatten"
+                label="&flatten.label;"
+                accesskey="&flatten.accesskey;"
+                command="cmd_tabkit-sortgroup-group-flatten"
+                acceltext="&flatten.acceltext;"
+                groupsonly="true"/>
       <menuitem id="menu_tabkit-sortgroup-group-bookmark"
                 label="&bookmark.label;"
                 accesskey="&bookmark.accesskey;"
