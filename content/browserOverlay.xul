@@ -64,7 +64,7 @@
   <menu id="menu_tabkit-sortgroup"
         label="&tabcontextmenu.label;"
         accesskey="&tabcontextmenu.accesskey;">
-    <menupopup onpopupshowing="tabkit.updateSortGroupMenu(event, this);">
+    <menupopup id="menupopup_tabkit-sortgroup">
       <menu id="menu_tabkit-sortgroup-global"
             label="&global.label;"
             accesskey="&global.accesskey;">

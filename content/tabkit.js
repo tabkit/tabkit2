@@ -1217,6 +1217,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     gBrowser.tabContainer.addEventListener("click", tk.sortgroup_onClickTab, true);
     gBrowser.tabContainer.addEventListener("dblclick", tk.sortgroup_onDblclickTab, true);
 
+    document.getElementById("menupopup_tabkit-sortgroup").addEventListener("popupshowing", tk.updateSortGroupMenu, true);
+
     tk.addPrefListener("forceThemeCompatibility", tk.detectTheme);
     tk.addPrefListener("colorTabNotLabel", tk.detectTheme);
     tk.addPrefListener("minSaturation", tk.regenSaturationLightness);
@@ -2361,10 +2363,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
   };
 
-
-  this.updateSortGroupMenu = function updateSortGroupMenu(event, popup) {
+  this.updateSortGroupMenu = function updateSortGroupMenu(event) {
     if (event.target != event.currentTarget) return;
 
+    var popup = event.target;
     var contextTab = gBrowser.mContextTab ? gBrowser.mContextTab : gBrowser.selectedTab;
 
     // Set appropriate text for Mark As Read/Unread
