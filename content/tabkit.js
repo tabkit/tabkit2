@@ -876,7 +876,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   /// Initialisation:
   this.preInitPrefsObservers = function preInitPrefsObservers(event) {
     // Make sure we can use addObserver on this
-    gPrefService.QueryInterface(Ci.nsIPrefBranch2);
+    gPrefService.QueryInterface(Ci.nsIPrefBranch);
 
     // Do this in preInit just in case something expects their init prefListener to work 'instantly'
     tk.addGlobalPrefListener(PREF_BRANCH, tk.localPrefsListener);
