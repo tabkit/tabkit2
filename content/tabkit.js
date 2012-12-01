@@ -1381,8 +1381,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     // And an attribute based related tab source:
     var reportPhishing = document.getElementById("menu_HelpPopup_reportPhishingtoolmenu");
-    if (reportPhishing)
-      reportPhishing.setAttribute("oncommand", 'tabkit.addingTab("related"); try {' + reportPhishing.getAttribute("oncommand") + '} finally { tabkit.addingTabOver(); }');
+    if (reportPhishing) {
+      reportPhishing.
+        setAttribute("oncommand",
+                    'tabkit.addingTab("related"); try {' + reportPhishing.getAttribute("oncommand") + '} finally { tabkit.addingTabOver(); }');
+    }
+
 
     // And an attribute based history tab source:
     var goMenu = document.getElementById("history-menu");
@@ -5422,15 +5426,24 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     textbox.setAttribute("tooltiptext", strings.getString("search_tabs"));
     textbox.setAttribute("clickSelectsAll", "true");
     textbox.setAttribute("newlines", "replacewithspaces");
-    textbox.setAttribute("oncommand", "tabkit.filterTabs(this.value)");
-    textbox.setAttribute("oninput", "document.getElementById('tabkit-filtertabs-includetext').collapsed = !this.value;");
-    textbox.setAttribute("onblur", "document.getElementById('tabkit-filtertabs-includetext').collapsed = !this.value;"); // Clearing the query doesn't always trigger an input event, so additionally check when it gets blurred
+    textbox.addEventListener("command", function() {
+      tabkit.filterTabs(this.value)
+    });
+    textbox.addEventListener("input", function() {
+      document.getElementById('tabkit-filtertabs-includetext').collapsed = !this.value;
+    });
+    textbox.addEventListener("blur", function() {
+      // Clearing the query doesn't always trigger an input event, so additionally check when it gets blurred
+      document.getElementById('tabkit-filtertabs-includetext').collapsed = !this.value;
+    });
     vbox.appendChild(textbox);
 
     var checkbox = document.createElementNS(XUL_NS, "checkbox");
     checkbox.setAttribute("id", "tabkit-filtertabs-includetext");
     checkbox.setAttribute("label", strings.getString("include_page_text"));
-    checkbox.setAttribute("oncommand", "tabkit.filterTabs(document.getElementById('tabkit-filtertabs-query').value)");
+    checkbox.addEventListener("command", function() {
+      tabkit.filterTabs(document.getElementById('tabkit-filtertabs-query').value)
+    });
     checkbox.setAttribute("collapsed", "true");
     vbox.appendChild(checkbox);
 
@@ -6175,7 +6188,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       window.tkprompt = function tkprompt() {
         quickprompt(tabkit._eval, "Tab Kit QuickPrompt", help(), "");
       };
-      document.getElementById("cmd_quickPrompt").setAttribute("oncommand", "tkprompt()");
+      document.getElementById("cmd_quickPrompt").addEventListener("command", function() {
+        tkprompt();
+      });
     }
   };
   this.preInitListeners.push(this.preInitDebugAids); */
