@@ -67,7 +67,8 @@
     <menupopup id="menupopup_tabkit-sortgroup">
       <menu id="menu_tabkit-sortgroup-global"
             label="&global.label;"
-            accesskey="&global.accesskey;">
+            accesskey="&global.accesskey;"
+            acceltext="&global.acceltext;">
         <menupopup>
           <menuitem id="menu_tabkit-sortgroup-sortByUri"
                     label="&sortByUri.label;"
@@ -131,7 +132,8 @@
 
       <menu id="menu_tabkit-sortgroup-newtabs"
             label="&newTabs.label;"
-            accesskey="&newTabs.accesskey;">
+            accesskey="&newTabs.accesskey;"
+            acceltext="&newTabs.acceltext;">
         <menupopup>
           <menuitem id="menu_tabkit-sortgroup-newtabs-lastSort"
                     label="&lastSort.label;"

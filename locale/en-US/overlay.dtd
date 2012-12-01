@@ -3,7 +3,8 @@
 
 
 <!ENTITY global.label "Global Actions">
-<!ENTITY global.accesskey "O">
+<!ENTITY global.accesskey "A">
+<!ENTITY global.acceltext "(A)">
 
 
 <!ENTITY sortByUri.label "Sort Tabs By Address">
@@ -35,7 +36,9 @@
 
 
 <!ENTITY newTabs.label "New Tabs...">
-<!ENTITY newTabs.accesskey "N">
+<!ENTITY newTabs.accesskey "M">
+<!ENTITY newTabs.acceltext "(M)">
+
 
 <!ENTITY lastSort.label "Are Ordered By Last Sort">
 <!ENTITY lastSort.accesskey "S">
