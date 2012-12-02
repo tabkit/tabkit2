@@ -132,3 +132,16 @@
 
 <!ENTITY closeTabsBelow.label "Close Tabs Below">
 <!ENTITY closeTabsBelow.accesskey "L">
+
+
+<!ENTITY openSelectedTextLinks.label "Open Selected Text Links">
+<!ENTITY openSelectedTextLinks.accesskey "P">
+<!ENTITY openSelectedTextLinks.acceltext "P">
+
+<!ENTITY openSelectedLinks.label "Open Selected Links">
+<!ENTITY openSelectedLinks.accesskey "O">
+<!ENTITY openSelectedLinks.acceltext "O">
+
+<!ENTITY openTopSelectedLinks.label "Open Main Selected Links">
+<!ENTITY openTopSelectedLinks.accesskey "M">
+<!ENTITY openTopSelectedLinks.acceltext "M">
