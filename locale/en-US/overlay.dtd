@@ -4,7 +4,7 @@
 
 <!ENTITY global.label "Global Actions">
 <!ENTITY global.accesskey "A">
-<!ENTITY global.acceltext "(A)">
+<!ENTITY global.acceltext "A">
 
 
 <!ENTITY sortByUri.label "Sort Tabs By Address">
@@ -37,7 +37,7 @@
 
 <!ENTITY newTabs.label "New Tabs...">
 <!ENTITY newTabs.accesskey "M">
-<!ENTITY newTabs.acceltext "(M)">
+<!ENTITY newTabs.acceltext "M">
 
 
 <!ENTITY lastSort.label "Are Ordered By Last Sort">
@@ -57,65 +57,65 @@
 
 <!ENTITY newTabHere.label "New Tab Here">
 <!ENTITY newTabHere.accesskey "N">
-<!ENTITY newTabHere.acceltext "(N)">
+<!ENTITY newTabHere.acceltext "N">
 
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY duplicateTab.accesskey "D">
-<!ENTITY duplicateTab.acceltext "(D)">
+<!ENTITY duplicateTab.acceltext "D">
 
 <!ENTITY makeGroup.label "Group Tabs From Here To Current">
 <!ENTITY makeGroup.accesskey "T">
-<!ENTITY makeGroup.acceltext "(T)">
+<!ENTITY makeGroup.acceltext "T">
 
 <!ENTITY toggleProtected.label "Protect Tab">
 <!ENTITY toggleProtected.accesskey "P">
-<!ENTITY toggleProtected.acceltext "(P)">
+<!ENTITY toggleProtected.acceltext "P">
 
 <!ENTITY toggleUnread.label "Mark As Read">
 <!ENTITY toggleUnread.accesskey "R">
-<!ENTITY toggleUnread.acceltext "(R)">
+<!ENTITY toggleUnread.acceltext "R">
 
 
 <!ENTITY group.caption "This Group:">
 
 <!ENTITY collapse.label "Collapse Group">
 <!ENTITY collapse.accesskey "C">
-<!ENTITY collapse.acceltext "(C)">
+<!ENTITY collapse.acceltext "C">
 
 <!ENTITY expand.label "Expand Group">
 <!ENTITY expand.accesskey "E">
-<!ENTITY expand.acceltext "(E)">
+<!ENTITY expand.acceltext "E">
 
 <!ENTITY flatten.label "Flatten Group">
 <!ENTITY flatten.accesskey "F">
-<!ENTITY flatten.acceltext "(F)">
+<!ENTITY flatten.acceltext "F">
 
 <!ENTITY bookmark.label "Bookmark Group">
 <!ENTITY bookmark.accesskey "B">
-<!ENTITY bookmark.acceltext "(B)">
+<!ENTITY bookmark.acceltext "B">
 
 <!ENTITY closeGroup.label "Close Group">
 <!ENTITY closeGroup.accesskey "G">
 <!ENTITY closeGroup.modifiers "alt shift">
 <!ENTITY closeGroup.key "W">
-<!ENTITY closeGroup.acceltext "(G); Alt+Shift+W; Ctrl+Middleclick">
+<!ENTITY closeGroup.acceltext "G; Alt+Shift+W; Ctrl+Middleclick">
 
 <!ENTITY closeSubGroup.label "Close Sub Group">
 <!ENTITY closeSubGroup.accesskey "S">
-<!ENTITY closeSubGroup.acceltext "(S)">
+<!ENTITY closeSubGroup.acceltext "S">
 
 <!ENTITY closeChildren.label "Close Children">
 <!ENTITY closeChildren.accesskey "H">
-<!ENTITY closeChildren.acceltext "(H); Ctrl+Shift+Middleclick">
+<!ENTITY closeChildren.acceltext "H; Ctrl+Shift+Middleclick">
 
 <!ENTITY ungroup.label "Ungroup Group">
 <!ENTITY ungroup.accesskey "U">
-<!ENTITY ungroup.acceltext "(U)">
+<!ENTITY ungroup.acceltext "U">
 
 
 <!ENTITY options.label "Options">
 <!ENTITY options.accesskey "O">
-<!ENTITY options.acceltext "(O)">
+<!ENTITY options.acceltext "O">
 
 
 <!ENTITY selection.caption "Selected Tabs:">
