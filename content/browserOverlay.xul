@@ -303,19 +303,19 @@ Related code in JS file is not removed until stable version is produced MEDIC!--
             accesskey="P"
             hidden="true"
             insertafter="context-openlinkintab"
-            oncommand="window.setTimeout(tabkit.openSelectedLinks, 1, this);"/>
+            oncommand="tabkit.openSelectedLinks(this);"/>
   <menuitem id="context_tabkit-openselectedlinks"
             label="Open Selected Links"
             accesskey="O"
             hidden="true"
             insertafter="context-openlinkintab"
-            oncommand="window.setTimeout(tabkit.openSelectedLinks, 1, this);"/>
+            oncommand="tabkit.openSelectedLinks(this);"/>
   <menuitem id="context_tabkit-opentopselectedlinks"
             label="Open Main Selected Links"
             accesskey="M"
             hidden="true"
             insertafter="context-openlinkintab"
-            oncommand="window.setTimeout(tabkit.openSelectedLinks, 1, this);"/>
+            oncommand="tabkit.openSelectedLinks(this);"/>
 </popup>
 
 
