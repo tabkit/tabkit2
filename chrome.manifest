@@ -8,11 +8,6 @@ overlay	chrome://browser/content/history/history-panel.xul	chrome://tabkit/conte
 overlay	chrome://browser/content/places/places.xul	chrome://tabkit/content/globalOverlay.xul
 
 locale	tabkit	en-US locale/en-US/
-locale	tabkit	zh-CN locale/zh-CN/
-locale	tabkit	zh-TW locale/zh-TW/
-locale	tabkit	ru locale/ru/
-locale	tabkit	de locale/de/
-locale	tabkit	fr-FR locale/fr-FR/
 
 skin	tabkit	classic/1.0	skin/classic/
 
