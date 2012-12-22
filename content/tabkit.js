@@ -773,6 +773,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     window.setTimeout(function __runPostInitListeners() {
       // Run module specific late initialisation code (after all init* listeners, and after most extensions):
+      tk.log('__runPostInitListeners works');
       for each (var listener in tk.postInitListeners) {
         listener(event);
       }
@@ -1034,7 +1035,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       // object[method] = new function(code);
     }
     catch (ex) {
-      tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex + "\nCode: "+code.substring(0,150), ex);
+      tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex + "\nCode: "+(code && code.substring(0,150)), ex);
     }
   };
 
