@@ -1314,22 +1314,24 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       'gBrowser.addTab',
 
       't.dispatchEvent(evt);',
-      'if (tabkit.sourceTypes.length) { \
-        evt.stack = [ arguments.callee ]; \
-        evt.stackDepth = 0; \
-        while (evt.stackDepth < tabkit.sourceTypes[0].depth) { \
-          var prev = evt.stack[evt.stackDepth].caller; \
-          if (prev) { \
-            evt.stack.push(prev); \
-            evt.stackDepth++; \
+      'try { \
+        if (tabkit.sourceTypes.length) { \
+          evt.stack = [ arguments.callee ]; \
+          evt.stackDepth = 0; \
+          while (evt.stackDepth < tabkit.sourceTypes[0].depth) { \
+            var prev = evt.stack[evt.stackDepth].caller; \
+            if (prev) { \
+              evt.stack.push(prev); \
+              evt.stackDepth++; \
+            } \
+            else { \
+              break; \
+            } \
           } \
-          else { \
-            break; \
-          } \
+          evt.shouldBeFromSS = false; \
+          if (aSkipAnimation) {evt.shouldBeFromSS = true;} \
         } \
-        evt.shouldBeFromSS = false; \
-        if (aSkipAnimation) {evt.shouldBeFromSS = true;} \
-      } \
+      } catch(e) {} \
       $&'
     ]);
 
@@ -1859,7 +1861,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       }
     }
     else if (!("fromInitSortingAndGrouping" in event)) {
-      if (event.stack) {
+      if (event.stack && event.stackDepth) {
         var stack = event.stack;
         var depth = event.stackDepth;
         /*
@@ -5028,13 +5030,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       var searchBox = document.getElementById("tabkit-filtertabs-box");
       var checkPtI = 1;
       var menubar = document.getElementById("toolbar-menubar");
-      tk.debug("searchBox chk pt " + checkPtI++);
-      tk.debug("searchBox.previousSibling = "+(searchBox?searchBox.previousSibling:null));
-      tk.debug("searchBox.nextSibling = "+(searchBox?searchBox.nextSibling:null));
-      menubar.parentNode.insertBefore(tabsToolbar, menubar);//search box bug source!!
-      tk.debug("searchBox chk pt " + checkPtI++);
-      tk.debug("searchBox.previousSibling = "+(searchBox?searchBox.previousSibling:null));
-      tk.debug("searchBox.nextSibling = "+(searchBox?searchBox.nextSibling:null));
+      menubar.parentNode.insertBefore(tabsToolbar, menubar);
     }
     else if (pos == tk.Positions.BOTTOM) {
       a = document.getElementById("browser-bottombox");
