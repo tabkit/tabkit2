@@ -3678,7 +3678,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   };
 
   this.postInitAllTabsMenuColors = function postInitAllTabsMenuColors(event) {
-    _tabContainer.mAllTabsPopup.addEventListener("popupshowing", tk.colorAllTabsMenu, false);
+
+    // gBrowser.tabContainer.mAllTabsPopup could be null
+    if (_tabContainer.mAllTabsPopup) {
+      _tabContainer.mAllTabsPopup.addEventListener("popupshowing", tk.colorAllTabsMenu, false);
+    }
+
     _tabContainer.addEventListener("TabClose", tk.colorAllTabsMenu, false);
     _tabContainer.addEventListener("TabSelect", tk.colorAllTabsMenu, false);
     _tabContainer.addEventListener("TabSelect", tk.setTabsColorBlack, false);
@@ -4683,14 +4688,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       '(aTriggeringEvent.altKey ^ gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.addressBar"))'
     ]);//}
 
-    // [Fx4+]
     if ("PlacesUIUtils" in window) {
+      // Let tabkit determine the place to open a tab
       tk.addMethodHook([
         'PlacesUIUtils.openNodeIn',
 
         'this._openNodeIn(aNode, aWhere, window);',
         'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(aWhere, aNode), window);'
       ]);
+
+      // Let tabkit determine the place to open a tab
       tk.addMethodHook([
         'PlacesUIUtils.openNodeWithEvent',
 
@@ -4698,6 +4705,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(window.whereToOpenLink(aEvent), aNode), window);'
       ]);
 
+      // Check whether the node is a bookmark and user does not prefer opening "places" in new tab
+      // which should be opened as a web panel
       tk.addMethodHook([
         'PlacesUIUtils._openNodeIn',
 
