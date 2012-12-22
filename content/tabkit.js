@@ -6091,10 +6091,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     );
 
     // Disable the sliding effect of tab dragging until here is an preference
-    tk.prependMethodCode(
-      'gBrowser.tabContainer._animateTabMove',
-      'this._handleTabSelect(); return;'
-    );
+    if (gBrowser.tabContainer._animateTabMove) {
+      tk.prependMethodCode(
+        'gBrowser.tabContainer._animateTabMove',
+        'this._handleTabSelect(); return;'
+      );
+    }
 
     //Workaround for Issue 9
     tk.mapBoolPrefToAttribute("solidBackground", _tabContainer, "solidbackground");
