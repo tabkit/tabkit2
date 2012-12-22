@@ -48,6 +48,12 @@ task :build, :version do |t, args|
 
   final_filename = "#{product_filename}#{product_ext}"
 
+  # Still exists? properly development use, just overwrite
+  if File.exists?(File.join(path, final_filename))
+    puts "Deleting should be development version"
+    File.delete(File.join(path, final_filename))
+  end
+
   ### Zip
 
   puts "About to build #{final_filename} with #{no_of_files} files"
