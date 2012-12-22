@@ -1321,8 +1321,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       'gBrowser.addTab',
 
       't.dispatchEvent(evt);',
-      'try { \
-        if (tabkit.sourceTypes.length) { \
+      'if (tabkit.sourceTypes.length) { \
+        try { \
           evt.stack = [ arguments.callee ]; \
           evt.stackDepth = 0; \
           while (evt.stackDepth < tabkit.sourceTypes[0].depth) { \
@@ -1335,10 +1335,17 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
               break; \
             } \
           } \
-          evt.shouldBeFromSS = false; \
-          if (aSkipAnimation) {evt.shouldBeFromSS = true;} \
         } \
-      } catch(e) {} \
+        catch(ex) { \
+          tabkit.debug("Cannot use arguments", ex); \
+        } \
+        finally { \
+          evt.shouldBeFromSS = false; \
+          if (aSkipAnimation) { \
+            evt.shouldBeFromSS = true; \
+          } \
+        } \
+      } \
       $&'
     ]);
 
@@ -1868,7 +1875,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       }
     }
     else if (!("fromInitSortingAndGrouping" in event)) {
-      if (event.stack && event.stackDepth) {
+      if (event.stack) {
         var stack = event.stack;
         var depth = event.stackDepth;
         /*
