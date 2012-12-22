@@ -5727,7 +5727,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       return;
 
     var name = event.originalTarget.localName;
-    tk.log(name);
     if (!_prefs.getBoolPref("gestures.tabWheelTabSwitch") || (name == "scrollbar" || name == "scrollbarbutton" || name == "slider" || name == "thumb")) {
       // Scrollwheeling above an overflow scrollbar should still scroll 3 lines if vertical or 2 lines if multi-row tab bar
       var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
