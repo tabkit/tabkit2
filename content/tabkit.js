@@ -1016,7 +1016,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       // if (hook[1])
         // window[hook[1]] + "=" + hook[0]);
 
-      var code = eval(hook[0] + ".toString()");
+      // try to get the code string, but it might not exist
+      try {
+        var code = eval(hook[0] + ".toString()");
+      } catch (ex) {
+        tk.debug("Method target: \"" + hook[0] + "\" does not exist.", ex);
+        return;
+      }
+
       // var method = namespaces.pop();
       // var code = object[method].toString();
 
