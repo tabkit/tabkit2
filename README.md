@@ -12,7 +12,7 @@ The name for the new(not quite) extension is *TabKit 2nd Edition*(You can still 
 
 ## Download / Installation
 * [Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/)  
-* [Alternative download (use this if Mozilla hasn't approved the new version yet)](https://github.com/PikachuEXE/tabkit2/downloads)  
+* [Alternative download (Beta versions and releases not approved yet)](http://www.mediafire.com/?i17mt3o435ngm)  
 If you download as a file, then you have to go to Firefox Addon Page, then press the gear button and choose `Install Addon from file` something
 
 ## Issue
