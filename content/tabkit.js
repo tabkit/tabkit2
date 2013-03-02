@@ -1353,15 +1353,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       'nsContextMenu.prototype.openLinkInTab',//{
       'nsContextMenu.prototype.openFrameInTab',
       'nsContextMenu.prototype.viewBGImage',
-      'nsContextMenu.prototype.addDictionaries'
+      'nsContextMenu.prototype.addDictionaries',
+      'nsContextMenu.prototype.viewMedia'
       // And nsBrowserAccess.prototype.openURI if !isExternal
       // And <menuitem id="menu_HelpPopup_reportPhishingtoolmenu">
       // See also sourceTypes
     ];//}
-    if ('viewMedia' in nsContextMenu.prototype) // [Fx3.5+]
-      relatedTabSources.push('nsContextMenu.prototype.viewMedia');
-    else // [Fx3-]
-      relatedTabSources.push('nsContextMenu.prototype.viewImage');
 
     var newTabSources = [
       // See sourceTypes
