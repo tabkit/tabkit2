@@ -1183,18 +1183,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   });
 
   this.__defineGetter__("autoGroupNewTabs", function __get_autoGroupNewTabs() {
-    var bool = tk.getWindowValue("autoGroupNewTabs");
-    if (bool != "") {
-      return bool == "true" ? true : false;
-    }
-    else {
-      bool = _prefs.getBoolPref("autoGroupNewTabs");
-      tk.setWindowValue("autoGroupNewTabs", bool);
-      return bool;
-    }
+    return _prefs.getBoolPref("autoGroupNewTabs");
   });
   this.__defineSetter__("autoGroupNewTabs", function __set_autoGroupNewTabs(bool) {
-    tk.setWindowValue("autoGroupNewTabs", bool);
     _prefs.setBoolPref("autoGroupNewTabs", bool);
     return bool;
   });

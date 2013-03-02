@@ -125,7 +125,7 @@
 <!ENTITY grouping.title "Grouping">
 
 <!ENTITY groupingTabs.caption "Grouping Tabs">
-<!ENTITY autoGroupNewTabs.label "Automatically group new tabs*">
+<!ENTITY autoGroupNewTabs.label "Automatically group new tabs">
 <!ENTITY autoGroupNewTabs.accesskey "A">
 <!ENTITY lastActiveGrouping.label "Active grouping*:">
 <!ENTITY lastActiveGrouping.accesskey "G">
