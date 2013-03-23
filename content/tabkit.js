@@ -1160,12 +1160,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   });
 
   this.__defineGetter__("newTabPosition", function __get_newTabPosition() {
-    var position = tk.getWindowValue("newTabPosition");
-    if (position !== "")
-      return Number(position);
-    position = _prefs.getIntPref("newTabPosition");
+    var position = _prefs.getIntPref("newTabPosition");
     if (position >= 0 && position <= 2) {
-      tk.setWindowValue("newTabPosition", position);
       return position;
     }
     else {
@@ -1175,11 +1171,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   });
   this.__defineSetter__("newTabPosition", function __set_newTabPosition(position) {
     if (position >= 0 && position <= 2) {
-      tk.setWindowValue("newTabPosition", position);
       _prefs.setIntPref("newTabPosition", position);
     }
-    else tk.dump("newTabPosition - invalid position: " + position);
-    return position;
+    else {
+      tk.dump("newTabPosition - invalid position: " + position);
+      return position;
+    }
   });
 
   this.__defineGetter__("autoGroupNewTabs", function __get_autoGroupNewTabs() {

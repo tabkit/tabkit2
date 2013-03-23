@@ -139,7 +139,7 @@
 <!ENTITY collapsedGroupVisibleTab.first.label "First tab in group">
 
 <!ENTITY positioningTabs.caption "Positioning Tabs">
-<!ENTITY newTabPosition.label "Ungrouped new tabs should be positioned*">
+<!ENTITY newTabPosition.label "Ungrouped new tabs should be positioned">
 <!ENTITY newTabPosition.accesskey "N">
 <!ENTITY newTabPosition.lastSort.label "according to the last sort">
 <!ENTITY newTabPosition.nextToCurrent.label "next to the current tab">
