@@ -1108,40 +1108,40 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   /// Globals:
   this.__defineGetter__("activeSort", function __get_activeSort() {
-    var sortName = tk.getWindowValue("activeSort");
-    if (!sortName) {
-      sortName = _prefs.getCharPref("lastActiveSort");
-      if (!sortName in tk.Sorts)
-        sortName = "creation";
-      tk.setWindowValue("activeSort", sortName);
+    var sortName = _prefs.getCharPref("lastActiveSort");
+
+    if (!sortName in tk.Sorts) {
+      sortName = "creation";
     }
+
     return sortName;
   });
   this.__defineSetter__("activeSort", function __set_activeSort(sortName) {
     if (sortName in tk.Sorts) {
-      tk.setWindowValue("activeSort", sortName);
       _prefs.setCharPref("lastActiveSort", sortName);
     }
-    else tk.dump("activeSort - invalid sort name: " + sortName);
+    else {
+      tk.dump("activeSort - invalid sort name: " + sortName);
+    }
     return sortName;
   });
 
   this.__defineGetter__("activeGrouping", function __get_activeGrouping() {
-    var groupingName = tk.getWindowValue("activeGrouping");
-    if (!groupingName) {
-      groupingName = _prefs.getCharPref("lastActiveGrouping");
-      if (!groupingName in tk.Groupings)
-        groupingName = "none";
-      tk.setWindowValue("activeGrouping", groupingName);
+    var groupingName = _prefs.getCharPref("lastActiveGrouping");
+
+    if (!groupingName in tk.Groupings) {
+      groupingName = "none";
     }
+
     return groupingName;
   });
   this.__defineSetter__("activeGrouping", function __set_activeGrouping(groupingName) {
     if (groupingName in tk.Groupings) {
-      tk.setWindowValue("activeGrouping", groupingName);
       _prefs.setCharPref("lastActiveGrouping", groupingName);
     }
-    else tk.dump("activeGrouping - invalid grouping name: " + groupingName);
+    else {
+      tk.dump("activeGrouping - invalid grouping name: " + groupingName);
+    }
     return groupingName;
   });
 
@@ -1155,7 +1155,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     if (positionName in tk.RelativePositions) {
       _prefs.setCharPref("openRelativePosition", positionName);
     }
-    else tk.dump("openRelativePosition - invalid position name: " + positionName);
+    else {
+      tk.dump("openRelativePosition - invalid position name: " + positionName);
+    }
     return positionName;
   });
 
