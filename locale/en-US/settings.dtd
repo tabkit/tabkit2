@@ -127,13 +127,13 @@
 <!ENTITY groupingTabs.caption "Grouping Tabs">
 <!ENTITY autoGroupNewTabs.label "Automatically group new tabs">
 <!ENTITY autoGroupNewTabs.accesskey "A">
-<!ENTITY lastActiveGrouping.label "Active grouping*:">
+<!ENTITY lastActiveGrouping.label "Active grouping:">
 <!ENTITY lastActiveGrouping.accesskey "G">
 <!ENTITY lastActiveGrouping.domain.label "by domain">
 <!ENTITY lastActiveGrouping.opener.label "by opener (recommended)">
 <!ENTITY autoCollapse.label "Automatically collapse inactive groups">
 <!ENTITY autoCollapse.accesskey "U">
-<!ENTITY collapsedGroupVisibleTab.label "Tab visible in collapsed group*:">
+<!ENTITY collapsedGroupVisibleTab.label "Tab visible in collapsed group:">
 <!ENTITY collapsedGroupVisibleTab.accesskey "C">
 <!ENTITY collapsedGroupVisibleTab.selected.label "Selected tab">
 <!ENTITY collapsedGroupVisibleTab.first.label "First tab in group">
@@ -144,7 +144,7 @@
 <!ENTITY newTabPosition.lastSort.label "according to the last sort">
 <!ENTITY newTabPosition.nextToCurrent.label "next to the current tab">
 <!ENTITY newTabPosition.farRight.label "at far right of the tab bar">
-<!ENTITY lastActiveSort.label "The 'last sort' was*">
+<!ENTITY lastActiveSort.label "The 'last sort' was">
 <!ENTITY lastActiveSort.accesskey "S">
 <!ENTITY lastActiveSort.address.label "by address">
 <!ENTITY lastActiveSort.lastLoaded.label "by last loaded">
