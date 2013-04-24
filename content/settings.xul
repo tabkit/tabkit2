@@ -115,8 +115,6 @@
       <preference id="tabminwidth-pref" name="extensions.tabkit.tabs.tabMinWidth" type="int"/>
       <preference id="closebuttons-pref" name="extensions.tabkit.tabs.closeButtons" type="int"/>
 
-      <preference id="emphasizecurrenttab-pref" name="extensions.tabkit.emphasizeCurrentTab" type="bool"/>
-      <preference id="boldcurrenttab-pref" name="extensions.tabkit.boldCurrentTab" type="bool"/>
       <preference id="emphasizeprotectedtabs-pref" name="extensions.tabkit.emphasizeProtectedTabs" type="bool"/>
       <preference id="disablesearchbar-pref" name="extensions.tabkit.disableSearchBar" type="bool"/>
       <preference id="solidbackground-pref" name="extensions.tabkit.solidBackground" type="bool"/>
@@ -160,14 +158,6 @@
     <groupbox>
       <caption label="&appearance.caption;"/>
 
-      <checkbox id="emphasizecurrenttab"
-                label="&emphasizeCurrentTab.label;"
-                accesskey="&emphasizeCurrentTab.accesskey;"
-                preference="emphasizecurrenttab-pref"/>
-      <checkbox id="boldcurrenttab"
-                label="&boldCurrentTab.label;"
-                accesskey="&boldCurrentTab.accesskey;"
-                preference="boldcurrenttab-pref"/>
       <checkbox id="emphasizeprotectedtabs"
                 label="&emphasizeProtectedTabs.label;"
                 accesskey="&emphasizeProtectedTabs.accesskey;"
