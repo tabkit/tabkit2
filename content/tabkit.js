@@ -4580,8 +4580,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   this.initProtectedTabs = function initProtectedTabs(event) {
 
-    tk.mapBoolPrefToAttribute("emphasizeProtectedTabs", _tabContainer, "emphasizeprotected");
-
     tk.prependMethodCode('gBrowser.removeTab', 'if (aTab.getAttribute("protected") == "true") { tabkit.beep(); return; }');
 
     tk.prependMethodCode('gBrowser.warnAboutClosingTabs', ' \
