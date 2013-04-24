@@ -43,18 +43,6 @@
   opacity: 1.0;
 }
 
-/* Highlight unread tabs */
-/* If Sorting and Grouping sets "colortabnotlabel" we do the opposite */
-#main-window > #browser-stack .tabbrowser-tabs[highlightunread]:not([colortabnotlabel]) .tabbrowser-tab:not([read]) > */*[Fx2only]*/,
-#main-window > #browser .tabbrowser-tabs[highlightunread]:not([colortabnotlabel]) .tabbrowser-tab:not([read])/*[Fx3only]*/ {
-  background-color: yellow !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
-  color: black !important;
-}
-.tabbrowser-tabs[highlightunread][colortabnotlabel] .tabbrowser-tab:not([read]) .tab-text {
-  background-color: #ff6 !important;
-  color: black !important; /* We can't take the risk of them having a white on black theme */
-}
-
 /* Highlight protected tabs */
 #main-window > #browser-stack .tabbrowser-tabs[emphasizeprotected]:not([colortabnotlabel]) .tabbrowser-tab[protected="true"] > */*[Fx2only]*/,
 #main-window > #browser .tabbrowser-tabs[emphasizeprotected]:not([colortabnotlabel]) .tabbrowser-tab[protected="true"]/*[Fx3only]*/ {
