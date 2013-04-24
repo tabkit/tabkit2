@@ -91,7 +91,6 @@ function disableAll() {
 
   document.getElementById("tabbarposition-pref").value = 0;
 
-  document.getElementById("highlightunreadtabs-pref").value = false;
   document.getElementById("emphasizeprotectedtabs-pref").value = false;
   document.getElementById("boldcurrenttab-pref").value = false;
   document.getElementById("forcethemecompatibility-pref").value = 0;

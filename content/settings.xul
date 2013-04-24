@@ -115,7 +115,6 @@
       <preference id="tabminwidth-pref" name="extensions.tabkit.tabs.tabMinWidth" type="int"/>
       <preference id="closebuttons-pref" name="extensions.tabkit.tabs.closeButtons" type="int"/>
 
-      <preference id="highlightunreadtabs-pref" name="extensions.tabkit.highlightUnreadTabs" type="bool"/>
       <preference id="emphasizecurrenttab-pref" name="extensions.tabkit.emphasizeCurrentTab" type="bool"/>
       <preference id="boldcurrenttab-pref" name="extensions.tabkit.boldCurrentTab" type="bool"/>
       <preference id="emphasizeprotectedtabs-pref" name="extensions.tabkit.emphasizeProtectedTabs" type="bool"/>
@@ -161,10 +160,6 @@
     <groupbox>
       <caption label="&appearance.caption;"/>
 
-      <checkbox id="highlightunreadtabs"
-                label="&highlightUnreadTabs.label;"
-                accesskey="&highlightUnreadTabs.accesskey;"
-                preference="highlightunreadtabs-pref"/>
       <checkbox id="emphasizecurrenttab"
                 label="&emphasizeCurrentTab.label;"
                 accesskey="&emphasizeCurrentTab.accesskey;"
