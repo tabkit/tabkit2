@@ -90,9 +90,6 @@ function disableAll() {
   toggleMultipleRows();
 
   document.getElementById("tabbarposition-pref").value = 0;
-
-  document.getElementById("emphasizeprotectedtabs-pref").value = false;
-  document.getElementById("boldcurrenttab-pref").value = false;
   document.getElementById("forcethemecompatibility-pref").value = 0;
   document.getElementById("disablesearchbar-pref").value = false;
   document.getElementById("solidbackground-pref").value = false;
