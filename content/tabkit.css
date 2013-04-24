@@ -60,20 +60,6 @@
   cursor: pointer !important; /* Since the image doesn't have a hover state */
 }
 
-/* Highlight current tab */
-#main-window > #browser-stack .tabbrowser-tabs[emphasizecurrent]:not([colortabnotlabel]) .tabbrowser-tab[selected="true"] > */*[Fx2only]*/,
-#main-window > #browser .tabbrowser-tabs[emphasizecurrent]:not([colortabnotlabel]) .tabbrowser-tab[selected="true"]/*[Fx3only]*/ {
-  background-color: black !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
-  color: white !important;
-}
-.tabbrowser-tabs[emphasizecurrent][colortabnotlabel] .tabbrowser-tab[selected="true"] .tab-text {
-  background-color: black !important;
-  color: white !important;
-}
-.tabbrowser-tabs[boldcurrent] .tabbrowser-tab[selected="true"] .tab-text {
-  font-weight:bold;
-}
-
 
 /* Give tab labels pretty rounded borders */
 .tabbrowser-tabs[multirow="true"] .tabbrowser-tab .tab-text {
