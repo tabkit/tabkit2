@@ -24,7 +24,6 @@ pref("extensions.tabkit.tabs.tabMinWidth", 100);
 pref("extensions.tabkit.tabs.closeButtons", 1); // 0: Active tab only, 1: All tabs, 2: None, 3: Button at end of tab strip
 
 //--- Appearance ---
-pref("extensions.tabkit.highlightUnreadTabs", true);
 pref("extensions.tabkit.emphasizeCurrentTab", false);
 pref("extensions.tabkit.boldCurrentTab", false);
 pref("extensions.tabkit.emphasizeProtectedTabs", true);
