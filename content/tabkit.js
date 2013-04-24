@@ -3643,7 +3643,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       if (gBrowser.tabContainer.getAttribute("colortabnotlabel") == "true") {
         menuItem.style.backgroundImage = bgSample.style.backgroundImage;
       }
-      else if ((gBrowser.tabContainer.hasAttribute("highlightunread") && !tab.hasAttribute("read"))
+      else if ((gBrowser.tabContainer.hasAttribute("tabkit-highlight-unread-tab") && !tab.hasAttribute("read"))
            || (gBrowser.tabContainer.hasAttribute("emphasizecurrent") && tab.getAttribute("selected") == "true"))
       {
         var bgStyle = window.getComputedStyle(bgSample, null);
@@ -5570,20 +5570,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   /// Initialisation:
   this.initHighlightUnreadTabs = function initHighlightUnreadTabs(event) {
-    tk.mapBoolPrefToAttribute("highlightUnreadTabs", _tabContainer, "highlightunread");
     tk.mapBoolPrefToAttribute("emphasizeCurrentTab", _tabContainer, "emphasizecurrent");
     tk.mapBoolPrefToAttribute("boldCurrentTab", _tabContainer, "boldcurrent");
 
     _tabContainer.addEventListener("TabSelect", tk.tabRead, false);
   };
   this.initListeners.push(this.initHighlightUnreadTabs);
-
-  this.postInitHighlightUnreadTabs = function postInitHighlightUnreadTabs(event) {
-    gBrowser.selectedTab.setAttribute("read", "true");
-
-    if (_ss)
-      _ss.persistTabAttribute("read"); // So restored sessions remember which tabs have been read
-  };
   this.postInitListeners.push(this.postInitHighlightUnreadTabs);
 
   /// Event Listener
