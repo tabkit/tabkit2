@@ -44,15 +44,6 @@
 }
 
 /* Highlight protected tabs */
-#main-window > #browser-stack .tabbrowser-tabs[emphasizeprotected]:not([colortabnotlabel]) .tabbrowser-tab[protected="true"] > */*[Fx2only]*/,
-#main-window > #browser .tabbrowser-tabs[emphasizeprotected]:not([colortabnotlabel]) .tabbrowser-tab[protected="true"]/*[Fx3only]*/ {
-  background-color: green !important; /* We rely on our theme detection to ensure that any background-image is suitably translucent */
-  color: white !important;
-}
-.tabbrowser-tabs[emphasizeprotected][colortabnotlabel] .tabbrowser-tab[protected="true"] .tab-text {
-  background-color: green !important;
-  color: white !important;
-}
 .tabbrowser-tab[protected="true"] .tab-close-button {
   display: -moz-box !important; /* Display even if they're normally hidden */
   list-style-image: url(chrome://tabkit/skin/Secure.png) !important; /* Show padlock instead of close button */
