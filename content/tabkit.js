@@ -4690,29 +4690,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     ]);//}
 
     if ("PlacesUIUtils" in window) {
-      // Let tabkit determine the place to open a tab
-      tk.addMethodHook([
-        'PlacesUIUtils.openNodeIn',
-
-        'this._openNodeIn(aNode, aWhere, window);',
-        'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(aWhere, aNode), window);'
-      ]);
-
-      // Let tabkit determine the place to open a tab
-      tk.addMethodHook([
-        'PlacesUIUtils.openNodeWithEvent',
-
-        'this._openNodeIn(aNode, window.whereToOpenLink(aEvent), window);',
-        'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(window.whereToOpenLink(aEvent), aNode), window);'
-      ]);
-
-      // Check whether the node is a bookmark and user does not prefer opening "places" in new tab
-      // which should be opened as a web panel
+      // We were patching `PlacesUIUtils.openNodeIn` and `PlacesUIUtils.openNodeWithEvent` before
+      // But since they both calls `PlacesUIUtils._openNodeIn`, we just need to monky patch one place
       tk.addMethodHook([
         'PlacesUIUtils._openNodeIn',
 
         'if (aWhere == "current" && isBookmark)',
-        'if ((aWhere == "current" || (aWhere == "tab" && tabkit.localPrefService.getBoolPref("openTabsFrom.places"))) && isBookmark)'
+        'aWhere =  tabkit.returnWhereWhenOpenPlaces(aWhere, aNode); \
+        $&'
       ]);
 
       // document.getElementById('placesContext_open').removeAttribute('default');
@@ -4722,49 +4707,50 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.postInitListeners.push(this.postInitNewTabsByDefault);
 
   this.returnWhereWhenOpenPlaces = function returnWhereWhenOpenPlaces(aWhere, aNode) {
-    if (!gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places"))
+    if (!gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places")) {
       return aWhere;
+    }
 
-  /*    if ( // clicking on folder
-        aEvent &&
-        (
-          ( // tree
-            aEvent.target.localName == 'treechildren' &&
-            aEvent.currentTarget.selectedNode &&
-            !PlacesUtils.nodeIsURI(aEvent.currentTarget.selectedNode) &&
-            PlacesUtils.nodeIsContainer(aEvent.currentTarget.selectedNode)
-          ) ||
-          ( // toolbar, menu
-            aEvent.originalTarget &&
-            aEvent.originalTarget.node &&
-            PlacesUtils.nodeIsContainer(aEvent.originalTarget.node)
-          )
-        )
-      )
-      tk.debug("clicking on folder");return aWhere;
-  */
+    // if ( // clicking on folder
+    //   aEvent &&
+    //   (
+    //     ( // tree
+    //       aEvent.target.localName == 'treechildren' &&
+    //       aEvent.currentTarget.selectedNode &&
+    //       !PlacesUtils.nodeIsURI(aEvent.currentTarget.selectedNode) &&
+    //       PlacesUtils.nodeIsContainer(aEvent.currentTarget.selectedNode)
+    //     ) ||
+    //     ( // toolbar, menu
+    //       aEvent.originalTarget &&
+    //       aEvent.originalTarget.node &&
+    //       PlacesUtils.nodeIsContainer(aEvent.originalTarget.node)
+    //     )
+    //   )
+    // )
+    // tk.debug("clicking on folder");return aWhere;
 
-      if ((aWhere == "tab")  || (aWhere == "tabshifted")
-        || (aNode.uri.indexOf('javascript:') == 0) /* bookmarklets*/) {
-        // tk.debug("return current");
-        return "current";
+
+    if ((aWhere == "tab")  || (aWhere == "tabshifted")
+      || (aNode.uri.indexOf('javascript:') == 0) /* bookmarklets*/) {
+      // tk.debug("return current");
+      return "current";
+    }
+    else {
+      // var w = getTopWin();
+      var w = Components.classes["@mozilla.org/browser/browserglue;1"].getService(Components.interfaces.nsIBrowserGlue).getMostRecentBrowserWindow();
+      var browser = w ? w.getBrowser().tabContainer.selectedItem.linkedBrowser : w;
+      // tk.debug(browser.contentTitle);
+      // tk.debug(browser.webNavigation.currentURI.spec);
+      if (aWhere == "current"
+         && (!browser
+         || browser.webNavigation.currentURI.spec != "about:blank"
+         || browser.webProgress.isLoadingDocument)
+         ) {
+        // tk.debug("return tab");
+        return "tab";
       }
-      else {
-        // var w = getTopWin();
-        var w = Components.classes["@mozilla.org/browser/browserglue;1"].getService(Components.interfaces.nsIBrowserGlue).getMostRecentBrowserWindow();
-        var browser = w ? w.getBrowser().tabContainer.selectedItem.linkedBrowser : w;
-        // tk.debug(browser.contentTitle);
-        // tk.debug(browser.webNavigation.currentURI.spec);
-        if (aWhere == "current"
-           && (!browser
-           || browser.webNavigation.currentURI.spec != "about:blank"
-           || browser.webProgress.isLoadingDocument)
-           ) {
-          // tk.debug("return tab");
-          return "tab";
-        }
-      }
-    };
+    }
+  };
 
 //}##########################
 //{=== Tab Min Width
