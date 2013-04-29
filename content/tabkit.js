@@ -4690,20 +4690,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     ]);//}
 
     if ("PlacesUIUtils" in window) {
-      // Let tabkit determine the place to open a tab
+      // We were patching `PlacesUIUtils.openNodeIn` and `PlacesUIUtils.openNodeWithEvent` before
+      // But since they both calls `PlacesUIUtils._openNodeIn`, we just need to monky patch one place
       tk.addMethodHook([
-        'PlacesUIUtils.openNodeIn',
+        'PlacesUIUtils._openNodeIn',
 
-        'this._openNodeIn(aNode, aWhere, window);',
-        'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(aWhere, aNode), window);'
-      ]);
-
-      // Let tabkit determine the place to open a tab
-      tk.addMethodHook([
-        'PlacesUIUtils.openNodeWithEvent',
-
-        'this._openNodeIn(aNode, window.whereToOpenLink(aEvent), window);',
-        'this._openNodeIn(aNode, tk.returnWhereWhenOpenPlaces(window.whereToOpenLink(aEvent), aNode), window);'
+        'if (aWhere == "current" && isBookmark)',
+        'aWhere =  tabkit.returnWhereWhenOpenPlaces(aWhere, aNode); \
+        $&'
       ]);
 
       // Check whether the node is a bookmark and user does not prefer opening "places" in new tab
