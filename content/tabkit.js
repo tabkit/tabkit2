@@ -5559,27 +5559,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   };
 
 //}##########################
-//{=== Highlight unread tabs
-//|##########################
-
-  // TODO=P4: UVOICE Tab progress bar/rotating+filling pie
-
-  // Note: sorting and grouping hooks into _onShowingAllTabsPopup to highlight all tabs menu entries
-
-  /// Initialisation:
-  this.initHighlightUnreadTabs = function initHighlightUnreadTabs(event) {
-    _tabContainer.addEventListener("TabSelect", tk.tabRead, false);
-  };
-  this.initListeners.push(this.initHighlightUnreadTabs);
-  this.postInitListeners.push(this.postInitHighlightUnreadTabs);
-
-  /// Event Listener
-  this.tabRead = function tabRead(event) {
-    var tab = event.target;
-    tab.setAttribute("read", "true");
-  };
-
-//}##########################
 //{=== Mouse Gestures
 //|##########################
 
