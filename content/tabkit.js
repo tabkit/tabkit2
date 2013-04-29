@@ -6059,9 +6059,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         'this._handleTabSelect(); return;'
       );
     }
-
-    //Workaround for Issue 9
-    tk.mapBoolPrefToAttribute("solidBackground", _tabContainer, "solidbackground");
   };
   this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
     window.addEventListener("mouseover", tk.onMouseOverTabEffect, false);

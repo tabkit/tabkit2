@@ -54,8 +54,6 @@
 <!ENTITY appearance.caption "Appearance">
 <!ENTITY disableSearchBar.label "Disable Search Bar">
 <!ENTITY disableSearchBar.accesskey "D">
-<!ENTITY solidBackground.label "Solid Background (non-Transparent)">
-<!ENTITY solidBackground.accesskey "S">
 <!ENTITY disableTabGroupColor.label "Disable tab group coloring (require restart)">
 
 <!ENTITY coloring.caption "Tab Coloring">

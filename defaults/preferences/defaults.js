@@ -25,7 +25,6 @@ pref("extensions.tabkit.tabs.closeButtons", 1); // 0: Active tab only, 1: All ta
 
 //--- Appearance ---
 pref("extensions.tabkit.disableSearchBar", false);
-pref("extensions.tabkit.solidBackground", false);
 pref("extensions.tabkit.disableTabGroupColor", false);
 
 //--- Advanced ---

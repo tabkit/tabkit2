@@ -215,15 +215,6 @@
   max-width: 9999px !important;/* Make sure tabs fill width */
 }
 
-/* Make tab background-color solid */
-#TabsToolbar .tabbrowser-tabs .tabbrowser-tab {
-  background-color: -moz-Dialog !important;
-}
-/* Make tab bar background-color solid */
-#TabsToolbar .tabbrowser-tabs[solidbackground] {
-  background-color: -moz-Dialog !important;
-}
-
 /*Add by Pika End*/
 
 /**************
