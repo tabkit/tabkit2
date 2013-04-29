@@ -4707,49 +4707,50 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.postInitListeners.push(this.postInitNewTabsByDefault);
 
   this.returnWhereWhenOpenPlaces = function returnWhereWhenOpenPlaces(aWhere, aNode) {
-    if (!gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places"))
+    if (!gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.places")) {
       return aWhere;
+    }
 
-  /*    if ( // clicking on folder
-        aEvent &&
-        (
-          ( // tree
-            aEvent.target.localName == 'treechildren' &&
-            aEvent.currentTarget.selectedNode &&
-            !PlacesUtils.nodeIsURI(aEvent.currentTarget.selectedNode) &&
-            PlacesUtils.nodeIsContainer(aEvent.currentTarget.selectedNode)
-          ) ||
-          ( // toolbar, menu
-            aEvent.originalTarget &&
-            aEvent.originalTarget.node &&
-            PlacesUtils.nodeIsContainer(aEvent.originalTarget.node)
-          )
-        )
-      )
-      tk.debug("clicking on folder");return aWhere;
-  */
+    // if ( // clicking on folder
+    //   aEvent &&
+    //   (
+    //     ( // tree
+    //       aEvent.target.localName == 'treechildren' &&
+    //       aEvent.currentTarget.selectedNode &&
+    //       !PlacesUtils.nodeIsURI(aEvent.currentTarget.selectedNode) &&
+    //       PlacesUtils.nodeIsContainer(aEvent.currentTarget.selectedNode)
+    //     ) ||
+    //     ( // toolbar, menu
+    //       aEvent.originalTarget &&
+    //       aEvent.originalTarget.node &&
+    //       PlacesUtils.nodeIsContainer(aEvent.originalTarget.node)
+    //     )
+    //   )
+    // )
+    // tk.debug("clicking on folder");return aWhere;
 
-      if ((aWhere == "tab")  || (aWhere == "tabshifted")
-        || (aNode.uri.indexOf('javascript:') == 0) /* bookmarklets*/) {
-        // tk.debug("return current");
-        return "current";
+
+    if ((aWhere == "tab")  || (aWhere == "tabshifted")
+      || (aNode.uri.indexOf('javascript:') == 0) /* bookmarklets*/) {
+      // tk.debug("return current");
+      return "current";
+    }
+    else {
+      // var w = getTopWin();
+      var w = Components.classes["@mozilla.org/browser/browserglue;1"].getService(Components.interfaces.nsIBrowserGlue).getMostRecentBrowserWindow();
+      var browser = w ? w.getBrowser().tabContainer.selectedItem.linkedBrowser : w;
+      // tk.debug(browser.contentTitle);
+      // tk.debug(browser.webNavigation.currentURI.spec);
+      if (aWhere == "current"
+         && (!browser
+         || browser.webNavigation.currentURI.spec != "about:blank"
+         || browser.webProgress.isLoadingDocument)
+         ) {
+        // tk.debug("return tab");
+        return "tab";
       }
-      else {
-        // var w = getTopWin();
-        var w = Components.classes["@mozilla.org/browser/browserglue;1"].getService(Components.interfaces.nsIBrowserGlue).getMostRecentBrowserWindow();
-        var browser = w ? w.getBrowser().tabContainer.selectedItem.linkedBrowser : w;
-        // tk.debug(browser.contentTitle);
-        // tk.debug(browser.webNavigation.currentURI.spec);
-        if (aWhere == "current"
-           && (!browser
-           || browser.webNavigation.currentURI.spec != "about:blank"
-           || browser.webProgress.isLoadingDocument)
-           ) {
-          // tk.debug("return tab");
-          return "tab";
-        }
-      }
-    };
+    }
+  };
 
 //}##########################
 //{=== Tab Min Width
