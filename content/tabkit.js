@@ -4700,15 +4700,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         $&'
       ]);
 
-      // Check whether the node is a bookmark and user does not prefer opening "places" in new tab
-      // which should be opened as a web panel
-      tk.addMethodHook([
-        'PlacesUIUtils._openNodeIn',
-
-        'if (aWhere == "current" && isBookmark)',
-        'if ((aWhere == "current" || (aWhere == "tab" && tabkit.localPrefService.getBoolPref("openTabsFrom.places"))) && isBookmark)'
-      ]);
-
       // document.getElementById('placesContext_open').removeAttribute('default');
       // document.getElementById('placesContext_open:newtab').setAttribute('default', true);
     }
