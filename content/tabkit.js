@@ -5563,28 +5563,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 //|##########################
 
   /// Private Globals:
-  var _mousedown              = [false, undefined, false];
-  var _preventContext         = false;
-  var _mouseScrollWrapCounter = 0;
-  var _hoverTab               = null;
-  var _hoverTimer             = null;
-  var _lastHover              = 0;
 
   /// Initialisation:
   this.initMouseGestures = function initMouseGestures(event) {
-    gBrowser.addEventListener("mouseup", tk.onMouseUpGesture, true);
-    gBrowser.addEventListener("mousedown", tk.onMouseDownGesture, true);
-    gBrowser.addEventListener("contextmenu", tk.onContextMenuGesture, true);
-    gBrowser.addEventListener("draggesture", tk.onMouseDragGesture, true);
-    gBrowser.addEventListener("mouseout", tk.onMouseOutGesture, false);
-    //gBrowser.mPanelContainer.addEventListener("DOMMouseScroll", tk.onRMBWheelGesture, true);
-    gBrowser.addEventListener("DOMMouseScroll", tk.onRMBWheelGesture, true);
-    //_tabInnerBox.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
-    //_tabContainer.mTabstripClosebutton.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
     gBrowser.tabContainer.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
-    _tabContainer.addEventListener("TabSelect", function(event) { _mouseScrollWrapCounter = 0; }, false);
-    _tabContainer.addEventListener("mouseover", tk.onTabHoverGesture, false);
-    _tabContainer.addEventListener("mouseout", tk.cancelTabHoverGesture, false);
 
     // Move Close Tab Before/After to the tab context menu (from the Tools menu)
     var tabContextMenu = gBrowser.tabContextMenu;
@@ -5602,96 +5584,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   };
   this.initListeners.push(this.initMouseGestures);
 
-  /// Event Listeners:
-  this.onMouseUpGesture = function onMouseUpGesture(event) {
-    if (!event.isTrusted)
-      return;
-
-    var splitter = document.getElementById("tabkit-splitter");
-    if (splitter && splitter.getAttribute("state") == "dragging")
-      return;
-
-    var btn = event.button;
-    if (_mousedown[btn])
-      _mousedown[btn] = false;
-    else if (btn != 1)
-      event.preventDefault(); // We've probably just done a rocker gesture
-  };
-
-  this.onMouseDownGesture = function onMouseDownGesture(event) {
-    if (!event.isTrusted)
-      return;
-
-    var splitter = document.getElementById("tabkit-splitter");
-    if (splitter && splitter.getAttribute("state") == "dragging")
-      return;
-
-    var btn = event.button; //0 = LMB, 2 = RMB
-    var opp;  //opposite button
-    if (btn == 0)
-      opp = 2;
-    else if (btn == 2)
-      opp = 0;
-    else
-      return;
-
-    if (_mousedown[opp] && _prefs.getBoolPref("gestures.lmbRmbBackForward")) {
-      if (btn == 0)
-        BrowserBack();
-      else
-        BrowserForward();
-      _preventContext = true;
-      _mousedown[opp] = false; // Since the Firefox loses mouseup events during the page load (http://forums.mozillazine.org/viewtopic.php?p=33605#33605)
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    else {
-      _mousedown[btn] = true;
-    }
-  };
-
-  this.onContextMenuGesture = function onContextMenuGesture(event) {
-    if (!event.isTrusted || !_preventContext)
-      return;
-
-    _preventContext = false;
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  this.onMouseDragGesture = function onMouseDragGesture(event) {
-    if (!event.isTrusted)
-      return;
-
-    _mousedown[0] = _mousedown[2] = false;
-  };
-
-  this.onMouseOutGesture = function onMouseOutGesture(event) {
-    if (!event.isTrusted || event.target != event.currentTarget) // n.b. this refers to gBrowser, not tabkit!
-      return;
-
-    // _mousedown[0] = _mousedown[2] = false; //comment it for fixing Issue 23(RMBWheelGesture not work after one scroll)
-    _mousedown[0] = false;
-  };
-
-  this.onRMBWheelGesture = function onRMBWheelGesture(event) {
-    if (!event.isTrusted || !_mousedown[2] || !_prefs.getBoolPref("gestures.rmbWheelTabSwitch"))
-      return;
-
-    tk.scrollwheelTabSwitch(event);
-    if (event.change != 0)
-      _preventContext = true;
-  };
-
   this.onTabWheelGesture = function onTabWheelGesture(event) {
     if (!event.isTrusted)
       return;
 
-    var isUsingTabSheelSwitch = _prefs.getBoolPref("gestures.tabWheelTabSwitch");
+    var isUsingTabSheelSwitch = false;
     try {
       // The external preference key entry(s) could be missing, so we use try catch here
-      isUsingTabSheelSwitch = isUsingTabSheelSwitch ||
-          gPrefService.getBoolPref("extensions.tabkit.mouse-gestures.tabWheelSwitchHover");
+      isUsingTabSheelSwitch = gPrefService.getBoolPref("extensions.tabkit.mouse-gestures.tabWheelSwitchHover");
     } catch(ex) {}
 
     var name = event.originalTarget.localName;
@@ -5723,62 +5623,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       event.preventDefault();
       event.stopPropagation();
     }
-    else if (_prefs.getBoolPref("gestures.tabWheelTabSwitch")) {
-      tk.scrollwheelTabSwitch(event);
-    }
-  };
-
-  this.onTabHoverGesture = function onTabHoverGesture(event) {
-    if (!event.isTrusted || event.target.localName != "tab" || !_prefs.getBoolPref("gestures.switchTabsOnHover"))
-      return;
-
-    _hoverTab = event.target;
-    // Switch instantly if less than 200ms since last switch, or to tabs next to current tab if less than 1s
-    if ((Date.now() - _lastHover) < (Math.abs(_hoverTab._tPos - gBrowser.selectedTab._tPos) == 1 ? 1000 : 200))
-      var wait = 0;
-    else
-      var wait = 200;
-    window.clearTimeout(_hoverTimer);
-    _hoverTimer = window.setTimeout(function __hoverSelectTab() {
-      gBrowser.selectedTab = _hoverTab;
-      _lastHover = Date.now();
-    }, wait);
-  };
-  this.cancelTabHoverGesture = function cancelTabHoverGesture(event) {
-    if (!event.isTrusted || event.target != _hoverTab)
-      return;
-
-    window.clearTimeout(_hoverTimer);
-  };
-
-  /// Methods:
-  this.scrollwheelTabSwitch = function scrollwheelTabSwitch(event) {
-    var change = event.detail;
-    if (change > 0) {
-      var lastTab = _tabs[_tabs.length-1];
-      while (lastTab.hidden && lastTab.previousSibling) // visibility of a tab
-        lastTab = lastTab.previousSibling;
-      // Switch to next tab, but requiring 3 wheelscrolls to wrap around
-      if (_tabContainer.selectedIndex < lastTab._tPos || _mouseScrollWrapCounter >= 2) {
-        _tabContainer.advanceSelectedTab(1, true);
-        // Note: _mouseScrollWrapCounter is reset whenever a tab is selected
-      }
-      else _mouseScrollWrapCounter++;
-    }
-    else if (change < 0) {
-      var firstTab = _tabs[0];
-      while (firstTab.hidden && firstTab.nextSibling) // visibility of a tab
-        firstTab = firstTab.nextSibling;
-      // Switch to previous tab, but requiring 3 wheelscrolls to wrap around
-      if (_tabContainer.selectedIndex > firstTab._tPos || _mouseScrollWrapCounter >= 2) {
-        _tabContainer.advanceSelectedTab(-1, true);
-        // Note: _mouseScrollWrapCounter is reset whenever a tab is selected
-      }
-      else _mouseScrollWrapCounter++;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
   };
 
   this.removeTabsBefore = function removeTabsBefore(contextTab) {
