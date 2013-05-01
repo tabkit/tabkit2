@@ -4692,13 +4692,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     if ("PlacesUIUtils" in window) {
       // We were patching `PlacesUIUtils.openNodeIn` and `PlacesUIUtils.openNodeWithEvent` before
       // But since they both calls `PlacesUIUtils._openNodeIn`, we just need to monky patch one place
-      tk.addMethodHook([
-        'PlacesUIUtils._openNodeIn',
-
-        'if (aWhere == "current" && isBookmark)',
-        'aWhere =  tabkit.returnWhereWhenOpenPlaces(aWhere, aNode); \
-        $&'
-      ]);
+      if ("_openNodeIn" in PlacesUIUtils) {
+        // `PlacesUIUtils` seems to be shared by multiple windows, so it's better to just override the method once
+        PlacesUIUtils._openNodeInOriginal = PlacesUIUtils._openNodeInOriginal || PlacesUIUtils._openNodeIn;
+        PlacesUIUtils._openNodeIn = function (aNode, aWhere, aWindow) {
+          aWhere = tabkit.returnWhereWhenOpenPlaces(aWhere, aNode);
+          PlacesUIUtils._openNodeInOriginal(aNode, aWhere, aWindow);
+        }
+      }
 
       // document.getElementById('placesContext_open').removeAttribute('default');
       // document.getElementById('placesContext_open:newtab').setAttribute('default', true);
