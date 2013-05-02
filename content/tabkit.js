@@ -4751,6 +4751,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         return "tab";
       }
     }
+
+    // Fallback
+    return "tab";
   };
 
 //}##########################
