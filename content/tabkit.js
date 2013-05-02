@@ -4744,7 +4744,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       // tk.debug(browser.webNavigation.currentURI.spec);
       if (aWhere == "current"
          && (!browser
-         || browser.webNavigation.currentURI.spec != "about:blank"
          || browser.webProgress.isLoadingDocument)
          ) {
         // tk.debug("return tab");
