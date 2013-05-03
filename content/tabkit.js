@@ -4712,6 +4712,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       return aWhere;
     }
 
+    /* bookmarklets*/
+    if (aNode.uri.indexOf('javascript:') == 0) {
+      return aWhere;
+    }
+
+
     // if ( // clicking on folder
     //   aEvent &&
     //   (
@@ -4730,29 +4736,19 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     // )
     // tk.debug("clicking on folder");return aWhere;
 
-
-    if ((aWhere == "tab")  || (aWhere == "tabshifted")
-      || (aNode.uri.indexOf('javascript:') == 0) /* bookmarklets*/) {
+    // Reverse bookmark open location: new tab <--> current tab
+    if ((aWhere == "tab") || (aWhere == "tabshifted")) {
       // tk.debug("return current");
       return "current";
     }
-    else {
-      // var w = getTopWin();
-      var w = Components.classes["@mozilla.org/browser/browserglue;1"].getService(Components.interfaces.nsIBrowserGlue).getMostRecentBrowserWindow();
-      var browser = w ? w.getBrowser().tabContainer.selectedItem.linkedBrowser : w;
-      // tk.debug(browser.contentTitle);
-      // tk.debug(browser.webNavigation.currentURI.spec);
-      if (aWhere == "current"
-         && (!browser
-         || browser.webProgress.isLoadingDocument)
-         ) {
-        // tk.debug("return tab");
-        return "tab";
-      }
+
+    if (aWhere == "current") {
+      // tk.debug("return tab");
+      return "tab";
     }
 
-    // Fallback
-    return "tab";
+    // Fallback (for window and othe values)
+    return aWhere;
   };
 
 //}##########################
