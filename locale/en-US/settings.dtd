@@ -52,18 +52,8 @@
 <!ENTITY closeButtons.end.label "show a single close button at the end of the tab bar">
 
 <!ENTITY appearance.caption "Appearance">
-<!ENTITY highlightUnreadTabs.label "Highlight unread tabs in yellow">
-<!ENTITY highlightUnreadTabs.accesskey "H">
-<!ENTITY emphasizeCurrentTab.label "Emphasize current tab in black">
-<!ENTITY emphasizeCurrentTab.accesskey "E">
-<!ENTITY emphasizeProtectedTabs.label "Emphasize protected tabs in green">
-<!ENTITY emphasizeProtectedTabs.accesskey "P">
-<!ENTITY boldCurrentTab.label "Make current tab text bold">
-<!ENTITY boldCurrentTab.accesskey "B">
 <!ENTITY disableSearchBar.label "Disable Search Bar">
 <!ENTITY disableSearchBar.accesskey "D">
-<!ENTITY solidBackground.label "Solid Background (non-Transparent)">
-<!ENTITY solidBackground.accesskey "S">
 <!ENTITY disableTabGroupColor.label "Disable tab group coloring (require restart)">
 
 <!ENTITY coloring.caption "Tab Coloring">
