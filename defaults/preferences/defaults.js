@@ -39,13 +39,6 @@ pref("extensions.tabkit.maxLightness", 80);
 
 //{ ### Controls ###
 //--- Mouse Gestures ---
-pref("extensions.tabkit.gestures.tabWheelTabSwitch", true);
-pref("extensions.tabkit.gestures.rmbWheelTabSwitch", false);
-
-pref("extensions.tabkit.gestures.switchTabsOnHover", false);
-
-pref("extensions.tabkit.gestures.lmbRmbBackForward", true);
-
 pref("extensions.tabkit.doubleClickCollapseExpand", true);
 
 //--- Tab Dragging---

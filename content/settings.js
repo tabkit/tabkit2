@@ -94,8 +94,6 @@ function disableAll() {
   document.getElementById("disablesearchbar-pref").value = false;
   document.getElementById("disabletabgroupcolor-pref").value = false;
 
-  document.getElementById("tabwheeltabswitch-pref").value = false;
-  document.getElementById("lmbrmbbackforward-pref").value = false;
   document.getElementById("doubleclickcollapseexpand-pref").value = false;
   document.getElementById("shiftdraggroups-pref").value = false;
   document.getElementById("scrollbarsnotarrows-pref").value = false;

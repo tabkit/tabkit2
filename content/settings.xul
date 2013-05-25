@@ -224,10 +224,6 @@
 
   <prefpane id="controls-pane" label="&controls.title;" image="chrome://tabkit/skin/prefs-controls.png">
     <preferences>
-      <preference id="tabwheeltabswitch-pref" name="extensions.tabkit.gestures.tabWheelTabSwitch" type="bool"/>
-      <preference id="rmbwheeltabswitch-pref" name="extensions.tabkit.gestures.rmbWheelTabSwitch" type="bool"/>
-      <preference id="switchtabsonhover-pref" name="extensions.tabkit.gestures.switchTabsOnHover" type="bool"/>
-      <preference id="lmbrmbbackforward-pref" name="extensions.tabkit.gestures.lmbRmbBackForward" type="bool"/>
       <preference id="doubleclickcollapseexpand-pref" name="extensions.tabkit.doubleClickCollapseExpand" type="bool"/>
 
       <preference id="shiftdraggroups-pref" name="extensions.tabkit.shiftDragGroups" type="bool"/>
@@ -241,17 +237,6 @@
     </preferences>
 
     <groupbox><caption label="&mouseGestures.caption;"/>
-      <label value="&scrollwheelTabSwitch.label;"/>
-      <vbox class="indent">
-        <checkbox id="tabwheeltabswitch" label="&tabWheelTabSwitch.label;"
-            accesskey="&tabWheelTabSwitch.accesskey;" preference="tabwheeltabswitch-pref"/>
-        <checkbox id="rmbwheeltabswitch" label="&rmbWheelTabSwitch.label;"
-            accesskey="&rmbWheelTabSwitch.accesskey;" preference="rmbwheeltabswitch-pref"/>
-      </vbox>
-      <checkbox id="switchtabsonhover" label="&switchTabsOnHover.label;"
-          accesskey="&switchTabsOnHover.accesskey;" preference="switchtabsonhover-pref"/>
-      <checkbox id="lmbrmbbackforward" label="&lmbRmbBackForward.label;"
-          accesskey="&lmbRmbBackForward.accesskey;" preference="lmbrmbbackforward-pref"/>
       <checkbox id="doubleclickcollapsecxpand" label="&doubleClickCollapseExpand.label;"
           accesskey="&doubleClickCollapseExpand.accesskey;" preference="doubleclickcollapseexpand-pref"/>
     </groupbox>

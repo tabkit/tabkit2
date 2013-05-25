@@ -85,15 +85,6 @@
 <!ENTITY controls.title "Controls">
 
 <!ENTITY mouseGestures.caption "Mouse Gestures">
-<!ENTITY scrollwheelTabSwitch.label "Scrollwheel tab switch...">
-<!ENTITY tabWheelTabSwitch.label "while mouse is over tab bar">
-<!ENTITY tabWheelTabSwitch.accesskey "T">
-<!ENTITY rmbWheelTabSwitch.label "while holding down right mouse button">
-<!ENTITY rmbWheelTabSwitch.accesskey "R">
-<!ENTITY switchTabsOnHover.label "Switch tabs by hovering over them">
-<!ENTITY switchTabsOnHover.accesskey "H">
-<!ENTITY lmbRmbBackForward.label "Click left while holding right to go back in page history, and vice versa">
-<!ENTITY lmbRmbBackForward.accesskey "L">
 <!ENTITY doubleClickCollapseExpand.label "Double clicking on a tab group collapses/expands it">
 <!ENTITY doubleClickCollapseExpand.accesskey "D">
 
