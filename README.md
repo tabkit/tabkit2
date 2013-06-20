@@ -4,7 +4,7 @@ It was last updated September 26, 2010, and the author has been silent after tha
 The most updated version (0.6) is not compatible with FF4+, since FF3->4 has a HUGE change especially in tab bar DOM structure.
 
 This project aims to change modify the original TK to make it FF4+ compatible (and drop the support for pre-FF4).  
-The name for the new(not quite) extension is *TabKit 2nd Edition*(You can still call it *TabKit 2* or *TK2* for short)
+The name for the new(not quite) extension is *Tab Kit 2nd Edition*(You can still call it *Tab Kit 2* or *TK2* for short)
 
 ## News & Discussion
 - [Google Group (For more general discussion)](http://groups.google.com/group/tabkit-2nd-edition)  
@@ -27,7 +27,7 @@ See https://github.com/tabkit/tabkit2/blob/master/CHANGELOG.md
 
 # Project Helper Needed!
 I am working starting from 23 July, 2012  
-So that means I have almost no time for maintaining TabKit  
+So that means I have almost no time for maintaining Tab Kit  
 I need someone to help me!
 
 ## Collaboration

@@ -1,9 +1,9 @@
-/* TabKit 2nd Edition(TabKit 2 for short) - http://code.google.com/p/tabkit-2nd-edition/
+/* Tab Kit 2nd Edition(Tab Kit 2 for short) - http://code.google.com/p/tabkit-2nd-edition/
  *
  * Copyright (c) 2007-2010 John Mellor
  * Copyright (c) 2011-2012 Leung Ho Kuen <pikachuexe@gmail.com>
  *
- * This file is part of TabKit 2.
+ * This file is part of Tab Kit 2.
  * Tab Kit is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
