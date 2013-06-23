@@ -90,17 +90,10 @@ function disableAll() {
   toggleMultipleRows();
 
   document.getElementById("tabbarposition-pref").value = 0;
-
-  document.getElementById("highlightunreadtabs-pref").value = false;
-  document.getElementById("emphasizeprotectedtabs-pref").value = false;
-  document.getElementById("boldcurrenttab-pref").value = false;
   document.getElementById("forcethemecompatibility-pref").value = 0;
   document.getElementById("disablesearchbar-pref").value = false;
-  document.getElementById("solidbackground-pref").value = false;
   document.getElementById("disabletabgroupcolor-pref").value = false;
 
-  document.getElementById("tabwheeltabswitch-pref").value = false;
-  document.getElementById("lmbrmbbackforward-pref").value = false;
   document.getElementById("doubleclickcollapseexpand-pref").value = false;
   document.getElementById("shiftdraggroups-pref").value = false;
   document.getElementById("scrollbarsnotarrows-pref").value = false;

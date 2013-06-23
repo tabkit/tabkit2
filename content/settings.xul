@@ -115,12 +115,7 @@
       <preference id="tabminwidth-pref" name="extensions.tabkit.tabs.tabMinWidth" type="int"/>
       <preference id="closebuttons-pref" name="extensions.tabkit.tabs.closeButtons" type="int"/>
 
-      <preference id="highlightunreadtabs-pref" name="extensions.tabkit.highlightUnreadTabs" type="bool"/>
-      <preference id="emphasizecurrenttab-pref" name="extensions.tabkit.emphasizeCurrentTab" type="bool"/>
-      <preference id="boldcurrenttab-pref" name="extensions.tabkit.boldCurrentTab" type="bool"/>
-      <preference id="emphasizeprotectedtabs-pref" name="extensions.tabkit.emphasizeProtectedTabs" type="bool"/>
       <preference id="disablesearchbar-pref" name="extensions.tabkit.disableSearchBar" type="bool"/>
-      <preference id="solidbackground-pref" name="extensions.tabkit.solidBackground" type="bool"/>
       <preference id="disabletabgroupcolor-pref" name="extensions.tabkit.disableTabGroupColor" type="bool"/>
 
       <preference id="forcethemecompatibility-pref" name="extensions.tabkit.forceThemeCompatibility" type="int"/>
@@ -161,30 +156,10 @@
     <groupbox>
       <caption label="&appearance.caption;"/>
 
-      <checkbox id="highlightunreadtabs"
-                label="&highlightUnreadTabs.label;"
-                accesskey="&highlightUnreadTabs.accesskey;"
-                preference="highlightunreadtabs-pref"/>
-      <checkbox id="emphasizecurrenttab"
-                label="&emphasizeCurrentTab.label;"
-                accesskey="&emphasizeCurrentTab.accesskey;"
-                preference="emphasizecurrenttab-pref"/>
-      <checkbox id="boldcurrenttab"
-                label="&boldCurrentTab.label;"
-                accesskey="&boldCurrentTab.accesskey;"
-                preference="boldcurrenttab-pref"/>
-      <checkbox id="emphasizeprotectedtabs"
-                label="&emphasizeProtectedTabs.label;"
-                accesskey="&emphasizeProtectedTabs.accesskey;"
-                preference="emphasizeprotectedtabs-pref"/>
       <checkbox id="disablesearchbar"
                 label="&disableSearchBar.label;"
                 accesskey="&disableSearchBar.accesskey;"
                 preference="disablesearchbar-pref"/>
-      <checkbox id="solidbackground"
-                label="&solidBackground.label;"
-                accesskey="&solidBackground.accesskey;"
-                preference="solidbackground-pref"/>
       <checkbox id="disabletabgroupcolor"
                 label="&disableTabGroupColor.label;"
                 preference="disabletabgroupcolor-pref"/>
@@ -249,10 +224,6 @@
 
   <prefpane id="controls-pane" label="&controls.title;" image="chrome://tabkit/skin/prefs-controls.png">
     <preferences>
-      <preference id="tabwheeltabswitch-pref" name="extensions.tabkit.gestures.tabWheelTabSwitch" type="bool"/>
-      <preference id="rmbwheeltabswitch-pref" name="extensions.tabkit.gestures.rmbWheelTabSwitch" type="bool"/>
-      <preference id="switchtabsonhover-pref" name="extensions.tabkit.gestures.switchTabsOnHover" type="bool"/>
-      <preference id="lmbrmbbackforward-pref" name="extensions.tabkit.gestures.lmbRmbBackForward" type="bool"/>
       <preference id="doubleclickcollapseexpand-pref" name="extensions.tabkit.doubleClickCollapseExpand" type="bool"/>
 
       <preference id="shiftdraggroups-pref" name="extensions.tabkit.shiftDragGroups" type="bool"/>
@@ -266,17 +237,6 @@
     </preferences>
 
     <groupbox><caption label="&mouseGestures.caption;"/>
-      <label value="&scrollwheelTabSwitch.label;"/>
-      <vbox class="indent">
-        <checkbox id="tabwheeltabswitch" label="&tabWheelTabSwitch.label;"
-            accesskey="&tabWheelTabSwitch.accesskey;" preference="tabwheeltabswitch-pref"/>
-        <checkbox id="rmbwheeltabswitch" label="&rmbWheelTabSwitch.label;"
-            accesskey="&rmbWheelTabSwitch.accesskey;" preference="rmbwheeltabswitch-pref"/>
-      </vbox>
-      <checkbox id="switchtabsonhover" label="&switchTabsOnHover.label;"
-          accesskey="&switchTabsOnHover.accesskey;" preference="switchtabsonhover-pref"/>
-      <checkbox id="lmbrmbbackforward" label="&lmbRmbBackForward.label;"
-          accesskey="&lmbRmbBackForward.accesskey;" preference="lmbrmbbackforward-pref"/>
       <checkbox id="doubleclickcollapsecxpand" label="&doubleClickCollapseExpand.label;"
           accesskey="&doubleClickCollapseExpand.accesskey;" preference="doubleclickcollapseexpand-pref"/>
     </groupbox>

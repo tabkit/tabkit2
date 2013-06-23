@@ -52,18 +52,8 @@
 <!ENTITY closeButtons.end.label "show a single close button at the end of the tab bar">
 
 <!ENTITY appearance.caption "Appearance">
-<!ENTITY highlightUnreadTabs.label "Highlight unread tabs in yellow">
-<!ENTITY highlightUnreadTabs.accesskey "H">
-<!ENTITY emphasizeCurrentTab.label "Emphasize current tab in black">
-<!ENTITY emphasizeCurrentTab.accesskey "E">
-<!ENTITY emphasizeProtectedTabs.label "Emphasize protected tabs in green">
-<!ENTITY emphasizeProtectedTabs.accesskey "P">
-<!ENTITY boldCurrentTab.label "Make current tab text bold">
-<!ENTITY boldCurrentTab.accesskey "B">
 <!ENTITY disableSearchBar.label "Disable Search Bar">
 <!ENTITY disableSearchBar.accesskey "D">
-<!ENTITY solidBackground.label "Solid Background (non-Transparent)">
-<!ENTITY solidBackground.accesskey "S">
 <!ENTITY disableTabGroupColor.label "Disable tab group coloring (require restart)">
 
 <!ENTITY coloring.caption "Tab Coloring">
@@ -95,15 +85,6 @@
 <!ENTITY controls.title "Controls">
 
 <!ENTITY mouseGestures.caption "Mouse Gestures">
-<!ENTITY scrollwheelTabSwitch.label "Scrollwheel tab switch...">
-<!ENTITY tabWheelTabSwitch.label "while mouse is over tab bar">
-<!ENTITY tabWheelTabSwitch.accesskey "T">
-<!ENTITY rmbWheelTabSwitch.label "while holding down right mouse button">
-<!ENTITY rmbWheelTabSwitch.accesskey "R">
-<!ENTITY switchTabsOnHover.label "Switch tabs by hovering over them">
-<!ENTITY switchTabsOnHover.accesskey "H">
-<!ENTITY lmbRmbBackForward.label "Click left while holding right to go back in page history, and vice versa">
-<!ENTITY lmbRmbBackForward.accesskey "L">
 <!ENTITY doubleClickCollapseExpand.label "Double clicking on a tab group collapses/expands it">
 <!ENTITY doubleClickCollapseExpand.accesskey "D">
 
