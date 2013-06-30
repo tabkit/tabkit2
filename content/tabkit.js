@@ -4028,7 +4028,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       return;
 
     var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-    if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != this)
+    if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned"))
       return;
 
     this._tabDropIndicator.collapsed = true;
@@ -4121,7 +4121,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         // tk.chosenNewIndex = newIndex;
         // event.tab = tab;
         // gBrowser.old_onDrop(event);
-                var copiedTab = tk._duplicateTab(tab)
+        var copiedTab = tk._duplicateTab(tab)
         gBrowser.moveTabTo(copiedTab, newIndex);
 
         newTabs.unshift(copiedTab);
@@ -4446,7 +4446,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     var dt = event.dataTransfer;
     var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-    if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != _tabContainer)
+    if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned"))
       return;
 
     var isVertical = gBrowser.hasAttribute("vertitabbar");
