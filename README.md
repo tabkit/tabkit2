@@ -20,7 +20,7 @@ I have moved a few issues from Google Code, move more if you think it's necessar
 - [Google Code](http://code.google.com/p/tabkit-2nd-edition/issues/list)  
 Deprecated
 
-## Change log
+## Changes
 See https://github.com/tabkit/tabkit2/blob/master/CHANGELOG.md
 
 ## Tab Kit Series Extensions
@@ -29,7 +29,7 @@ See https://github.com/tabkit/tabkit2/blob/master/CHANGELOG.md
 - [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
 
 ## Project Helper Needed!
-If you want some feature added, then it might be faster to do it yourself! :P
+If you want some feature added, then it might be faster to do it yourself! :P  
 I am working as Web Developer and don't really have time to develop Tab Kit :d
 
 ## Collaboration
