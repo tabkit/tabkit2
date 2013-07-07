@@ -25,6 +25,10 @@ Deprecated
 ## Change log
 See https://github.com/tabkit/tabkit2/blob/master/CHANGELOG.md
 
+## Other Related Extensions
+- [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
+- [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
+
 # Project Helper Needed!
 I am working starting from 23 July, 2012  
 So that means I have almost no time for maintaining Tab Kit  
