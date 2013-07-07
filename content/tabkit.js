@@ -2910,6 +2910,45 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       tk.dump("showBookmarkDialog NOT in PlacesUIUtils.");
     }
   };
+  this.copyGroupURIs = function copyGroupURIs(contextTab) {
+    // TODO=P3: GCODE Drag group/subtree onto bookmarks toolbar should create bookmark folder
+    if (!contextTab)
+      contextTab = gBrowser.selectedTab;
+
+    var group = tk.getGroupFromTab(contextTab);
+    if (!group) {
+      tk.dump("copyGroupURIs: Group was null for tab in pos " + contextTab._tPos);
+      return;
+    }
+
+    // Based on PlacesCommandHook.bookmarkCurrentPages
+    var aURIList = group.map(function __getUri(tab) {
+        return tab.linkedBrowser.webNavigation.currentURI;
+    });
+
+    if (aURIList.length == 0)
+      throw("copyGroupURIs expects a list of nsIURI objects");
+
+    urisStringToCopy = '';
+    for each (var uri in aURIList) {
+      urisStringToCopy = urisStringToCopy + uri.spec + '\n';
+    }
+
+    // Code from http://stackoverflow.com/questions/218462/in-a-firefox-extension-how-can-i-copy-rich-text-links-to-the-clipboard
+    // Extract to a method if you need this somewhere else
+
+    var transferable = Components.classes["@mozilla.org/widget/transferable;1"].createInstance(Components.interfaces.nsITransferable);
+    var unicodeString = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+    var clipboardId = Components.interfaces.nsIClipboard;
+    var clipboard = Components.classes["@mozilla.org/widget/clipboard;1"].getService(clipboardId);
+
+    unicodeString.data = urisStringToCopy;
+
+    transferable.addDataFlavor("text/unicode");
+    transferable.setTransferData("text/unicode", unicodeString, urisStringToCopy.length * 2);
+
+    clipboard.setData(transferable, null, clipboardId.kGlobalClipboard);
+  };
   this.closeGroup = function closeGroup(contextTab) {
     if (!contextTab)
       contextTab = gBrowser.selectedTab;

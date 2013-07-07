@@ -79,8 +79,8 @@
 <!ENTITY group.caption "This Group:">
 
 <!ENTITY collapse.label "Collapse Group">
-<!ENTITY collapse.accesskey "C">
-<!ENTITY collapse.acceltext "C">
+<!ENTITY collapse.accesskey "T">
+<!ENTITY collapse.acceltext "T">
 
 <!ENTITY expand.label "Expand Group">
 <!ENTITY expand.accesskey "E">
@@ -93,6 +93,10 @@
 <!ENTITY bookmark.label "Bookmark Group">
 <!ENTITY bookmark.accesskey "B">
 <!ENTITY bookmark.acceltext "B">
+
+<!ENTITY copyUris.label "Copy Group URLs">
+<!ENTITY copyUris.accesskey "C">
+<!ENTITY copyUris.acceltext "C">
 
 <!ENTITY closeGroup.label "Close Group">
 <!ENTITY closeGroup.accesskey "G">
