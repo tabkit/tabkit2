@@ -221,16 +221,16 @@
  * Search bar *
  **************/
 
-#content:not([vertitabbar]) #tabkit-filtertabs-box {
+#TabsToolbar:not([vertitabbar]) #tabkit-filtertabs-box {
   -moz-box-orient: horizontal;
 }
-#content[hidden="true"] #tabkit-filtertabs-box { /* Many users want it hidden */
+#TabsToolbar[hidden="true"] #tabkit-filtertabs-box { /* Many users want it hidden */
   display:none;
 }
-#content:not([vertitabbar]) #tabkit-filtertabs-query:not([focused="true"]) {
+#TabsToolbar:not([vertitabbar]) #tabkit-filtertabs-query:not([focused="true"]) {
   width: 18px;
 }
-#content:not([vertitabbar]) #tabkit-filtertabs-includetext {
+#TabsToolbar:not([vertitabbar]) #tabkit-filtertabs-includetext {
   display: none; /* I'd like to find a way of incorporating it, but have yet to find a neat way, so for now this option is only available when the tab bar is vertical */
 }
 
