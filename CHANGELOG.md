@@ -1,7 +1,7 @@
 ### Changelog
 
 
-- **0.10.0.dev**
+- **0.10.0**
   - Add: Copy group URLs, separated by newlines (#4)
   - Remove: Some coloring features extracted into [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
   - Remove: Some mouse gesture features extracted into [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
