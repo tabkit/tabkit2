@@ -2944,6 +2944,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     unicodeString.data = urisStringToCopy;
 
+    if ('init' in transferable) transferable.init(null); // Gecko 16
+
     transferable.addDataFlavor("text/unicode");
     transferable.setTransferData("text/unicode", unicodeString, urisStringToCopy.length * 2);
 
