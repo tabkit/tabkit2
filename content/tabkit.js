@@ -4142,7 +4142,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
 
     var singleTab = (tabs.length == 1);
-    var copyOrFromAnotherWindow = (dropEffect == "copy" || draggedTab.parentNode != _tabContainer);
+    var tabIsCopied = (dropEffect == "copy");
+    var tabIsFromAnotherWindow = (draggedTab.parentNode != gBrowser.tabContainer);
 
     // Move/copy the tab(s)
     var tabsReverse = tabs.slice(); // Copy
@@ -4150,7 +4151,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     var newTabs = [];
     var tabIdMapping = {};
     for each (var tab in tabsReverse) {
-      if (copyOrFromAnotherWindow) {
+      if (tabIsCopied || tabIsFromAnotherWindow) {
         // Tab was copied or from another window, so tab will be recreated instead of moved directly
 
         // Only allow beforeTab not afterTab because addingTabOver only indents newTab if it is after draggedTab (since addingTabOver just sets possibleparent to the source tab)
@@ -4183,19 +4184,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
         newTabs.unshift(tab); // Although not strictly a new tab, this allows copy and move to reuse code later
       }
+
       newTabs[0].originalTreeLevel = singleTab ? 0 : tab.treeLevel; // Save the treeLevels
     }
 
     event.preventDefault();
     event.stopPropagation();
 
-    if (dropEffect == "copy" && draggedTab.parentNode != _tabContainer)
+    if (tabIsCopied || tabIsFromAnotherWindow)
       gBrowser.selectedTab = newTabs[0]; // TODO=P3: TJS Is this necessary?
 
     window.setTimeout(function ___onDropCallback() { // TODO=P3: TJS Waiting may actually be unnecessary
       // This is now after the tabs have been restored
 
-      if (copyOrFromAnotherWindow)
+      if (tabIsCopied || tabIsFromAnotherWindow)
         for (var i = 0; i < newTabs.length; i++)
           // Map tabids of original tabs to tabids of their clones
           tabIdMapping[tabs[i].getAttribute("tabid")] = newTabs[i].getAttribute("tabid");
@@ -4225,7 +4227,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         if (newTabs[0].hasAttribute("groupid"))
           tk.removeGID(newTabs[0]);
       }
-      else if (copyOrFromAnotherWindow /*&& !singleTab*/) {
+      else if (tabIsCopied || tabIsFromAnotherWindow /*&& !singleTab*/) {
         // Create a new groupid
         newGid = ":oG-copiedGroupOrSubtree-" + tk.generateId();
 
@@ -4254,7 +4256,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
           // TODO=P3: N/A For consistency, use a temporary parent attribute so it's reset by sorts etc.
           newTab.setAttribute("possibleparent", app);
         }
-        else if (copyOrFromAnotherWindow && !singleTab) {
+        else if ((tabIsCopied || tabIsFromAnotherWindow) && !singleTab) {
           var tpp = tabs[i].getAttribute("possibleparent");
           if (tpp in tabIdMapping)
             tpp = tabIdMapping[tpp];
@@ -4282,7 +4284,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
           }
         }
       }
-      else if (!copyOrFromAnotherWindow) {
+      else if (!(tabIsCopied || tabIsFromAnotherWindow)) {
         if (shiftDragSubtree) {
           // Make sure old group isn't now a singleton
           var group = tk.getGroupById(draggedGid);
@@ -4290,7 +4292,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
             tk.removeGID(group[0], true);
         }
       }
-      /*else if (copyOrFromAnotherWindow) {
+      /*else if (tabIsCopied || tabIsFromAnotherWindow) {
         if (shiftDragSubtree) {
           // No need to worry about this, as no tabs are moved (they only get removed, so the TabClose listener sorts this out)
       }*/
