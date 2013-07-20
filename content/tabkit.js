@@ -4113,8 +4113,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
 
     // Determine if we're dealing with one tab or a group/subtree
-    var tabs;
-    var shiftDragSubtree;
+    var tabs = [];
+    var shiftDragSubtree = false;
     if (draggedGid && (event.shiftKey && _prefs.getBoolPref("shiftDragGroups")
            || draggedTab.hasAttribute("groupcollapsed"))) {
       // User wants to drag a group/subtree
