@@ -54,7 +54,7 @@
 <!ENTITY appearance.caption "Appearance">
 <!ENTITY disableSearchBar.label "Disable Search Bar">
 <!ENTITY disableSearchBar.accesskey "D">
-<!ENTITY disableTabGroupColor.label "Disable tab group coloring (require restart)">
+<!ENTITY disableTabGroupColor.label "Disable tab group coloring">
 
 <!ENTITY coloring.caption "Tab Coloring">
 <!ENTITY forceThemeCompatibility.label "Theme compatibility:">

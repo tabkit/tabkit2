@@ -1209,6 +1209,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     tk.addPrefListener("forceThemeCompatibility", tk.detectTheme);
     tk.addPrefListener("colorTabNotLabel", tk.detectTheme);
+    tk.addPrefListener("disableTabGroupColor", tk.detectTheme);
     tk.addPrefListener("minSaturation", tk.regenSaturationLightness);
     tk.addPrefListener("maxSaturation", tk.regenSaturationLightness);
     tk.addPrefListener("minLightness", tk.regenSaturationLightness);
@@ -3606,20 +3607,20 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   this.colorizeTab = function colorizeTab(tab) {
     try {
-      //New option to disable coloring
-      if (_prefs.getBoolPref("disableTabGroupColor")) {
-        return;
-      }
-
-
       var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label");
       var node = tab;
       if (!_prefs.getBoolPref("colorTabNotLabel")) {
         node = tabText;
       }
 
+      // Clear the style first anyway
       tab.style.removeProperty("background-image");
       tabText.style.removeProperty("background-image");
+
+      //New option to disable coloring
+      if (_prefs.getBoolPref("disableTabGroupColor")) {
+        return;
+      }
 
       var gid = tab.getAttribute("groupid");
       if (gid) {
@@ -3638,7 +3639,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       }
       //add by Pika, coloring for Fx4+
       if (bgColor != "") {
-        bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top",bgColor).replace("@HSL_Bottom",bgColor);
+        bgColor = "-moz-linear-gradient(@HSL_Top, @HSL_Bottom)".replace("@HSL_Top",bgColor).replace("@HSL_Bottom",bgColor);
       }
       else {
         // bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,1)").replace("@HSL_Bottom","hsla(0, 0%, 100%,1)");
