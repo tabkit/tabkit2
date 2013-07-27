@@ -5935,31 +5935,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
   };
   this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
-    window.addEventListener("mouseover", tk.onMouseOverTabEffect, false);
-    window.addEventListener("mouseout", tk.onMouseOutTabEffect, false);
-
     window.addEventListener("fullscreen", tk.onFullScreenToggle, false);
   };
   this.postInitListeners.push(this.postInitFx4Modifications);
   this.postInitListeners.push(this.postInitFx4TabEffects);
-
-  this.onMouseOverTabEffect = function onMouseOverTabEffect(event) {
-    if (event.target.nodeName != "xul:tab" && event.target.nodeName != "tab")
-      return;
-    var tab = event.target;
-
-    if (tab.hasAttribute("bartab-ontab") && tab.getAttribute("bartab-ontab")) //for same effect with bartab
-      tab.style.setProperty('opacity',0.3,'important');
-    else
-      tab.style.setProperty('opacity',0.7,'important');
-  };
-
-  this.onMouseOutTabEffect = function onMouseOutTabEffect(event) {
-    if (event.target.nodeName != "xul:tab" && event.target.nodeName != "tab")
-      return;
-
-    event.target.style.setProperty('opacity','','important');
-  };
 
   // Good for HTML5 full screen video viewing
   this.onFullScreenToggle = function onFullScreenToggle(event) {
