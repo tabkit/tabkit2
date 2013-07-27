@@ -939,26 +939,25 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 //{### Pref-attribute Mapping
 //|##########################
 
-  this.mapPrefsToAttribute = function mapPrefsToAttribute(prefs, test, node, attribute) {
+  this.mapPrefToAttribute = function mapPrefToAttribute(prefName, test, node, attributeName) {
     var listener = function() {
-      var value = test();
+      var value = test(prefName);
       if (value !== undefined) {
-        node.setAttribute(attribute, value);
+        node.setAttribute(attributeName, value);
       }
       else {
-        node.removeAttribute(attribute);
+        node.removeAttribute(attributeName);
       }
     };
 
-    for each (var pref in prefs) {
-      tk.addPrefListener(pref, listener);
-    }
+    tk.addPrefListener(prefName, listener);
 
+    // Call it once on start
     listener();
   };
 
-  this.mapBoolPrefToAttribute = function mapBoolPrefToAttribute(pref, node, attribute) {
-    tk.mapPrefsToAttribute([pref], function() { return _prefs.getBoolPref(pref) ? "true" : undefined; }, node, attribute);
+  this.mapBoolPrefToAttribute = function mapBoolPrefToAttribute(prefName, node, attributeName) {
+    tk.mapPrefToAttribute(prefName, function() { return _prefs.getBoolPref(prefName) ? "true" : undefined; }, node, attributeName);
   };
 
 //}##########################
