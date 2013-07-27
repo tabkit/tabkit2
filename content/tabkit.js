@@ -888,9 +888,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   // Presumeably more efficient than simply adding a global observer for each one...
   this.localPrefsListener = function localPrefsListener(changedPref) {
     changedPref = changedPref.substring(PREF_BRANCH.length); // Remove prefix for these local prefs
-    for (var pref in _localPrefListeners) {
-      if (changedPref.substring(0, pref.length) == pref) {
-        for each (var listener in _localPrefListeners[pref]) {
+    for (var prefName in _localPrefListeners) {
+      if (changedPref.substring(0, prefName.length) == prefName) {
+        for each (var listener in _localPrefListeners[prefName]) {
           listener(changedPref);
         }
       }
@@ -1956,7 +1956,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
 
     // Color tabs-bottom (see also colorizeTab, and note that tabs-bottom is hidden during multirow mode)
-    // if (_tabContainer.getAttribute("colortabnotlabel") == "true" && _tabContainer.getAttribute("multirow") != "true") {
+    // if (_prefs.getBoolPref("colorTabNotLabel") && _tabContainer.getAttribute("multirow") != "true") {
       // var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
       // if (tabsBottom) {
         // var bgColor = document.getAnonymousNodes(tab)[0].style.backgroundColor;
@@ -3423,7 +3423,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   this.detectTheme = function detectTheme() {
     var forceThemeCompatibility = _prefs.getIntPref("forceThemeCompatibility"); // 0: Never, 1: Auto, 2: Always
-    var colorTabNotLabel = _prefs.getBoolPref("colorTabNotLabel");
     var darkTheme;
 
     // Auto mode forces compatibility unless the theme has been tested
@@ -3466,34 +3465,28 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       darkTheme = (theme in badThemes) ? ("dark" in badThemes[theme]) : false;
     }
     if (forceThemeCompatibility > 0)
-      _tabContainer.setAttribute("tk-forcethemecompatibility", "true");
+      gBrowser.tabContainer.setAttribute("tk-forcethemecompatibility", "true");
     else
-      _tabContainer.removeAttribute("tk-forcethemecompatibility");
+      gBrowser.tabContainer.removeAttribute("tk-forcethemecompatibility");
 
     if (darkTheme)
-      _tabContainer.setAttribute("tk-darktheme", "true");
+      gBrowser.tabContainer.setAttribute("tk-darktheme", "true");
     else
-      _tabContainer.removeAttribute("tk-darktheme");
+      gBrowser.tabContainer.removeAttribute("tk-darktheme");
 
-    // Set colortabnotlabel attribute, clear up old colorizeTab results, and re-run colorizeTab for each tab
-    if (colorTabNotLabel) {
-      if (_tabContainer.getAttribute("colortabnotlabel") != "true") {
-        _tabContainer.setAttribute("colortabnotlabel", "true");
-        for (var i = 0; i < _tabs.length; i++) {
-          var t = _tabs[i];
-          t.ownerDocument.getAnonymousElementByAttribute(t, "class", "tab-text tab-label").style.backgroundColor = null;
-          tk.colorizeTab(t);
-        }
+    // Clear up old colorizeTab results and re-run colorizeTab for each tab
+    if (_prefs.getBoolPref("colorTabNotLabel")) {
+      for (var i = 0; i < gBrowser.tabs.length; i++) {
+        var tab = gBrowser.tabs[i];
+        tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label").style.backgroundColor = null;
+        tk.colorizeTab(tab);
       }
     }
-    else if (_tabContainer.hasAttribute("colortabnotlabel")) {
-      _tabContainer.removeAttribute("colortabnotlabel");
-      for (var i = 0; i < _tabs.length; i++) {
-        var t = _tabs[i];
-        var nodes = [ t ];
-        for (var j = 0; j < nodes.length; j++)
-          nodes[j].style.backgroundColor = null;
-        tk.colorizeTab(t);
+    else {
+      for (var i = 0; i < gBrowser.tabs.length; i++) {
+        var tab = gBrowser.tabs[i];
+        tab.style.backgroundColor = null;
+        tk.colorizeTab(tab);
       }
     }
   };
@@ -3508,8 +3501,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         var sat = tk.randInt(_prefs.getIntPref("minSaturation"), _prefs.getIntPref("maxSaturation"));
         var lum = tk.randInt(_prefs.getIntPref("minLightness"), _prefs.getIntPref("maxLightness"));
         tk.setWindowValue("knownColor:" + gid, "hsl(" + hue + ", " + sat + "%, " + lum + "%)");
-        for each (var t in groups[gid])
-          tk.colorizeTab(t);
+        for each (var tab in groups[gid]) {
+          tk.colorizeTab(tab);
+        }
       }
       catch (ex) { // Shouldn't happen
         tk.dump(ex);
@@ -3644,7 +3638,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       }
       var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label");
       // Background colors are reset on tab move (and close then restore), hence the listeners
-      if (_tabContainer.getAttribute("colortabnotlabel") == "true") { // This is set at the start of initSortingAndGrouping
+      if (_prefs.getBoolPref("colorTabNotLabel")) { // This is set at the start of initSortingAndGrouping
         var nodes = [ tab ];
       }
       else {
@@ -3663,7 +3657,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         // nodes[i].style.setProperty("color", "black", "important");   //oh turns out setTabsColorBlack is doing it already
       }
       // Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
-      // if (tab.getAttribute("selected") == "true" && _tabContainer.getAttribute("colortabnotlabel") == "true") {
+      // if (tab.getAttribute("selected") == "true" && _prefs.getBoolPref("colorTabNotLabel")) {
         // var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
         // if (tabsBottom)
           // tabsBottom.style.setProperty("background-color", bgColor, "important");
@@ -3685,7 +3679,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     // TODO=P4: GCODE Fx3: Make All Tabs prettier (since we mess things up a little by setting -moz-appearance: none)
     try {
       var bgSample = tab;//new line by Pika, Fx2 related
-      if (gBrowser.tabContainer.getAttribute("colortabnotlabel") == "true") {
+      if (_prefs.getBoolPref("colorTabNotLabel")) {
         menuItem.style.backgroundImage = bgSample.style.backgroundImage;
       }
       else if ((gBrowser.tabContainer.hasAttribute("tabkit-highlight-unread-tab") && !tab.hasAttribute("read"))
