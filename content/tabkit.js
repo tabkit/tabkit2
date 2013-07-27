@@ -1947,18 +1947,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       // Auto-expand groups when a hidden tab is accessed (note that normal methods of switching tabs skip these)
       tk.toggleGroupCollapsed(tab);
     }
-
-    // Color tabs-bottom (see also colorizeTab, and note that tabs-bottom is hidden during multirow mode)
-    // if (_prefs.getBoolPref("colorTabNotLabel") && _tabContainer.getAttribute("multirow") != "true") {
-      // var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
-      // if (tabsBottom) {
-        // var bgColor = document.getAnonymousNodes(tab)[0].style.backgroundColor;
-        // tabsBottom.style.setProperty("background-color", bgColor, "important");
-      // }
-      // else {
-        // tk.debug("sortgroup_onTabSelect: Couldn't find tabs-bottom");
-      // }
-    // }
   };
 
   // TODO=P3: GCODE Call updateAutoCollapse on restore if selected before the groupid is restored
@@ -3645,14 +3633,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         // bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,1)").replace("@HSL_Bottom","hsla(0, 0%, 100%,1)");
       }
       node.style.setProperty("background-image", bgColor, "important");
-      // Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
-      // if (tab.getAttribute("selected") == "true" && _prefs.getBoolPref("colorTabNotLabel")) {
-        // var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
-        // if (tabsBottom)
-          // tabsBottom.style.setProperty("background-color", bgColor, "important");
-        // else
-          // tk.debug("colorizeTab: Couldn't find tabs-bottom");
-      // }
     }
     catch (ex) {
       tk.dump(ex);
