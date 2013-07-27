@@ -1,6 +1,10 @@
 ### Changelog
 
 
+- **0.10.1**
+  - Change: Some Grouping coloring options no longer require restart
+  - Change: Change and cleanup some code to work with Tab Kit - Tab Highlighter 0.2.1
+
 - **0.10.0**
   - Add: Copy group URLs, separated by newlines (#4)
   - Remove: Some coloring features extracted into [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
