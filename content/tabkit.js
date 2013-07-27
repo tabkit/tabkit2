@@ -1226,6 +1226,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     tk.addPrefListener("indentAmount", tk.updateIndents);
     tk.addPrefListener("autoCollapse", tk.updateAutoCollapse);
 
+    // Bool value and attribute existence are inversed
+    tk.mapPrefToAttribute("colorTabNotLabel", function() {
+      return _prefs.getBoolPref("colorTabNotLabel") ? undefined : "true";
+    }, gBrowser.tabContainer, "tabkit-color-label-not-tab");
+
     // Set attributes for tabs that opened before we were able to register our listeners (in particular the initial xul:tab never fires a TabOpen event, and may never load either if it remains blank, but sometimes other tabs load first too)
     for (var i = 0; i < _tabs.length; i++) {
       tk.sortgroup_onTabAdded({ target: _tabs[i], fromInitSortingAndGrouping: true });
