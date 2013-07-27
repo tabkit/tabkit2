@@ -903,14 +903,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       _globalPrefObservers[prefString] = {
         listeners: [],
 
-        register: function() {
-          gPrefService.addObserver(prefString, this, false);
-        },
-
-        unregister: function() {
-          gPrefService.removeObserver(prefString, this);
-        },
-
         observe: function(aSubject, aTopic, aData) {
           if (aTopic != "nsPref:changed") return;
           // aSubject is the nsIPrefBranch we're observing (after appropriate QI)
@@ -921,18 +913,18 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         }
       };
 
-      window.addEventListener("unload", function() { _globalPrefObservers[prefString].unregister(); }, false);
-      _globalPrefObservers[prefString].register();
+      gPrefService.addObserver(prefString, _globalPrefObservers[prefString], false);
+      window.addEventListener("unload", function() { gPrefService.removeObserver(prefString, _globalPrefObservers[prefString]); }, false);
     }
 
     _globalPrefObservers[prefString].listeners.push(prefListener);
   };
 
-  this.addPrefListener = function addPrefListener(pref, listener) {
-    if (!_localPrefListeners[pref]) {
-      _localPrefListeners[pref] = [];
+  this.addPrefListener = function addPrefListener(prefName, listener) {
+    if (!_localPrefListeners[prefName]) {
+      _localPrefListeners[prefName] = [];
     }
-    _localPrefListeners[pref].push(listener);
+    _localPrefListeners[prefName].push(listener);
   };
 
 //}##########################
@@ -3478,14 +3470,12 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     if (_prefs.getBoolPref("colorTabNotLabel")) {
       for (var i = 0; i < gBrowser.tabs.length; i++) {
         var tab = gBrowser.tabs[i];
-        tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label").style.backgroundColor = null;
         tk.colorizeTab(tab);
       }
     }
     else {
       for (var i = 0; i < gBrowser.tabs.length; i++) {
         var tab = gBrowser.tabs[i];
-        tab.style.backgroundColor = null;
         tk.colorizeTab(tab);
       }
     }
@@ -3621,6 +3611,16 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         return;
       }
 
+
+      var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label");
+      var node = tab;
+      if (!_prefs.getBoolPref("colorTabNotLabel")) {
+        node = tabText;
+      }
+
+      tab.style.removeProperty("background-image");
+      tabText.style.removeProperty("background-image");
+
       var gid = tab.getAttribute("groupid");
       if (gid) {
         var bgColor = tk.getWindowValue("knownColor:" + gid);
@@ -3636,14 +3636,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       else {
         var bgColor = "";
       }
-      var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label");
-      // Background colors are reset on tab move (and close then restore), hence the listeners
-      if (_prefs.getBoolPref("colorTabNotLabel")) { // This is set at the start of initSortingAndGrouping
-        var nodes = [ tab ];
-      }
-      else {
-        var nodes = [ tabText ];
-      }
       //add by Pika, coloring for Fx4+
       if (bgColor != "") {
         bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top",bgColor).replace("@HSL_Bottom",bgColor);
@@ -3651,11 +3643,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       else {
         // bgColor = "-moz-linear-gradient(@HSL_Top,@HSL_Bottom)".replace("@HSL_Top","hsla(0, 0%, 100%,1)").replace("@HSL_Bottom","hsla(0, 0%, 100%,1)");
       }
-      for (var i = 0; i < nodes.length; i++) {
-        //edit by Pika, coloring for Fx4+
-        nodes[i].style.setProperty("background-image", bgColor, "important");
-        // nodes[i].style.setProperty("color", "black", "important");   //oh turns out setTabsColorBlack is doing it already
-      }
+      node.style.setProperty("background-image", bgColor, "important");
       // Color tabs-bottom (see also sortgroup_onTabSelect, and note that tabs-bottom is hidden during multirow mode)
       // if (tab.getAttribute("selected") == "true" && _prefs.getBoolPref("colorTabNotLabel")) {
         // var tabsBottom = document.getAnonymousElementByAttribute(tab.parentNode, "class", "tabs-bottom");
