@@ -620,6 +620,18 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     _sound.beep();
   };
 
+  this.getTabId = function (tab, forceUpdate) {
+    if (forceUpdate == null) {
+      forceUpdate = false;
+    }
+
+    if (forceUpdate || !tab.hasAttribute('tabid')) {
+      tab.setAttribute("tabid", tk.generateId());
+    }
+
+    return tab.getAttribute('tabid');
+  };
+
 //}##########################
 //{### Initialisation
 //|##########################
@@ -1468,7 +1480,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
           return;
 
         // Get pid, set possibleparent
-        var pid = parent ? parent.getAttribute("tabid") : null;
+        var pid = parent ? tk.getTabId(parent) : null;
         if (pid) {
           tab.setAttribute("possibleparent", pid);
           tk.updateIndents();
@@ -1758,7 +1770,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         var openerGroup = firstTab.getAttribute(tk.Groupings.opener);
         var gid = firstTab.getAttribute("groupid");
         if (!openerGroup) {
-          openerGroup = ":oG-bookmarkGroup-" + firstTab.getAttribute("tabid");
+          openerGroup = ":oG-bookmarkGroup-" + tk.getTabId(firstTab);
           firstTab.setAttribute(tk.Groupings.opener, openerGroup);
           if (tk.autoGroupNewTabs && !gid) {
             gid = openerGroup;
@@ -1837,8 +1849,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.sortgroup_onTabAdded = function sortgroup_onTabAdded(event) {
     var tab = event.target;
 
-    var tid = tk.generateId();
-    tab.setAttribute("tabid", tid);
+    var tid = tk.getTabId(tab);
 
     // Set keys
     tab.setAttribute(tk.Sorts.lastViewed, new Date().setYear(2030)); // Set never viewed tabs as viewed in the future!
@@ -2082,7 +2093,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       && arguments.callee.caller.caller.caller
       && arguments.callee.caller.caller.caller.name == "sss_duplicateTab")
     {
-      tab.setAttribute("tabid", tk.generateId()); // Tab must have its own unique tabid
+      tk.getTabId(tab); // Tab must have its own unique tabid
       tk.removeGID(tab); // Let duplicateTab's caller worry about groups
       return; // Don't call __sortgroup_onTabRestored (which might move the tab) - duplicating method must deal with this
     }
@@ -2226,7 +2237,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.sortgroup_onTabRemoved = function sortgroup_onTabRemoved(event) {
     var tab = event.target;
     var gid = tab.getAttribute("groupid");
-    var tid = tab.getAttribute("tabid");
+    var tid = tk.getTabId(tab);
     var pid = tab.getAttribute("possibleparent");
 
     // Choose next tab
@@ -2566,7 +2577,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         return defaultTab;
       }
       // The tab and siblings share an opener based group, so see if we can use possibleparents to choose close order
-      var tid = tab.getAttribute("tabid");
+      var tid = tk.getTabId(tab);
       var pid = tab.getAttribute("possibleparent");
       var openerGroup = tab.getAttribute(tk.Groupings.opener);
       if (prev.getAttribute(tk.Groupings.opener) == openerGroup) {
@@ -3133,9 +3144,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   this.getTabById = function getTabById(tid) {
     for (var i = 0; i < _tabs.length; i++) {
-      var t = _tabs[i];
-      if (t.getAttribute("tabid") == tid)
-        return t;
+      var tab = _tabs[i];
+      if (tk.getTabId(tab) == tid)
+        return tab;
     }
     tk.debug("Tab id not found: " + tid + "\n" + tk.quickStack());
     return null;
@@ -3377,7 +3388,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       if (pp) {
         for (var i = stack.length - 1; i >= 0; i--) {
           if (stack[i] == pp) {
-            stack.push(tab.getAttribute("tabid"));
+            stack.push(tk.getTabId(tab));
             tab.treeLevel = Math.min(i + 1, maxlevel); // For external use, e.g. dragging subtrees
             if (!groupcollapsed && subtreesEnabled) {
               tab.style.setProperty("margin-left", (indent * tab.treeLevel) + "px", "important");
@@ -3391,7 +3402,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       }
       tab.treeLevel = 0;
       tab.style.marginLeft = "";
-      stack = [ tab.getAttribute("tabid") ];
+      stack = [ tk.getTabId(tab) ];
     }
   };
   this.toggleIndentedTree = function toggleIndentedTree() {
@@ -3829,7 +3840,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         var pp = tabset[i].getAttribute("possibleparent");
         if (pp) {
           for (var j = i - 1; j >= 0; j--) {
-            if (tabset[j].getAttribute("tabid") == pp) {
+            if (tk.getTabId(tabset[j]) == pp) {
               if (tk.openRelativePosition == "left") {
                 tabset.splice(j, 0, tabset.splice(i, 1)[0]); // Move i before j
               }
@@ -4018,7 +4029,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this._duplicateTab = function _duplicateTab(aTab) {
     if (_ss) {
       var newTab = _ss.duplicateTab(window, aTab); // [Fx3+]
-      newTab.setAttribute("tabid", tk.generateId());
+      tk.getTabId(newTab);
       tk.removeGID(newTab);
       return newTab;
     }
@@ -4167,7 +4178,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       if (tabIsCopied || tabIsFromAnotherWindow)
         for (var i = 0; i < newTabs.length; i++)
           // Map tabids of original tabs to tabids of their clones
-          tabIdMapping[tabs[i].getAttribute("tabid")] = newTabs[i].getAttribute("tabid");
+          tabIdMapping[tk.getTabId(tabs[i])] = tk.getTabId(newTabs[i]);
 
       // Group/indent the new/moved tabs
       var newGid;
