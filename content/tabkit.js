@@ -3502,11 +3502,17 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   };
 
   this.allocateColor = function allocateColor(tab) {
-    var tgid = tab.getAttribute("groupid");
-    if (!tgid)
-      tk.dump("allocateColor requires a groupid!");
-    if (tk.getWindowValue("knownColor:" + tgid))
-      return;
+    var tabGroupID = tab.getAttribute("groupid");
+
+    if (!tabGroupID) {
+      return "";
+    }
+
+    var knownColorKey = "knownColor:" + tabGroupID;
+
+    if (tk.getWindowValue(knownColorKey)) {
+      return tk.getWindowValue(knownColorKey);
+    }
 
     // Find neighbouring gids
     var gids = [];
@@ -3597,11 +3603,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       }
     }
 
-    var sat = tk.randInt(_prefs.getIntPref("minSaturation"), _prefs.getIntPref("maxSaturation"));
-    var lum = tk.randInt(_prefs.getIntPref("minLightness"), _prefs.getIntPref("maxLightness"));
+    var saturation = tk.randInt(_prefs.getIntPref("minSaturation"), _prefs.getIntPref("maxSaturation"));
+    var lightness = tk.randInt(_prefs.getIntPref("minLightness"), _prefs.getIntPref("maxLightness"));
 
     // TODO=P3: GCODE Stop memory-leaking known colors (for the duration of a session)
-    tk.setWindowValue("knownColor:" + tgid, "hsl(" + hue + ", " + sat + "%, " + lum + "%)");
+    var resultColor = "hsl(@hue, @saturation%, @lightness%)".replace('@hue', hue).replace('@saturation', saturation).replace('@lightness', lightness);
+    tk.setWindowValue(knownColorKey, resultColor);
+    return resultColor;
   };
 
   this.colorizeTab = function colorizeTab(tab) {
@@ -3621,21 +3629,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         return;
       }
 
-      var gid = tab.getAttribute("groupid");
-      if (gid) {
-        var bgColor = tk.getWindowValue("knownColor:" + gid);
-        if (!bgColor) {
-          // Use a timeout to make sure the tab is in place (next to the groups it will neighbour) before we color it
-          window.setTimeout(function __colorizeTabLater(tk, tab) {
-            tk.allocateColor(tab);
-            tk.colorizeTab(tab);
-          }, 0, tk, tab);
-          return;
-        }
-      }
-      else {
-        var bgColor = "";
-      }
+      var bgColor = tk.allocateColor(tab);
+
       //add by Pika, coloring for Fx4+
       if (bgColor != "") {
         bgColor = "-moz-linear-gradient(@HSL_Top, @HSL_Bottom)".replace("@HSL_Top",bgColor).replace("@HSL_Bottom",bgColor);
