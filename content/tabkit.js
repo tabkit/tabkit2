@@ -3650,11 +3650,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
   };
 
-  this.setTabsColorBlack = function setTabsColorBlack(event) {
-    for (var i = 0; i<_tabs.length; i++)
-      _tabs[i].style.setProperty("color", "black", "important");
-  }
-
   this.colorAllTabsMenuItem = function colorAllTabsMenuItem(tab, menuItem) {
     // TODO=P4: GCODE Fx3: Make All Tabs prettier (since we mess things up a little by setting -moz-appearance: none)
     try {
@@ -3706,10 +3701,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     _tabContainer.addEventListener("TabClose", tk.colorAllTabsMenu, false);
     _tabContainer.addEventListener("TabSelect", tk.colorAllTabsMenu, false);
-    _tabContainer.addEventListener("TabSelect", tk.setTabsColorBlack, false);
 
     //Need to run at the first time or they will missed out
-    tk.setTabsColorBlack(event);
     tk.colorAllTabsMenu(event);
 
 
