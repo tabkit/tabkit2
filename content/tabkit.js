@@ -1849,7 +1849,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.sortgroup_onTabAdded = function sortgroup_onTabAdded(event) {
     var tab = event.target;
 
-    var tid = tk.getTabId(tab);
+    var tid = tk.getTabId(tab, true);
 
     // Set keys
     tab.setAttribute(tk.Sorts.lastViewed, new Date().setYear(2030)); // Set never viewed tabs as viewed in the future!
@@ -2093,7 +2093,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       && arguments.callee.caller.caller.caller
       && arguments.callee.caller.caller.caller.name == "sss_duplicateTab")
     {
-      tk.getTabId(tab); // Tab must have its own unique tabid
+      tk.getTabId(tab, true); // Tab must have its own unique tabid
       tk.removeGID(tab); // Let duplicateTab's caller worry about groups
       return; // Don't call __sortgroup_onTabRestored (which might move the tab) - duplicating method must deal with this
     }
@@ -4017,7 +4017,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this._duplicateTab = function _duplicateTab(aTab) {
     if (_ss) {
       var newTab = _ss.duplicateTab(window, aTab); // [Fx3+]
-      tk.getTabId(newTab);
+      tk.getTabId(newTab, true);
       tk.removeGID(newTab);
       return newTab;
     }
