@@ -4591,14 +4591,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
     tk.prependMethodCode('gBrowser.removeTab', 'if (aTab.getAttribute("protected") == "true") { tabkit.beep(); return; }');
 
-    tk.prependMethodCode('gBrowser.warnAboutClosingTabs', ' \
-      if (aAll === true) { \
-        var numProtected = this.tabContainer.getElementsByAttribute("protected", "true").length; \
-        if (numProtected > 0) \
-          return tabkit.warnAboutClosingProtectedTabs(numProtected); \
-      } \
-    ');
-
     _tabContainer.addEventListener("click", tk.protectedTabs_onClick, true);
 
     var tabContextMenu = _tabContainer.contextMenu;
@@ -4616,42 +4608,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       _ss.persistTabAttribute("protected");
   };
   this.postInitListeners.push(this.postInitProtectedTabs);
-
-  this.warnAboutClosingProtectedTabs = function warnAboutClosingProtectedTabs(numProtected) {
-    // Focus the window before prompting.
-    // This will raise any minimized window, which will
-    // make it obvious which window the prompt is for and will
-    // solve the problem of windows "obscuring" the prompt.
-    // See bug #350299 for more details
-    window.focus();
-    var strings = document.getElementById("bundle_tabkit");
-    var flags = _ps.BUTTON_POS_0 * _ps.BUTTON_TITLE_IS_STRING
-          + _ps.BUTTON_POS_1 * _ps.BUTTON_TITLE_CANCEL
-          + _ps.BUTTON_POS_2 * _ps.BUTTON_TITLE_IS_STRING;
-    var button = _ps.confirmEx(
-      window, //aParent
-      gBrowser.mStringBundle.getString("tabs.closeWarningTitle"), //aDialogTitle
-      strings.getFormattedString("close_warning_protected_tabs", [ _tabs.length, numProtected ]), //aText
-      flags, // aButtonFlags
-      strings.getString("close_all_tabs"), //aButton0Title
-      null, //aButton1Title // Cancel has to be button 1 due to Bug 345067 - Issues with prompt service's confirmEx - confirmEx always returns 1 when user closes dialog window using the X button in titlebar
-      strings.getString("close_unprotected_tabs"), //aButton2Title
-      null, //aCheckMsg
-      {} //aCheckState
-    );
-    if (button == 0) { // Close all tabs
-      return true;
-    }
-    else if (button == 2) { // Close unprotected tabs
-      for (var i = _tabs.length - 1; i >= 0; --i)
-        if (_tabs[i].getAttribute("protected") != "true")
-          gBrowser.removeTab(_tabs[i]);
-      return false;
-    }
-    else { // Cancel
-      return false;
-    }
-  };
 
   this.protectedTabs_onClick = function protectedTabs_onClick(event) {
     if (event.originalTarget.className == "tab-close-button"
@@ -5637,16 +5593,14 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.removeTabsBefore = function removeTabsBefore(contextTab) {
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
-    if (gBrowser.warnAboutClosingTabs(contextTab._tPos))
-      for (var i = contextTab._tPos - 1; i >= 0; i--)
-        gBrowser.removeTab(_tabs[i]);
+    for (var i = contextTab._tPos - 1; i >= 0; i--)
+      gBrowser.removeTab(_tabs[i]);
   };
   this.removeTabsAfter = function removeTabsAfter(contextTab) {
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
-    if (gBrowser.warnAboutClosingTabs(_tabs.length - contextTab._tPos - 1))
-      for (var i = _tabs.length - 1; i > contextTab._tPos; i--)
-        gBrowser.removeTab(_tabs[i]);
+    for (var i = _tabs.length - 1; i > contextTab._tPos; i--)
+      gBrowser.removeTab(_tabs[i]);
   };
 
   /// Method hooks:
