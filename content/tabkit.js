@@ -2477,24 +2477,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         $&' // When closing the last tab and browser.tabs.closeWindowWithLastTab is false, tk.chooseNextTab is called before the replacement tab is opened, so tk.blurTab returns null; the original _blurTab works fine in this case though
       ]);//}
     }
-    else if ("_endRemoveTab" in gBrowser) { // [Fx3.1b3]
-      tk.addMethodHook([//{
-        "gBrowser._endRemoveTab",
-
-        'newIndex = index == length ? index - 1 : index;',
-        'newIndex = tabkit.pickNextIndex(index, length); \
-        if (newIndex == null) $&' // When closing the last tab and browser.tabs.closeWindowWithLastTab is false, tk.chooseNextTab is perhaps called before the replacement tab is opened, so tk.pickNextIndex returns null; the original code works fine in this case though
-      ]);//}
-    }
-    else { // [Fx3-]
-      tk.addMethodHook([//{
-        "gBrowser.removeTab",
-
-        /newIndex = \(?index == l - 1\)? \? index - 1 : index;/,
-        'newIndex = tabkit.pickNextIndex(index, l - 1); \
-        if (newIndex == null) $&' // When closing the last tab and browser.tabs.closeWindowWithLastTab is false, tk.chooseNextTab is perhaps called before the replacement tab is opened, so tk.pickNextIndex returns null; the original code works fine in this case though
-      ]);//}
-    }
   };
   this.preInitListeners.push(this.preInitBlurTabModifications);
 
