@@ -135,7 +135,7 @@
                accesskey="&tabMinWidth.accesskey;"/>
         <textbox id="tabminwidth"
                  type="number"
-                 min="100" max="250"
+                 min="50" max="250"
                  preference="tabminwidth-pref"/>
         <label control="tabminwidth"
                value="&tabMinWidth.label2;"/>

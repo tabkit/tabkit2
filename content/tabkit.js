@@ -279,6 +279,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   const PREF_BRANCH = "extensions.tabkit.";
 
+
+  const TAB_MIN_WIDTH = 50;
+
 //}##########################
 //{### Services
 //|##########################
@@ -4744,7 +4747,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   // Note: this is also used by multi-row tabs
   this.setTabMinWidth = function setTabMinWidth(minWidth) {
     // _tabContainer.mTabMinWidth = minWidth;
-    minWidth = Math.max(minWidth, 100);
+    minWidth = Math.max(minWidth, TAB_MIN_WIDTH);
     for (var i = 0; i < _tabs.length; i++) {
       _tabs[i].minWidth = minWidth;
       //the index may change, also be noticed first rule start @ 1, [0] is always undefined, don't ask me why, idk
@@ -5137,7 +5140,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
           // visibleTabs++; // Treat the new tab button as a tab for our purposes
         var minWidth = gPrefService.getIntPref("browser.tabs.tabMinWidth");
         var availWidth = _tabContainer.mTabstrip._scrollbox.boxObject.width;
-        var tabsPerRow = Math.floor(availWidth / Math.max(minWidth, 100));  //Minimum minWidth of tab is 100, a built-in CSS rule
+        var tabsPerRow = Math.floor(availWidth / Math.max(minWidth, TAB_MIN_WIDTH));  //Minimum minWidth of tab is 100, a built-in CSS rule
         var rows = Math.ceil(visibleTabs / tabsPerRow);
       }
       if (rows > 1) {
