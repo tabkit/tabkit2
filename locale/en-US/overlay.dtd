@@ -94,6 +94,10 @@
 <!ENTITY bookmark.accesskey "B">
 <!ENTITY bookmark.acceltext "B">
 
+<!ENTITY reColor.label "Re-Color Group">
+
+<!ENTITY reColorAll.label "Re-Color All Groups">
+
 <!ENTITY copyUris.label "Copy Group URLs">
 <!ENTITY copyUris.accesskey "C">
 <!ENTITY copyUris.acceltext "C">

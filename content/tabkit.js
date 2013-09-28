@@ -488,6 +488,13 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       _winvars[aKey] = aStringValue;
   };
 
+  this.deleteWindowValue = function removeWindowValue(aKey) {
+    if (_ss)
+      _ss.deleteWindowValue(window, aKey);
+    else
+      delete _winvars[aKey];
+  };
+
 
 
 
@@ -2909,6 +2916,36 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
       tk.dump("showBookmarkDialog NOT in PlacesUIUtils.");
     }
   };
+  this.reColorGroup = function reColorGroup(contextTab) {
+    if (!contextTab)
+      contextTab = gBrowser.selectedTab;
+
+    // Remove known color for the group and re color all tabs in group
+    var tabGroupID = contextTab.getAttribute("groupid");
+    if (!tabGroupID) {
+      return;
+    }
+    var knownColorKey = "knownColor:" + tabGroupID;
+    tk.deleteWindowValue(knownColorKey);
+
+    for each (var tab in tk.getGroupFromTab(contextTab))
+      tk.colorizeTab(tab);
+  };
+  this.reColorAllGroups = function reColorAllGroups(contextTab) {
+    // Delete all known colors first, then regenerate again
+    var groups = tk.getAllGroups();
+
+    for (var gid in groups) {
+      var knownColorKey = "knownColor:" + gid;
+      tk.deleteWindowValue(knownColorKey);
+    }
+
+    for (var gid in groups) {
+      for each (var tab in groups[gid]) {
+        tk.colorizeTab(tab);
+      }
+    }
+  };
   this.copyGroupURIs = function copyGroupURIs(contextTab) {
     // TODO=P3: GCODE Drag group/subtree onto bookmarks toolbar should create bookmark folder
     if (!contextTab)
@@ -3506,7 +3543,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 
   this.allocateColor = function allocateColor(tab) {
     var tabGroupID = tab.getAttribute("groupid");
-
     if (!tabGroupID) {
       return "";
     }
@@ -3615,6 +3651,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     return resultColor;
   };
 
+  // Give color to the tab
+  //
+  // @params [Object] tab The tab to give color to
+  // @params [String] customColor Any custom color in format "hsl(@hue, @saturation%, @lightness%)"
   this.colorizeTab = function colorizeTab(tab) {
     try {
       var tabText = tab.ownerDocument.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label");
