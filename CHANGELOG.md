@@ -1,6 +1,9 @@
 ### Changelog
 
 
+- **0.10.2**
+  - Remove: Warning message and Firefox built-in protection when using "Close tabs left/right/above/below"
+
 - **0.10.1**
   - Change: Some Grouping coloring options no longer require restart
   - Change: Change and cleanup some code to work with Tab Kit - Tab Highlighter 0.2.1
