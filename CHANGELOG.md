@@ -1,6 +1,10 @@
 ### Changelog
 
 
+- **0.10.3**
+  - Add: Menu items for re-coloring a group and all groups (Right click on a group)
+  - Change: Minimal Tab width can now be set down to 50px (per request in review)
+
 - **0.10.2**
   - Remove: Warning message and Firefox built-in protection when using "Close tabs left/right/above/below"
 
