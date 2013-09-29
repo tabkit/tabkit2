@@ -5178,7 +5178,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
         //seems not needed in FF4+
         // if (newTabButton && newTabButton.className == "tabs-newtab-button")
           // visibleTabs++; // Treat the new tab button as a tab for our purposes
-        var minWidth = gPrefService.getIntPref("browser.tabs.tabMinWidth");
+        var minWidth = _prefs.getIntPref("tabs.tabMinWidth");
         var availWidth = _tabContainer.mTabstrip._scrollbox.boxObject.width;
         var tabsPerRow = Math.floor(availWidth / Math.max(minWidth, TAB_MIN_WIDTH));  //Minimum minWidth of tab is 100, a built-in CSS rule
         var rows = Math.ceil(visibleTabs / tabsPerRow);
