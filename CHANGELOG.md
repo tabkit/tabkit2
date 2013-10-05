@@ -1,7 +1,7 @@
 ### Changelog
 
 
-- **dev**
+- **0.10.4**
   - Add: Menu item for closing tabs from target tab to current tab
   - Change: Recoloring a single group now ignores the surrounding groups (otherwise it might have too little effect)
 
