@@ -2910,6 +2910,9 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     var knownColorKey = "knownColor:" + tabGroupID;
     tk.deleteWindowValue(knownColorKey);
 
+    tk.allocateColor(contextTab, true);
+
+
     for each (var tab in tk.getGroupFromTab(contextTab))
       tk.colorizeTab(tab);
   };
@@ -3523,7 +3526,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
   };
 
-  this.allocateColor = function allocateColor(tab) {
+  this.allocateColor = function allocateColor(tab, ignoreSurroundingGroups) {
+    if (ignoreSurroundingGroups == null) {
+      ignoreSurroundingGroups = false
+    }
+
     var tabGroupID = tab.getAttribute("groupid");
     if (!tabGroupID) {
       return "";
@@ -3558,7 +3565,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     }
 
     // If there are no surrounding groups, just generate a new color
-    if (gids.length < 1) {
+    if (gids.length < 1 || ignoreSurroundingGroups) {
       // TODO=P4: GCODE Should I give domain groups a consistent color even if it might be the same as nearby groups?
       var hue = Math.floor(Math.random() * 360);
     }

@@ -1,6 +1,9 @@
 ### Changelog
 
 
+- **dev**
+  - Change: Recoloring a single group now ignores the surrounding groups (otherwise it might have too little effect)
+
 - **0.10.3**
   - Add: Menu items for re-coloring a group and all groups (Right click on a group)
   - Change: Minimal tab width can now be set down to 50px (per request in review)
