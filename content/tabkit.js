@@ -2076,23 +2076,6 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   this.sortgroup_onSSTabRestoring = function sortgroup_onSSTabRestoring(event) {
     var tab = event.originalTarget;
 
-    if ("__SS_data" in tab.linkedBrowser.parentNode && "attributes" in tab.linkedBrowser.parentNode.__SS_data) {
-      // Clean up the tab, in case it had data before being restored into
-      var attributes = tab.linkedBrowser.parentNode.__SS_data.attributes;
-      if (!("groupid" in attributes) && tab.hasAttribute("groupid"))
-        tk.removeGID(tab);
-      if (!("groupcollapsed" in attributes) && tab.hasAttribute("groupcollapsed")) {
-        tab.removeAttribute("groupcollapsed");
-        tk.tabSetHidden(tab.hidden, false); // visibility of a tab
-      }
-      if (!("singletonid" in attributes) && tab.hasAttribute("singletonid"))
-        tab.removeAttribute("singletonid");
-      if (!("possibleparent" in attributes) && tab.hasAttribute("possibleparent"))
-        tab.removeAttribute("possibleparent");
-      if (!("outoforder" in attributes) && tab.hasAttribute("outoforder"))
-        tab.removeAttribute("outoforder");
-    }
-
     // Prevent restoring the lastViewedKey from overwriting the fact that the tab is currently being viewed
     if (tab.getAttribute("selected") == "true")
       tab.setAttribute(tk.Sorts.lastViewed, Date.now());
