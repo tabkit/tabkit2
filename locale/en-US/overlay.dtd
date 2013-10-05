@@ -75,6 +75,8 @@
 <!ENTITY toggleUnread.accesskey "R">
 <!ENTITY toggleUnread.acceltext "R">
 
+<!ENTITY closeFromHereToCurrent.label "Close Tabs From Here To Current">
+
 
 <!ENTITY group.caption "This Group:">
 

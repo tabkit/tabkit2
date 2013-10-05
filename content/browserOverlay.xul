@@ -40,6 +40,8 @@
   <command id="cmd_tabkit-tab-toggleProtected" oncommand="tabkit.toggleProtected(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-tab-toggleUnread" oncommand="tabkit.toggleUnread(TabContextMenu.contextTab);"/>
 
+  <command id="cmd_tabkit-sortgroup-tab-closeFromHereToCurrent" oncommand="tabkit.closeFromHereToCurrent(TabContextMenu.contextTab);"/>
+
 
   <command id="cmd_tabkit-sortgroup-group-collapseExpand" oncommand="tabkit.toggleGroupCollapsed(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-flatten" oncommand="tabkit.flattenGroup(TabContextMenu.contextTab);"/>
@@ -200,6 +202,9 @@
                 accesskey="&toggleUnread.accesskey;"
                 command="cmd_tabkit-tab-toggleUnread"
                 acceltext="&toggleUnread.acceltext;"/>
+      <menuitem id="menu_tabkit-sortgroup-tab-closeFromHereToCurrent"
+                label="&closeFromHereToCurrent.label;"
+                command="cmd_tabkit-sortgroup-tab-closeFromHereToCurrent"/>
 
       <menuseparator groupsonly="true"/>
 

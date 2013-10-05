@@ -2806,6 +2806,24 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
   };
 
 
+  this.closeFromHereToCurrent = function closeFromHereToCurrent(contextTab) {
+    if (!contextTab || contextTab == gBrowser.selectedTab)
+      return;
+
+    var start = Math.min(contextTab._tPos, gBrowser.selectedTab._tPos);
+    var end = Math.max(contextTab._tPos, gBrowser.selectedTab._tPos);
+
+
+    var tabsToClose = [];
+    for (var i = start; i <= end; i++) {
+      tabsToClose.push(gBrowser.tabs[i]);
+    }
+    for (var i = 0; i < tabsToClose.length; i++) {
+      gBrowser.removeTab(tabsToClose[i]);
+    }
+  };
+
+
   // TODO=P4: ??? Left click on already selected collapsed tab shows group as menu (with expand option obviously) - or maybe on right-click? (see auto-collapse/expanding)
   this.toggleGroupCollapsed = function toggleGroupCollapsed(contextTab) {
     if (!contextTab)
