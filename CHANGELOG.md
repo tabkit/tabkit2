@@ -1,6 +1,9 @@
 ### Changelog
 
 
+- **dev**
+  - Change: When closing multiple tabs, close from the right/bottom first
+
 - **0.10.4**
   - Add: Menu item for closing tabs from target tab to current tab
   - Change: Recoloring a single group now ignores the surrounding groups (otherwise it might have too little effect)

@@ -2801,7 +2801,7 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     for (var i = start; i <= end; i++) {
       tabsToClose.push(gBrowser.tabs[i]);
     }
-    for (var i = 0; i < tabsToClose.length; i++) {
+    for (var i = tabsToClose.length - 1; i >= 0; i--) {
       gBrowser.removeTab(tabsToClose[i]);
     }
   };
@@ -2977,8 +2977,10 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
 
-    for each (var tab in tk.getGroupFromTab(contextTab))
-      gBrowser.removeTab(tab);
+    var tabsToClose = tk.getGroupFromTab(contextTab);
+    for (var i = tabsToClose.length - 1; i >= 0; i--) {
+      gBrowser.removeTab(tabsToClose[i]);
+    }
   };
   this.closeSubGroup = function closeSubGroup(contextTab) {
     if (!contextTab)
@@ -2991,9 +2993,11 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
 
-    for each (var tab in tk.getSubtreeFromTab(contextTab))
-      if (tab != contextTab) // Don't close parent
-        gBrowser.removeTab(tab);
+    var tabsToClose = tk.getSubtreeFromTab(contextTab);
+    for (var i = tabsToClose.length - 1; i >= 0; i--) {
+      if (tabsToClose[i] != contextTab) // Don't close parent
+        gBrowser.removeTab(tabsToClose[i]);
+    }
   };
   this.ungroupGroup = function ungroupGroup(contextTab) {
     if (!contextTab)
