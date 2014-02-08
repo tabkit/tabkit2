@@ -1,4 +1,6 @@
-var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace' to hide our stuff in
+
+(function (window) {
+window.tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace' to hide our stuff in
 
 //|##########################
 //{### Basic Constants
@@ -296,5 +298,6 @@ var tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namespace
 //|##########################
 
 };
+})(this);
 
 window.addEventListener("DOMContentLoaded", tabkitGlobal.onDOMContentLoaded_global, false);

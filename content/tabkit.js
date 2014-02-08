@@ -263,7 +263,8 @@
  * TODO=P4: GCODE Check that shift-dragging a group and/or subtree into subtree never causes following tabs to reset indent
  */
 
-var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide our stuff in
+(function (window) {
+window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide our stuff in
 
 //|##########################
 //{### Basic Constants
@@ -5994,6 +5995,8 @@ var tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide ou
 //|##########################
 
 };
+})(this);
+
 
 
 window.addEventListener("DOMContentLoaded", tabkit.onDOMContentLoaded, false);
