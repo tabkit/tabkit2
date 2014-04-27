@@ -127,7 +127,6 @@
 
           <menuitem id="menu_tabkit-sortgroup-ungroupAll"
                     label="&ungroupAll.label;"
-                    accesskey="&ungroupAll.accesskey;"
                     command="cmd_tabkit-sortgroup-ungroupAll"/>
 
         </menupopup>
@@ -274,9 +273,7 @@
                 groupsonly="true"/>
       <menuitem id="menu_tabkit-sortgroup-group-ungroup"
                 label="&ungroup.label;"
-                accesskey="&ungroup.accesskey;"
                 command="cmd_tabkit-sortgroup-group-ungroup"
-                acceltext="&ungroup.acceltext;"
                 groupsonly="true"/>
 
       <menuseparator/>

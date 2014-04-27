@@ -32,7 +32,6 @@
 <!ENTITY groupByOpener.accesskey "P">
 
 <!ENTITY ungroupAll.label "Ungroup All Tabs">
-<!ENTITY ungroupAll.accesskey "U">
 
 
 <!ENTITY newTabs.label "New Tabs...">
@@ -119,8 +118,6 @@
 <!ENTITY closeChildren.acceltext "H; Ctrl+Shift+Middleclick">
 
 <!ENTITY ungroup.label "Ungroup Group">
-<!ENTITY ungroup.accesskey "U">
-<!ENTITY ungroup.acceltext "U">
 
 
 <!ENTITY options.label "Options">
