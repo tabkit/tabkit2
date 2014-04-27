@@ -5866,13 +5866,15 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 //|##########################
   this.postInitFx4Modifications = function postInitFx4Modifications(event) {
     // Not sure if pinned tab works in horizontal mode, but still BAM!
-    // tk.addMethodHook([
-      // "gBrowser.pinTab",
+    tk.addMethodHook([
+      "gBrowser.pinTab",
 
-      // 'if (aTab.pinned)',
-      // 'alert("Sorry, but Tabkit 2 does not support App Tabs"); return; \
-      // $&',
-    // ]);
+      'if (aTab.pinned)',
+      'if (tabkit.getIsVerticalMode()) { \
+      alert("Sorry, Tab Kit 2nd Edition does not support App Tabs in Vertical mode"); return; \
+      } \
+      $&',
+    ]);
 
     // Disable Panorama, why use Panorama when you have Tabkit?
     tk.addMethodHook([
