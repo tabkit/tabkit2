@@ -1,10 +1,12 @@
 ### Changelog
 
 
-## Unreleased
+## Unreleased
+
 ### Enhancements
 - When closing multiple tabs, close from the right/bottom first, so that the parent can be restored first
 - Remove access key for ungrouping tab groups to avoid accidents
+- Disallow "Pin Tab" in vertical mode (but allow in horizontal mode)
 
 ## 0.10.4
 - Add: Menu item for closing tabs from target tab to current tab
