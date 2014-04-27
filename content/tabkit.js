@@ -643,6 +643,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     return tab.getAttribute('tabid');
   };
 
+  this.getIsVerticalMode = function () {
+    return gBrowser.hasAttribute("vertitabbar");
+  };
+
 //}##########################
 //{### Initialisation
 //|##########################
@@ -2320,7 +2324,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       if (event.originalTarget.getAttribute('anonid') == 'close-button')
       {
         if (!event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey
-          && gBrowser.hasAttribute("vertitabbar")) {
+          && tabkit.getIsVerticalMode()) {
           // The user expected to close two tabs by clicking on a close button,
           // then clicking on the close button of the tab below it (which will
           // by now have risen up by one), so do this.
@@ -3349,7 +3353,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
 
   this.subtreesEnabled = function subtreesEnabled() {
-    return (gBrowser.hasAttribute("vertitabbar")
+    return (tk.getIsVerticalMode()
         && _prefs.getBoolPref("indentedTree"));
   };
 
@@ -3437,7 +3441,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
   };
   this.toggleIndentedTree = function toggleIndentedTree() {
-    if (gBrowser.hasAttribute("vertitabbar") && _prefs.getBoolPref("indentedTree"))
+    if (tk.getIsVerticalMode() && _prefs.getBoolPref("indentedTree"))
       tk.updateIndents();
     else
       for (var i = 0; i < _tabs.length; i++)
@@ -4128,7 +4132,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
       if (shiftDragSubtree) {
         /* Note that tk.getSubtreeFromTab checks tk.subtreesEnabled,
-         * which checks gBrowser.hasAttribute("vertitabbar") &&
+         * which checks `tabkit.getIsVerticalMode()` &&
          * _prefs.getBoolPref("indentedTree")*/
         tabs = tk.getSubtreeFromTab(draggedTab);
         if (tabs.length < 2)
@@ -4375,7 +4379,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       var newIndex = tk._getDropIndex(event);
       var targetTab = this.childNodes[newIndex < this.childNodes.length ? newIndex : newIndex - 1];
       var ltr = getComputedStyle(this, null).direction == "ltr";
-      var isVertical = gBrowser.hasAttribute("vertitabbar");
+      var isVertical = tk.getIsVerticalMode();
 
       var position = isVertical ? "screenY" : "screenX";
       var size = isVertical ? "height" : "width";
@@ -4438,7 +4442,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return;
       }
 
-      var isVertical = gBrowser.hasAttribute("vertitabbar");
+      var isVertical = tk.getIsVerticalMode();
       var position = isVertical ? "screenY" : "screenX";
       var size = isVertical ? "height" : "width";
       var start = isVertical ? "top" : "left";
@@ -4496,7 +4500,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned"))
       return;
 
-    var isVertical = gBrowser.hasAttribute("vertitabbar");
+    var isVertical = tk.getIsVerticalMode();
     var position = isVertical ? "screenY" : "screenX";
     var size = isVertical ? "height" : "width";
     var start = isVertical ? "top" : "left";
@@ -4845,7 +4849,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   }
   this.positionedTabbar_onTabOpen = function positionedTabbar_onTabOpen(event) {
     var tab = event.target;
-    if (gBrowser.hasAttribute("vertitabbar") && document.getElementById("tabkit-splitter")) {
+    if (tk.getIsVerticalMode() && document.getElementById("tabkit-splitter")) {
 
       tab.maxWidth = 9999;
       tab.minWidth = 0;
@@ -4861,7 +4865,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
   this.positionedTabbar_onTabSelect = function positionedTabbar_onTabSelect(event) {
     var tab = gBrowser.selectedTab;
-    if (gBrowser.hasAttribute("vertitabbar")) {
+    if (tk.getIsVerticalMode()) {
 
 
       // Tabs on different rows shouldn't get before/afterselected attributes
@@ -5345,7 +5349,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         'ib.style.display = "none";',
 
         'ind.style.MozMarginStart = newMargin + "px";',
-        'if (gBrowser.hasAttribute("vertitabbar")) { \
+        'if (tk.getIsVerticalMode()) { \
           newMargin = Math.floor(this.mStrip.width / 2); \
         } \
         ib.style.display = "none"; \
@@ -5354,7 +5358,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         'ind.style.MozMarginStart = newMargin + "px";',
         '$& \
         if (newIndex == this.tabs.length) \
-          ib.style.top = (this.tabs[newIndex-1].boxObject.screenY - this.tabs[0].boxObject.screenY + (gBrowser.hasAttribute("vertitabbar") ? this.tabs[newIndex-1].boxObject.height : 0)) + "px"; \
+          ib.style.top = (this.tabs[newIndex-1].boxObject.screenY - this.tabs[0].boxObject.screenY + (tk.getIsVerticalMode() ? this.tabs[newIndex-1].boxObject.height : 0)) + "px"; \
         else \
           ib.style.top = (this.tabs[newIndex].boxObject.screenY - this.tabs[0].boxObject.screenY) + "px"; \
         ib.style.display = null;',
@@ -5610,7 +5614,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return;
       }
 
-      if (gBrowser.hasAttribute("vertitabbar"))
+      if (tk.getIsVerticalMode())
         var delta = (Math.abs(event.detail) != 1 ? event.detail : (event.detail < 0 ? -3 : 3)) * 24;
       else if (gBrowser.tabContainer.getAttribute("multirow") == "true")
         var delta = event.detail < 0 ? -48 : 48; // 2*24
