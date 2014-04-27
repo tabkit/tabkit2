@@ -6,8 +6,10 @@ The most updated version (0.6) is not compatible with FF4+, since FF3->4 has a H
 This project aims to change modify the original TK to make it FF4+ compatible (and drop the support for pre-FF4).  
 The name for the new(not quite) extension is *Tab Kit 2nd Edition*(You can still call it *Tab Kit 2* or *TK2* for short)
 
-## News & Discussion
-- [Google Group (For more general discussion)](http://groups.google.com/group/tabkit-2nd-edition)
+## Extension since `0.10.0`
+Some features are extracted into other extensions (which can be used separately):
+- Some coloring features extracted into [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
+- Some mouse gesture features extracted into [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
 
 ## Download / Installation
 - [Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/)  
@@ -27,6 +29,9 @@ See https://github.com/tabkit/tabkit2/blob/master/CHANGELOG.md
 - [Tab Kit 2nd Edition](https://github.com/tabkit/tabkit2)
 - [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
 - [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
+
+## News & Discussion
+- [Google Group (For more general discussion)](http://groups.google.com/group/tabkit-2nd-edition)
 
 ## Project Helper Needed!
 If you want some feature added, then it might be faster to do it yourself! :P  
