@@ -58,6 +58,8 @@
 <!ENTITY newTabHere.accesskey "N">
 <!ENTITY newTabHere.acceltext "N">
 
+<!ENTITY openClipboardLinks.label "Open Clipboard Link(s) in group">
+
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY duplicateTab.accesskey "D">
 <!ENTITY duplicateTab.acceltext "D">

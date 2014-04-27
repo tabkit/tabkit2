@@ -5852,6 +5852,50 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       gBrowser.selectedTab = firstTab;
   };
 
+  this.openClipboardLinks = function openClipboardLinks(contextTab) {
+    var unicodeString = '';
+    
+    try {
+      var transferable = Components.classes["@mozilla.org/widget/transferable;1"]
+                         .createInstance(Components.interfaces.nsITransferable);
+      var clipboard = Components.classes["@mozilla.org/widget/clipboard;1"].
+                      createInstance(Components.interfaces.nsIClipboard);
+                      
+      // Store the transfered data
+      var unicodeStringObject = new Object();
+      var unicodeStringLengthObject = new Object();
+      
+      if ('init' in transferable) transferable.init(null); // Gecko 16
+      
+      transferable.addDataFlavor("text/unicode");
+      clipboard.getData(transferable, clipboard.kGlobalClipboard);
+      transferable.getTransferData("text/unicode", unicodeStringObject, unicodeStringLengthObject);
+      
+      if (unicodeStringObject) {
+        unicodeString = unicodeStringObject.value.QueryInterface(Components.interfaces.nsISupportsString).toString();
+      }
+    } catch (ex) {
+      return;
+    }
+    
+    var uris = tk.detectURIsFromText(unicodeString);
+    
+    if (uris.length == 0) {
+      return;
+    }
+    
+    var firstTab = gBrowser.addTab(uris.shift());
+    var lastTab = firstTab;
+    for each (var uri in uris) {
+      lastTab = gBrowser.addTab(uri);
+    }
+    if (!gPrefService.getBoolPref("browser.tabs.loadInBackground")) {
+      gBrowser.selectedTab = firstTab;
+    }
+    // Even has one tab, lastTab == firstTab so this method would do nothing
+    tk.makeGroupBetweenTwoTabs(firstTab, lastTab);
+  };
+  
   // @return [Array]
   this.detectURIsFromText = function detectURIsFromText(textToDetect) {
     var uris = [];

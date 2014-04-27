@@ -34,6 +34,7 @@
 
 
   <command id="cmd_tabkit-sortgroup-tab-newTabHere" oncommand="tabkit.openNewTabHere(TabContextMenu.contextTab);"/>
+  <command id="cmd_tabkit-sortgroup-tab-openClipboardLinks" oncommand="tabkit.openClipboardLinks(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-tab-duplicateTab" oncommand="tabkit.duplicateTab(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-tab-makeGroup" oncommand="tabkit.makeGroup(TabContextMenu.contextTab);"/>
 
@@ -180,6 +181,9 @@
                 accesskey="&newTabHere.accesskey;"
                 command="cmd_tabkit-sortgroup-tab-newTabHere"
                 acceltext="&newTabHere.acceltext;"/>
+      <menuitem id="menu_tabkit-sortgroup-tab-openClipboardLinks"
+                label="&openClipboardLinks.label;"
+                command="cmd_tabkit-sortgroup-tab-openClipboardLinks"/>
       <menuitem id="menu_tabkit-sortgroup-tab-duplicateTab"
                 label="&duplicateTab.label;"
                 accesskey="&duplicateTab.accesskey;"
