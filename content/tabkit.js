@@ -5813,29 +5813,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     var uris = [];
 
     var selectedText = focusedWindow.getSelection().toString();
-    if (selectedText == "")
-      return uris;
-
-    // Using regex from http://www.regexguru.com/2008/11/detecting-urls-in-a-block-of-text/
-    // This matches anything starting with www., ftp., http://, https:// or ftp://
-    // and containing common URL characters, but the final character is restricted (for
-    // example URLs mustn't end in brackets, dots, or commas). It will however correctly
-    // recognise urls such as http://en.wikipedia.org/wiki/Rock_(disambiguation) by
-    // specifically permitting singly-nested matching brackets.
-    var matches = selectedText.match(/\b(?:(?:https?|ftp):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/ig);
-    if (matches != null) {
-      for (var i = 0; i < matches.length; i++) {
-        var uri = matches[i];
-        uri = gBrowser.mURIFixup.createFixupURI(uri, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
-        if (uri == null)
-          continue;
-        uri = uri.spec;
-        if (uris.indexOf(uri) == -1)
-          uris.push(uri);
-      }
-    }
-
-    return uris;
+    return tk.detectURIsFromText(selectedText);
   };
 
   this.openSelectedLinks = function openSelectedLinks(menuItem) {
@@ -5859,6 +5837,36 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       gBrowser.addTab(uri);
     if (!gPrefService.getBoolPref("browser.tabs.loadInBackground"))
       gBrowser.selectedTab = firstTab;
+  };
+
+  // @return [Array]
+  this.detectURIsFromText = function detectURIsFromText(textToDetect) {
+    var uris = [];
+    if (textToDetect == "")
+      return uris;
+    
+    // Using regex from http://www.regexguru.com/2008/11/detecting-urls-in-a-block-of-text/
+    // This matches anything starting with www., ftp., http://, https:// or ftp://
+    // and containing common URL characters, but the final character is restricted (for
+    // example URLs mustn't end in brackets, dots, or commas). It will however correctly
+    // recognise urls such as http://en.wikipedia.org/wiki/Rock_(disambiguation) by
+    // specifically permitting singly-nested matching brackets.
+    var matches = textToDetect.match(/\b(?:(?:https?|ftp):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/ig);
+    if (matches == null) {
+      return uris;
+    }
+    
+    for (var i = 0; i < matches.length; i++) {
+      var uri = matches[i];
+      uri = gBrowser.mURIFixup.createFixupURI(uri, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
+      if (uri == null)
+        continue;
+      uri = uri.spec;
+      if (uris.indexOf(uri) == -1)
+        uris.push(uri);
+    }
+
+    return uris;
   };
 
 //}##########################
