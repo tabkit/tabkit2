@@ -2713,8 +2713,22 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (!contextTab || contextTab == gBrowser.selectedTab)
       return;
 
-    var start = Math.min(contextTab._tPos, gBrowser.selectedTab._tPos);
-    var end = Math.max(contextTab._tPos, gBrowser.selectedTab._tPos);
+    tk.makeGroupBetweenTwoTabs(contextTab, gBrowser.selectedTab);
+  };
+  // TODO=P4: N/A merge left/right & split group features?
+
+  // Make tabs between two tab group together
+  // If they are the same tab then do nothing
+  this.makeGroupBetweenTwoTabs = function makeGroupBetweenTwoTabs(tabA, tabB) {
+    if (!tabA || !tabB) {
+      return;
+    }
+    if (tabA == tabB) {
+      return;
+    }
+    
+    var start = Math.min(tabA._tPos, tabB._tPos);
+    var end = Math.max(tabA._tPos, tabB._tPos);
 
     var reallyRegroup = false;
     for (var i = start; i <= end; i++) {
@@ -2781,7 +2795,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (reallyRegroup)
       tk.keepGroupsTogether();
   };
-  // TODO=P4: N/A merge left/right & split group features?
 
   this.toggleUnread = function toggleUnread(contextTab) {
     if (!contextTab)
@@ -5813,29 +5826,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     var uris = [];
 
     var selectedText = focusedWindow.getSelection().toString();
-    if (selectedText == "")
-      return uris;
-
-    // Using regex from http://www.regexguru.com/2008/11/detecting-urls-in-a-block-of-text/
-    // This matches anything starting with www., ftp., http://, https:// or ftp://
-    // and containing common URL characters, but the final character is restricted (for
-    // example URLs mustn't end in brackets, dots, or commas). It will however correctly
-    // recognise urls such as http://en.wikipedia.org/wiki/Rock_(disambiguation) by
-    // specifically permitting singly-nested matching brackets.
-    var matches = selectedText.match(/\b(?:(?:https?|ftp):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/ig);
-    if (matches != null) {
-      for (var i = 0; i < matches.length; i++) {
-        var uri = matches[i];
-        uri = gBrowser.mURIFixup.createFixupURI(uri, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
-        if (uri == null)
-          continue;
-        uri = uri.spec;
-        if (uris.indexOf(uri) == -1)
-          uris.push(uri);
-      }
-    }
-
-    return uris;
+    return tk.detectURIsFromText(selectedText);
   };
 
   this.openSelectedLinks = function openSelectedLinks(menuItem) {
@@ -5859,6 +5850,80 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       gBrowser.addTab(uri);
     if (!gPrefService.getBoolPref("browser.tabs.loadInBackground"))
       gBrowser.selectedTab = firstTab;
+  };
+
+  this.openClipboardLinks = function openClipboardLinks(contextTab) {
+    var unicodeString = '';
+    
+    try {
+      var transferable = Components.classes["@mozilla.org/widget/transferable;1"]
+                         .createInstance(Components.interfaces.nsITransferable);
+      var clipboard = Components.classes["@mozilla.org/widget/clipboard;1"].
+                      createInstance(Components.interfaces.nsIClipboard);
+                      
+      // Store the transfered data
+      var unicodeStringObject = new Object();
+      var unicodeStringLengthObject = new Object();
+      
+      if ('init' in transferable) transferable.init(null); // Gecko 16
+      
+      transferable.addDataFlavor("text/unicode");
+      clipboard.getData(transferable, clipboard.kGlobalClipboard);
+      transferable.getTransferData("text/unicode", unicodeStringObject, unicodeStringLengthObject);
+      
+      if (unicodeStringObject) {
+        unicodeString = unicodeStringObject.value.QueryInterface(Components.interfaces.nsISupportsString).toString();
+      }
+    } catch (ex) {
+      return;
+    }
+    
+    var uris = tk.detectURIsFromText(unicodeString);
+    
+    if (uris.length == 0) {
+      return;
+    }
+    
+    var firstTab = gBrowser.addTab(uris.shift());
+    var lastTab = firstTab;
+    for each (var uri in uris) {
+      lastTab = gBrowser.addTab(uri);
+    }
+    if (!gPrefService.getBoolPref("browser.tabs.loadInBackground")) {
+      gBrowser.selectedTab = firstTab;
+    }
+    // Even has one tab, lastTab == firstTab so this method would do nothing
+    tk.makeGroupBetweenTwoTabs(firstTab, lastTab);
+  };
+  
+  // @return [Array]
+  this.detectURIsFromText = function detectURIsFromText(textToDetect) {
+    var uris = [];
+    if (textToDetect == "")
+      return uris;
+    
+    // Using regex from http://www.regexguru.com/2008/11/detecting-urls-in-a-block-of-text/
+    // This matches anything starting with www., ftp., http://, https:// or ftp://
+    // and containing common URL characters, but the final character is restricted (for
+    // example URLs mustn't end in brackets, dots, or commas). It will however correctly
+    // recognise urls such as http://en.wikipedia.org/wiki/Rock_(disambiguation) by
+    // specifically permitting singly-nested matching brackets.
+    var matches = textToDetect.match(/\b(?:(?:https?|ftp):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/ig);
+    if (matches == null) {
+      return uris;
+    }
+    
+    for (var i = 0; i < matches.length; i++) {
+      var uri = matches[i];
+      uri = gBrowser.mURIFixup.createFixupURI(uri, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
+      if (uri == null)
+        continue;
+      uri = uri.spec;
+      if (uris.indexOf(uri) == -1)
+        uris.push(uri);
+    }
+
+    return uris;
   };
 
 //}##########################
