@@ -5173,7 +5173,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         for (var i = 0; i < _tabs.length; i++)
           if (_tabs[i].hidden) // visibility of a tab
             visibleTabs--;
-        var newTabButton = _tabs[_tabs.length-1].boxObject.nextSibling; // [Fx3.5+]
+        //var newTabButton = _tabs[_tabs.length-1].boxObject.nextSibling; // [Fx3.5+]
         //seems not needed in FF4+
         // if (newTabButton && newTabButton.className == "tabs-newtab-button")
           // visibleTabs++; // Treat the new tab button as a tab for our purposes
