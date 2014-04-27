@@ -2713,8 +2713,22 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (!contextTab || contextTab == gBrowser.selectedTab)
       return;
 
-    var start = Math.min(contextTab._tPos, gBrowser.selectedTab._tPos);
-    var end = Math.max(contextTab._tPos, gBrowser.selectedTab._tPos);
+    tk.makeGroupBetweenTwoTabs(contextTab, gBrowser.selectedTab);
+  };
+  // TODO=P4: N/A merge left/right & split group features?
+
+  // Make tabs between two tab group together
+  // If they are the same tab then do nothing
+  this.makeGroupBetweenTwoTabs = function makeGroupBetweenTwoTabs(tabA, tabB) {
+    if (!tabA || !tabB) {
+      return;
+    }
+    if (tabA == tabB) {
+      return;
+    }
+    
+    var start = Math.min(tabA._tPos, tabB._tPos);
+    var end = Math.max(tabA._tPos, tabB._tPos);
 
     var reallyRegroup = false;
     for (var i = start; i <= end; i++) {
@@ -2781,7 +2795,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (reallyRegroup)
       tk.keepGroupsTogether();
   };
-  // TODO=P4: N/A merge left/right & split group features?
 
   this.toggleUnread = function toggleUnread(contextTab) {
     if (!contextTab)
