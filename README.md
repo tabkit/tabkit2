@@ -6,7 +6,10 @@ The most updated version (0.6) is not compatible with FF4+, since FF3->4 has a H
 This project aims to change modify the original TK to make it FF4+ compatible (and drop the support for pre-FF4).  
 The name for the new(not quite) extension is *Tab Kit 2nd Edition*(You can still call it *Tab Kit 2* or *TK2* for short)
 
-## Extension since `0.10.0`
+## Extension since `0.10.0`
+
+
+
 Some features are extracted into other extensions (which can be used separately):
 - Some coloring features extracted into [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
 - Some mouse gesture features extracted into [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
@@ -52,7 +55,7 @@ But if you don't want to wait, then use the Custom download one :P
 (But it seems OK since Fx10 o_0)
 
 ## Compatibility with new features in Fx4+
-  - TabsOnTop: Works fine on horizontal mode, no effect on vertical mode
+  - TabsOnTop: Not allowed by Tab Kit
   - App/Pin Tabs: Use it at your own risk, no support provided
   - Tab Groups: Disabled
 

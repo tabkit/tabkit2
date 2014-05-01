@@ -5964,8 +5964,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     // Issue 47, Ban TabsOnTop if tab bar is not on top
     tk.prependMethodCode(
       'TabsOnTop.toggle',
-      'if (!this.enabled && tabkit.localPrefService.getIntPref("tabbarPosition") != tabkit.Positions.TOP) \
-      { alert("Sorry, but Tabkit 2 cannot allow you to enable TabsOnTop unless the tab bar is on top"); return; }'
+      'if (!this.enabled) \
+      { alert("Sorry, but Tabkit 2 cannot allow you to enable TabsOnTop"); return; }'
     );
 
     // Disable the sliding effect of tab dragging until here is an preference
@@ -6000,6 +6000,19 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       }
     }
   };
+  
+  this.onPrefTabsonTopChanged = function onPrefTabsonTopChanged() {
+    if (gPrefService.getBoolPref("browser.tabs.onTop") === true) {
+      gPrefService.setBoolPref("browser.tabs.onTop", false);
+    }
+  };
+  this.initOnPrefTabsonTopChanged = function initOnPrefTabsonTopChanged(event) {
+    tk.addGlobalPrefListener("browser.tabs.onTop", tk.onPrefTabsonTopChanged);
+    
+    // Run it once on start
+    tk.onPrefTabsonTopChanged();
+  };
+  this.initListeners.push(this.initOnPrefTabsonTopChanged);
 
 
 //}##########################
