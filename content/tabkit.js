@@ -4184,14 +4184,22 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         // tk.chosenNewIndex = newIndex;
         // event.tab = tab;
         // gBrowser.old_onDrop(event);
-        var copiedTab = tk._duplicateTab(tab)
+        var copiedTab = tk._duplicateTab(tab);
         gBrowser.moveTabTo(copiedTab, newIndex);
 
         newTabs.unshift(copiedTab);
 
         tk.addingTabOver();
-        if (singleTab && draggedTab == beforeTab)
+        
+        if (tabIsFromAnotherWindow) {
+          // Code copied from addon SDK
+          var draggedTabWindow = draggedTab.ownerDocument.defaultView;
+          draggedTabWindow.gBrowser.removeTab(draggedTab);
+        }
+        
+        if (singleTab && draggedTab == beforeTab) {
           return; // addingTabOver will already have grouped the tab etc, so skip ___onDropCallback
+        }
       }
       else {
         // Tab will be moved directly
