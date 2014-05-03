@@ -5949,18 +5949,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       $&',
     ]);
 
-    // Disable Panorama, why use Panorama when you have Tabkit?
-    tk.addMethodHook([
-      "TabView.toggle",
-
-      'if (this.isVisible())',
-      '{ alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)"); return; } \
-      $&',
-    ]);
-    //Also need to disable certain menu item(s)
-    var context_tabViewMenu = document.getElementById("context_tabViewMenu");
-    context_tabViewMenu.disabled = true;
-
     // Issue 22, some weird behavior by the new animation related functions which mess with tabs' maxWidth
     tk.addMethodHook([
       'gBrowser.tabContainer._lockTabSizing',
@@ -6058,6 +6046,22 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tk.debug('Going to set layout.css.devPixelsPerPx to ' + result);
     gPrefService.setCharPref("layout.css.devPixelsPerPx", result.toFixed(2));
   };
+  
+  
+  // ### Panorama Related
+  this.Panorama = this.Panorama || {};
+  this.Panorama.Initializers = this.Panorama.Initializers || {};
+  this.Panorama.Initializers.addMethodHookOnPostInit = function addMethodHookOnPostInit(event) {
+    // Disable Panorama, why use Panorama when you have Tabkit?
+    tk.addMethodHook([
+      "TabView.toggle",
+
+      'if (this.isVisible())',
+      '{ alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)"); return; } \
+      $&',
+    ]);
+  };
+  this.postInitListeners.push(this.Panorama.Initializers.addMethodHookOnPostInit);
 
 //}##########################
 //{### Debug Aids
