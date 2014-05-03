@@ -1,7 +1,7 @@
 ### Changelog
 
 
-## Unreleased
+## 0.10.5
 
 ### New Features
 - Open clipboard URIs in group (right click -> Tab Kit)
