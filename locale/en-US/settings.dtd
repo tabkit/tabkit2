@@ -186,3 +186,9 @@
 <!ENTITY resetAll.accesskey "R">
 <!ENTITY disableAll.label "Turn off all features">
 <!ENTITY disableAll.accesskey "T">
+
+<!ENTITY pane.experimental.title "Experimental">
+
+<!ENTITY pane.experimental.group.firefox.caption "Firefox Built-in Features">
+<!ENTITY pane.experimental.group.firefox.label "Any features enabled here won't be supported.">
+<!ENTITY pane.experimental.group.firefox.Panorama.enabled.label "Enable Panorama">

@@ -6057,7 +6057,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       "TabView.toggle",
 
       'if (this.isVisible())',
-      '{ alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)"); return; } \
+      'if (tabkit.localPrefService.getBoolPref("panorama.enabled") === false) { \
+        alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)"); return; \
+      } \
       $&',
     ]);
   };

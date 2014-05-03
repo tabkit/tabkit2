@@ -10,6 +10,7 @@
 - When closing multiple tabs, close from the right/bottom first, so that the parent can be restored first
 - Remove access key for ungrouping tab groups to avoid accidents
 - Disallow "Pin Tab" in vertical mode (but allow in horizontal mode)
+- Add option to enable Panorama (Options -> Experimental)
 
 ### Changes
 - Always disable TabsOnTop to avoid layout issue

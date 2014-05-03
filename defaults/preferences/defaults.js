@@ -95,6 +95,11 @@ pref("extensions.tabkit.newTabsAreRelated", false);
 //}
 
 
+//{ ### Experimental ###
+// Allow Panorama to be used
+pref("extensions.tabkit.panorama.enabled", false);
+
+
 //{ ### (Hidden) ###
 pref("extensions.tabkit.firstRunWizardDone", false); // TODO=P3: Add checkbox to re-enable
 pref("extensions.tabkit.checkCompatibility", true); // TODO=P3: Add checkbox to re-enable

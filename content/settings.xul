@@ -430,6 +430,20 @@
     </groupbox>
   </prefpane>
 
+  <prefpane id="experimental-pane" label="&pane.experimental.title;" image="chrome://tabkit/skin/prefs-experimental.png">
+    <preferences>
+      <preference id="enablepanorama-pref" name="extensions.tabkit.panorama.enabled" type="bool"/>
+    </preferences>
+
+    <groupbox><caption label="&pane.experimental.group.firefox.caption;"/>
+      <vbox>
+        <label value="&pane.experimental.group.firefox.label;"/>
+        <checkbox id="enablepanorama" label="&pane.experimental.group.firefox.Panorama.enabled.label;"
+            preference="enablepanorama-pref"/>
+      </vbox>
+    </groupbox>
+  </prefpane>
+
   <script type="application/x-javascript" src="chrome://tabkit/content/settings.js"/>
 
 </prefwindow>
