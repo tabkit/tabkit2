@@ -1,5 +1,10 @@
 ### Changelog
 
+## Unreleased
+
+### Enhancements
+- Add option to toggle "force disable TabsOnTop" (Options -> Tab Bar)
+
 
 ## 0.10.5
 
@@ -15,7 +20,8 @@
 ### Changes
 - Always disable TabsOnTop to avoid layout issue
 
-### Bug Fix
+### Bug Fix
+
 - Moving tab across window will now close the original one from old window
 
 

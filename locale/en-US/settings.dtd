@@ -38,6 +38,9 @@
 <!ENTITY DPIValue.label "Your current DPI value">
 <!ENTITY DPIValue.accesskey "D">
 
+<!ENTITY pane.tabbar.group.firefox.caption "Firefox Built-in Features Related">
+<!ENTITY pane.tabbar.group.firefox.tabsontop.force_disable.label "Force Disable TabsOnTop">
+
 <!ENTITY tabs.title "Tabs">
 
 <!ENTITY tabs.caption "Tabs">

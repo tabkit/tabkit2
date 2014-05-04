@@ -20,6 +20,8 @@
       <preference id="indentamount-pref" name="extensions.tabkit.indentAmount" type="int"/>
 
       <preference id="dpivalue-pref" name="extensions.tabkit.DPIValue" type="int"/>
+      
+      <preference id="firefox-tabsontop-force_disable-enabled-pref" name="extensions.tabkit.firefox.tabsontop.force_disable.enabled" type="bool"/>
     </preferences>
 
     <groupbox>
@@ -107,6 +109,15 @@
                  min="96" max="192"
                  preference="dpivalue-pref"/>
       </hbox>
+    </groupbox>
+
+    <groupbox id="pane-tabbar__group-firefox">
+      <caption label="&pane.tabbar.group.firefox.caption;"/>
+
+      <vbox>
+        <checkbox id="firefox-tabsontop-force_disable-enabled-checkbox" label="&pane.tabbar.group.firefox.tabsontop.force_disable.label;"
+            preference="firefox-tabsontop-force_disable-enabled-pref"/>
+      </vbox>
     </groupbox>
   </prefpane>
 

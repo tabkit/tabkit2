@@ -13,6 +13,9 @@ pref("extensions.tabkit.indentedTree", true);
 
 //--- DPI value ---
 pref("extensions.tabkit.DPIValue", 96);
+
+//--- Firefox feature related ---
+pref("extensions.tabkit.firefox.tabsontop.force_disable.enabled", true);
 //}
 
 
