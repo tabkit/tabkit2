@@ -367,6 +367,15 @@
   height: auto !important;
 }
 
+/* [since Fx29] */
+.tabbrowser-tabs[multirow="true"] .tabbrowser-tab {
+  vertical-align: top;
+}
+.tabbrowser-tabs[multirow="true"] .tabbrowser-tab .tab-background > * {
+  min-height: 26px;
+}
+/* [since Fx29] */
+
 /*************************
  * Scrollbars not arrows *
  *************************/
