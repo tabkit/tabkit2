@@ -642,7 +642,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     return tab.getAttribute('tabid');
   };
-  
+
   this.TabBar = this.TabBar || {};
   this.TabBar.Mode = this.TabBar.Mode || {};
   // @return [Boolean] if vertical mode, true
@@ -2729,7 +2729,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (tabA == tabB) {
       return;
     }
-    
+
     var start = Math.min(tabA._tPos, tabB._tPos);
     var end = Math.max(tabA._tPos, tabB._tPos);
 
@@ -4193,13 +4193,13 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         newTabs.unshift(copiedTab);
 
         tk.addingTabOver();
-        
+
         if (tabIsFromAnotherWindow) {
           // Code copied from addon SDK
           var draggedTabWindow = draggedTab.ownerDocument.defaultView;
           draggedTabWindow.gBrowser.removeTab(draggedTab);
         }
-        
+
         if (singleTab && draggedTab == beforeTab) {
           return; // addingTabOver will already have grouped the tab etc, so skip ___onDropCallback
         }
@@ -5865,36 +5865,36 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   this.openClipboardLinks = function openClipboardLinks(contextTab) {
     var unicodeString = '';
-    
+
     try {
       var transferable = Components.classes["@mozilla.org/widget/transferable;1"]
                          .createInstance(Components.interfaces.nsITransferable);
       var clipboard = Components.classes["@mozilla.org/widget/clipboard;1"].
                       createInstance(Components.interfaces.nsIClipboard);
-                      
+
       // Store the transfered data
       var unicodeStringObject = new Object();
       var unicodeStringLengthObject = new Object();
-      
+
       if ('init' in transferable) transferable.init(null); // Gecko 16
-      
+
       transferable.addDataFlavor("text/unicode");
       clipboard.getData(transferable, clipboard.kGlobalClipboard);
       transferable.getTransferData("text/unicode", unicodeStringObject, unicodeStringLengthObject);
-      
+
       if (unicodeStringObject) {
         unicodeString = unicodeStringObject.value.QueryInterface(Components.interfaces.nsISupportsString).toString();
       }
     } catch (ex) {
       return;
     }
-    
+
     var uris = tk.detectURIsFromText(unicodeString);
-    
+
     if (uris.length == 0) {
       return;
     }
-    
+
     var firstTab = gBrowser.addTab(uris.shift());
     var lastTab = firstTab;
     for each (var uri in uris) {
@@ -5906,13 +5906,13 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     // Even has one tab, lastTab == firstTab so this method would do nothing
     tk.makeGroupBetweenTwoTabs(firstTab, lastTab);
   };
-  
+
   // @return [Array]
   this.detectURIsFromText = function detectURIsFromText(textToDetect) {
     var uris = [];
     if (textToDetect == "")
       return uris;
-    
+
     // Using regex from http://www.regexguru.com/2008/11/detecting-urls-in-a-block-of-text/
     // This matches anything starting with www., ftp., http://, https:// or ftp://
     // and containing common URL characters, but the final character is restricted (for
@@ -5923,7 +5923,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (matches == null) {
       return uris;
     }
-    
+
     for (var i = 0; i < matches.length; i++) {
       var uri = matches[i];
       uri = gBrowser.mURIFixup.createFixupURI(uri, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
@@ -5999,7 +5999,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       }
     }
   };
-  
+
   this.onPrefTabsonTopChanged = function onPrefTabsonTopChanged() {
     if (tk.localPrefService.getBoolPref("firefox.tabsontop.force_disable.enabled") === false) {
       return;
@@ -6010,7 +6010,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
   this.initOnPrefTabsonTopChanged = function initOnPrefTabsonTopChanged(event) {
     tk.addGlobalPrefListener("browser.tabs.onTop", tk.onPrefTabsonTopChanged);
-    
+
     // Run it once on start
     tk.onPrefTabsonTopChanged();
   };
@@ -6052,8 +6052,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tk.debug('Going to set layout.css.devPixelsPerPx to ' + result);
     gPrefService.setCharPref("layout.css.devPixelsPerPx", result.toFixed(2));
   };
-  
-  
+
+
   // ### Panorama Related
   this.Panorama = this.Panorama || {};
   this.Panorama.Initializers = this.Panorama.Initializers || {};
