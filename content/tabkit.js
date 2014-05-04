@@ -642,8 +642,11 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     return tab.getAttribute('tabid');
   };
-
-  this.getIsVerticalMode = function () {
+  
+  this.TabBar = this.TabBar || {};
+  this.TabBar.Mode = this.TabBar.Mode || {};
+  // @return [Boolean] if vertical mode, true
+  this.TabBar.Mode.getIsVerticalMode = function getIsVerticalMode () {
     return gBrowser.hasAttribute("vertitabbar");
   };
 
@@ -2324,7 +2327,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       if (event.originalTarget.getAttribute('anonid') == 'close-button')
       {
         if (!event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey
-          && tabkit.getIsVerticalMode()) {
+          && tabkit.TabBar.Mode.getIsVerticalMode()) {
           // The user expected to close two tabs by clicking on a close button,
           // then clicking on the close button of the tab below it (which will
           // by now have risen up by one), so do this.
@@ -3366,7 +3369,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
 
   this.subtreesEnabled = function subtreesEnabled() {
-    return (tk.getIsVerticalMode()
+    return (tk.TabBar.Mode.getIsVerticalMode()
         && _prefs.getBoolPref("indentedTree"));
   };
 
@@ -3454,7 +3457,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
   };
   this.toggleIndentedTree = function toggleIndentedTree() {
-    if (tk.getIsVerticalMode() && _prefs.getBoolPref("indentedTree"))
+    if (tk.TabBar.Mode.getIsVerticalMode() && _prefs.getBoolPref("indentedTree"))
       tk.updateIndents();
     else
       for (var i = 0; i < _tabs.length; i++)
@@ -4145,7 +4148,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
       if (shiftDragSubtree) {
         /* Note that tk.getSubtreeFromTab checks tk.subtreesEnabled,
-         * which checks `tabkit.getIsVerticalMode()` &&
+         * which checks `tabkit.TabBar.Mode.getIsVerticalMode()` &&
          * _prefs.getBoolPref("indentedTree")*/
         tabs = tk.getSubtreeFromTab(draggedTab);
         if (tabs.length < 2)
@@ -4400,7 +4403,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       var newIndex = tk._getDropIndex(event);
       var targetTab = this.childNodes[newIndex < this.childNodes.length ? newIndex : newIndex - 1];
       var ltr = getComputedStyle(this, null).direction == "ltr";
-      var isVertical = tk.getIsVerticalMode();
+      var isVertical = tk.TabBar.Mode.getIsVerticalMode();
 
       var position = isVertical ? "screenY" : "screenX";
       var size = isVertical ? "height" : "width";
@@ -4463,7 +4466,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return;
       }
 
-      var isVertical = tk.getIsVerticalMode();
+      var isVertical = tk.TabBar.Mode.getIsVerticalMode();
       var position = isVertical ? "screenY" : "screenX";
       var size = isVertical ? "height" : "width";
       var start = isVertical ? "top" : "left";
@@ -4521,7 +4524,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned"))
       return;
 
-    var isVertical = tk.getIsVerticalMode();
+    var isVertical = tk.TabBar.Mode.getIsVerticalMode();
     var position = isVertical ? "screenY" : "screenX";
     var size = isVertical ? "height" : "width";
     var start = isVertical ? "top" : "left";
@@ -4870,7 +4873,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   }
   this.positionedTabbar_onTabOpen = function positionedTabbar_onTabOpen(event) {
     var tab = event.target;
-    if (tk.getIsVerticalMode() && document.getElementById("tabkit-splitter")) {
+    if (tk.TabBar.Mode.getIsVerticalMode() && document.getElementById("tabkit-splitter")) {
 
       tab.maxWidth = 9999;
       tab.minWidth = 0;
@@ -4886,7 +4889,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
   this.positionedTabbar_onTabSelect = function positionedTabbar_onTabSelect(event) {
     var tab = gBrowser.selectedTab;
-    if (tk.getIsVerticalMode()) {
+    if (tk.TabBar.Mode.getIsVerticalMode()) {
 
 
       // Tabs on different rows shouldn't get before/afterselected attributes
@@ -5370,7 +5373,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         'ib.style.display = "none";',
 
         'ind.style.MozMarginStart = newMargin + "px";',
-        'if (tk.getIsVerticalMode()) { \
+        'if (tk.TabBar.Mode.getIsVerticalMode()) { \
           newMargin = Math.floor(this.mStrip.width / 2); \
         } \
         ib.style.display = "none"; \
@@ -5379,7 +5382,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         'ind.style.MozMarginStart = newMargin + "px";',
         '$& \
         if (newIndex == this.tabs.length) \
-          ib.style.top = (this.tabs[newIndex-1].boxObject.screenY - this.tabs[0].boxObject.screenY + (tk.getIsVerticalMode() ? this.tabs[newIndex-1].boxObject.height : 0)) + "px"; \
+          ib.style.top = (this.tabs[newIndex-1].boxObject.screenY - this.tabs[0].boxObject.screenY + (tk.TabBar.Mode.getIsVerticalMode() ? this.tabs[newIndex-1].boxObject.height : 0)) + "px"; \
         else \
           ib.style.top = (this.tabs[newIndex].boxObject.screenY - this.tabs[0].boxObject.screenY) + "px"; \
         ib.style.display = null;',
@@ -5635,7 +5638,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return;
       }
 
-      if (tk.getIsVerticalMode())
+      if (tk.TabBar.Mode.getIsVerticalMode())
         var delta = (Math.abs(event.detail) != 1 ? event.detail : (event.detail < 0 ? -3 : 3)) * 24;
       else if (gBrowser.tabContainer.getAttribute("multirow") == "true")
         var delta = event.detail < 0 ? -48 : 48; // 2*24
@@ -5943,7 +5946,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       "gBrowser.pinTab",
 
       'if (aTab.pinned)',
-      'if (tabkit.getIsVerticalMode()) { \
+      'if (tabkit.TabBar.Mode.getIsVerticalMode()) { \
       alert("Sorry, Tab Kit 2nd Edition does not support App Tabs in Vertical mode"); return; \
       } \
       $&',
