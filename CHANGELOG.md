@@ -1,6 +1,6 @@
 ### Changelog
 
-## Unreleased
+## 0.10.6
 
 ### Enhancements
 - Add option to toggle "force disable TabsOnTop" (Options -> Tab Bar)
