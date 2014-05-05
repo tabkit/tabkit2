@@ -2,7 +2,7 @@
 
 
 
-## Next Release
+## 0.11.1
 
 ### Bug Fix
 - Fix "Protect Tab" functionality on Firefox 29
