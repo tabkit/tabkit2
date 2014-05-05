@@ -1,9 +1,11 @@
-### Changelog
+### Changelog
 
 
-## Unreleased
 
-### Changes
+## 0.11.0
+
+### Changes
+- Compatible with Firefox 29
 - Now requires [Classic Theme Restorer](https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/) Extension  
   Also needs to set "Tabs on Top" in that extension tp fix the direction
 
