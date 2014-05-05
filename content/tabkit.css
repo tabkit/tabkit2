@@ -215,6 +215,12 @@
   max-width: 9999px !important;/* Make sure tabs fill width */
 }
 
+/* [since Fx29] */
+/* Fix the strange gap in vertical node */
+#TabsToolbar .tabbrowser-arrowscrollbox > .arrowscrollbox-scrollbox {
+  padding-right: 0px;
+}
+
 /*Add by Pika End*/
 
 /**************
@@ -360,6 +366,15 @@
 #TabsToolbar {
   height: auto !important;
 }
+
+/* [since Fx29] */
+.tabbrowser-tabs[multirow="true"] .tabbrowser-tab {
+  vertical-align: top;
+}
+.tabbrowser-tabs[multirow="true"] .tabbrowser-tab .tab-background > * {
+  min-height: 26px;
+}
+/* [since Fx29] */
 
 /*************************
  * Scrollbars not arrows *

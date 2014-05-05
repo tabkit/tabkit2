@@ -1,8 +1,16 @@
-### Changelog
+### Changelog
+
+
+## Unreleased
+
+### Changes
+- Now requires [Classic Theme Restorer](https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/) Extension  
+  Also needs to set "Tabs on Top" in that extension tp fix the direction
+
 
 ## 0.10.6
 
-### Enhancements
+### Enhancements
 - Add option to toggle "force disable TabsOnTop" (Options -> Tab Bar)
 
 

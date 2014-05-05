@@ -6,18 +6,23 @@ The most updated version (0.6) is not compatible with FF4+, since FF3->4 has a H
 This project aims to change modify the original TK to make it FF4+ compatible (and drop the support for pre-FF4).  
 The name for the new(not quite) extension is *Tab Kit 2nd Edition*(You can still call it *Tab Kit 2* or *TK2* for short)
 
+
+## Since Firefox `29.0`
+Now requires [Classic Theme Restorer](https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/) Extension  
+Also needs to set "Tabs on Top" in that extension tp fix the direction  
+
+
 ## Extension since `0.10.0`
-
-
-
 Some features are extracted into other extensions (which can be used separately):
 - Some coloring features extracted into [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
 - Some mouse gesture features extracted into [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
+
 
 ## Download / Installation
 - [Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/)  
 - [Alternative download (Beta and official releases that might not be approved yet)](http://www.mediafire.com/?i17mt3o435ngm)  
 If you download as a file, then you have to go to Firefox Addon Page, then press the gear button and choose `Install Addon from file`
+
 
 ## Issue
 - [Github (here)](https://github.com/tabkit/tabkit2/issues)  
@@ -25,20 +30,25 @@ I have moved a few issues from Google Code, move more if you think it's necessar
 - [Google Code](http://code.google.com/p/tabkit-2nd-edition/issues/list)  
 Deprecated
 
+
 ## Changes
 See https://github.com/tabkit/tabkit2/blob/master/CHANGELOG.md
+
 
 ## Tab Kit Series Extensions
 - [Tab Kit 2nd Edition](https://github.com/tabkit/tabkit2)
 - [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
 - [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures)
 
+
 ## News & Discussion
 - [Google Group (For more general discussion)](http://groups.google.com/group/tabkit-2nd-edition)
+
 
 ## Project Helper Needed!
 If you want some feature added, then it might be faster to do it yourself! :P  
 I am working as Web Developer and don't really have time to develop Tab Kit :d
+
 
 ## Collaboration
 Since we are on GitHub  
@@ -49,15 +59,17 @@ I will check frequently (since I also use GitHub at work)
 The one on their site is reviewed  
 But if you don't want to wait, then use the Custom download one :P
 
-## Compatibility with other extensions
 
+## Compatibility with other extensions
 - Firebug: Incompatible  
 (But it seems OK since Fx10 o_0)
 
+
 ## Compatibility with new features in Fx4+
-  - TabsOnTop: Not allowed by Tab Kit
-  - App/Pin Tabs: Use it at your own risk, no support provided
-  - Tab Groups: Disabled
+- TabsOnTop: Not allowed by Tab Kit, unless you change it in options
+- App/Pin Tabs: Use it at your own risk, no support provided
+- Tab Groups: Not allowed by Tab Kit, unless you change it in options
+
 
 ### False incompatibility with newer Firefox
 Summary:  
@@ -66,6 +78,7 @@ If newer Firefox say it is incompatible, install one of the following:
 - https://addons.mozilla.org/en-us/firefox/addon/checkcompatibility/
 
 But it should not be a problem since Fx 12
+
 
 ## License
 Look the tabkit.js for now
