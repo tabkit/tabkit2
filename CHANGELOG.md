@@ -2,6 +2,12 @@
 
 
 
+## Next Release
+
+### Bug Fix
+- Fix "Protect Tab" functionality on Firefox 29
+
+
 ## 0.11.0
 
 ### Changes
@@ -31,7 +37,6 @@
 - Always disable TabsOnTop to avoid layout issue
 
 ### Bug Fix
-
 - Moving tab across window will now close the original one from old window
 
 

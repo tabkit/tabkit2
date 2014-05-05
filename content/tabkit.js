@@ -4676,10 +4676,11 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   this.postInitListeners.push(this.postInitProtectedTabs);
 
   this.protectedTabs_onClick = function protectedTabs_onClick(event) {
-    if (event.originalTarget.className == "tab-close-button"
-      && (event.button == 0 || event.button == 1)
-      && event.target.localName == "tab"
-      && event.target.getAttribute("protected") == "true")
+    var isCloseButton = (event.originalTarget.className.indexOf("tab-close-button") > -1);
+    var isMouseClick = (event.button == 0 || event.button == 1);
+    var isProtectedTab = ((event.target.localName == "tab") && event.target.getAttribute("protected") == "true");
+
+    if (isCloseButton && isMouseClick && isProtectedTab)
     {
       event.target.removeAttribute("protected");
       event.stopPropagation();

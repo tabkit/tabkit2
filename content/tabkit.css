@@ -44,7 +44,8 @@
 }
 
 /* Highlight protected tabs */
-.tabbrowser-tab[protected="true"] .tab-close-button {
+.tabbrowser-tab[protected="true"] .tab-close-button, /* Firefox < 29 */
+.tabbrowser-tab[protected="true"] .tab-close-button .toolbarbutton-icon { /* Firefox >= 29 */
   display: -moz-box !important; /* Display even if they're normally hidden */
   list-style-image: url(chrome://tabkit/skin/Secure.png) !important; /* Show padlock instead of close button */
   -moz-image-region: rect(1px, 15px, 15px, 1px) !important;
