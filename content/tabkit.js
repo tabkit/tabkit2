@@ -650,6 +650,15 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     return gBrowser.hasAttribute("vertitabbar");
   };
 
+
+  this.DomUtility = this.DomUtility || {};
+  this.DomUtility.insertBefore = function insertBefore(referenceNode, newNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode);
+  };
+  this.DomUtility.insertAfter = function insertAfter(referenceNode, newNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+  };
+
 //}##########################
 //{### Initialisation
 //|##########################
@@ -4840,8 +4849,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     var tabbarPosition = _prefs.getIntPref("tabbarPosition");
 
-    if (tabbarPosition == tk.Positions.LEFT)
-      tk.moveSidebar();
+    tk.moveSidebar();
     tk.addPrefListener("tabbarPosition", tk.moveSidebar);
 
     if (tabbarPosition != tk.Positions.TOP) {
@@ -4981,43 +4989,55 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (typeof tabbarPosition != "number") tabbarPosition = _prefs.getIntPref("tabbarPosition");
 
     // Strange behavior when put on top or bottom, remove those options
-    var sidebarPosition = tk.Positions.LEFT
-    if (tabbarPosition == tk.Positions.LEFT)
-      sidebarPosition = tk.Positions.RIGHT
+    var flip_direction = false;
+    if (tabbarPosition == tk.Positions.LEFT) {
+      flip_direction = true;
+    }
+    var need_move_sidebar = ((tabbarPosition == tk.Positions.LEFT) || (tabbarPosition == tk.Positions.RIGHT))
 
     // Calculate new orient attributes
     var fromHorizontal = "horizontal";
     var fromVertical = "vertical";
     var fromNormal = "normal";
 
-    // Calculate new direction attribute
-    var flipDirection = (sidebarPosition == tk.Positions.RIGHT);
-
     // Get some nodes
+    var browser_border_start = document.getElementById("browser-border-start");
     var browser = document.getElementById("browser");
-    var sidebarBox = document.getElementById("sidebar-box");
-    var sidebarHeader = sidebarBox.getElementsByTagName("sidebarheader")[0];
+    var sidebar_box = document.getElementById("sidebar-box");
+    var sidebar_splitter = document.getElementById("sidebar-splitter");
+    var sidebar_header = sidebar_box.getElementsByTagName("sidebarheader")[0];
+    var appcontent = document.getElementById("appcontent");
     var normallyHorizontal = [
       browser,
-      document.getElementById("sidebar-splitter"),
-      sidebarHeader
+      sidebar_splitter,
+      sidebar_header
     ];
     var normallyVertical = [
-      sidebarBox,
-      document.getElementById("appcontent")
+      sidebar_box,
+      appcontent
     ];
     var normallyNormal = [
-      sidebarBox,
-      sidebarHeader
+      sidebar_box,
+      sidebar_header
     ];
 
     // Set new attributes
-    browser.dir = flipDirection ? "reverse" : "normal";
+    var new_direction = flip_direction ? "reverse" : "normal";
+
+    // Before we use browser.dir, but that screws up the direction
+    // Now just move the sidebar element
+    if (need_move_sidebar) {
+      tk.DomUtility.insertAfter(appcontent, sidebar_box);
+      tk.DomUtility.insertBefore(sidebar_box, sidebar_splitter);
+    } else {
+      tk.DomUtility.insertAfter(browser_border_start, sidebar_box);
+      tk.DomUtility.insertAfter(sidebar_box, sidebar_splitter);
+    }
 
     for each (var node in normallyNormal)
       node.dir = fromNormal;
 
-    sidebarHeader.pack = "start";
+    sidebar_header.pack = "start";
 
     // Set orient attributes last or stuff messes up
     for each (var node in normallyHorizontal)
@@ -5028,7 +5048,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     // Now activate our css
     browser.removeAttribute("horizsidebar");
     browser.removeAttribute("vertisidebar");
-    browser.setAttribute(fromVertical.substring(0, 5) + "sidebar", flipDirection ? "reverse" : "normal");
+    browser.setAttribute(fromVertical.substring(0, 5) + "sidebar", new_direction);
   };
 
   //Edited by PikachuEXE, NOT tested
@@ -5038,6 +5058,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     //Start Edit by Pika
     var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
     var appcontent = document.getElementById("appcontent");
+    var browser = document.getElementById("browser");
 
     // Calculate new orient attributes
     var flipOrient = (pos == tk.Positions.LEFT || pos == tk.Positions.RIGHT);
@@ -5046,9 +5067,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     // Calculate new direction attribute
     var flipDirection = (pos == tk.Positions.RIGHT || pos == tk.Positions.BOTTOM);
+    var newDirection = flipDirection ? "reverse" : "normal";
 
     // Now activate our css
-    if (pos == tk.Positions.LEFT || pos == tk.Positions.RIGHT) {
+    if (flipOrient) {
       appcontent.parentNode.insertBefore(tabsToolbar, appcontent);
     }
     else if (pos == tk.Positions.TOP) {
@@ -5058,21 +5080,22 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       menubar.parentNode.insertBefore(tabsToolbar, menubar);
     }
     else if (pos == tk.Positions.BOTTOM) {
-      a = document.getElementById("browser-bottombox");
+      var a = document.getElementById("browser-bottombox");
       a.parentNode.insertBefore(tabsToolbar, a);
     }
+    browser.dir = newDirection;
     tabsToolbar.orient = _tabContainer.mTabstrip.orient = fromHorizontal;
     gBrowser.removeAttribute("horiztabbar");
     gBrowser.removeAttribute("vertitabbar");
-    gBrowser.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", flipDirection ? "reverse" : "normal");
+    gBrowser.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", newDirection);
     tabsToolbar.removeAttribute("horiztabbar");
     tabsToolbar.removeAttribute("vertitabbar");
-    tabsToolbar.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", flipDirection ? "reverse" : "normal");
+    tabsToolbar.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", newDirection);
     //add one more to mainPopupSet
     var mainPopupSet = document.getElementById("mainPopupSet");
     mainPopupSet.removeAttribute("horiztabbar");
     mainPopupSet.removeAttribute("vertitabbar");
-    mainPopupSet.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", flipDirection ? "reverse" : "normal");
+    mainPopupSet.setAttribute(fromHorizontal.substring(0, 5) + "tabbar", newDirection);
 
     // Toggle the splitter as appropriate
     var splitter = document.getElementById("tabkit-splitter");
@@ -5093,7 +5116,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         var grippy = document.createElementNS(XUL_NS, "grippy");
         grippy.id = "tabkit-grippy";
         splitter.appendChild(grippy);
-        appcontent.parentNode.insertBefore(splitter, appcontent);//add by Pika
 
         splitter.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
         splitter.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
@@ -5104,12 +5126,15 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         tk.setTabMinWidth(0);
         gBrowser.mTabBox.addEventListener("resize", tk.positionedTabbar_onResize, false);
       }
-      if ("toggleIndentedTree" in tk)
+      tk.DomUtility.insertBefore(appcontent, splitter);//add by Pika
+      if ("toggleIndentedTree" in tk) {
         tk.toggleIndentedTree();
+      }
     }
     else {
-      if ("toggleIndentedTree" in tk)
+      if ("toggleIndentedTree" in tk) {
         tk.toggleIndentedTree();
+      }
       if (splitter) {
         gBrowser.mTabBox.removeEventListener("resize", tk.positionedTabbar_onResize, false);
         for (var i = 0; i < _tabs.length; i++)

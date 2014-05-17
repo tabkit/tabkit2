@@ -2,6 +2,15 @@
 
 
 
+## Unreleased
+
+### Bug Fix
+- Fix tabbar left right are reversed in Firefox 29 (Tested with Classic Theme Restorer 1.1.9)
+
+### Known Bug
+- Due to the bug fix above, the tab bar position is reversed on Firefox 28 or below (Won't fix)
+
+
 ## 0.11.1
 
 ### Bug Fix
