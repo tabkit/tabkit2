@@ -6,8 +6,9 @@
 
 ### Bug Fix
 - Fix tabbar left right are reversed in Firefox 29 (Tested with Classic Theme Restorer 1.1.9)
+- Fix vertical tabbar splitter not showing on Firefox 29 on startup
 
-### Known Bug
+### Known Bugs
 - Due to the bug fix above, the tab bar position is reversed on Firefox 28 or below (Won't fix)
 
 

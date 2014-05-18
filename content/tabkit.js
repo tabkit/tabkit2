@@ -4847,14 +4847,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   /// Initialisation:
   this.initTabbarPosition = function initTabbarPosition(event) {
 
-    var tabbarPosition = _prefs.getIntPref("tabbarPosition");
-
     tk.moveSidebar();
     tk.addPrefListener("tabbarPosition", tk.moveSidebar);
 
-    if (tabbarPosition != tk.Positions.TOP) {
-      tk.moveTabbar(tabbarPosition);
-    }
+    tk.moveTabbar();
     tk.addPrefListener("tabbarPosition", tk.moveTabbar);
 
     _tabContainer.addEventListener("TabOpen", tk.positionedTabbar_onTabOpen, false);
@@ -4870,6 +4866,15 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     _tabContainer.addEventListener("TabClose", tk.bug608589workaround, true);
   };
   this.initListeners.push(this.initTabbarPosition);
+
+  this.TabBar = this.TabBar || {};
+  this.TabBar.Callbacks = this.TabBar.Callbacks || {}
+  this.TabBar.Callbacks.initTabbarPositionOnPostInit = function initTabbarPositionOnPostInit(event) {
+    // HACK: Run again to workaround a strange bug that
+    // The splitter is not showing properly on OSX on startup
+    tk.moveTabbar();
+  }
+  this.postInitListeners.push(this.TabBar.Callbacks.initTabbarPositionOnPostInit);
 
   /// Event listeners:
   this.bug608589workaround = function bug608589workaround(event) {
