@@ -9,7 +9,9 @@ The name for the new(not quite) extension is *Tab Kit 2nd Edition*(You can still
 
 ## Since Firefox `29.0`
 Now requires [Classic Theme Restorer](https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/) Extension  
-Also needs to set "Tabs on Top" in that extension tp fix the direction  
+Required options for `Classic Theme Restorer`:
+- Select `Tabs not on Top`: should fix the vertical tabbar direction  
+- Uncheck `Tabs in title bar`: should fix the totally unusable layout  
 
 
 ## Extension since `0.10.0`
