@@ -7,6 +7,24 @@ This project aims to change modify the original TK to make it FF4+ compatible (a
 The name for the new(not quite) extension is *Tab Kit 2nd Edition*(You can still call it *Tab Kit 2* or *TK2* for short)
 
 
+## Description from original Tab Kit (modified)
+Tab Kit makes tabs more efficient for power users, allowing a wide variety of tweaks, all of which are optional, notably:
+
+- Group tabs, by domain or opener (parent) tab, manually or automatically
+- Vertical tab tree (with splitter), like Tree Style Tab
+- Multi-row tabs
+- Sort tabs, by address, last loaded, last viewed, order of creation, origin or title
+- Control new tab position and close order
+- Easily duplicate tabs and groups and copy/move them between windows by dragging
+- Scrollwheel tab switch (Extracted to [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures))
+- 'Mouse rocker' to go back/forward in history (Extracted to [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures))
+- Highlight unread tabs (and emphasise current tab) (Extracted to [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter))
+- Scrollbar instead of scroll arrows in over-long Bookmarks and All Tabs popups
+- Open Selected Links feature
+- Switch tabs on hover (Extracted to [Tab Kit - Mouse Gestures](https://github.com/tabkit/mouse-gestures))
+- Options for urls, searches and/or bookmarks to open in new tabs by default
+
+
 ## Since Firefox `29.0`
 Now requires [Classic Theme Restorer](https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/) Extension  
 Required options for `Classic Theme Restorer`:
