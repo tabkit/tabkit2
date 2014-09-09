@@ -222,6 +222,13 @@
   padding-right: 0px;
 }
 
+/* Fix tabkit-splitter cannot be dragged when the width of vertical tabbar is too small */
+/* The content of vertical tabbar got overlays the splitter so that it (almost) cannot dragged */
+#tabkit-splitter {
+  position: relative;
+  z-index: 0;
+}
+
 /*Add by Pika End*/
 
 /**************
