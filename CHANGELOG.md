@@ -2,6 +2,12 @@
 
 
 
+## Unreleased
+
+### Bug Fix
+- Fix "Splitter cannot be dragged when vertical tabbar has a small width" (#65)
+
+
 ## 0.11.2
 
 ### Bug Fix
