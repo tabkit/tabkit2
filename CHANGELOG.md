@@ -6,6 +6,7 @@
 
 ### Bug Fix
 - Fix "Splitter cannot be dragged when vertical tabbar has a small width" (#65)
+- Fix "Vertical Tab Bar Has Horizontal Tabs Jammed In" (#58) by removing a "fix" that is no longer needed by OSX
 
 
 ## 0.11.2
