@@ -27,9 +27,9 @@ Tab Kit makes tabs more efficient for power users, allowing a wide variety of tw
 
 ## Since Firefox `29.0`
 Now requires [Classic Theme Restorer](https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/) Extension  
-Required options for `Classic Theme Restorer`:
-- Select `Tabs not on Top`: should fix the vertical tabbar direction  
-- Uncheck `Tabs in title bar`: should fix the totally unusable layout  
+Required options for `Classic Theme Restorer` `1.2.3`:
+- Select `Tabs not on top - set [tabsontop=false]` in `Tabs` page: should fix the vertical tabbar direction  
+- Uncheck `Firefox titlebar (about:config preference)` in ` Application button` page: should fix the totally unusable layout  
 
 
 ## Extension since `0.10.0`
