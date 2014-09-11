@@ -4,6 +4,12 @@
 
 ## Unreleased
 
+### New Features
+- Add "Flatten Sub Group"
+
+### Enhancements
+- Bind hotkey to "Flatten Sub Group" instead of "Flatten Group" to be safe
+
 ### Bug Fix
 - Fix "Splitter cannot be dragged when vertical tabbar has a small width" (#65)
 - Fix "Vertical Tab Bar Has Horizontal Tabs Jammed In" (#58) by removing a "fix" that is no longer needed by OSX

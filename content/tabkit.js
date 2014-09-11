@@ -2896,6 +2896,21 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       tab.style.marginLeft = "";
     }
   };
+  this.flattenSubGroup = function flattenSubGroup(contextTab) {
+    if (!contextTab)
+      contextTab = gBrowser.selectedTab;
+
+    var possibleparent = contextTab.getAttribute("possibleparent");
+
+    var tabsToClose = tk.getSubtreeFromTab(contextTab);
+    for (var i = tabsToClose.length - 1; i >= 0; i--) {
+      var tab = tabsToClose[i];
+      if (tab != contextTab) // No need to set parent for contentTab
+        tab.setAttribute("possibleparent", possibleparent);
+        tab.treeLevel = contextTab.treeLevel || 0;
+        tab.style.marginLeft = contextTab.style.marginLeft || "";
+    }
+  };
   this.bookmarkGroup = function bookmarkGroup(contextTab) {
     // TODO=P3: GCODE Drag group/subtree onto bookmarks toolbar should create bookmark folder
     if (!contextTab)
