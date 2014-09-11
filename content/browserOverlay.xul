@@ -233,13 +233,13 @@
                 collapsed="true"/>
       <menuitem id="menu_tabkit-sortgroup-group-flatten"
                 label="&flatten.label;"
-                accesskey="&flatten.accesskey;"
                 command="cmd_tabkit-sortgroup-group-flatten"
-                acceltext="&flatten.acceltext;"
                 groupsonly="true"/>
       <menuitem id="cmd_tabkit-sortgroup-group-flattenSubGroup"
                 label="&flattenSubGroup.label;"
                 command="cmd_tabkit-sortgroup-group-flattenSubGroup"
+                accesskey="&flattenSubGroup.accesskey;"
+                acceltext="&flattenSubGroup.acceltext;"
                 groupsonly="true"/>
       <menuitem id="menu_tabkit-sortgroup-group-bookmark"
                 label="&bookmark.label;"
