@@ -4218,7 +4218,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
         tk.addingTabOver();
 
-        if (tabIsFromAnotherWindow) {
+        if (tabIsFromAnotherWindow && !tabIsCopied) {
           // Code copied from addon SDK
           var draggedTabWindow = draggedTab.ownerDocument.defaultView;
           draggedTabWindow.gBrowser.removeTab(draggedTab);
