@@ -32,6 +32,11 @@ Required options for `Classic Theme Restorer` `1.2.3`:
 - Uncheck `Firefox titlebar (about:config preference)` in ` Application button` page: should fix the totally unusable layout  
 
 
+## Extension since `0.12.0`
+Only support Firefox 31 ESR  
+(Firefox of other versions can still install the extension, but issues for those will be ignored)
+
+
 ## Extension since `0.10.0`
 Some features are extracted into other extensions (which can be used separately):
 - Some coloring features extracted into [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)

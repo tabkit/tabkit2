@@ -2,7 +2,12 @@
 
 
 
-## Unreleased
+## 0.12.0
+
+### Changes
+
+- Only support Firefox 31 ESR  
+  (Firefox of other versions can still install the extension, but issues for those will be ignored)
 
 ### New Features
 - Add "Flatten Sub Group"
