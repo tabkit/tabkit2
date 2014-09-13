@@ -15,6 +15,7 @@
 - Fix "Vertical Tab Bar Has Horizontal Tabs Jammed In" (#58) by removing a "fix" that is no longer needed by OSX
 - No longer remove the original tab when copying a single tab to a different browser window
 - Fix moving group to a new window
+- Fix strange sidebar arrangement when using with extension "All-In-One Sidebar"
 
 
 ## 0.11.2

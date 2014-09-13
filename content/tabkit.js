@@ -5028,7 +5028,14 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (tabbarPosition == tk.Positions.LEFT) {
       flip_direction = true;
     }
-    var need_move_sidebar = ((tabbarPosition == tk.Positions.LEFT) || (tabbarPosition == tk.Positions.RIGHT))
+    // Special support for extension "All-In-One Sidebar"
+    // Totally non-scalable implmenetation
+    var do_not_move_sidebar = !!("AiOS_HELPER" in window);
+    if (do_not_move_sidebar) {
+      return;
+    }
+
+    var need_move_sidebar = ((tabbarPosition == tk.Positions.LEFT) || (tabbarPosition == tk.Positions.RIGHT));
 
     // Calculate new orient attributes
     var fromHorizontal = "horizontal";
