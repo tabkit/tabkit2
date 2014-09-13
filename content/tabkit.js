@@ -4132,6 +4132,11 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     var bGid = beforeTab ? beforeTab.getAttribute("groupid") : null;
     var aGid = afterTab ? afterTab.getAttribute("groupid") : null;
 
+    // To be called after everything is done
+    // If we perform cleanup too early (like removing original tabs in case of dragging tab across window)
+    // It affects the grouping of moved/copied tabs in new window
+    var cleanupCallbacks = [];
+
     // Prevent accidentally dragging into a collapsed group
     if (aGid && aGid == bGid && afterTab.hasAttribute("groupcollapsed")) {
       for each (var t in tk.getGroupFromTab(afterTab)) {
@@ -4163,12 +4168,17 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     // Determine if we're dealing with one tab or a group/subtree
     var tabs = [];
     var shiftDragSubtree = false;
+
+    var tabIsCopied = (dropEffect == "copy");
+    var tabIsFromAnotherWindow = (draggedTab.parentNode != gBrowser.tabContainer);
+
     if (draggedGid && (event.shiftKey && _prefs.getBoolPref("shiftDragGroups")
            || draggedTab.hasAttribute("groupcollapsed"))) {
       // User wants to drag a group/subtree
 
       shiftDragSubtree = _prefs.getBoolPref("shiftDragSubtrees")
-                   && !draggedTab.hasAttribute("groupcollapsed");
+                   && !draggedTab.hasAttribute("groupcollapsed")
+                   && !tabIsFromAnotherWindow;
 
       if (shiftDragSubtree) {
         /* Note that tk.getSubtreeFromTab checks tk.subtreesEnabled,
@@ -4190,9 +4200,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
 
     var singleTab = (tabs.length == 1);
-    var tabIsCopied = (dropEffect == "copy");
-    var tabIsFromAnotherWindow = (draggedTab.parentNode != gBrowser.tabContainer);
-
     // Move/copy the tab(s)
     var tabsReverse = tabs.slice(); // Copy
     tabsReverse.reverse(); // In-place reverse
@@ -4218,10 +4225,19 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
         tk.addingTabOver();
 
+
         if (tabIsFromAnotherWindow && !tabIsCopied) {
           // Code copied from addon SDK
           var draggedTabWindow = draggedTab.ownerDocument.defaultView;
-          draggedTabWindow.gBrowser.removeTab(draggedTab);
+
+          if (draggedGid)
+            cleanupCallbacks.push(function() {
+              draggedTabWindow.tabkit.closeGroup(draggedTab);
+            });
+          else
+            cleanupCallbacks.push(function() {
+              draggedTabWindow.gBrowser.removeTab(draggedTab);
+            });
         }
 
         if (singleTab && draggedTab == beforeTab) {
@@ -4259,15 +4275,18 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           tabIdMapping[tk.getTabId(tabs[i])] = tk.getTabId(newTabs[i]);
 
       // Group/indent the new/moved tabs
-      var newGid;
-      var app;
+      var newGid = null;
+      var app = null;
       var draggedIntoGroup = (aGid && aGid == bGid);
-      if (draggedIntoGroup || draggedGid && (aGid == draggedGid || bGid == draggedGid)) {
-        if (aGid == draggedGid || bGid == draggedGid)
+      var draggedIntoSameGroup = (draggedGid && (aGid == draggedGid || bGid == draggedGid));
+
+      if (draggedIntoGroup || draggedIntoSameGroup) {
+        if (draggedIntoSameGroup)
           newGid = draggedGid; // We're in the same group we were before
-        else
+        else // draggedIntoGroup is true
           newGid = aGid; // Copy enclosing groupid
 
+        // Get possible parent tab's ID in same group
         if (aGid) {
           // Inherit enclosing indentation (possibleparent)
           app = afterTab.getAttribute("possibleparent");
@@ -4276,26 +4295,18 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           if (!parent || parent.getAttribute("groupid") != aGid)
             app = null;
         }
-        else
-          app = null;
       }
       else if (singleTab) {
         if (newTabs[0].hasAttribute("groupid"))
           tk.removeGID(newTabs[0]);
       }
-      else if (tabIsCopied || tabIsFromAnotherWindow /*&& !singleTab*/) {
+      else if (tabIsCopied || tabIsFromAnotherWindow) {
         // Create a new groupid
         newGid = ":oG-copiedGroupOrSubtree-" + tk.generateId();
-
-        app = null;
       }
       else {
         if (shiftDragSubtree)
           newGid = ":oG-draggedSubtree-" + tk.generateId(); // Maintain subtree by creating a new opener group // TODO=P5: GCODE No need if the subtree was the entire group
-        else
-          newGid = null; // Just keep existing groupid
-
-        app = null;
       }
       for (var i = 0; i < newTabs.length; i++) {
         var newTab = newTabs[i];
@@ -4319,6 +4330,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           newTab.setAttribute("possibleparent", tpp);
           // n.b. duplicated [single] tabs have their possibleparent set to the original because of the tk.addingTab("related", ...) above
         }
+
+        delete newTab.originalTreeLevel;
       }
       tk.updateIndents();
 
@@ -4352,6 +4365,14 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         if (shiftDragSubtree) {
           // No need to worry about this, as no tabs are moved (they only get removed, so the TabClose listener sorts this out)
       }*/
+
+      for (var i = 0; i < cleanupCallbacks.length; i++) {
+        var cleanupCallback = cleanupCallbacks[i];
+        if (typeof cleanupCallback === "function")
+          cleanupCallback();
+      }
+
+      cleanupCallbacks.length = 0;
     }, 200);
   };
 
