@@ -17,3 +17,9 @@ GNU General Public License for more details.
 For the complete terms of the GNU General Public License, please see this URL:
 http://www.gnu.org/licenses/gpl-2.0.html
 */
+
+(function (window) {
+
+window.TabKit2 = {};
+
+})(this);
