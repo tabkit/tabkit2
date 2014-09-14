@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<overlay
+  id="tabkit--overlay--browser--tabkit2-js"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+>
+
+<script
+  type="application/x-javascript"
+  src="chrome://tabkit2/content/scripts/browser/tabkit2.js"
+/>
+
+</overlay>
