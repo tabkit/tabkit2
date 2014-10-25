@@ -1,4 +1,5 @@
 # Tab Kit 2nd Edition
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/tabkit/tabkit2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 The original [Tab Kit(TK)](https://addons.mozilla.org/en-us/firefox/addon/tab-kit/) is an extension of Firefox that many people are using.  
 It was last updated September 26, 2010, and the author has been silent after that.  
 The most updated version (0.6) is not compatible with FF4+, since FF3->4 has a HUGE change especially in tab bar DOM structure.
