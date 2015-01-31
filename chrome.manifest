@@ -3,7 +3,9 @@
 
 content   tabkit2         content/
 
-# Overlays
+resource  tabkit2         resource/
+
+
 overlay   chrome://browser/content/browser.xul  chrome://tabkit2/content/overlays/browser/tabkit2-js.xul
 
 locale    tabkit2         en-US         locale/en-US/
