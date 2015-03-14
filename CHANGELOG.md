@@ -1,6 +1,11 @@
 ### Changelog
 
 
+## 0.12.1
+
+### Bug Fix
+- Fix fullscreen vertical tab bar behaviour (#80)
+
 
 ## 0.12.0
 
