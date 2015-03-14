@@ -6044,6 +6044,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
   };
   this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
+    // https://developer.mozilla.org/en-US/docs/Web/Events/fullscreen
     window.addEventListener("fullscreen", tk.onFullScreenToggle, false);
   };
   this.postInitListeners.push(this.postInitFx4Modifications);
@@ -6052,11 +6053,13 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   // Good for HTML5 full screen video viewing
   this.onFullScreenToggle = function onFullScreenToggle(event) {
     var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
-    var isFullScreen = tabsToolbar.getAttribute("inFullscreen");
+    // This value is the value before switch, tested in FF 31.1.0 & 36.0.1
+    var isFullScreenBeforeEvent = window.fullScreen;
+    var willBeFullScreen = !isFullScreenBeforeEvent;
     var splitter = document.getElementById("tabkit-splitter");
 
     if (splitter) { //only collapsed splitter in vertical mode
-      if (isFullScreen) {
+      if (willBeFullScreen) {
         tk.debug("gonna set splitter collapsed");
         splitter.setAttribute("state","collapsed");
       }
