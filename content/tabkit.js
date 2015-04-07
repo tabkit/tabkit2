@@ -3021,6 +3021,24 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     clipboard.setData(transferable, null, clipboardId.kGlobalClipboard);
   };
+  this.protectAllTabsForGroupOfTab = function protectAllTabsForGroupOfTab(contextTab) {
+    if (!contextTab)
+      contextTab = gBrowser.selectedTab;
+
+    var tabsInGroup = tk.getGroupFromTab(contextTab);
+    for (var i = tabsInGroup.length - 1; i >= 0; i--) {
+      tk.setTabProtected(tabsInGroup[i]);
+    }
+  };
+  this.unprotectAllTabsForGroupOfTab = function unprotectAllTabsForGroupOfTab(contextTab) {
+    if (!contextTab)
+      contextTab = gBrowser.selectedTab;
+
+    var tabsInGroup = tk.getGroupFromTab(contextTab);
+    for (var i = tabsInGroup.length - 1; i >= 0; i--) {
+      tk.setTabUnprotected(tabsInGroup[i]);
+    }
+  };
   this.closeGroup = function closeGroup(contextTab) {
     if (!contextTab)
       contextTab = gBrowser.selectedTab;

@@ -107,6 +107,10 @@
 <!ENTITY copyUris.accesskey "C">
 <!ENTITY copyUris.acceltext "C">
 
+<!ENTITY protectAllInGroup.label "Protect All Tabs in Group">
+
+<!ENTITY unprotectAllInGroup.label "Unprotect All Tabs in Group">
+
 <!ENTITY closeGroup.label "Close Group">
 <!ENTITY closeGroup.accesskey "G">
 <!ENTITY closeGroup.modifiers "alt shift">

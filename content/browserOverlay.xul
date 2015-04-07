@@ -51,6 +51,8 @@
   <command id="cmd_tabkit-sortgroup-group-reColor" oncommand="tabkit.reColorGroup(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-reColorAll" oncommand="tabkit.reColorAllGroups(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-copyUris" oncommand="tabkit.copyGroupURIs(TabContextMenu.contextTab);"/>
+  <command id="cmd_tabkit-sortgroup-group-protectAllInGroup" oncommand="tabkit.protectAllTabsForGroupOfTab(TabContextMenu.contextTab);"/>
+  <command id="cmd_tabkit-sortgroup-group-unprotectAllInGroup" oncommand="tabkit.unprotectAllTabsForGroupOfTab(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-close" oncommand="tabkit.closeGroup(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-closeSubGroup" oncommand="tabkit.closeSubGroup(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-group-closeChildren" oncommand="tabkit.closeChildren(TabContextMenu.contextTab);"/>
@@ -260,6 +262,14 @@
                 accesskey="&copyUris.accesskey;"
                 command="cmd_tabkit-sortgroup-group-copyUris"
                 acceltext="&copyUris.acceltext;"
+                groupsonly="true"/>
+      <menuitem id="menu_tabkit-sortgroup-group-protectAllInGroup"
+                label="&protectAllInGroup.label;"
+                command="cmd_tabkit-sortgroup-group-protectAllInGroup"
+                groupsonly="true"/>
+      <menuitem id="menu_tabkit-sortgroup-group-unprotectAllInGroup"
+                label="&unprotectAllInGroup.label;"
+                command="cmd_tabkit-sortgroup-group-unprotectAllInGroup"
                 groupsonly="true"/>
       <menuitem id="menu_tabkit-sortgroup-group-close"
                 label="&closeGroup.label;"

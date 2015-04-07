@@ -5,6 +5,7 @@
 
 ### Enhancements
 - "Close Tabs From Here To Current" now does NOT close selected tab
+- Add new functions "Protect All Tabs in Group" & "Unprotect All Tabs in Group" for tab groups with menu items
 
 
 ## 0.12.1
