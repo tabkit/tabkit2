@@ -2832,6 +2832,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       tabsToClose.push(gBrowser.tabs[i]);
     }
     for (var i = tabsToClose.length - 1; i >= 0; i--) {
+      if (tabsToClose[i] === gBrowser.selectedTab) {
+        continue;
+      }
       gBrowser.removeTab(tabsToClose[i]);
     }
   };

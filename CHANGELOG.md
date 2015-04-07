@@ -1,6 +1,12 @@
 ### Changelog
 
 
+## Unreleased
+
+### Enhancements
+- "Close Tabs From Here To Current" now does NOT close selected tab
+
+
 ## 0.12.1
 
 ### Bug Fix
