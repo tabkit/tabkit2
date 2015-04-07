@@ -4742,14 +4742,50 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tk.context_closeTab.setAttribute('disabled', isProtected);
   };
 
-  this.toggleProtected = function toggleProtected(contextTab) {
-    if (!contextTab)
+  this.getTabIsProtected = function getTabIsProtected(contextTab) {
+    if (!contextTab) {
       contextTab = gBrowser.selectedTab;
+    }
 
-    if (contextTab.getAttribute("protected") == "true")
-      contextTab.removeAttribute("protected");
-    else
+    return (contextTab.getAttribute("protected") === "true");
+  };
+  this.toggleProtected = function toggleProtected(contextTab) {
+    if (!contextTab) {
+      contextTab = gBrowser.selectedTab;
+    }
+
+    if (tk.getTabIsProtected(contextTab)) {
+      tk.setTabUnprotected(contextTab);
+    }
+    else {
+      tk.setTabProtected(contextTab);
+    }
+  };
+  this.setTabProtected = function setTabProtected(contextTab) {
+    if (!contextTab) {
+      contextTab = gBrowser.selectedTab;
+    }
+
+    if (tk.getTabIsProtected(contextTab)) {
+      return false;
+    }
+    else {
       contextTab.setAttribute("protected", "true");
+      return true;
+    }
+  };
+  this.setTabUnprotected = function setTabUnprotected(contextTab) {
+    if (!contextTab) {
+      contextTab = gBrowser.selectedTab;
+    }
+
+    if (tk.getTabIsProtected(contextTab)) {
+      contextTab.removeAttribute("protected");
+      return true;
+    }
+    else {
+      return false;
+    }
   };
 
 //}##########################
