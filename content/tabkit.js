@@ -341,10 +341,12 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   // The property "hidden" of a tab is read-only, therefore assigning to this property does not work. See Firefox's source code, browser/base/content/tabbrowser.xml
   this.tabSetHidden = function tabSetHidden(tab, hidden) {
-    if (hidden)
+    if (hidden) {
       gBrowser.hideTab(tab);
-    else
+    }
+    else {
       gBrowser.showTab(tab);
+    }
   };
 
   // A log of all reported errors is kept, in case the Error Console loses them!
@@ -1282,14 +1284,15 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     // Fixed Issue 11 by Pika
     // After each tab selecting/switching the whole list of tabs is called against gBrowser.showTab (Source not found, guessed to be Panorama)
     // So this method hook disallows those collapsed and hidden tabs to be expanded by that unknown source
-    tk.addMethodHook([
-      "gBrowser.showTab",
+    // Now commented for another issue to avoid completely hidden groups of tabs
+    // tk.addMethodHook([
+    //   "gBrowser.showTab",
 
-      'if (aTab.hidden) {',
-      ' \
-      $& \
-      if(aTab.hasAttribute("groupcollapsed")) return;',
-    ]);
+    //   'if (aTab.hidden) {',
+    //   ' \
+    //   $& \
+    //   if(aTab.hasAttribute("groupcollapsed")) return;',
+    // ]);
 
     // Fix: Faviconize is now ignored on grouped tabs (Issue 51)
     // First injected statement required a leading space to make it work, don't know why (probably JS syntax)
@@ -2026,8 +2029,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         visible.sort(tk.compareTabViewedExceptUnread);
 
         //1. hide them all first
-        for each (var t in visible)
+        for each (var t in visible) {
           tk.tabSetHidden(t, true); // visibility of a tab
+        }
 
         //2. decide which to show: First tab in group or last viewed tab
         var firstTab = group[0];
@@ -2180,8 +2184,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
             if (last.hasAttribute("groupcollapsed")) {
               tab.setAttribute("groupcollapsed", "true");
               if (tab.getAttribute("selected") == "true") {
-                for each (var t in group)
+                for each (var t in group) {
                   tk.tabSetHidden(t, true); // visibility of a tab
+                }
                 tk.tabSetHidden(tab, false); // visibility of a tab
               }
               else {
@@ -2842,8 +2847,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   // TODO=P4: ??? Left click on already selected collapsed tab shows group as menu (with expand option obviously) - or maybe on right-click? (see auto-collapse/expanding)
   this.toggleGroupCollapsed = function toggleGroupCollapsed(contextTab) {
-    if (!contextTab)
+    if (!contextTab) {
       contextTab = gBrowser.selectedTab;
+    }
 
     var group = tk.getGroupFromTab(contextTab);
     if (!group) {
@@ -2863,17 +2869,18 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
       for each (var tab in group) {
         tab.setAttribute("groupcollapsed", "true");
-        if (tab != targetTab) {
 
-          //select context tab if not selected (prevent not completely collepesed group)
-          if (tab == gBrowser.selectedTab)
-            gBrowser.selectedTab = targetTab;
-
-          tk.tabSetHidden(tab, true); // visibility of a tab */
+        if (tab == targetTab) {
+          continue;
         }
+
+        //select context tab if not selected (prevent not completely collepesed group)
+        if (tab == gBrowser.selectedTab) {
+          gBrowser.selectedTab = targetTab;
+        }
+
+        tk.tabSetHidden(tab, true); // visibility of a tab */
       }
-
-
     }
 
     tk.updateIndents();
@@ -3334,39 +3341,49 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     return groups;
   };
 
-  this.setGID = function setGID(tab, gid) {
+  this.setGID = function setGID(targetTab, gid) {
     if (!gid) {
       tk.dump("setGID: Bad groupid \"" + gid + "\"");
       return;
     }
 
-    tk.removeCollapsedTab(tab);
+    tk.removeCollapsedTab(targetTab);
 
-    for (var i = 0; i < _tabs.length; i++) {
-      var t = _tabs[i];
-      if (t.getAttribute("groupid") == gid) {
-        if (t.hasAttribute("groupcollapsed")) {
-          tab.setAttribute("groupcollapsed", "true");
-          for each (var st in tk.getGroupById(gid)) {
-            if (!st.hidden) { // visibility of a tab
-              if (st.getAttribute("selected") == "true") {
-                tk.tabSetHidden(tab, true); // visibility of a tab
-              }
-              else {
-                tk.tabSetHidden(st, true); // visibility of a tab
-              }
-              break;
-            }
+    // Handle tab visibility in collapsed group
+    // At least one tab in target group OR target tab should be visible
+    var tabsInTargetGroup = tk.getGroupById(gid);
+    var firstTabInTargetGroup = tabsInTargetGroup[0];
+    if (firstTabInTargetGroup && firstTabInTargetGroup.hasAttribute("groupcollapsed")) {
+      targetTab.setAttribute("groupcollapsed", "true");
+
+      isSelectedTabInTargetGroup = false;
+
+      for each (var tabInTargetGroup in tabsInTargetGroup) {
+        if (!tabInTargetGroup.hidden) { // visibility of a tab
+          if (tabInTargetGroup.getAttribute("selected") == "true") {
+            tk.tabSetHidden(tabInTargetGroup, false); // visibility of a tab
+            isSelectedTabInTargetGroup = true;
           }
-          // Note that if no tab is currently visible(!), then the tab we're adding will be correctly kept visible
+          else {
+            tk.tabSetHidden(tabInTargetGroup, true); // visibility of a tab
+          }
+          break;
         }
-        break;
+      }
+
+      // When isSelectedTabInTargetGroup is true, a tab in target group is shown
+      // Thus need to hide target tab
+      if (isSelectedTabInTargetGroup) {
+        tk.tabSetHidden(tabInTargetGroup, true);
+      }
+      else {
+        tk.tabSetHidden(tabInTargetGroup, false);
       }
     }
 
-    tab.removeAttribute("singletonid");
-    tab.setAttribute("groupid", gid);
-    tk.colorizeTab(tab);
+    targetTab.removeAttribute("singletonid");
+    targetTab.setAttribute("groupid", gid);
+    tk.colorizeTab(targetTab);
     tk.updateIndents();
   };
 
@@ -3394,8 +3411,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           if (t !== tab && t.getAttribute("groupid") == tgid)
             oldGroup.push(t);
         }
-        if (oldGroup.length > 0)
+        if (oldGroup.length > 0) {
           tk.ensureCollapsedGroupVisible(oldGroup);
+        }
       }
     }
     tk.tabSetHidden(tab, false);   // visibility of a tab
@@ -3403,13 +3421,22 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   this.ensureCollapsedGroupVisible = function ensureCollapsedGroupVisible(group) {
     // TODO=P3: GCODE Optimize ensureCollapsedGroupVisible with a timeout and Set of gids to avoid processing groups repeatedly [O(n^2) time]
-    for each (var t in group)
-      if (!t.hidden) // visibility of a tab
+    // Empty group => Skip
+    if (group.length === 0) {
+      return;
+    }
+    // At least one shown => Skip
+    for each (var tab in group) {
+      if (!tab.hidden) {
         return;
+      }
+    }
     var mostRecent = group[0];
-    for (var i = 1; i < group.length; i++)
-      if (tk.compareTabViewedExceptUnread(group[i], mostRecent) > 0)
+    for (var i = 1; i < group.length; i++) {
+      if (tk.compareTabViewedExceptUnread(group[i], mostRecent) > 0) {
         mostRecent = group[i];
+      }
+    }
     tk.tabSetHidden(mostRecent, false); // visibility of a tab
   };
 
