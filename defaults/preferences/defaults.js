@@ -118,6 +118,11 @@ pref("extensions.tabkit@jomel.me.uk.description", "chrome://tabkit/locale/tabkit
 //}
 
 
+//{ ### Fullscreen related ###
+pref("extensions.tabkit.tabSidebarCollapseOnFullscreen", true);
+
+
+
 //// Max no. of recent windows to keep (0 to disable completely, -1 for unlimited)
 //pref("extensions.tabkit.maxRecentWindows", 10);
 
