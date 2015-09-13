@@ -1,4 +1,13 @@
-### Changelog
+# Change Log
+All notable changes to this project will be documented in this file.
+This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (Will do so after rewrite).
+
+
+## [Unreleased][unreleased] - YYYY-MM-DD
+
+### Fixed
+- Remove an old "workaround" that causes more unexpected issues, including "forever hidden tabs" ([Issue 71][issue_71])
+  No regression is found with the "workaround" removed.
 
 
 ## 0.12.2
@@ -117,3 +126,7 @@
 ## 0.9.10
 - Fix: Bookmark and History opened in new tab not working (#23)
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
+
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.2...HEAD
+
+[issue_71]: https://github.com/tabkit/tabkit2/issues/71
