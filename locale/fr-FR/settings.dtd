@@ -1,0 +1,200 @@
+<!ENTITY options.title "Options de Tab Kit">
+
+<!ENTITY tabbar.title "Barre d'onglets">
+
+<!ENTITY panels.caption "Panneeaux">
+<!ENTITY tabbarPosition.label1 "Afficher la barre d'onglets">
+<!ENTITY tabbarPosition.accesskey "T">
+<!ENTITY tabbarPosition.top.label "en haut">
+<!ENTITY tabbarPosition.left.label "sur le côté gauche">
+<!ENTITY tabbarPosition.right.label "sur le côté droit">
+<!ENTITY tabbarPosition.bottom.label "en bas">
+<!ENTITY tabbarPosition.label2 "de la fenêtre">
+<!ENTITY sidebarPosition.label1 "Afficher la barre d'onglets">
+<!ENTITY sidebarPosition.accesskey "S">
+<!ENTITY sidebarPosition.top.label "en haut">
+<!ENTITY sidebarPosition.left.label "sur le côte gauche">
+<!ENTITY sidebarPosition.right.label "sur le côté droit">
+<!ENTITY sidebarPosition.bottom.label "en bas">
+<!ENTITY sidebarPosition.label2 "de la fenêtre">
+
+<!ENTITY horizontalTabbar.caption "Barre d'onglets horizontale">
+<!ENTITY multipleRows.label "Afficher la barre d'onglets sur de multiples lignes">
+<!ENTITY multipleRows.accesskey "M">
+<!ENTITY tabRows.label1 "Montrer jusqu'à">
+<!ENTITY tabRows.accesskey "R">
+<!ENTITY tabRows.label2 "lignes en une fois">
+
+<!ENTITY verticalTabbar.caption "Barre d'onglets verticale">
+<!ENTITY indentedTree.label "Indenter les onglets enfants (présenter la barre d'onglets en arbre)">
+<!ENTITY indentedTree.accesskey "I">
+<!ENTITY maxTreeLevel.label "Nombre de niveaux maximum">
+<!ENTITY maxTreeLevel.accesskey "X">
+<!ENTITY indentAmount.label1 "Indenter chaque niveaux de">
+<!ENTITY indentAmount.accesskey "P">
+<!ENTITY indentAmount.label2 "pixels">
+
+<!ENTITY DPISettings.caption "Relatif au DPI">
+<!ENTITY DPIValue.label "Votre valeur de DPI actuelle">
+<!ENTITY DPIValue.accesskey "D">
+
+<!ENTITY fullscreenSettings.caption "Relatif au plein écran">
+<!ENTITY fullscreenSettings.label "Masquer la barre d'onglets en plein écran">
+
+<!ENTITY pane.tabbar.group.firefox.caption "Relatif aux fonctionnalités internes de Firefox">
+<!ENTITY pane.tabbar.group.firefox.tabsontop.force_disable.label "Forcer la désactivation des &quot;Onglets au dessus&quot;">
+
+<!ENTITY tabs.title "Onglets">
+
+<!ENTITY tabs.caption "Onglets">
+<!ENTITY tabMinWidth.label1 "Largeur (minimale) d'un onglet :">
+<!ENTITY tabMinWidth.accesskey "W">
+<!ENTITY tabMinWidth.label2 "pixels">
+<!ENTITY closeButtons.label "Boutons &quot;Fermer&quot; :">
+<!ENTITY closeButtons.accesskey "O">
+<!ENTITY closeButtons.active.label "afficher uniquement sur l'onglet courant">
+<!ENTITY closeButtons.all.label "afficher sur tous les onglets">
+<!ENTITY closeButtons.none.label "ne montrer aucun bouton &quot;Fermer&quot;">
+<!ENTITY closeButtons.end.label "afficher un seul bouton &quot;Fermer&quot; à la fin de la barre d'onglets">
+
+<!ENTITY appearance.caption "Apparence">
+<!ENTITY disableSearchBar.label "Désactiver la barre de recherche">
+<!ENTITY disableSearchBar.accesskey "D">
+<!ENTITY disableTabGroupColor.label "Désactiver la colorisation des groupes d'onglets">
+
+<!ENTITY coloring.caption "Colorisation d'onglet">
+<!ENTITY forceThemeCompatibility.label "Compatibilité du thème :">
+<!ENTITY forceThemeCompatibility.accesskey "T">
+<!ENTITY forceThemeCompatibility.never.label "Ne jamais outrepasser les thèmes">
+<!ENTITY forceThemeCompatibility.auto.label "Détection automatique (recommandé)">
+<!ENTITY forceThemeCompatibility.always.label "Toujours outrepasser les thèmes">
+<!ENTITY colorTabNotLabel.label "Colorisation :">
+<!ENTITY colorTabNotLabel.accesskey "C">
+<!ENTITY colorTabNotLabel.true.label "Colorer les onglets par groupe et étiquette si mis en évidence">
+<!ENTITY colorTabNotLabel.false.label "Colorer les étiquettes par groupe et onglets si mis en évidence">
+<!ENTITY minSaturation.label "Saturation du groupe - Min :">
+<!ENTITY minSaturation.accesskey "S">
+<!ENTITY maxSaturation.label "Max :">
+<!ENTITY maxSaturation.accesskey "M">
+<!ENTITY minLightness.label "Clarté du groupe - Min :">
+<!ENTITY minLightness.accesskey "L">
+<!ENTITY maxLightness.label "Max :">
+<!ENTITY maxLightness.accesskey "M">
+<!ENTITY hue.label "La teinte est sélectionnée automatiquement, de sorte à être distincte des groupes proches">
+
+<!ENTITY openSelectedLinks.caption "Ouvrir les liens sélectionnés">
+<!ENTITY openSelectedLinks.label "Ouvrir les liens sélectionnés dans des nouveaux onglets depuis le menu contextuel de la page (incluant les liens texte)">
+<!ENTITY openSelectedLinks.accesskey "O">
+<!ENTITY openSelectedLinksShowOnlyOne.label "Proposer uniquement les meilleurs liens (au lieu du choix entre les plus importants / tous / seulement les liens texte)">
+<!ENTITY openSelectedLinksShowOnlyOne.accesskey "F">
+
+<!ENTITY controls.title "Contrôles">
+
+<!ENTITY mouseGestures.caption "Mouvements de souris">
+<!ENTITY doubleClickCollapseExpand.label "Double cliquer sur un groupe pour le plier/déplier">
+<!ENTITY doubleClickCollapseExpand.accesskey "D">
+
+<!ENTITY dragging.caption "Déplacement d'onglet">
+<!ENTITY accelDragCopy.label "Ctrl-glisser copie les onglets au lieu de les déplacer (Cmd-glisser sur Mac)">
+<!ENTITY accelDragCopy.accesskey "C">
+<!ENTITY shiftDragGroups.label "Shift-glisser déplace le groupe entier">
+<!ENTITY shiftDragGroups.accesskey "G">
+<!ENTITY shiftDragSubtrees.label "Au lieu de ça, en mode arbre, shift-glisser déplace un 'sous-arbre' (expérimental !)">
+<!ENTITY shiftDragSubtrees.accesskey "I">
+
+<!ENTITY scrolling.caption "Défilement">
+<!ENTITY scrollbarsNotArrows.label "Utiliser des barres de défilement (scrollbar) au lieu des flèches dans les menus Favoris et Tous les onglets*">
+<!ENTITY scrollbarsNotArrows.accesskey "S">
+<!ENTITY onlyAppliesToNewWindows.label1 "* S'applique uniquement aux nouvelles fenêtres">
+<!ENTITY scrollOneExtra.label "Toujours garder les onglets à côté de l'onglet courant visible">
+<!ENTITY scrollOneExtra.accesskey "A">
+
+<!ENTITY grouping.title "Groupement">
+
+<!ENTITY groupingTabs.caption "Groupement des onglets">
+<!ENTITY autoGroupNewTabs.label "Grouper automatiquement les nouveaus onglets">
+<!ENTITY autoGroupNewTabs.accesskey "A">
+<!ENTITY lastActiveGrouping.label "Groupement actif :">
+<!ENTITY lastActiveGrouping.accesskey "G">
+<!ENTITY lastActiveGrouping.domain.label "par nom de domaine">
+<!ENTITY lastActiveGrouping.opener.label "par ouvreur (recommandé)">
+<!ENTITY autoCollapse.label "Replier automatiquement les groupes inactifs">
+<!ENTITY autoCollapse.accesskey "U">
+<!ENTITY collapsedGroupVisibleTab.label "Onglet visible dans les groupes repliés :">
+<!ENTITY collapsedGroupVisibleTab.accesskey "C">
+<!ENTITY collapsedGroupVisibleTab.selected.label "L'onglet sélectionné">
+<!ENTITY collapsedGroupVisibleTab.first.label "Le premier onglet du groupe">
+
+<!ENTITY positioningTabs.caption "Positionnement des onglets">
+<!ENTITY newTabPosition.label "Les nouveaux onglets non groupés doivent être positionnés">
+<!ENTITY newTabPosition.accesskey "N">
+<!ENTITY newTabPosition.lastSort.label "selon le dernier tri">
+<!ENTITY newTabPosition.nextToCurrent.label "à côté de l'onglet courant">
+<!ENTITY newTabPosition.farRight.label "à l'extrême droite de la barre d'onglets">
+<!ENTITY lastActiveSort.label "Le 'dernier tri' équivaut à">
+<!ENTITY lastActiveSort.accesskey "S">
+<!ENTITY lastActiveSort.address.label "par adresse">
+<!ENTITY lastActiveSort.lastLoaded.label "par date de dernier chargement">
+<!ENTITY lastActiveSort.lastViewed.label "par date de dernier affichage">
+<!ENTITY lastActiveSort.creation.label "par ordre de création">
+<!ENTITY lastActiveSort.origin.label "par origine">
+<!ENTITY lastActiveSort.pageTitle.label "par titre de page">
+<!ENTITY openRelativePosition.label "'À côte de l&apos;onglet courant' équivaut à :">
+<!ENTITY openRelativePosition.accesskey "C">
+<!ENTITY openRelativePosition.left.label "à sa gauche">
+<!ENTITY openRelativePosition.right.label "à sa droite">
+<!ENTITY openRelativePosition.rightOfRecent.label "à sa droite et à celle de ses enfants récents">
+<!ENTITY openRelativePosition.rightOfConsecutive.label "à sa droite et à celle de tous ses enfants">
+
+<!ENTITY closingTabs.caption "Fermeture des onglets">
+<!ENTITY customCloseOrder.label "Quand des onglets sont fermés :">
+<!ENTITY customCloseOrder.accesskey "W">
+<!ENTITY customCloseOrder.auto.label "choisir automatiquement (selon les groupes et le niveau de l'arbre)">
+<!ENTITY customCloseOrder.groupLeft.label "sélectionner l'onglet à gauche sauf s'il est possible de rester dans le groupe">
+<!ENTITY customCloseOrder.groupRight.label "sélectionner l'onglet à droite sauf s'il est possible de rester dans le groupe">
+<!ENTITY customCloseOrder.left.label "toujours sélectionner l'onglet à gauche">
+<!ENTITY customCloseOrder.right.label "toujours sélectionner l'onglet à droite">
+<!ENTITY selectOwnerOnClose.label "Outrepasser ce comportement pour les fenêtres popup détournées et retourner à l'onglet parent">
+<!ENTITY selectOwnerOnClose.accesskey "O">
+
+<!ENTITY onlyAppliesToNewWindows.label2 "* S'applique uniquement aux nouvelles fenêtres">
+
+<!ENTITY advanced.title "Avancé">
+
+<!ENTITY openTabsFrom.caption "Par défaut ouvrir des nouveaux onglets depuis :">
+<!ENTITY addressBar.label "La barre d'adresse">
+<!ENTITY addressBar.accesskey "A">
+<!ENTITY searchBar.label "La barre de recherche">
+<!ENTITY searchBar.accesskey "S">
+<!ENTITY places.label "Les favoris et l'historique">
+<!ENTITY places.accesskey "K">
+
+<!ENTITY closeOtherTabs.caption "Fermer les autres onglets">
+<!ENTITY closeBeforeAfterNotOther.label "Remplacer 'Fermer les autres onglets' par Fermer les onglets avant et Fermer les onglets après">
+<!ENTITY closeBeforeAfterNotOther.accesskey "C">
+
+<!ENTITY tabOrder.caption "Ordre des onglets">
+<!ENTITY autoSortOpenerGroups.label "Trier automatiquement les onglets groupés par ouvreur selon l'onglet parent (recommandé)">
+<!ENTITY autoSortOpenerGroups.accesskey "O">
+<!ENTITY autoSortDomainGroups.label "Trier automatiquement les onglets groupés par nom de domaine selon l'adresse">
+<!ENTITY autoSortDomainGroups.accesskey "D">
+
+<!ENTITY whenGroupingByOpener.caption "Quand les onglets sont groupés par ouvreur :">
+<!ENTITY bookmarkTabsAreRelated.label "Traiter les favoris comme étant relatifs à l'onglet courant">
+<!ENTITY bookmarkTabsAreRelated.accesskey "B">
+<!ENTITY historyTabsAreRelated.label "Traiter les onglets d'historique comme étant relatifs à l'onglet courant">
+<!ENTITY historyTabsAreRelated.accesskey "H">
+<!ENTITY newTabsAreRelated.label "Traiter les nouveaux onglets vides comme étant relatifs à l'onglet courant">
+<!ENTITY newTabsAreRelated.accesskey "N">
+
+<!ENTITY reset.caption "Réinitialisation">
+<!ENTITY resetAll.label "Réinitialiser toutes les options à leur valeur par défaut">
+<!ENTITY resetAll.accesskey "R">
+<!ENTITY disableAll.label "Désactiver toutes les fonctionnalités">
+<!ENTITY disableAll.accesskey "T">
+
+<!ENTITY pane.experimental.title "Expérimental">
+
+<!ENTITY pane.experimental.group.firefox.caption "Fonctionnalités internes de Firefox">
+<!ENTITY pane.experimental.group.firefox.label "Toutes les fonctionnalités activées ne seront pas prises en charge.">
+<!ENTITY pane.experimental.group.firefox.Panorama.enabled.label "Activer Panorama">
