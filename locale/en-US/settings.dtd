@@ -33,6 +33,10 @@
 <!ENTITY indentAmount.label1 "Indent each tree level by">
 <!ENTITY indentAmount.accesskey "P">
 <!ENTITY indentAmount.label2 "pixels">
+<!ENTITY tabbarFullscreenBehaviour.label "Tab Bar Fullscreen Behaviour">
+<!ENTITY tabbarFullscreenBehaviour.options.auto_collapse_with_spitter_visible.label "Auto collapse (Spitter visible) (Default)">
+<!ENTITY tabbarFullscreenBehaviour.options.auto_collapse_with_spitter_hidden.label "Auto collapse (Spitter hidden)">
+<!ENTITY tabbarFullscreenBehaviour.options.do_nothing.label "Do nothing">
 
 <!ENTITY DPISettings.caption "DPI related">
 <!ENTITY DPIValue.label "Your current DPI value">

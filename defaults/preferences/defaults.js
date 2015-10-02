@@ -8,8 +8,9 @@ pref("extensions.tabkit.tabRows", 3); // 1 to disable
 
 //--- Vertical Tab Bar --- (disable as appropriate)
 pref("extensions.tabkit.indentedTree", true);
-    pref("extensions.tabkit.maxTreeLevel", 5);
-    pref("extensions.tabkit.indentAmount", 19);
+pref("extensions.tabkit.maxTreeLevel", 5);
+pref("extensions.tabkit.indentAmount", 19);
+pref("extensions.tabkit.tabbarFullscreenBehaviour", "auto_collapse_with_spitter_visible");
 
 //--- DPI value ---
 pref("extensions.tabkit.DPIValue", 96);

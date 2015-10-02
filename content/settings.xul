@@ -19,6 +19,8 @@
       <preference id="maxtreelevel-pref" name="extensions.tabkit.maxTreeLevel" type="int"/>
       <preference id="indentamount-pref" name="extensions.tabkit.indentAmount" type="int"/>
 
+      <preference id="tabbar_fullscreen_behaviour-pref" name="extensions.tabkit.tabbarFullscreenBehaviour" type="string"/>
+
       <preference id="dpivalue-pref" name="extensions.tabkit.DPIValue" type="int"/>
 
       <preference id="firefox-tabsontop-force_disable-enabled-pref" name="extensions.tabkit.firefox.tabsontop.force_disable.enabled" type="bool"/>
@@ -95,6 +97,25 @@
                value="&indentAmount.label2;"
                accesskey="&indentAmount.accesskey;"/>
       </hbox>
+
+      <grid>
+        <rows>
+          <row align="center">
+            <label control="tabbar-fullscreen-behaviour"
+                   value="&tabbarFullscreenBehaviour.label;"/>
+            <menulist id="tabbar-fullscreen-behaviour" preference="tabbar_fullscreen_behaviour-pref">
+            <menupopup>
+              <menuitem value="auto_collapse_with_spitter_visible"
+                label="&tabbarFullscreenBehaviour.options.auto_collapse_with_spitter_visible.label;"/>
+              <menuitem value="auto_collapse_with_spitter_hidden"
+                label="&tabbarFullscreenBehaviour.options.auto_collapse_with_spitter_hidden.label;"/>
+              <menuitem value="do_nothing"
+                label="&tabbarFullscreenBehaviour.options.do_nothing.label;"/>
+            </menupopup>
+            </menulist>
+          </row>
+        </rows>
+      </grid>
     </groupbox>
 
     <groupbox id="dpisettings">

@@ -6155,15 +6155,40 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     var willBeFullScreen = !isFullScreenBeforeEvent;
     var splitter = document.getElementById("tabkit-splitter");
 
-    if (splitter) { //only collapsed splitter in vertical mode
-      if (willBeFullScreen) {
-        tk.debug("gonna set splitter collapsed");
-        splitter.setAttribute("state","collapsed");
+    // Type: String
+    // Values:
+    // - `auto_collapse_with_spitter_visible`
+    // - `auto_collapse_with_spitter_hidden`
+    // - `do_nothing`
+    var full_screen_behaviour_preference_value = _prefs.getCharPref("tabbarFullscreenBehaviour");
+    var should_hide_spitter_on_collapse = (full_screen_behaviour_preference_value === "auto_collapse_with_spitter_hidden");
+
+    if (!splitter) {
+      //only collapsed splitter in vertical mode
+      return;
+    }
+    if (full_screen_behaviour_preference_value === "do_nothing") {
+      // Nothing needs to be done
+      return;
+    }
+
+    if (willBeFullScreen) {
+      tk.debug("gonna set splitter collapsed");
+      splitter.setAttribute("state", "collapsed");
+
+      if (should_hide_spitter_on_collapse) {
+        tk.debug("gonna set splitter hidden");
+        splitter.setAttribute("hidden", "true");
       }
-      else {
-        tk.debug("gonna set splitter open");
-        splitter.setAttribute("state","open");
-        tabsToolbar.removeAttribute("collapsed");
+    }
+    else {
+      tk.debug("gonna set splitter open");
+      splitter.setAttribute("state", "open");
+      tabsToolbar.removeAttribute("collapsed");
+
+      if (should_hide_spitter_on_collapse) {
+        tk.debug("gonna set splitter visible");
+        splitter.removeAttribute("hidden");
       }
     }
   };
