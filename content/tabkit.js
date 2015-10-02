@@ -661,6 +661,17 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   };
 
+  this.VerticalTabBarScrollbar = this.VerticalTabBarScrollbar || {};
+  this.VerticalTabBarScrollbar.getElement = function () {
+    if (!tk.TabBar.Mode.getIsVerticalMode()) {
+      return null;
+    }
+
+    var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
+
+    return innerBox.mVerticalScrollbar;
+  };
+
 //}##########################
 //{### Initialisation
 //|##########################
@@ -5079,8 +5090,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (event.attrName != "collapsed")
       return;
 
-    var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
-    var scrollbar = innerBox.mVerticalScrollbar;
+    var scrollbar = tk.VerticalTabBarScrollbar.getElement();
 
     if (event.attrChange == MutationEvent.ADDITION) {
       event.target.collapsed = false; //target = appcontent
@@ -5376,8 +5386,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           _tabContainer.mTabstrip.style.setProperty("min-height", 24 * maxRows + "px", "important");
           _tabContainer.mTabstrip.style.setProperty("max-height", 24 * maxRows + "px", "important");
 
-          var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
-          var scrollbar = innerBox.mVerticalScrollbar;
+          var scrollbar = tk.VerticalTabBarScrollbar.getElement();
           try {
             scrollbar.removeEventListener("DOMAttrModified", tk.preventChangeOfAttributes, true);
           }
@@ -5443,8 +5452,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
 
   this.preventChangeOfAttributes = function preventChangeOfAttributes(event) {
-    var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
-    var scrollbar = innerBox.mVerticalScrollbar;
+    var scrollbar = tk.VerticalTabBarScrollbar.getElement();
     if (event.attrName == "increment") {
       //event.preventDefault(); // does not work for this event...
       scrollbar.setAttribute("increment", 24);
@@ -5789,8 +5797,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (!isUsingTabSheelSwitch ||
       (name == "scrollbar" || name == "scrollbarbutton" || name == "slider" || name == "thumb")) {
       // Scrollwheeling above an overflow scrollbar should still scroll 3 lines if vertical or 2 lines if multi-row tab bar
-      var innerBox = document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
-      var scrollbar = innerBox.mVerticalScrollbar;
+      var scrollbar = tk.VerticalTabBarScrollbar.getElement();
       if (!scrollbar) {
         tk.dump("tabInnerBox.mVerticalScrollbar is null - so what scrollbar did we scroll over?!");
         return;
