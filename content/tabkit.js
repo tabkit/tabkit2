@@ -5749,6 +5749,12 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   /// Initialisation:
   this.initMouseGestures = function initMouseGestures(event) {
+    // event `wheel` is supported since Firefox 17, but was buggy (tested on 38.3.0)
+    // It's not always fired
+    // https://developer.mozilla.org/en-US/docs/Web/Events/wheel
+    //
+    // We keep using event `DOMMouseScroll`. It's deprecated but more reliable.
+    // https://developer.mozilla.org/en-US/docs/Web/Events/DOMMouseScroll
     gBrowser.tabContainer.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
 
     // Move Close Tab Before/After to the tab context menu (from the Tools menu)
