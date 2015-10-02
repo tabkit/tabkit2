@@ -5095,7 +5095,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       window.setTimeout(function __restoreScrollPosition() {
         if ("tkScrollPos" in _tabBar && scrollbar) {
           // Restore the old scroll position, as collapsing the tab bar will have reset it
-          _tabInnerBox.mVerticalScrollbar.setAttribute("curpos", _tabBar.tkScrollPos);
+          scrollbar.setAttribute("curpos", _tabBar.tkScrollPos);
           delete _tabBar.tkScrollPos;
         }
       }, 50); // TODO: TJS Find more reliable way of setting this than 50 ms timeout...
