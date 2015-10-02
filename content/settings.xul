@@ -20,7 +20,7 @@
       <preference id="indentamount-pref" name="extensions.tabkit.indentAmount" type="int"/>
 
       <preference id="dpivalue-pref" name="extensions.tabkit.DPIValue" type="int"/>
-      
+
       <preference id="firefox-tabsontop-force_disable-enabled-pref" name="extensions.tabkit.firefox.tabsontop.force_disable.enabled" type="bool"/>
     </preferences>
 
