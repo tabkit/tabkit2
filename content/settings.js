@@ -106,4 +106,6 @@ function disableAll() {
   document.getElementById("customcloseorder-pref").value = 4;
 
   document.getElementById("closebeforeafternotother-pref").value = false;
+
+  document.getElementById("tabsidebarcollapseonfullscreen-pref").value = true;
 }

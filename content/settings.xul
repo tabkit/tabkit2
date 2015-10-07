@@ -20,6 +20,8 @@
       <preference id="indentamount-pref" name="extensions.tabkit.indentAmount" type="int"/>
 
       <preference id="dpivalue-pref" name="extensions.tabkit.DPIValue" type="int"/>
+
+      <preference id="tabsidebarcollapseonfullscreen-pref" name="extensions.tabkit.tabSidebarCollapseOnFullscreen" type="bool"/>
       
       <preference id="firefox-tabsontop-force_disable-enabled-pref" name="extensions.tabkit.firefox.tabsontop.force_disable.enabled" type="bool"/>
     </preferences>
@@ -109,6 +111,15 @@
                  min="96" max="192"
                  preference="dpivalue-pref"/>
       </hbox>
+    </groupbox>
+
+    <groupbox id="fullscreensettings">
+      <caption label="&fullscreenSettings.caption;"/>
+
+      <vbox>
+        <checkbox id="tabsidebarcollapseonfullscreen-checkbox" label="&fullscreenSettings.label;"
+            preference="tabsidebarcollapseonfullscreen-pref"/>
+      </vbox>
     </groupbox>
 
     <groupbox id="pane-tabbar__group-firefox">

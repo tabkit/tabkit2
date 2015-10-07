@@ -6142,6 +6142,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   // Good for HTML5 full screen video viewing
   this.onFullScreenToggle = function onFullScreenToggle(event) {
+  	
+  	var isMaxFullScreenAllowed = _prefs.getBoolPref("tabSidebarCollapseOnFullscreen");
+  	if (!isMaxFullScreenAllowed) return;
+  	
     var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
     // This value is the value before switch, tested in FF 31.1.0 & 36.0.1
     var isFullScreenBeforeEvent = window.fullScreen;
