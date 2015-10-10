@@ -8,6 +8,7 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ### Fixed
 - Remove an old "workaround" that causes more unexpected issues, including "forever hidden tabs" ([Issue 71][issue_71])
   No regression is found with the "workaround" removed.
+- Disable window dragging by dragging the scrollbar on tab bar which makes the scrollbar difficult to use. ([Issue 87][issue_87])
 
 
 ## 0.12.2
@@ -129,4 +130,5 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 [unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.2...HEAD
 
+[issue_87]: https://github.com/tabkit/tabkit2/issues/87
 [issue_71]: https://github.com/tabkit/tabkit2/issues/71
