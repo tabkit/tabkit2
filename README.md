@@ -8,6 +8,8 @@ The most updated version (0.6) is not compatible with FF4+, since FF3->4 has a H
 This project aims to change modify the original TK to make it FF4+ compatible (and drop the support for pre-FF4).  
 The name for the new(not quite) extension is *Tab Kit 2nd Edition*(You can still call it *Tab Kit 2* or *TK2* for short)
 
+**Classic Theme Restorer is required!! See section `Dependent Extensions` below**
+
 
 ## Description from original Tab Kit (modified)
 Tab Kit makes tabs more efficient for power users, allowing a wide variety of tweaks, all of which are optional, notably:
@@ -27,11 +29,13 @@ Tab Kit makes tabs more efficient for power users, allowing a wide variety of tw
 - Options for urls, searches and/or bookmarks to open in new tabs by default
 
 
-## Since Firefox `29.0`
-Now requires [Classic Theme Restorer](https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/) Extension  
-Required options for `Classic Theme Restorer` `1.2.3`:
-- Select `Tabs not on top - set [tabsontop=false]` in `Tabs` page: should fix the vertical tabbar direction  
-- Uncheck `Firefox titlebar (about:config preference)` in ` Application button` page: should fix the totally unusable layout  
+## Dependent Extensions
+
+### Classic Theme Restorer (since Firefox `29.0`)
+You should install it **BEFORE** installing this extension at https://addons.mozilla.org/en-US/firefox/addon/classicthemerestorer/  
+Required options for proper style: (extracted from `Classic Theme Restorer` `1.2.3`, please kindly notify me if they have changed)
+- Select `Tabs not on top - set [tabsontop=false]` in `Tabs` page: fix the vertical tabbar direction  
+- Uncheck `Firefox titlebar (about:config preference)` in ` Application button` page: fix the totally unusable layout  
 
 
 ## Extension since `0.12.0`
