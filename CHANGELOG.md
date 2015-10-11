@@ -5,6 +5,9 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+
+## [0.12.3][0.12.3] - 2015-10-11
+
 ### Added
 - Add new preference to allow hiding the vertical tab bar splitter on fullscreen  
   See "Tab Bar" in options
@@ -132,7 +135,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Fix: Bookmark and History opened in new tab not working (#23)
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.2...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.3...HEAD
+[0.12.3]:     https://github.com/tabkit/tabkit2/compare/v0.12.2...0.12.3
 
 [issue_87]: https://github.com/tabkit/tabkit2/issues/87
 [issue_71]: https://github.com/tabkit/tabkit2/issues/71
