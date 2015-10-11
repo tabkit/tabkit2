@@ -5,6 +5,10 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+### Added
+- Add new preference to allow hiding the vertical tab bar splitter on fullscreen  
+  See "Tab Bar" in options
+
 ### Fixed
 - Remove an old "workaround" that causes more unexpected issues, including "forever hidden tabs" ([Issue 71][issue_71])
   No regression is found with the "workaround" removed.
