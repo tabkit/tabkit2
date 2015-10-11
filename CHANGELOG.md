@@ -136,7 +136,7 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 [unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.3...HEAD
-[0.12.3]:     https://github.com/tabkit/tabkit2/compare/v0.12.2...0.12.3
+[0.12.3]:     https://github.com/tabkit/tabkit2/compare/v0.12.2...v0.12.3
 
 [issue_87]: https://github.com/tabkit/tabkit2/issues/87
 [issue_71]: https://github.com/tabkit/tabkit2/issues/71
