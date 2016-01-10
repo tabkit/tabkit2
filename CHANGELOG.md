@@ -5,6 +5,9 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+
+## [0.12.4][0.12.4] - 2016-01-10
+
 ### Fixed
 - Workaround [#92][issue_92] by adding back the workaround removed in last version ([0.12.3][0.12.3])
   This will cause [#71][issue_71] again, but that issue was less serious
@@ -140,7 +143,9 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Fix: Bookmark and History opened in new tab not working (#23)
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.3...HEAD
+
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.4...HEAD
+[0.12.4]:     https://github.com/tabkit/tabkit2/compare/v0.12.3...v0.12.4
 [0.12.3]:     https://github.com/tabkit/tabkit2/compare/v0.12.2...v0.12.3
 
 [issue_92]: https://github.com/tabkit/tabkit2/issues/92
