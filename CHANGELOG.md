@@ -5,6 +5,11 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+### Fixed
+- Workaround [#92][issue_92] by adding back the workaround removed in last version ([0.12.3][0.12.3])
+  This will cause [#71][issue_71] again, but that issue was less serious
+  The workaround will be kept until a permanent fix is developed
+
 
 ## [0.12.3][0.12.3] - 2015-10-11
 
@@ -138,5 +143,6 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 [unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.3...HEAD
 [0.12.3]:     https://github.com/tabkit/tabkit2/compare/v0.12.2...v0.12.3
 
+[issue_92]: https://github.com/tabkit/tabkit2/issues/92
 [issue_87]: https://github.com/tabkit/tabkit2/issues/87
 [issue_71]: https://github.com/tabkit/tabkit2/issues/71
