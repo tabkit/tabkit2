@@ -6001,6 +6001,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       gBrowser.selectedTab = firstTab;
   };
 
+  // Open the URL(s) in clipboard & create a group with opened tabs (if > 1)
   this.openClipboardLinks = function openClipboardLinks(contextTab) {
     var unicodeString = '';
 

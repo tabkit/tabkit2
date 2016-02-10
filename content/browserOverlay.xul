@@ -34,7 +34,10 @@
 
 
   <command id="cmd_tabkit-sortgroup-tab-newTabHere" oncommand="tabkit.openNewTabHere(TabContextMenu.contextTab);"/>
-  <command id="cmd_tabkit-sortgroup-tab-openClipboardLinks" oncommand="tabkit.openClipboardLinks(TabContextMenu.contextTab);"/>
+  <command
+    id="tabkit.tab_context_menu.sections.special_operations.actions.open_clipboard_links.command"
+    oncommand="tabkit.openClipboardLinks(TabContextMenu.contextTab);"
+  />
   <command id="cmd_tabkit-sortgroup-tab-duplicateTab" oncommand="tabkit.duplicateTab(TabContextMenu.contextTab);"/>
   <command id="cmd_tabkit-sortgroup-tab-makeGroup" oncommand="tabkit.makeGroup(TabContextMenu.contextTab);"/>
 
@@ -174,6 +177,17 @@
 
       <menuseparator/>
 
+      <menuitem id="tabkit__tab-context-menu__sections__special-operations"
+                label="&tabkit.tab_context_menu.sections.special_operations.caption;"
+                disabled="true"
+                style="font-size: 80%; background: none !important; -moz-appearance: none;"/>
+
+      <menuitem id="tabkit__tab-context-menu__sections__special-operations__open-clipboard-links"
+            label="&tabkit.tab_context_menu.sections.special_operations.actions.open_clipboard_links.label;"
+            command="tabkit.tab_context_menu.sections.special_operations.actions.open_clipboard_links.command"/>
+
+      <menuseparator/>
+
       <menuitem id="menu_tabkit-sortgroup-tab-caption"
                 label="&tab.caption;"
                 disabled="true"
@@ -184,9 +198,6 @@
                 accesskey="&newTabHere.accesskey;"
                 command="cmd_tabkit-sortgroup-tab-newTabHere"
                 acceltext="&newTabHere.acceltext;"/>
-      <menuitem id="menu_tabkit-sortgroup-tab-openClipboardLinks"
-                label="&openClipboardLinks.label;"
-                command="cmd_tabkit-sortgroup-tab-openClipboardLinks"/>
       <menuitem id="menu_tabkit-sortgroup-tab-duplicateTab"
                 label="&duplicateTab.label;"
                 accesskey="&duplicateTab.accesskey;"

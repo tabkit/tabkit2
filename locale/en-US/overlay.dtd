@@ -52,13 +52,16 @@
 <!ENTITY autoGroup.accesskey "G">
 
 
+<!ENTITY tabkit.tab_context_menu.sections.special_operations.caption "Special Operations:">
+
+<!ENTITY tabkit.tab_context_menu.sections.special_operations.actions.open_clipboard_links.label "Open Clipboard Link(s) in a group">
+
+
 <!ENTITY tab.caption "This Tab:">
 
 <!ENTITY newTabHere.label "New Tab Here">
 <!ENTITY newTabHere.accesskey "N">
 <!ENTITY newTabHere.acceltext "N">
-
-<!ENTITY openClipboardLinks.label "Open Clipboard Link(s) in group">
 
 <!ENTITY duplicateTab.label "Duplicate Tab">
 <!ENTITY duplicateTab.accesskey "D">
