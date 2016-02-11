@@ -101,17 +101,23 @@
       <grid>
         <rows>
           <row align="center">
-            <label control="tabbar-fullscreen-behaviour"
-                   value="&tabbarFullscreenBehaviour.label;"/>
-            <menulist id="tabbar-fullscreen-behaviour" preference="tabbar_fullscreen_behaviour-pref">
-            <menupopup>
-              <menuitem value="auto_collapse_with_spitter_visible"
-                label="&tabbarFullscreenBehaviour.options.auto_collapse_with_spitter_visible.label;"/>
-              <menuitem value="auto_collapse_with_spitter_hidden"
-                label="&tabbarFullscreenBehaviour.options.auto_collapse_with_spitter_hidden.label;"/>
-              <menuitem value="do_nothing"
-                label="&tabbarFullscreenBehaviour.options.do_nothing.label;"/>
-            </menupopup>
+            <label
+              control="tabbar-fullscreen-behaviour"
+              value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.label;"/>
+            <menulist
+              id="tabbar-fullscreen-behaviour"
+              preference="tabbar_fullscreen_behaviour-pref">
+              <menupopup>
+                <menuitem
+                  value="auto_collapse_with_spitter_visible"
+                  label="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.auto_collapse_with_spitter_visible.label;"/>
+                <menuitem
+                  value="auto_collapse_with_spitter_hidden"
+                  label="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.auto_collapse_with_spitter_hidden.label;"/>
+                <menuitem
+                  value="do_nothing"
+                  label="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.do_nothing.label;"/>
+              </menupopup>
             </menulist>
           </row>
         </rows>
