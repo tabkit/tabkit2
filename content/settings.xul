@@ -20,6 +20,7 @@
       <preference id="indentamount-pref" name="extensions.tabkit.indentAmount" type="int"/>
 
       <preference id="tabbar_fullscreen_behaviour-pref" name="extensions.tabkit.tabbarFullscreenBehaviour" type="string"/>
+      <preference id="tabbar_fullscreen_value_meaning_in_callback-pref" name="extensions.tabkit.tabbar_fullscreen_value_meaning_in_callback" type="string"/>
 
       <preference id="dpivalue-pref" name="extensions.tabkit.DPIValue" type="int"/>
 
@@ -119,6 +120,34 @@
                   label="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.do_nothing.label;"/>
               </menupopup>
             </menulist>
+          </row>
+
+          <row align="center">
+            <label
+              control="tabbar-fullscreen-value-meaning-in-callback"
+              value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.label;"/>
+            <menulist
+              id="tabbar-fullscreen-value-meaning-in-callback"
+              preference="tabbar_fullscreen_value_meaning_in_callback-pref">
+              <menupopup>
+                <menuitem
+                  value="value_before_change"
+                  label="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.options.value_before_change.label;"/>
+                <menuitem
+                  value="value_after_change"
+                  label="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.options.value_after_change.label;"/>
+              </menupopup>
+            </menulist>
+          </row>
+          <row align="center">
+            <groupbox id="">
+              <row align="center">
+                <label value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.description.line1;"/>
+              </row>
+              <row align="center">
+                <label value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.description.line2;"/>
+              </row>
+            </groupbox>
           </row>
         </rows>
       </grid>
