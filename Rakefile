@@ -12,9 +12,16 @@ task :build, :version do |t, args|
   # Default read file from install.rdf
   if version.nil?
     meta_file = File.read('install.rdf')
-    version_from_file = meta_file.match(/<em:version>([\w\.\-]+)<\/em:version>/i)[1] # Match data in brackets start at one
+    version_from_file_matchdata = meta_file.match(/<em:version>(?<version>.+)<\/em:version>/i)
+    version_from_file = version_from_file_matchdata && version_from_file_matchdata[:version] # Match data in brackets start at one
 
     version = version_from_file
+  end
+
+  # Still missing
+  # Must be something wrong
+  if version.nil?
+    raise "Something is wrong, version is nil"
   end
 
   ### Files to include
@@ -71,5 +78,3 @@ task :build, :version do |t, args|
 end
 
 task default: :build
-
-
