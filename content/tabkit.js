@@ -6126,6 +6126,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
     // This value is the value before switch, tested in FF 31.1.0 & 36.0.1
     var isFullScreenBeforeEvent = window.fullScreen;
+    if (_prefs.getCharPref("tabbar_fullscreen_value_meaning_in_callback") == "value_after_change") {
+      isFullScreenBeforeEvent = !isFullScreenBeforeEvent;
+    }
+
     var willBeFullScreen = !isFullScreenBeforeEvent;
     var splitter = document.getElementById("tabkit-splitter");
 

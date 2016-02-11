@@ -39,6 +39,12 @@
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.auto_collapse_with_spitter_hidden.label "Auto collapse (Spitter hidden)">
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.do_nothing.label "Do nothing">
 
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.label "Firefox Fullscreen Value Meaning In Event Callback">
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.description.line1 "Firefox's behaviour for fullscreen is slightly different in different versions.">
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.description.line2 "Just change this value if you encounter reverse behaviour.">
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.options.value_before_change.label "Value Before Change">
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.options.value_after_change.label "Value After Change">
+
 <!ENTITY DPISettings.caption "DPI related">
 <!ENTITY DPIValue.label "Your current DPI value">
 <!ENTITY DPIValue.accesskey "D">
