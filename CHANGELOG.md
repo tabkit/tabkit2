@@ -5,6 +5,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+## [0.12.5][0.12.5] - 2016-02-12
+
 ### Fixed
 - Add new preference to allow users to fix [#96][issue_96] in different versions of Firefox
   Tested with 38.6.0 and 44.0.1 which behave differently
@@ -148,7 +150,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.4...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.5...HEAD
+[0.12.5]:     https://github.com/tabkit/tabkit2/compare/v0.12.4...v0.12.5
 [0.12.4]:     https://github.com/tabkit/tabkit2/compare/v0.12.3...v0.12.4
 [0.12.3]:     https://github.com/tabkit/tabkit2/compare/v0.12.2...v0.12.3
 
