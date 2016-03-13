@@ -6270,7 +6270,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 //|##########################
 
 };
-})(this);
+// `this` in FF 45 is a `Sandbox` not a `ChromeWindow`
+// Using reference `window` ensures it is a `ChromeWindow`
+// Tested in FF 45.0 & 38.7.0
+})(window);
 
 
 
