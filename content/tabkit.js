@@ -1374,7 +1374,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           } \
         } \
         catch(ex) { \
-          tabkit.debug("Cannot use arguments", ex); \
+          tabkit.debug("Cannot use arguments"); \
+          tabkit.debug(ex); \
         } \
         finally { \
           evt.shouldBeFromSS = false; \
