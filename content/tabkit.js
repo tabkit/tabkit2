@@ -631,16 +631,19 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     _sound.beep();
   };
 
-  this.getTabId = function (tab, forceUpdate) {
-    if (forceUpdate == null) {
-      forceUpdate = false;
-    }
-
-    if (forceUpdate || !tab.hasAttribute('tabid')) {
-      tab.setAttribute("tabid", tk.generateId());
+  this.getTabId = function (tab) {
+    if (!tab.hasAttribute('tabid')) {
+      tk.generateNewTabId(tab);
     }
 
     return tab.getAttribute('tabid');
+  };
+
+  this.generateNewTabId = function (tab) {
+    var new_id = tk.generateId();
+    tab.setAttribute("tabid", new_id);
+
+    return new_id;
   };
 
   this.TabBar = this.TabBar || {};
@@ -1888,7 +1891,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   this.sortgroup_onTabAdded = function sortgroup_onTabAdded(event) {
     var tab = event.target;
 
-    var tid = tk.getTabId(tab, true);
+    var tid = tk.generateNewTabId(tab);
 
     // Set keys
     tab.setAttribute(tk.Sorts.lastViewed, new Date().setYear(2030)); // Set never viewed tabs as viewed in the future!
@@ -2115,7 +2118,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       && arguments.callee.caller.caller.caller
       && arguments.callee.caller.caller.caller.name == "sss_duplicateTab")
     {
-      tk.getTabId(tab, true); // Tab must have its own unique tabid
+      tk.generateNewTabId(tab); // Tab must have its own unique tabid
       tk.removeGID(tab); // Let duplicateTab's caller worry about groups
       return; // Don't call __sortgroup_onTabRestored (which might move the tab) - duplicating method must deal with this
     }
@@ -4132,7 +4135,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   this._duplicateTab = function _duplicateTab(aTab) {
     if (_ss) {
       var newTab = _ss.duplicateTab(window, aTab); // [Fx3+]
-      tk.getTabId(newTab, true);
+      tk.generateNewTabId(newTab);
       tk.removeGID(newTab);
       return newTab;
     }
