@@ -1342,6 +1342,529 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           _ss.persistTabAttribute(attr);
       }
     }
+
+    // This is for search item in context menu only
+    // Not sure if `BrowserSearch.loadSearch` should be patched as well
+    (function init_BrowserSearch_loadSearchFromContext() {
+      "use strict";
+
+      if (!("loadSearchFromContext" in BrowserSearch) || typeof BrowserSearch.loadSearchFromContext !== "function") {
+        tk.debug("BrowserSearch.loadSearchFromContext doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = BrowserSearch.loadSearchFromContext;
+      // Function signature should be valid for FF 38.x & 45.x
+      BrowserSearch.loadSearchFromContext = function(terms) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> BrowserSearch.loadSearchFromContext >>>");
+        let selected_tab_before_operation = gBrowser.selectedTab
+        tabkit.addingTab({
+          added_tab_type: "unrelated",
+          parent_tab: selected_tab_before_operation
+        });
+        try {
+          result = old_func.apply(this, [terms]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "unrelated",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        tk.debug("<<< BrowserSearch.loadSearchFromContext <<<");
+
+        return result;
+      };
+    })();
+
+    // For opening new tab with history entry of current tab
+    (function init_gotoHistoryIndex() {
+      "use strict";
+
+      if (!("gotoHistoryIndex" in window) || typeof window.gotoHistoryIndex !== "function") {
+        tk.debug("window.gotoHistoryIndex doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.gotoHistoryIndex;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.gotoHistoryIndex = function(aEvent) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.gotoHistoryIndex >>>");
+        let selected_tab_before_operation = gBrowser.selectedTab
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: selected_tab_before_operation
+        });
+        try {
+          result = old_func.apply(this, [aEvent]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        tk.debug("<<< window.gotoHistoryIndex <<<");
+
+        return result;
+      };
+    })();
+
+    // For opening new tab with history entry of current tab
+    (function init_BrowserBack() {
+      "use strict";
+
+      if (!("BrowserBack" in window) || typeof window.BrowserBack !== "function") {
+        tk.debug("window.BrowserBack doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.BrowserBack;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.BrowserBack = function(aEvent) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.BrowserBack >>>");
+        let selected_tab_before_operation = gBrowser.selectedTab
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: selected_tab_before_operation
+        });
+        try {
+          result = old_func.apply(this, [aEvent]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        tk.debug("<<< window.BrowserBack <<<");
+
+        return result;
+      };
+    })();
+
+    // For opening new tab with history entry of current tab
+    (function init_BrowserForward() {
+      "use strict";
+
+      if (!("BrowserForward" in window) || typeof window.BrowserForward !== "function") {
+        tk.debug("window.BrowserForward doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.BrowserForward;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.BrowserForward = function(aEvent) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.BrowserForward >>>");
+        let selected_tab_before_operation = gBrowser.selectedTab
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: selected_tab_before_operation
+        });
+        try {
+          result = old_func.apply(this, [aEvent]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        tk.debug("<<< window.BrowserForward <<<");
+
+        return result;
+      };
+    })();
+
+    // For duplicating tab?
+    (function init_BrowserReloadOrDuplicate() {
+      "use strict";
+
+      if (!("BrowserReloadOrDuplicate" in window) || typeof window.BrowserReloadOrDuplicate !== "function") {
+        tk.debug("window.BrowserReloadOrDuplicate doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.BrowserReloadOrDuplicate;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.BrowserReloadOrDuplicate = function(aEvent) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.BrowserReloadOrDuplicate >>>");
+        let selected_tab_before_operation = gBrowser.selectedTab
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: selected_tab_before_operation
+        });
+        try {
+          result = old_func.apply(this, [aEvent]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        tk.debug("<<< window.BrowserReloadOrDuplicate <<<");
+
+        return result;
+      };
+    })();
+
+    // For loading a search result
+    (function init_BrowserSearch_loadSearch() {
+      "use strict";
+
+      if (!("loadSearch" in BrowserSearch) || typeof BrowserSearch.loadSearch !== "function") {
+        tk.debug("BrowserSearch.loadSearch doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = BrowserSearch.loadSearch;
+      // Function signature should be valid for FF 38.x & 45.x
+      BrowserSearch.loadSearch = function(searchText, useNewTab, purpose) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> BrowserSearch.loadSearch >>>");
+        let selected_tab_before_operation = gBrowser.selectedTab
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: selected_tab_before_operation
+        });
+        try {
+          result = old_func.apply(this, [searchText, useNewTab, purpose]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        tk.debug("<<< BrowserSearch.loadSearch <<<");
+
+        return result;
+      };
+    })();
+
+    // The search bar behaviour
+    (function init_searchbar_handleSearchCommand() {
+      "use strict";
+
+      const searchbar = document.getElementById("searchbar");
+      if (!("handleSearchCommand" in searchbar) || typeof searchbar.handleSearchCommand !== "function") {
+        tk.debug("searchbar.handleSearchCommand doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = searchbar.handleSearchCommand;
+      // Function signature should be valid for FF 38.x & 45.x
+      searchbar.handleSearchCommand = function(aEvent, aEngine, aForceNewTab) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> searchbar.handleSearchCommand >>>");
+        tabkit.addingTab({
+          added_tab_type: "unrelated"
+        });
+        try {
+          result = old_func.apply(this, [aEvent, aEngine, aForceNewTab]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({});
+        }
+        tk.debug("<<< searchbar.handleSearchCommand <<<");
+
+        return result;
+      };
+    })();
+
+    // Should be handling click events on link in a webpage
+    (function init_window_handleLinkClick() {
+      "use strict";
+
+      if (!("handleLinkClick" in window) || typeof window.handleLinkClick !== "function") {
+        tk.debug("window.handleLinkClick doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.handleLinkClick;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.handleLinkClick = function(event, href, linkNode) {
+        "use strict";
+        var result = undefined;
+        var selected_tab_before_event_handling = gBrowser.selectedTab;
+
+        tk.debug(">>> window.handleLinkClick >>>");
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab:     selected_tab_before_event_handling
+        });
+        try {
+          result = old_func.apply(this, [event, href, linkNode]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related",
+            parent_tab:     selected_tab_before_event_handling
+          });
+        }
+        tk.debug("<<< window.handleLinkClick <<<");
+
+        return result;
+      };
+    })();
+
+    // Not sure what is this
+    // This is converted from code brought from Tab Kit 1
+    (function init_window_middleMousePaste() {
+      "use strict";
+
+      if (!("middleMousePaste" in window) || typeof window.middleMousePaste !== "function") {
+        tk.debug("window.middleMousePaste doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.middleMousePaste;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.middleMousePaste = function(event) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.middleMousePaste >>>");
+        tabkit.addingTab({
+          added_tab_type: "newtab"
+        });
+        try {
+          result = old_func.apply(this, [event]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "newtab"
+          });
+        }
+        tk.debug("<<< window.middleMousePaste <<<");
+
+        return result;
+      };
+    })();
+
+    // Some drag & drop action, but not sure where
+    (function init_window_newTabButtonObserver_onDrop() {
+      "use strict";
+
+      if (!("newTabButtonObserver" in window) ||
+          typeof window.newTabButtonObserver !== "object" ||
+          !("onDrop" in window.newTabButtonObserver) ||
+          typeof window.newTabButtonObserver.onDrop !== "function") {
+        tk.debug("window.newTabButtonObserver.onDrop doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.newTabButtonObserver.onDrop;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.newTabButtonObserver.onDrop = function(event) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.newTabButtonObserver.onDrop >>>");
+        tabkit.addingTab({
+          added_tab_type: "newtab"
+        });
+        try {
+          result = old_func.apply(this, [event]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "newtab"
+          });
+        }
+        tk.debug("<<< window.newTabButtonObserver.onDrop <<<");
+
+        return result;
+      };
+    })();
+
+    // Properly new tab button and/or Ctrl-T
+    (function init_window_BrowserOpenTab() {
+      "use strict";
+
+      if (!("BrowserOpenTab" in window) ||
+          typeof window.BrowserOpenTab !== "function") {
+        tk.debug("window.BrowserOpenTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.BrowserOpenTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.BrowserOpenTab = function() {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.BrowserOpenTab >>>");
+        tabkit.addingTab({
+          added_tab_type: "newtab"
+        });
+        try {
+          result = old_func.apply(this, []);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "newtab"
+          });
+        }
+        tk.debug("<<< window.BrowserOpenTab <<<");
+
+        return result;
+      };
+    })();
+
+    // Not sure which one uses it
+    (function init_window_delayedOpenTab() {
+      "use strict";
+
+      if (!("delayedOpenTab" in window) ||
+          typeof window.delayedOpenTab !== "function") {
+        tk.debug("window.delayedOpenTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.delayedOpenTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.delayedOpenTab = function(aUrl, aReferrer, aCharset, aPostData, aAllowThirdPartyFixup) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.delayedOpenTab >>>");
+        tabkit.addingTab({
+          added_tab_type: "newtab"
+        });
+        try {
+          result = old_func.apply(this, [aUrl, aReferrer, aCharset, aPostData, aAllowThirdPartyFixup]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "newtab"
+          });
+        }
+        tk.debug("<<< window.delayedOpenTab <<<");
+
+        return result;
+      };
+    })();
+
+    // Not sure which one uses it
+    (function init_window_gURLBar_handleCommand() {
+      "use strict";
+
+      if (!("gURLBar" in window) ||
+          typeof window.gURLBar !== "object" ||
+          !("handleCommand" in window.gURLBar) ||
+          typeof window.gURLBar.handleCommand === "function") {
+        tk.debug("window.gURLBar.handleCommand doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.gURLBar.handleCommand;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.gURLBar.handleCommand = function(aTriggeringEvent) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.gURLBar.handleCommand >>>");
+        tabkit.addingTab({
+          added_tab_type: "newtab"
+        });
+        try {
+          result = old_func.apply(this, [aTriggeringEvent]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "newtab"
+          });
+        }
+        tk.debug("<<< window.gURLBar.handleCommand <<<");
+
+        return result;
+      };
+    })();
+
+    // Some kind of cleanup function or remove tab callback
+    (function init_window_gBrowser__endRemoveTab() {
+      "use strict";
+
+      if (!("gBrowser" in window) ||
+          typeof window.gBrowser !== "object" ||
+          !("_endRemoveTab" in window.gBrowser) ||
+          typeof window.gBrowser._endRemoveTab === "function") {
+        tk.debug("window.gBrowser._endRemoveTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.gBrowser._endRemoveTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.gBrowser._endRemoveTab = function(aTab) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.gBrowser._endRemoveTab >>>");
+        tabkit.addingTab({
+          added_tab_type: "newtab"
+        });
+        try {
+          result = old_func.apply(this, [aTab]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "newtab"
+          });
+        }
+        tk.debug("<<< window.gBrowser._endRemoveTab <<<");
+
+        return result;
+      };
+    })();
   }
   this.postInitListeners.push(this.postInitSortingAndGrouping);
 
@@ -1361,32 +1884,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       'gBrowser.addTab',
 
       't.dispatchEvent(evt);',
-      'if (tabkit.sourceTypes.length) { \
-        try { \
-          evt.stack = [ arguments.callee ]; \
-          evt.stackDepth = 0; \
-          while (evt.stackDepth < tabkit.sourceTypes[0].depth) { \
-            var prev = evt.stack[evt.stackDepth].caller; \
-            if (prev) { \
-              evt.stack.push(prev); \
-              evt.stackDepth++; \
-            } \
-            else { \
-              break; \
-            } \
-          } \
-        } \
-        catch(ex) { \
-          tabkit.debug("Cannot use arguments"); \
-          tabkit.debug(ex); \
-        } \
-        finally { \
-          evt.shouldBeFromSS = false; \
+      'evt.shouldBeFromSS = false; \
           if (aSkipAnimation) { \
             evt.shouldBeFromSS = true; \
           } \
-        } \
-      } \
       $&'
     ]);
 
@@ -1444,13 +1945,12 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     // And an attribute based history tab source:
     var goMenu = document.getElementById("history-menu");
-    if (!goMenu)
+    if (!(typeof goMenu === "object" && "setAttribute" in goMenu)) {
       goMenu = document.getElementById("go-menu");
-    if (goMenu)
+    }
+    if (typeof goMenu === "object" && "setAttribute" in goMenu) {
       goMenu.setAttribute("oncommand", 'tabkit.addingTab("history"); try {' + goMenu.getAttribute("oncommand") + '} finally { tabkit.addingTabOver(); }');
-
-    // And another
-    // TODO=P5: GCODE document.getElementById("sidebar").contentDocument.getElementById("miOpenInNewTab") [set onload and onopensidebar]
+    }
 
     // And deal with tab groups
     tk.wrapMethodCode(
@@ -1476,7 +1976,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   this.postInitListeners.push(this.postInitSortingAndGroupingMethodHooks);
 
   /// Methods dealing with new tabs:
-  this.addingTab = function addingTab(type, parent, dontMoveNextTab) {
+  this.addingTab = function addingTab(type_or_options, parent, dontMoveNextTab) {
     try {
       // Already got type?
       // Then ignore addingTabOver processing
@@ -1485,10 +1985,28 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return;
       }
 
-      tk.nextType = type;
+      if (typeof type_or_options === "object") {
+        let options = type_or_options;
+
+        if (("added_tab_type" in options) && options.added_tab_type != null) {
+          tk.nextType = options.added_tab_type;
+        }
+        // This is special: will assign to `null` if provided
+        if (("parent_tab" in options) && typeof options.parent_tab !== "undefined") {
+          tk.nextParent = options.parent_tab;
+        }
+        if (("should_keep_added_tab_position" in options) && options.should_keep_added_tab_position != null) {
+          // Will convert to `bool`
+          tk.dontMoveNextTab = options.should_keep_added_tab_position ? true : false;
+        }
+      }
+      else {
+        tk.nextType = type_or_options;
       tk.isBookmarkGroup = false;
       tk.nextParent = parent != undefined ? parent : gBrowser.selectedTab;
+        // Will convert to `bool`
       tk.dontMoveNextTab = dontMoveNextTab ? true : false;
+    }
     }
     catch (ex) {
       tk.dump(ex);
@@ -1497,19 +2015,63 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   // For adding one tab
   // There is another function named addingTabsOver for multiple tabs
-  this.addingTabOver = function addingTabOver() {
+  this.addingTabOver = function addingTabOver(options) {
+    let added_tabs_from_params_or_global = [];
+    let parent_tab_from_params_or_global = null;
+    let added_tab_type_from_params_or_global = null;
+    let should_keep_added_tab_position_from_params_or_global = false;
+
+    if (typeof options === "object" && ("added_tab" in options) && options.added_tab != null) {
+      added_tabs_from_params_or_global = [options.added_tab];
+    }
+    else {
+      added_tabs_from_params_or_global = tk.addedTabs;
+    }
+
+    if (typeof options === "object" && ("added_tab_type" in options) && options.added_tab_type != null) {
+      added_tab_type_from_params_or_global = options.added_tab_type;
+    }
+    else {
+      added_tab_type_from_params_or_global = tk.nextType;
+    }
+
+    if (added_tab_type_from_params_or_global === "unrelated" || added_tab_type_from_params_or_global === "sessionrestore") {
+      parent_tab_from_params_or_global = null;
+    }
+    else {
+      if (typeof options === "object" && ("parent_tab" in options) && options.parent_tab != null) {
+        parent_tab_from_params_or_global = options.parent_tab;
+      }
+      else {
+        parent_tab_from_params_or_global = tk.nextParent;
+      }
+    }
+
+    if (typeof options === "object" && ("should_keep_added_tab_position" in options) && options.should_keep_added_tab_position != null) {
+      should_keep_added_tab_position_from_params_or_global = options.should_keep_added_tab_position;
+    }
+    else {
+      should_keep_added_tab_position_from_params_or_global = tk.dontMoveNextTab;
+    }
+
     try {
       if (tk.ignoreOvers > 0) {
         // tk.ignoreOvers will be decremented in the finally clause at the end of this function
         return;
       }
 
-      if (tk.addedTabs.length == 1) {
-        var type = tk.nextType;
+      if (added_tabs_from_params_or_global.length > 1) { // Shouldn't happen
+        tk.dump("addingTabsOver: More than one tab was added (" + added_tabs_from_params_or_global.length + " tabs, to be precise)!");
+        tk.addingTabsOver();
+        return;
+      }
+
+      if (added_tabs_from_params_or_global.length === 1) {
+        var type = added_tab_type_from_params_or_global;
         // unrelated tab has no parent
         // The first tab restored from session also has no parent
-        var parent = (type == "unrelated" || type == "sessionrestore") ? null : tk.nextParent;
-        var tab = tk.addedTabs.pop();
+        var parent = parent_tab_from_params_or_global;
+        var tab = added_tabs_from_params_or_global.pop();
 
         // Keep recentlyadded tags up to date
         if (!parent || parent != tk.lastParent)
@@ -1518,27 +2080,33 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         tk.lastParent = tk.nextParent;
 
         // We do *nothing else* for sessionrestore tabs, as they will (hopefully) be dealt with later after a sortgroup_onSSTabRestoring
-        if (type == "sessionrestore")
+        if (type === "sessionrestore") {
           return;
+        }
 
         // Get pid, set possibleparent
         var pid = parent ? tk.getTabId(parent) : null;
-        if (pid) {
+        var tid = tk.getTabId(tab);
+        if (pid != null) {
           tab.setAttribute("possibleparent", pid);
-          tk.updateIndents();
         }
-        else if (type != "unrelated")
+        else if (type !== "unrelated") {
           tk.dump("addingTabOver: no parent for " + type + " tab");
+        }
 
         // Adjust openerGroup sensitivity
-        if (type == "bookmark" && _prefs.getBoolPref("bookmarkTabsAreRelated"))
+        if (type === "bookmark" && _prefs.getBoolPref("bookmarkTabsAreRelated")) {
           type = "related";
-        else if (type == "history" && _prefs.getBoolPref("historyTabsAreRelated"))
+        }
+        else if (type === "history" && _prefs.getBoolPref("historyTabsAreRelated")) {
           type = "related";
-        else if (type == "newtab" && _prefs.getBoolPref("newTabsAreRelated"))
+        }
+        else if (type === "newtab" && _prefs.getBoolPref("newTabsAreRelated")) {
           type = "related";
-        else if (type == "sessionrestore")
+        }
+        else if (type === "sessionrestore") {
           type = "unrelated";
+        }
 
         // Set openerGroup (reused later if autoGroupNewTabs and activeGrouping == "opener")
         if (type == "related" && pid) {
@@ -1554,7 +2122,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           }
         }
 
-        var tabNeedsPlacing = !tk.dontMoveNextTab;
+        var tabNeedsPlacing = !should_keep_added_tab_position_from_params_or_global;
 
         if (tk.autoGroupNewTabs) {
           if (!tabNeedsPlacing
@@ -1755,20 +2323,17 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           }
         }
       }
-      else if (tk.addedTabs.length > 1) { // Shouldn't happen
-        tk.dump("addingTabsOver: More than one tab was added (" + tk.addedTabs.length + " tabs, to be precise)!");
-        tk.addingTabsOver();
-        return;
-      }
     }
     catch (ex) {
       tk.dump(ex);
     }
     finally {
+      // Don't reset until counter ends
       if (tk.ignoreOvers > 0) {
         tk.ignoreOvers--;
       }
       else {
+        // Reset
         tk.nextType = null;
         tk.isBookmarkGroup = false;
         tk.nextParent = null;
@@ -1906,77 +2471,36 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       if (tk.nextType == "loadTabs" && tk.addedTabs.length == 1) {
         tk.nextType = tk.isBookmarkGroup ? "bookmark" : "newtab";
         tk.dontMoveNextTab = false;
-        tk.addingTabOver();
+        tk.addingTabOver({
+          added_tab: tab,
+          added_tab_type: tk.isBookmarkGroup ? "bookmark" : "newtab",
+          should_keep_added_tab_position: false
+        });
         tk.addedTabs = [tab];
         tk.nextType = "loadTabs"; // But it can now be treated as "loadOneOrMoreURIs";
       }
     }
     else if (!("fromInitSortingAndGrouping" in event)) {
-      if (event.stack) {
-        var stack = event.stack;
-        var depth = event.stackDepth;
-        /*
-        // This is now calculated in addTab due to https://bugzilla.mozilla.org/show_bug.cgi?id=390488
-        var stack = [ arguments.callee.caller.caller ];
-        var depth = 0;
-        // Note that sourceTypes is sorted in order of decreasing d
-        while (depth < tk.sourceTypes[0].depth) {
-          var prev = stack[depth].caller;
-          if (prev) {
-            stack.push(prev);
-            depth++;
-          }
-          else {
-            break;
-          }
-        }
-        */
-        for (var i = 0; i < tk.sourceTypes.length; i++) {
-          var st = tk.sourceTypes[i];
-          if (st.depth > depth)
-            continue;
-          while (st.depth < depth)
-            depth--;
-          if (stack[depth].name == st.name) {
-            tk.nextType = st.type;
-            tk.dontMoveNextTab = ("DontMoveTab" in st && st.DontMoveTab);
-            // tk.debug('sourceType matched is: '+st.type+' & function name is: '+st.name);
-            break;
-          }
-        }
-
         // Special treatment for Firefox 15 or above for session restore
         // But only work for restoring a window, not for restoring a tab
-        if (event.shouldBeFromSS == true) {
+      if ("shouldBeFromSS" in event && event.shouldBeFromSS === true) {
           // When skipAnimation params in addTab is true
           // We assume it's from session restore, or you find me a better solution
           tk.nextType = 'sessionrestore';
           tk.dontMoveNextTab = true;
         }
 
-        // Debug
-        // tk.debug("Logging Stack for added tab: " + tid + "\nStack ="
-            // + event.stack.map(function __getName(f, i) {
-              // return " " + i + ": " + f.name + ' & sourceType matched is: ' + tk.nextType;
-            // }));
-
-        // Should be buggy is this statement is true
+      // Should be buggy if this statement is true
         if (!tk.nextType) {
-          tk.debug("No nextType for added tab: " + tid + "\nStack ="
-                + event.stack.map(function __getName(f, i) {
-                  return " " + i + ": " + f.name;
-                }));
-          // TODO=P2: GCODE Make default nextType depend on whether the tab was opened in the foreground or background, for better compatibility with extensions that open tabs (this may have to be done by seeing if the tab gets selected...)
+        tk.debug("No nextType for added tab: " + tid);
           tk.nextType = "newtab";
-          //tk.nextType = "unrelated";
-          //tk.dontMoveNextTab = true;
-        }
       }
 
-      tk.nextParent = gBrowser.selectedTab;
       tk.isBookmarkGroup = false;
-      tk.addedTabs = [tab];
-      tk.addingTabOver();
+      tk.addingTabOver({
+        parent_tab: gBrowser.selectedTab,
+        added_tab:  tab
+      });
     }
 
   };
@@ -5998,11 +6522,38 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return false;
       }
     });
-    var firstTab = gBrowser.addTab(uris.shift());
-    for each (var uri in uris)
-      gBrowser.addTab(uri);
-    if (!gPrefService.getBoolPref("browser.tabs.loadInBackground"))
-      gBrowser.selectedTab = firstTab;
+
+    let selected_tab_before_operation = gBrowser.selectedTab;
+
+    tk.addingTab({
+      parent_tab: selected_tab_before_operation,
+      added_tab_type: "related"
+    });
+    var first_tab = gBrowser.addTab(uris.shift());
+    tk.addingTabOver({
+      added_tab: first_tab,
+      added_tab_type: "related",
+      parent_tab: selected_tab_before_operation,
+      should_keep_added_tab_position: false
+    });
+
+    for each (var uri in uris) {
+      tk.addingTab({
+        parent_tab: selected_tab_before_operation,
+        added_tab_type: "related"
+      });
+      let new_tab = gBrowser.addTab(uri);
+      tk.addingTabOver({
+        added_tab: new_tab,
+        added_tab_type: "related",
+        parent_tab: selected_tab_before_operation,
+        should_keep_added_tab_position: false
+      });
+    }
+
+    if (!gPrefService.getBoolPref("browser.tabs.loadInBackground")) {
+      gBrowser.selectedTab = first_tab;
+    }
   };
 
   // Open the URL(s) in clipboard & create a group with opened tabs (if > 1)
