@@ -45,7 +45,7 @@ task :build, :version do |t, args|
 
   ### File name
 
-  product_filename = "tabkit2 #{version}"
+  product_filename = "tabkit2_#{version}"
   product_ext = '.xpi'
   # To avoid override, add time after version
   if File.exists?(File.join(path, "#{product_filename}#{product_ext}"))
