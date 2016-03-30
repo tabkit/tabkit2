@@ -198,11 +198,6 @@
                 accesskey="&newTabHere.accesskey;"
                 command="cmd_tabkit-sortgroup-tab-newTabHere"
                 acceltext="&newTabHere.acceltext;"/>
-      <menuitem id="menu_tabkit-sortgroup-tab-duplicateTab"
-                label="&duplicateTab.label;"
-                accesskey="&duplicateTab.accesskey;"
-                command="cmd_tabkit-sortgroup-tab-duplicateTab"
-                acceltext="&duplicateTab.acceltext;"/>
       <menuitem id="menu_tabkit-sortgroup-tab-makeGroup"
                 label="&makeGroup.label;"
                 accesskey="&makeGroup.accesskey;"
