@@ -5,6 +5,19 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+
+## [0.12.6][0.12.6] - 2016-03-30
+
+### Changed
+- Only allow 45.x to install this version, since FF 38.x can use last version without problem
+
+### Fixed
+- Fix tab coloring for FF 45.x
+- Fix new tab behaviour (maybe partially) for FF 45.x
+- Disable tab duplicating feature since it's still buggy on FF 45.x
+  It will be fixed soon
+
+
 ## [0.12.5][0.12.5] - 2016-02-12
 
 ### Fixed
@@ -150,7 +163,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.5...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.6...HEAD
+[0.12.5]:     https://github.com/tabkit/tabkit2/compare/v0.12.5...v0.12.6
 [0.12.5]:     https://github.com/tabkit/tabkit2/compare/v0.12.4...v0.12.5
 [0.12.4]:     https://github.com/tabkit/tabkit2/compare/v0.12.3...v0.12.4
 [0.12.3]:     https://github.com/tabkit/tabkit2/compare/v0.12.2...v0.12.3
