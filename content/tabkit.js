@@ -1730,13 +1730,34 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
       var old_func = window.BrowserOpenTab;
       // Function signature should be valid for FF 38.x & 45.x
-      window.BrowserOpenTab = function() {
+      window.BrowserOpenTab = function(optional_options) {
         "use strict";
         var result = undefined;
+        // Default value
+        var added_tab_type = "newtab";
+        if (typeof optional_options === "object" &&
+            "tab_kit_options" in optional_options &&
+            typeof optional_options.tab_kit_options === "object" &&
+            "added_tab_type" in optional_options.tab_kit_options &&
+            typeof optional_options.tab_kit_options.added_tab_type === "string"
+          ) {
+          added_tab_type = optional_tabkit_options.added_tab_type;
+        }
+        // Default value
+        var parent_tab = gBrowser.selectedTab;
+        if (typeof optional_options === "object" &&
+            "tab_kit_options" in optional_options &&
+            typeof optional_options.tab_kit_options === "object" &&
+            "parent_tab" in optional_options.tab_kit_options &&
+            typeof optional_options.tab_kit_options.parent_tab !== "undefined"
+          ) {
+          parent_tab = optional_tabkit_options.parent_tab;
+        }
 
         tk.debug(">>> window.BrowserOpenTab >>>");
         tabkit.addingTab({
-          added_tab_type: "newtab"
+          added_tab_type: added_tab_type,
+          parent_tab:     parent_tab
         });
         try {
           result = old_func.apply(this, []);
@@ -1745,7 +1766,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           // This might be called already
           // But this is called again since it contains code for cleaning up
           tabkit.addingTabOver({
-            added_tab_type: "newtab"
+            added_tab_type: added_tab_type,
+            parent_tab:     parent_tab
           });
         }
         tk.debug("<<< window.BrowserOpenTab <<<");
@@ -3289,7 +3311,12 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if (!contextTab)
       contextTab = gBrowser.selectedTab;
     tk.addingTab("related", contextTab);
-    BrowserOpenTab();
+    BrowserOpenTab({
+      tab_kit_options: {
+        added_tab_type: "related",
+        parent_tab: contextTab
+      }
+    });
     var newTab = document.getAnonymousElementByAttribute(gBrowser, "linkedpanel", gBrowser.mPanelContainer.lastChild.id);
     tk.addingTabOver();
     var gid = contextTab.getAttribute("groupid");
