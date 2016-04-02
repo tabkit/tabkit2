@@ -1797,7 +1797,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       if (!("gURLBar" in window) ||
           typeof window.gURLBar !== "object" ||
           !("handleCommand" in window.gURLBar) ||
-          typeof window.gURLBar.handleCommand === "function") {
+          typeof window.gURLBar.handleCommand !== "function") {
         tk.debug("window.gURLBar.handleCommand doesn't exists, replacing function failed");
         return;
       }
@@ -1835,7 +1835,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       if (!("gBrowser" in window) ||
           typeof window.gBrowser !== "object" ||
           !("_endRemoveTab" in window.gBrowser) ||
-          typeof window.gBrowser._endRemoveTab === "function") {
+          typeof window.gBrowser._endRemoveTab !== "function") {
         tk.debug("window.gBrowser._endRemoveTab doesn't exists, replacing function failed");
         return;
       }
