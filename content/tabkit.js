@@ -1813,6 +1813,72 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           added_tab_type: "newtab"
         });
         try {
+          // Open new tab for address bar by default if preference set
+          if (_prefs.getBoolPref("openTabsFrom.addressBar")) {
+            if (aTriggeringEvent instanceof KeyboardEvent) {
+              // Creates a new event object from the old one with some properties modified
+              // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/KeyboardEvent
+              aTriggeringEvent = new KeyboardEvent(aTriggeringEvent.type, {
+                key:          aTriggeringEvent.key,
+                code:         aTriggeringEvent.code,
+                location:     aTriggeringEvent.location,
+                ctrlKey:      aTriggeringEvent.ctrlKey,
+                shiftKey:     aTriggeringEvent.shiftKey,
+
+                // The main reason why we need a new event object
+                altKey:       !aTriggeringEvent.altKey,
+
+                metaKey:      aTriggeringEvent.metaKey,
+                repeat:       aTriggeringEvent.repeat,
+                isComposing:  aTriggeringEvent.isComposing,
+
+                // Following properties are deprecated
+                charCode:     aTriggeringEvent.charCode,
+                keyCode:      aTriggeringEvent.keyCode,
+                which:        aTriggeringEvent.which,
+
+                // From https://developer.mozilla.org/en-US/docs/Web/API/UIEvent/UIEvent
+                detail:               aTriggeringEvent.detail,
+                view:                 aTriggeringEvent.view,
+                sourceCapabilities:   aTriggeringEvent.sourceCapabilities,
+
+                // From https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
+                bubbles:              aTriggeringEvent.bubbles,
+                cancelable:           aTriggeringEvent.cancelable,
+              });
+            }
+            else if (aTriggeringEvent instanceof MouseEvent) {
+              // Creates a new event object from the old one with some properties modified
+              // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/MouseEvent
+              aTriggeringEvent = new MouseEvent(aTriggeringEvent.type, {
+                screenX:        aTriggeringEvent.screenX,
+                screenY:        aTriggeringEvent.screenY,
+                clientX:        aTriggeringEvent.clientX,
+                clientY:        aTriggeringEvent.clientY,
+                ctrlKey:        aTriggeringEvent.ctrlKey,
+                shiftKey:       aTriggeringEvent.shiftKey,
+
+                // The main reason why we need a new event object
+                altKey:         !aTriggeringEvent.altKey,
+
+                metaKey:        aTriggeringEvent.metaKey,
+                repeat:         aTriggeringEvent.repeat,
+                button:         aTriggeringEvent.button,
+                buttons:        aTriggeringEvent.buttons,
+                relatedTarget:  aTriggeringEvent.relatedTarget,
+                region:         aTriggeringEvent.region,
+
+                // From https://developer.mozilla.org/en-US/docs/Web/API/UIEvent/UIEvent
+                detail:               aTriggeringEvent.detail,
+                view:                 aTriggeringEvent.view,
+                sourceCapabilities:   aTriggeringEvent.sourceCapabilities,
+
+                // From https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
+                bubbles:              aTriggeringEvent.bubbles,
+                cancelable:           aTriggeringEvent.cancelable,
+              });
+            }
+          }
           result = old_func.apply(this, [aTriggeringEvent]);
         }
         finally {
@@ -5352,14 +5418,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   // See globalPreInitNewTabsByDefault in tabkit-global.js
 
   this.postInitNewTabsByDefault = function postInitNewTabsByDefault(event) {
-    // [Fx3.5+]
-    tk.addMethodHook([//{
-      'gURLBar.handleCommand',
-
-      'aTriggeringEvent.altKey',
-      '(aTriggeringEvent.altKey ^ gPrefService.getBoolPref("extensions.tabkit.openTabsFrom.addressBar"))'
-    ]);//}
-
     if ("PlacesUIUtils" in window) {
       // We were patching `PlacesUIUtils.openNodeIn` and `PlacesUIUtils.openNodeWithEvent` before
       // But since they both calls `PlacesUIUtils._openNodeIn`, we just need to monky patch one place
