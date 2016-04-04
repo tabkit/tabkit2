@@ -1,21 +1,28 @@
+require 'fileutils'
 require 'rubygems'
 require 'zip/zip'
 
 
 desc "Tabkit build script"
-task :build, :version do |t, args|
+task :build, [:version, :is_beta] do |t, args|
 
   ### Version
 
-  version = args[:version]
-
   # Default read file from install.rdf
-  if version.nil?
-    meta_file = File.read('install.rdf')
-    version_from_file_matchdata = meta_file.match(/<em:version>(?<version>.+)<\/em:version>/i)
-    version_from_file = version_from_file_matchdata && version_from_file_matchdata[:version] # Match data in brackets start at one
 
-    version = version_from_file
+  if args[:is_beta]
+    unless File.exists?("versions/beta_release/install.rdf")
+      raise "Please copy versions/beta_release/install.rdf.example to versions/beta_release/install.rdf to build beta versions"
+    end
+    FileUtils.mkdir_p("tmp")
+    FileUtils.copy("install.rdf", "tmp/install.rdf", verbose: true)
+    FileUtils.copy("versions/beta_release/install.rdf", "install.rdf", verbose: true)
+  end
+
+  version = begin
+    meta_file = File.read("install.rdf")
+    version_from_file_matchdata = meta_file.match(/<em:version>(?<version>.+)<\/em:version>/i)
+    version_from_file_matchdata && version_from_file_matchdata[:version] # Match data in brackets start at one
   end
 
   # Still missing
@@ -29,7 +36,7 @@ task :build, :version do |t, args|
   # ["content/bindings.xml"]
   everything = Dir.glob "**/*"
 
-  excluded_regexp = /(\.(xpi|zip)|Rakefile|Gemfile.*|product)$/i
+  excluded_regexp = /(\.(xpi|zip)|Rakefile|Gemfile.*|product|tmp)$/i
   included = everything.select do |path|
     path !~ excluded_regexp
   end
@@ -45,12 +52,11 @@ task :build, :version do |t, args|
 
   ### File name
 
-  product_filename = "tabkit2_#{version}"
-  product_ext = '.xpi'
+  product_filename = args[:filename] || "tabkit2_#{version}"
+  product_ext = '.xpi'.freeze
   # To avoid override, add time after version
-  if File.exists?(File.join(path, "#{product_filename}#{product_ext}"))
-    product_filename << " - "
-    product_filename << Time.now.strftime("%F")
+  if args[:is_beta] || File.exists?(File.join(path, "#{product_filename}#{product_ext}"))
+    product_filename = "#{product_filename}-#{Time.now.strftime("%Y-%m-%d-%H%M%S")}"
   end
 
   final_filename = "#{product_filename}#{product_ext}"
@@ -75,6 +81,19 @@ task :build, :version do |t, args|
   end
 
   puts "#{final_filename} Built"
+
+  # Cleanup
+  ## Copy back the normal file
+  if File.exist?("tmp/install.rdf")
+    FileUtils.copy("tmp/install.rdf", "install.rdf", verbose: true)
+  end
+  if File.exist?("tmp")
+    FileUtils.rm_rf("tmp", verbose: true)
+  end
 end
 
-task default: :build
+task :build_beta do
+  Rake::Task[:build].invoke(nil, true)
+end
+
+task default: :build_beta

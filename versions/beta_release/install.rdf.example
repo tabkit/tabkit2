@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+		xmlns:NC="http://home.netscape.com/NC-rdf#"
+		xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<RDF:Description RDF:about="rdf:#$qrzWX2"
+					em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+					em:minVersion="45.0"
+					em:maxVersion="45.*" />
+	<RDF:Description RDF:about="urn:mozilla:install-manifest">
+					<em:type>2</em:type>
+					<em:id>tabkit2-beta@pikachuexe.amateur.hk</em:id>
+					<em:name>Tab Kit 2nd Edition Beta</em:name>
+					<em:version>0.12.7-dev</em:version>
+					<em:creator>PikachuEXE</em:creator>
+					<em:developer>John Mellor</em:developer>
+					<em:contributor>Ivor Hewitt</em:contributor>
+					<em:contributor>Fans of Tab Kit</em:contributor>
+					<em:description>Tab grouping, multi-rows, tree view, and other tweaks. Firefox 4+ compatible!!</em:description>
+					<em:homepageURL>https://github.com/tabkit/tabkit2</em:homepageURL>
+					<em:iconURL>chrome://tabkit/skin/tabkit2-logo.png</em:iconURL>
+					<em:optionsURL>chrome://tabkit/content/settings.xul</em:optionsURL>
+			<em:targetApplication RDF:resource="rdf:#$qrzWX2"/>
+	</RDF:Description>
+</RDF:RDF>
