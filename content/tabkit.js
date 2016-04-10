@@ -1293,18 +1293,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     var tabContextMenu = gBrowser.tabContextMenu;
     tabContextMenu.insertBefore(document.getElementById("menu_tabkit-sortgroup"), tabContextMenu.childNodes[1]);
 
-    // Fixed Issue 11 by Pika
-    // After each tab selecting/switching the whole list of tabs is called against gBrowser.showTab (Source not found, guessed to be Panorama)
-    // So this method hook disallows those collapsed and hidden tabs to be expanded by that unknown source
-    tk.addMethodHook([
-      "gBrowser.showTab",
-
-      'if (aTab.hidden) {',
-      ' \
-      $& \
-      if(aTab.hasAttribute("groupcollapsed")) return;',
-    ]);
-
     // Fix: Faviconize is now ignored on grouped tabs (Issue 51)
     // First injected statement required a leading space to make it work, don't know why (probably JS syntax)
     if (typeof faviconize !== 'undefined' && typeof faviconize.quickFav !== 'undefined' && typeof faviconize.quickFav.dblclick !== 'undefined') {
