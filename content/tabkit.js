@@ -3411,20 +3411,51 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
   };
   this.duplicateTab = function duplicateTab(contextTab) {
-    if (!contextTab)
+    if (!contextTab) {
       contextTab = gBrowser.selectedTab;
-    tk.addingTab("related", contextTab);
-    var newTab = tk._duplicateTab(contextTab);
-    tk.addingTabOver();
-    var gid = contextTab.getAttribute("groupid");
-    if (gid && gid != newTab.getAttribute("groupid")) {
-      tk.setGID(newTab, gid);
-      newTab.setAttribute("outoforder", "true");
     }
-    if (tk.openRelativePosition == "left")
-      tk.moveBefore(newTab, contextTab);
-    else
-      tk.moveAfter(newTab, contextTab);
+
+    var newTab = tk._duplicateTab(contextTab);
+
+    function runPostDuplicateTabOperations(new_tab, parent_tab) {
+      tk.addingTabOver({
+        added_tab_type: "related",
+        added_tab:      new_tab,
+        parent_tab:     parent_tab,
+        should_keep_added_tab_position: false
+      });
+
+      var gid = tk.getTabGroupId(parent_tab);
+      if (gid && gid !== tk.getTabGroupId(new_tab)) {
+        tk.setGID(new_tab, gid);
+        new_tab.setAttribute("outoforder", "true");
+    }
+      if (tk.openRelativePosition === "left") {
+        tk.moveBefore(new_tab, parent_tab);
+      }
+      else {
+        tk.moveAfter(new_tab, parent_tab);
+      }
+    }
+
+    runPostDuplicateTabOperations(newTab, contextTab);
+
+    // Backup attributes at this time, so we can restore them later if needed
+    let tab_attributes_backup = tk.getTabAttributesForTabKit(newTab);
+
+    // In FF 45.x (and later maybe)
+    // The attributes are restored again asynchronizedly
+    // So we need to restore the atttributes after that operation
+    if (typeof TabStateFlusher === "object" &&
+        "flush" in TabStateFlusher &&
+        typeof TabStateFlusher.flush === "function") {
+
+      let browser = contextTab.linkedBrowser;
+      TabStateFlusher.flush(browser).then(() => {
+        tk.setTabAttributesForTabKit(newTab, tab_attributes_backup);
+      });
+    }
+
     gBrowser.selectedTab = newTab;
   };
   this.makeGroup = function makeGroup(contextTab) {
@@ -4825,13 +4856,20 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   /// Implement Bug 298571 - support tab duplication (using ctrl) on tab drag and drop
   this._duplicateTab = function _duplicateTab(aTab) {
-    if (_ss) {
-      var newTab = _ss.duplicateTab(window, aTab); // [Fx3+]
+    "use strict";
+
+    if (typeof _ss !== "object" ||
+        !("duplicateTab" in _ss) ||
+        typeof _ss.duplicateTab !== "function") {
+      return gBrowser.loadOneTab(gBrowser.getBrowserForTab(aTab).currentURI.spec); // [Fx3- since browser.sessionstore.enabled always on in 3.5+]
+    }
+
+    let newTab = _ss.duplicateTab(window, aTab);
+
       tk.generateNewTabId(newTab);
       tk.removeGID(newTab);
+
       return newTab;
-    }
-    return gBrowser.loadOneTab(gBrowser.getBrowserForTab(aTab).currentURI.spec); // [Fx3- since browser.sessionstore.enabled always on in 3.5+]
   };
 
   this._onDrop = function _onDrop(event) { // [Fx4+]
@@ -4938,10 +4976,15 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         // Tab was copied or from another window, so tab will be recreated instead of moved directly
 
         // Only allow beforeTab not afterTab because addingTabOver only indents newTab if it is after draggedTab (since addingTabOver just sets possibleparent to the source tab)
-        if (singleTab && draggedTab == beforeTab)
-          tk.addingTab("related", draggedTab, true); // Or could just do tk.duplicateTab(draggedTab); return;
-        else
-          tk.addingTab("unrelated", null, true);
+        let added_tab_type  = singleTab && draggedTab == beforeTab ? "related" : "unrelated";
+        let parent_tab      = singleTab && draggedTab == beforeTab ? draggedTab : null;
+        let should_keep_added_tab_position = true;
+
+        tk.addingTab({
+          added_tab_type: added_tab_type,
+          parent_tab:     parent_tab,
+          should_keep_added_tab_position: should_keep_added_tab_position
+        });
 
         // tk.chosenNewIndex = newIndex;
         // event.tab = tab;
@@ -4950,8 +4993,28 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         gBrowser.moveTabTo(copiedTab, newIndex);
 
         newTabs.unshift(copiedTab);
+        tk.addingTabOver({
+          added_tab_type: added_tab_type,
+          added_tab:      copiedTab,
+          parent_tab:     parent_tab,
+          should_keep_added_tab_position: should_keep_added_tab_position
+        });
 
-        tk.addingTabOver();
+        // Backup attributes at this time, so we can restore them later if needed
+        let tab_attributes_backup = tk.getTabAttributesForTabKit(newTab);
+
+        // In FF 45.x (and later maybe)
+        // The attributes are restored again asynchronizedly
+        // So we need to restore the atttributes after that operation
+        if (typeof TabStateFlusher === "object" &&
+            "flush" in TabStateFlusher &&
+            typeof TabStateFlusher.flush === "function") {
+
+          let browser = contextTab.linkedBrowser;
+          TabStateFlusher.flush(browser).then(() => {
+            tk.setTabAttributesForTabKit(newTab, tab_attributes_backup);
+          });
+        }
 
 
         if (tabIsFromAnotherWindow && !tabIsCopied) {
