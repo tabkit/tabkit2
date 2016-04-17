@@ -277,11 +277,18 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   const Cc          = Components.classes;
   const Ci          = Components.interfaces;
+  const Cu          = Components.utils;
 
   const PREF_BRANCH = "extensions.tabkit.";
 
 
   const TAB_MIN_WIDTH = 50;
+
+
+  const { XPCOMUtils } = Cu.import("resource://gre/modules/XPCOMUtils.jsm", {});
+  const { Promise } = Cu.import("resource://gre/modules/Promise.jsm", {});
+  // FF 45.x only
+  const { TabStateFlusher } = Cu.import("resource:///modules/sessionstore/TabStateFlusher.jsm", {});
 
 //}##########################
 //{### Services
@@ -644,6 +651,14 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tab.setAttribute("tabid", new_id);
 
     return new_id;
+  };
+
+  this.getTabGroupId = function (tab) {
+    if (!tab.hasAttribute("groupid")) {
+      return null;
+    }
+
+    return tab.getAttribute("groupid");
   };
 
   this.TabBar = this.TabBar || {};
@@ -1309,6 +1324,78 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
   this.initListeners.push(this.initSortingAndGrouping);
 
+  this.getTabAttributesForTabKit = function(tab) {
+    if (typeof tab !== "object" || typeof tab.getAttribute !== "function") {
+      return;
+    }
+
+    let data = {};
+
+    let attr_names = [
+      "tabid",
+      "possibleparent",
+      "outoforder",
+      "groupid",
+      "singletonid",
+      "groupcollapsed",
+    ];
+    for each (let attr_name in attr_names) {
+      if (tab.hasAttribute(attr_name)) {
+        data[attr_name] = tab.getAttribute(attr_name);
+      }
+    }
+
+    for each (let attr_name in tk.Sorts) {
+      if (tk.endsWith(attr_name, "Key")) {
+        data[attr_name] = tab.getAttribute(attr_name);
+      }
+    }
+    for each (let attr_name in tk.Groupings) {
+      if (tk.endsWith(attr_name, "Group")) {
+        data[attr_name] = tab.getAttribute(attr_name);
+      }
+    }
+
+    return data;
+  };
+
+  this.setTabAttributesForTabKit = function(tab, tab_attributes) {
+    if (typeof tab !== "object" || typeof tab.setAttribute !== "function") {
+      return;
+    }
+    if (typeof tab_attributes !== "object") {
+      return;
+    }
+
+    let attr_names = [
+      "tabid",
+      "possibleparent",
+      "outoforder",
+      "groupid",
+      "singletonid",
+      "groupcollapsed",
+    ];
+    for each (let attr_name in attr_names) {
+      if (attr_name in tab_attributes) {
+        tab.setAttribute(attr_name, tab_attributes[attr_name]);
+      }
+    }
+
+    for each (let attr_name in tk.Sorts) {
+      if (tk.endsWith(attr_name, "Key")) {
+        if (attr_name in tab_attributes) {
+          tab.setAttribute(attr_name, tab_attributes[attr_name]);
+        }
+      }
+    }
+    for each (let attr_name in tk.Groupings) {
+      if (tk.endsWith(attr_name, "Group")) {
+        if (attr_name in tab_attributes) {
+          tab.setAttribute(attr_name, tab_attributes[attr_name]);
+        }
+      }
+    }
+  };
 
   this.postInitSortingAndGrouping = function postInitSortingAndGrouping(event) {
     // Persist Attributes
