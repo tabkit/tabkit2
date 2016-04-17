@@ -6,6 +6,14 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.8][0.12.8] - 2016-04-17
+
+### Fixed
+- Remove an old "workaround" that causes more unexpected issues, including "forever hidden tabs" ([Issue 71][issue_71])
+  Again (2nd time)
+- Fix duplicate tab function in FF 45.x, but not tested in 38.x yet
+
+
 ## [0.12.7][0.12.7] - 2016-04-02
 
 ### Fixed
@@ -170,7 +178,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.7...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.8...HEAD
+[0.12.8]:     https://github.com/tabkit/tabkit2/compare/v0.12.7...v0.12.8
 [0.12.7]:     https://github.com/tabkit/tabkit2/compare/v0.12.6...v0.12.7
 [0.12.6]:     https://github.com/tabkit/tabkit2/compare/v0.12.5...v0.12.6
 [0.12.5]:     https://github.com/tabkit/tabkit2/compare/v0.12.4...v0.12.5
