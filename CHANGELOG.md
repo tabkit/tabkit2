@@ -5,6 +5,9 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+### Fixed
+- [Regression] New tabs opened by search text box (in browser menu bar) are now placed properly
+
 
 ## [0.12.8][0.12.8] - 2016-04-17
 

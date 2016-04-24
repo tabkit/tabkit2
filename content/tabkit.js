@@ -1665,7 +1665,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
         tk.debug(">>> searchbar.handleSearchCommand >>>");
         tabkit.addingTab({
-          added_tab_type: "unrelated"
+          added_tab_type: "unrelated",
+          parent_tab: gBrowser.selectedTab
         });
         try {
           result = old_func.apply(this, [aEvent, aEngine, aForceNewTab]);
@@ -1673,7 +1674,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         finally {
           // This might be called already
           // But this is called again since it contains code for cleaning up
-          tabkit.addingTabOver({});
+          tabkit.addingTabOver({
+            added_tab_type: "unrelated"
+          });
         }
         tk.debug("<<< searchbar.handleSearchCommand <<<");
 
@@ -2198,7 +2201,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       added_tab_type_from_params_or_global = tk.nextType;
     }
 
-    if (added_tab_type_from_params_or_global === "unrelated" || added_tab_type_from_params_or_global === "sessionrestore") {
+    // sessionrestore tabs have no parent
+    // unrelated tabs? Let it be (What)
+    if (added_tab_type_from_params_or_global === "sessionrestore") {
       parent_tab_from_params_or_global = null;
     }
     else {
@@ -2231,7 +2236,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
       if (added_tabs_from_params_or_global.length === 1) {
         var type = added_tab_type_from_params_or_global;
-        // unrelated tab has no parent
         // The first tab restored from session also has no parent
         var parent = parent_tab_from_params_or_global;
         var tab = added_tabs_from_params_or_global.pop();
@@ -3429,7 +3433,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       if (gid && gid !== tk.getTabGroupId(new_tab)) {
         tk.setGID(new_tab, gid);
         new_tab.setAttribute("outoforder", "true");
-    }
+      }
       if (tk.openRelativePosition === "left") {
         tk.moveBefore(new_tab, parent_tab);
       }
@@ -4866,10 +4870,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     let newTab = _ss.duplicateTab(window, aTab);
 
-      tk.generateNewTabId(newTab);
-      tk.removeGID(newTab);
+    tk.generateNewTabId(newTab);
+    tk.removeGID(newTab);
 
-      return newTab;
+    return newTab;
   };
 
   this._onDrop = function _onDrop(event) { // [Fx4+]
