@@ -2294,13 +2294,13 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
             && tab.previousSibling.getAttribute("groupid")
             && tab.previousSibling.getAttribute("groupid") == tab.nextSibling.getAttribute("groupid"))
           {
-            if (type != "unrelated") {
+            if (type === "unrelated") {
+              tk.keepGroupsTogether();
+            }
+            else {
               var gid = tab.previousSibling.getAttribute("groupid");
               tk.setGID(tab, gid);
               tab.setAttribute("outoforder", "true");
-            }
-            else {
-              tk.keepGroupsTogether();
             }
           }
           else if (tk.activeGrouping == "opener") {
