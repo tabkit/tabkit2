@@ -5,6 +5,9 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+
+## [0.12.9][0.12.9] - 2016-04-24
+
 ### Fixed
 - [Regression] New tabs opened by search text box (in browser menu bar) are now placed properly
 
@@ -181,7 +184,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.8...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.9...HEAD
+[0.12.9]:     https://github.com/tabkit/tabkit2/compare/v0.12.8...v0.12.9
 [0.12.8]:     https://github.com/tabkit/tabkit2/compare/v0.12.7...v0.12.8
 [0.12.7]:     https://github.com/tabkit/tabkit2/compare/v0.12.6...v0.12.7
 [0.12.6]:     https://github.com/tabkit/tabkit2/compare/v0.12.5...v0.12.6
