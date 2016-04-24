@@ -1457,6 +1457,46 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       };
     })();
 
+    // This is for search item in context menu only
+    // Not sure if `BrowserSearch.loadSearch` should be patched as well
+    // Present in Fx 38.x & 45.x
+    (function init_BrowserSearch_loadAddEngines() {
+      "use strict";
+
+      if (typeof BrowserSearch !== "object" || typeof BrowserSearch.loadAddEngines !== "function") {
+        tk.debug("BrowserSearch.loadAddEngines doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = BrowserSearch.loadAddEngines;
+      // Function signature should be valid for FF 38.x & 45.x
+      BrowserSearch.loadAddEngines = function() {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> BrowserSearch.loadAddEngines >>>");
+        let selected_tab_before_operation = gBrowser.selectedTab
+        tabkit.addingTab({
+          added_tab_type: "unrelated",
+          parent_tab: selected_tab_before_operation
+        });
+        try {
+          result = old_func.apply(this, []);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "unrelated",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        tk.debug("<<< BrowserSearch.loadAddEngines <<<");
+
+        return result;
+      };
+    })();
+
     // For opening new tab with history entry of current tab
     (function init_gotoHistoryIndex() {
       "use strict";
@@ -2068,20 +2108,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       // See also sourceTypes
     ];//}
 
-    var unrelatedTabSources = [
-      'BrowserSearch.loadAddEngines'//{
-      // Should add extensions.js->openURL too, but unrelated is the default after all...
-      // See also sourceTypes
-    ];//}
-
     // Process all simple related tab sources:
     for each (var s in relatedTabSources) {
       tk.wrapMethodCode(s, 'tabkit.addingTab("related"); try {', '} finally { tabkit.addingTabOver(); }');
-    }
-
-    // Process all simple unrelated tab sources:
-    for each (var s in unrelatedTabSources) {
-      tk.wrapMethodCode(s, 'tabkit.addingTab("unrelated"); try {', '} finally { tabkit.addingTabOver(); }');
     }
 
     // And a sometimes related, sometimes unrelated tab source:
