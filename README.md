@@ -51,15 +51,11 @@ Some features are extracted into other extensions (which can be used separately)
 
 ## Download / Installation
 - [Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/)  
-- [Alternative download (Beta and official releases that might not be approved yet)](https://bintray.com/tabkit/tabkit2)  
-If you download as a file, then you have to go to Firefox Addon Page, then press the gear button and choose `Install Addon from file`
 
 
 ## Issue
 - [Github (here)](https://github.com/tabkit/tabkit2/issues)  
 I have moved a few issues from Google Code, move more if you think it's necessary
-- [Google Code](http://code.google.com/p/tabkit-2nd-edition/issues/list)  
-Deprecated
 
 
 ## Changes
