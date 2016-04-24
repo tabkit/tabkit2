@@ -2068,10 +2068,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       // See also sourceTypes
     ];//}
 
-    var newTabSources = [
-      // See sourceTypes
-    ];
-
     var unrelatedTabSources = [
       'BrowserSearch.loadAddEngines'//{
       // Should add extensions.js->openURL too, but unrelated is the default after all...
@@ -2081,11 +2077,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     // Process all simple related tab sources:
     for each (var s in relatedTabSources) {
       tk.wrapMethodCode(s, 'tabkit.addingTab("related"); try {', '} finally { tabkit.addingTabOver(); }');
-    }
-
-    // Process all simple new tab sources:
-    for each (var s in newTabSources) {
-      tk.wrapMethodCode(s, 'tabkit.addingTab("newtab"); try {', '} finally { tabkit.addingTabOver(); }');
     }
 
     // Process all simple unrelated tab sources:
