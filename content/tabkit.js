@@ -2071,6 +2071,207 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return result;
       };
     })();
+
+
+    // Function called by context menu item
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/nsContextMenu.js#894
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/nsContextMenu.js#979
+    (function() {
+      "use strict";
+
+      if (!("nsContextMenu" in window) ||
+          typeof window.nsContextMenu !== "function" ||
+          typeof window.nsContextMenu.prototype.openLinkInTab !== "function") {
+        tk.debug("window.nsContextMenu.prototype.openLinkInTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.nsContextMenu.prototype.openLinkInTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.nsContextMenu.prototype.openLinkInTab = function() {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.nsContextMenu.prototype.openLinkInTab >>>");
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: gBrowser.selectedTab
+        });
+        try {
+          result = old_func.apply(this, []);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related"
+          });
+        }
+        tk.debug("<<< window.nsContextMenu.prototype.openLinkInTab <<<");
+
+        return result;
+      };
+    })();
+
+    // Function called by context menu item
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/nsContextMenu.js#926
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/nsContextMenu.js#1011
+    (function() {
+      "use strict";
+
+      if (!("nsContextMenu" in window) ||
+          typeof window.nsContextMenu !== "function" ||
+          typeof window.nsContextMenu.prototype.openFrameInTab !== "function") {
+        tk.debug("window.nsContextMenu.prototype.openFrameInTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.nsContextMenu.prototype.openFrameInTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.nsContextMenu.prototype.openFrameInTab = function() {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.nsContextMenu.prototype.openFrameInTab >>>");
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: gBrowser.selectedTab
+        });
+        try {
+          result = old_func.apply(this, []);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related"
+          });
+        }
+        tk.debug("<<< window.nsContextMenu.prototype.openFrameInTab <<<");
+
+        return result;
+      };
+    })();
+
+    // Function called by context menu item
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/nsContextMenu.js#1080
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/nsContextMenu.js#1182
+    (function() {
+      "use strict";
+
+      if (!("nsContextMenu" in window) ||
+          typeof window.nsContextMenu !== "function" ||
+          typeof window.nsContextMenu.prototype.viewBGImage !== "function") {
+        tk.debug("window.nsContextMenu.prototype.viewBGImage doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.nsContextMenu.prototype.viewBGImage;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.nsContextMenu.prototype.viewBGImage = function(e) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.nsContextMenu.prototype.viewBGImage >>>");
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: gBrowser.selectedTab
+        });
+        try {
+          result = old_func.apply(this, [e]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related"
+          });
+        }
+        tk.debug("<<< window.nsContextMenu.prototype.viewBGImage <<<");
+
+        return result;
+      };
+    })();
+
+    // Function called by context menu item
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/nsContextMenu.js#1560
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/nsContextMenu.js#1650
+    (function() {
+      "use strict";
+
+      if (!("nsContextMenu" in window) ||
+          typeof window.nsContextMenu !== "function" ||
+          typeof window.nsContextMenu.prototype.addDictionaries !== "function") {
+        tk.debug("window.nsContextMenu.prototype.addDictionaries doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.nsContextMenu.prototype.addDictionaries;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.nsContextMenu.prototype.addDictionaries = function() {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.nsContextMenu.prototype.addDictionaries >>>");
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: gBrowser.selectedTab
+        });
+        try {
+          result = old_func.apply(this, []);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related"
+          });
+        }
+        tk.debug("<<< window.nsContextMenu.prototype.addDictionaries <<<");
+
+        return result;
+      };
+    })();
+
+    // Function called by context menu item
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/nsContextMenu.js#1031
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/nsContextMenu.js#1133
+    (function() {
+      "use strict";
+
+      if (!("nsContextMenu" in window) ||
+          typeof window.nsContextMenu !== "function" ||
+          typeof window.nsContextMenu.prototype.viewMedia !== "function") {
+        tk.debug("window.nsContextMenu.prototype.viewMedia doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.nsContextMenu.prototype.viewMedia;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.nsContextMenu.prototype.viewMedia = function(e) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.nsContextMenu.prototype.viewMedia >>>");
+        tabkit.addingTab({
+          added_tab_type: "related",
+          parent_tab: gBrowser.selectedTab
+        });
+        try {
+          result = old_func.apply(this, [e]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: "related"
+          });
+        }
+        tk.debug("<<< window.nsContextMenu.prototype.viewMedia <<<");
+
+        return result;
+      };
+    })();
   }
   this.postInitListeners.push(this.postInitSortingAndGrouping);
 
@@ -2096,22 +2297,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           } \
       $&'
     ]);
-
-    var relatedTabSources = [
-      'nsContextMenu.prototype.openLinkInTab',//{
-      'nsContextMenu.prototype.openFrameInTab',
-      'nsContextMenu.prototype.viewBGImage',
-      'nsContextMenu.prototype.addDictionaries',
-      'nsContextMenu.prototype.viewMedia'
-      // And nsBrowserAccess.prototype.openURI if !isExternal
-      // And <menuitem id="menu_HelpPopup_reportPhishingtoolmenu">
-      // See also sourceTypes
-    ];//}
-
-    // Process all simple related tab sources:
-    for each (var s in relatedTabSources) {
-      tk.wrapMethodCode(s, 'tabkit.addingTab("related"); try {', '} finally { tabkit.addingTabOver(); }');
-    }
 
     // And a sometimes related, sometimes unrelated tab source:
     tk.wrapMethodCode(
