@@ -2272,6 +2272,48 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return result;
       };
     })();
+
+
+    // Function called by ... Browser access?
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/browser.js#4666
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/browser.js#4983
+    (function() {
+      "use strict";
+
+      if (!("nsBrowserAccess" in window) ||
+          typeof window.nsBrowserAccess !== "function" ||
+          typeof window.nsBrowserAccess.prototype.openURI !== "function") {
+        tk.debug("window.nsBrowserAccess.prototype.openURI doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = window.nsBrowserAccess.prototype.openURI;
+      // Function signature should be valid for FF 38.x & 45.x
+      window.nsBrowserAccess.prototype.openURI = function(aURI, aOpener, aWhere, aContext) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> window.nsBrowserAccess.prototype.openURI >>>");
+        var added_tab_type = aContext == Ci.nsIBrowserDOMWindow.OPEN_EXTERNAL ? "unrelated" : "related";
+        tabkit.addingTab({
+          added_tab_type: added_tab_type,
+          parent_tab: gBrowser.selectedTab
+        });
+        try {
+          result = old_func.apply(this, [aURI, aOpener, aWhere, aContext]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabOver({
+            added_tab_type: added_tab_type
+          });
+        }
+        tk.debug("<<< window.nsBrowserAccess.prototype.openURI <<<");
+
+        return result;
+      };
+    })();
   }
   this.postInitListeners.push(this.postInitSortingAndGrouping);
 
@@ -2298,19 +2340,23 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       $&'
     ]);
 
-    // And a sometimes related, sometimes unrelated tab source:
-    tk.wrapMethodCode(
-      'nsBrowserAccess.prototype.openURI',
-      'tabkit.addingTab(aContext == Ci.nsIBrowserDOMWindow.OPEN_EXTERNAL ? "unrelated" : "related"); try {',
-      '} finally { tabkit.addingTabOver(); }'
-    );
-
     // And an attribute based related tab source:
     var reportPhishing = document.getElementById("menu_HelpPopup_reportPhishingtoolmenu");
-    if (reportPhishing) {
+    if (typeof reportPhishing === "object" && "setAttribute" in reportPhishing) {
+      let original_command_str = reportPhishing.getAttribute("oncommand");
       reportPhishing.
-        setAttribute("oncommand",
-                    'tabkit.addingTab("related"); try {' + reportPhishing.getAttribute("oncommand") + '} finally { tabkit.addingTabOver(); }');
+        setAttribute(
+          "oncommand",
+          'tabkit.addingTab({ \
+            added_tab_type: "related", \
+            parent_tab: gBrowser.selectedTab \
+          }); try {' + original_command_str + '} \
+          finally { \
+            tabkit.addingTabOver({ \
+              added_tab_type: "related" \
+            }); \
+          }'
+        );
     }
 
 
@@ -2320,7 +2366,20 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       goMenu = document.getElementById("go-menu");
     }
     if (typeof goMenu === "object" && "setAttribute" in goMenu) {
-      goMenu.setAttribute("oncommand", 'tabkit.addingTab("history"); try {' + goMenu.getAttribute("oncommand") + '} finally { tabkit.addingTabOver(); }');
+      let original_command_str = goMenu.getAttribute("oncommand");
+      goMenu.
+        setAttribute(
+          "oncommand",
+          'tabkit.addingTab({ \
+            added_tab_type: "history", \
+            parent_tab: gBrowser.selectedTab \
+          }); try {' + original_command_str + '} \
+          finally { \
+            tabkit.addingTabOver({ \
+              added_tab_type: "history" \
+            }); \
+          }'
+        );
     }
 
     // And deal with tab groups
