@@ -4864,16 +4864,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     //Need to run at the first time or they will missed out
     tk.colorAllTabsMenu(event);
-
-    //FF4+ Code Modification for coloring AllTabsPopup
-    if (gBrowser.tabContainer._createTabMenuItem)
-      tk.addMethodHook([
-        'gBrowser.tabContainer._createTabMenuItem',
-
-        'return menuItem;',
-        'tabkit.colorAllTabsMenuItem(aTab, menuitem); \
-        $&'
-      ]);
   };
   this.postInitListeners.push(this.postInitAllTabsMenuColors);
 
