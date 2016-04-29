@@ -1104,11 +1104,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
   };
 
-  // TODO=P4: GCODE prepend/append/wrapMethodCode could be done without modifying the actual method to preserve closures
-  this.prependMethodCode = function prependMethodCode(methodname, codestring) {
-    tk.addMethodHook([methodname, '{', '{' + codestring]);
-  };
-
 //}##########################
 //{>>> Sorting & Grouping
 //|##########################
@@ -2336,6 +2331,34 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           tabkit.addingTabsOver();
         }
         tk.debug("<<< gBrowser.loadTabs <<<");
+
+        return result;
+      };
+    })();
+
+    // Function called by dragover event handler
+    // Disable the sliding effect of tab dragging until here is an preference
+    // Defined in
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#4112
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#4959
+    (function() {
+      "use strict";
+
+      if (typeof gBrowser.tabContainer !== "object" ||
+          typeof gBrowser.tabContainer._animateTabMove !== "function") {
+        tk.debug("gBrowser.tabContainer._animateTabMove doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser.tabContainer._animateTabMove;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.tabContainer._animateTabMove = function(event) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> gBrowser.loadTabs >>>");
+        this._handleTabSelect();
+        tk.debug("<<< gBrowser.tabContainer._animateTabMove <<<");
 
         return result;
       };
@@ -5764,8 +5787,36 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
    */
 
   this.initProtectedTabs = function initProtectedTabs(event) {
+    // Function called by removing tab
+    // Prevent "protected" tabs to be closed
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#2017
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#2109
+    (function() {
+      "use strict";
 
-    tk.prependMethodCode('gBrowser.removeTab', 'if (aTab.getAttribute("protected") == "true") { tabkit.beep(); return; }');
+      if (typeof gBrowser.removeTab !== "function") {
+        tk.debug("gBrowser.removeTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser.removeTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.removeTab = function(aTab, aParams) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> gBrowser.removeTab >>>");
+        if (tk.getTabIsProtected(aTab)) {
+          tabkit.beep();
+        }
+        else {
+          result = old_func.apply(this, [aTab, aParams]);
+        }
+        tk.debug("<<< gBrowser.removeTab <<<");
+
+        return result;
+      };
+    })();
 
     _tabContainer.addEventListener("click", tk.protectedTabs_onClick, true);
 
@@ -7149,14 +7200,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       'tab.style.setProperty("max-width", tabWidth, "important");',
       ''
     ]);
-
-    // Disable the sliding effect of tab dragging until here is an preference
-    if (gBrowser.tabContainer._animateTabMove) {
-      tk.prependMethodCode(
-        'gBrowser.tabContainer._animateTabMove',
-        'this._handleTabSelect(); return;'
-      );
-    }
   };
   this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
     // https://developer.mozilla.org/en-US/docs/Web/Events/fullscreen
