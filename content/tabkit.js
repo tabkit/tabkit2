@@ -1113,11 +1113,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tk.addMethodHook([methodname, /\}$/, codestring + '}']);
   };
 
-  this.wrapMethodCode = function wrapMethodCode(methodname, startcode, endcode) {
-    //tk.addMethodHook([methodname, /\{([^]*)\}$/, '{' + startcode + '$&' + endcode + '}']);
-    tk.addMethodHook([methodname, '{', '{' + startcode, /\}$/, endcode + '}']);
-  };
-
 //}##########################
 //{>>> Sorting & Grouping
 //|##########################
