@@ -2314,6 +2314,41 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         return result;
       };
     })();
+
+
+    // Function called by ... Browser access?
+    // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#1414
+    // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#1439
+    (function() {
+      "use strict";
+
+      if (!("loadTabs" in gBrowser) ||
+          typeof gBrowser.loadTabs !== "function") {
+        tk.debug("gBrowser.loadTabs doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser.loadTabs;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.loadTabs = function(aURIs, aLoadInBackground, aReplace) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> gBrowser.loadTabs >>>");
+        tabkit.addingTabs(aReplace ? gBrowser.selectedTab : null);
+        try {
+          result = old_func.apply(this, [aURIs, aLoadInBackground, aReplace]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          tabkit.addingTabsOver();
+        }
+        tk.debug("<<< gBrowser.loadTabs <<<");
+
+        return result;
+      };
+    })();
   }
   this.postInitListeners.push(this.postInitSortingAndGrouping);
 
@@ -2381,13 +2416,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           }'
         );
     }
-
-    // And deal with tab groups
-    tk.wrapMethodCode(
-      'gBrowser.loadTabs',
-      'tabkit.addingTabs(aReplace ? gBrowser.selectedTab : null); try {',
-      '} finally { tabkit.addingTabsOver(); }'
-    );
   };
   this.preInitListeners.push(this.preInitSortingAndGroupingMethodHooks);
 
