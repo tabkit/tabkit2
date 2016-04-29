@@ -7150,13 +7150,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       ''
     ]);
 
-    // Issue 47, Ban TabsOnTop if tab bar is not on top
-    tk.prependMethodCode(
-      'TabsOnTop.toggle',
-      'if (!this.enabled && tabkit.localPrefService.getBoolPref("firefox.tabsontop.force_disable.enabled")) \
-      { alert("TabsOnTop prevented by Tab Kit. If you want to use it anyway, change it in option."); return; }'
-    );
-
     // Disable the sliding effect of tab dragging until here is an preference
     if (gBrowser.tabContainer._animateTabMove) {
       tk.prependMethodCode(
