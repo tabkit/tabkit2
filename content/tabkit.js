@@ -2456,14 +2456,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   // See globalPreInitSortingAndGroupingMethodHooks in tabkit-global.js
 
   this.postInitSortingAndGroupingMethodHooks = function postInitSortingAndGroupingMethodHooks(event) {
-    // Give mlb_common.Utils.openUrlInNewTab a function name so it can be detected by sourceTypes!
-    if ("mlb_common" in window && "Utils" in mlb_common && "openUrlInNewTab" in mlb_common.Utils)
-      tk.addMethodHook([
-        'mlb_common.Utils.openUrlInNewTab',
-
-        'function (',
-        'function mlb_common_Utils_openUrlInNewTab('
-      ]);
   };
   this.postInitListeners.push(this.postInitSortingAndGroupingMethodHooks);
 
