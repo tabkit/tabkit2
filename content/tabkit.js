@@ -1109,10 +1109,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tk.addMethodHook([methodname, '{', '{' + codestring]);
   };
 
-  this.appendMethodCode = function appendMethodCode(methodname, codestring) {
-    tk.addMethodHook([methodname, /\}$/, codestring + '}']);
-  };
-
 //}##########################
 //{>>> Sorting & Grouping
 //|##########################
@@ -3909,6 +3905,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     if (gBrowser.selectedTab.hidden) // visibility of a tab
       gBrowser.selectedTab = contextTab;
+
+    tk.updateMultiRowTabs();
   };
   // Cancel all the indent in a group
   // Read updateIndents to see how indent work
@@ -4831,21 +4829,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     //Need to run at the first time or they will missed out
     tk.colorAllTabsMenu(event);
-
-
-    // if ("LastTab" in window && window.LastTab && LastTab.Browser && LastTab.Browser.OnTabMenuShowing) {
-      // tk.appendMethodCode('LastTab.Browser.OnTabMenuShowing',//{
-        // 'for (var i = 0; i < menu.childNodes.length; i++) { \
-          // var menuItem = menu.childNodes[i]; \
-          // if (LastTab.Preference.TabMenuSortMethod == LastTab.TabMenuSortMethod.MostRecent) \
-              // var tab = LastTab.Browser.TabHistory[menuItem.value]; \
-          // else \
-            // var tab = gBrowser.tabs[menuItem.value]; \
-          // tab.mCorrespondingMenuitem = menuItem; \
-        // } \
-        // tabkit.colorAllTabsMenu();'
-      // );//}
-    // }
 
     //FF4+ Code Modification for coloring AllTabsPopup
     if (gBrowser.tabContainer._createTabMenuItem)
@@ -6315,7 +6298,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tk.addDelayedEventListener(_tabContainer, "TabClose", tk.updateMultiRowTabs);
     document.addEventListener("SSTabRestoring", tk.updateMultiRowTabs, false); // "hidden" attributes might be restored!
     window.addEventListener("resize", tk.updateMultiRowTabs, false);
-    tk.appendMethodCode("tabkit.toggleGroupCollapsed", 'tabkit.updateMultiRowTabs();');
 
     _tabContainer.addEventListener("TabSelect", tk.multiRow_onTabSelect, false);
     _tabContainer.addEventListener("TabMove", tk.multiRow_onTabSelect, false); // In case a tab is moved out of sight
