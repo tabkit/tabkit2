@@ -1296,17 +1296,37 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     // Fix: Faviconize is now ignored on grouped tabs (Issue 51)
     // First injected statement required a leading space to make it work, don't know why (probably JS syntax)
-    if (typeof faviconize !== 'undefined' && typeof faviconize.quickFav !== 'undefined' && typeof faviconize.quickFav.dblclick !== 'undefined') {
-      tk.addMethodHook(['faviconize.quickFav.dblclick',
+    // https://github.com/ktakayama/faviconizetab/blob/master/content/addon/quick_fav.js
+    (function() {
+      "use strict";
 
-        'faviconize.toggle(e.target);',
-        ' tabkit.debug("faviconize hacked"); \
-        var tab = e.target; \
-        if (tab.hasAttribute("groupid") && tabkit.localPrefService.getBoolPref("doubleClickCollapseExpand")) \
-          { tabkit.debug("faviconize cancelled"); return; } \
-        else \
-          { $& }'])
-    }
+      if (!("faviconize" in window) ||
+          !("quickFav" in window.faviconize) ||
+          typeof faviconize.quickFav.dblclick !== "function") {
+        tk.debug("faviconize.quickFav.dblclick doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = faviconize.quickFav.dblclick;
+      // Function signature should be valid for FF 38.x & 45.x
+      faviconize.quickFav.dblclick = function(e) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> faviconize.quickFav.dblclick >>>");
+        var tab = e.target;
+        if (tab.hasAttribute("groupid") && tk.localPrefService.getBoolPref("doubleClickCollapseExpand")) {
+          tk.debug("faviconize cancelled");
+          return;
+        }
+        else {
+          result = old_func.apply(this, [e]);
+        }
+        tk.debug("<<< faviconize.quickFav.dblclick <<<");
+
+        return result;
+      };
+    })();
   };
   this.initListeners.push(this.initSortingAndGrouping);
 
