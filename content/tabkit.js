@@ -7210,15 +7210,34 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   this.Panorama.Initializers = this.Panorama.Initializers || {};
   this.Panorama.Initializers.addMethodHookOnPostInit = function addMethodHookOnPostInit(event) {
     // Disable Panorama, why use Panorama when you have Tabkit?
-    tk.addMethodHook([
-      "TabView.toggle",
+    // This feature is removed from 45.x
+    (function() {
+      "use strict";
 
-      'if (this.isVisible())',
-      'if (tabkit.localPrefService.getBoolPref("panorama.enabled") === false) { \
-        alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)"); return; \
-      } \
-      $&',
-    ]);
+      if (typeof TabView !== "object" ||
+          typeof TabView.toggle !== "function") {
+        tk.debug("TabView.toggle doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = TabView.toggle;
+      // Function signature should be valid for FF 38.x & 45.x
+      TabView.toggle = function() {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> TabView.toggle >>>");
+        if (tk.localPrefService.getBoolPref("panorama.enabled") === false) {
+          alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)");
+        }
+        else {
+          result = old_func.apply(this, []);
+        }
+        tk.debug("<<< TabView.toggle <<<");
+
+        return result;
+      };
+    })();
   };
   this.postInitListeners.push(this.Panorama.Initializers.addMethodHookOnPostInit);
 
