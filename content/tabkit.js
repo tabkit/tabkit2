@@ -2982,9 +2982,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         }
 
       // Should be buggy if this statement is true
-        if (!tk.nextType) {
+      if (!tk.nextType) {
         tk.debug("No nextType for added tab: " + tid);
-          tk.nextType = "newtab";
+        tk.nextType = "newtab";
       }
 
       tk.isBookmarkGroup = false;
