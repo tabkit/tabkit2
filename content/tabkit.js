@@ -7030,23 +7030,63 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 //|##########################
   this.postInitFx4Modifications = function postInitFx4Modifications(event) {
     // Not sure if pinned tab works in horizontal mode, but still BAM!
-    tk.addMethodHook([
-      "gBrowser.pinTab",
+    (function() {
+      "use strict";
 
-      'if (aTab.pinned)',
-      'if (tabkit.TabBar.Mode.getIsVerticalMode()) { \
-      alert("Sorry, Tab Kit 2nd Edition does not support App Tabs in Vertical mode"); return; \
-      } \
-      $&',
-    ]);
+      if (typeof gBrowser.pinTab !== "function") {
+        tk.debug("gBrowser.pinTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser.pinTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.pinTab = function(aTab) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> gBrowser.pinTab >>>");
+        if (tk.TabBar.Mode.getIsVerticalMode()) {
+          alert("Sorry, Tab Kit 2nd Edition does not support App Tabs in Vertical mode");
+        }
+        else {
+          result = old_func.apply(this, [aTab]);
+        }
+        tk.debug("<<< gBrowser.pinTab <<<");
+
+        return result;
+      };
+    })();
 
     // Issue 22, some weird behavior by the new animation related functions which mess with tabs' maxWidth
-    tk.addMethodHook([
-      'gBrowser.tabContainer._lockTabSizing',
+    (function() {
+      "use strict";
 
-      'tab.style.setProperty("max-width", tabWidth, "important");',
-      ''
-    ]);
+      if (typeof gBrowser.tabContainer._lockTabSizing !== "function") {
+        tk.debug("gBrowser.tabContainer._lockTabSizing doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser.tabContainer._lockTabSizing;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.tabContainer._lockTabSizing = function(aTab) {
+        "use strict";
+        var result = undefined;
+
+        tk.debug(">>> gBrowser.tabContainer._lockTabSizing >>>");
+        result = old_func.apply(this, [aTab]);
+        // Reset max-width
+        let numPinned = this.tabbrowser._numPinnedTabs;
+        var tabs = this.tabbrowser.visibleTabs;
+        for (let i = numPinned; i < tabs.length; i++) {
+          let tab = tabs[i];
+          // clear the value
+          tab.style.setProperty("max-width", "");
+        }
+        tk.debug("<<< gBrowser.tabContainer._lockTabSizing <<<");
+
+        return result;
+      };
+    })();
   };
   this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
     // https://developer.mozilla.org/en-US/docs/Web/Events/fullscreen
