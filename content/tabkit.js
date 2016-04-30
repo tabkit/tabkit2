@@ -288,7 +288,13 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   const { XPCOMUtils } = Cu.import("resource://gre/modules/XPCOMUtils.jsm", {});
   const { Promise } = Cu.import("resource://gre/modules/Promise.jsm", {});
   // FF 45.x only
-  const { TabStateFlusher } = Cu.import("resource:///modules/sessionstore/TabStateFlusher.jsm", {});
+  try {
+    const { TabStateFlusher } = Cu.import("resource:///modules/sessionstore/TabStateFlusher.jsm", {});
+  }
+  catch (e) {
+    // Do nothing
+  }
+
 
 //}##########################
 //{### Services
