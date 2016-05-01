@@ -4201,14 +4201,17 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   this.setTabUriKey = function setTabUriKey(aTab) { // TODO=P3: GCODE Listen for back/forwards
     var uri = aTab.linkedBrowser.currentURI;
     if (aTab.initialURI) {
-      if (!uri || uri.asciiSpec == "about:blank")
-        uri = gBrowser.mURIFixup.createFixupURI(aTab.initialURI, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI); // We can't just use _ios.newURI since sometimes initialURI can be things like google.com (without http:// or anything!)
+      // `isBlankPageURL` is a utility function present in Fx 38.x & 45.x
+      if (!uri || isBlankPageURL(uri.asciiSpec)) {
+        // We can't just use _ios.newURI since sometimes initialURI can be things like google.com (without http:// or anything!)
+          uri = gBrowser.mURIFixup.createFixupURI(aTab.initialURI, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
+      }
       delete aTab.initialURI;
     }
     if (!uri)
       uri = _ios.newURI("about:blank", null, null);
 
-    if (uri.asciiSpec == "about:blank") {
+    if (isBlankPageURL(uri.asciiSpec)) {
       var uriKey = "zzzzzzzzzzzzzzz/about/blank"; // Sort blank tabs to end
       // uriGroup isn't needed in this case
     }
