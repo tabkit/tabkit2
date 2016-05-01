@@ -1001,6 +1001,112 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     _localPrefListeners[prefName].push(listener);
   };
 
+// ##########################
+// ### Tab Kit Data I/O
+// ##########################
+
+  const TK_DATA_KEY = "tabkit_data";
+
+  this.TKData = {};
+
+  // Read data from an object
+  this.TKData.getDataWithKey = function(obj, key) {
+    if (obj === null || typeof obj === "undefined") {
+      tk.dump("obj is blank");
+      return {status: "failed", data: undefined};
+    }
+    if (typeof key !== "string") {
+      tk.dump("key is NOT a string");
+      return {status: "failed", data: undefined};
+    }
+
+    if (!(TK_DATA_KEY in obj)) {
+    return {status: "success", data: undefined};
+    }
+
+    let tk_data = obj[TK_DATA_KEY];
+    if (typeof tk_data !== "object") {
+      tk.dump("obj." + TK_DATA_KEY + " is NOT an object");
+      // No cleaning operation here, since this method is for reading only
+
+      return {status: "failed", data: undefined};
+    }
+
+    if (!(key in tk_data)) {
+      return {status: "success", data: undefined};
+    }
+
+    // This can still be `null` or `undefined`
+    return {status: "success", data: tk_data[key]};
+  };
+
+  // Write data to an object
+  this.TKData.setDataWithKey = function(obj, key, data) {
+    if (obj === null || typeof obj === "undefined") {
+      tk.dump("obj is blank");
+      return {status: "failed"};
+    }
+    if (typeof key !== "string") {
+      tk.dump("key is NOT a string");
+      return {status: "failed"};
+    }
+    // We don't check data
+    // Since we could intentionally set the data to `null` or even `undefined`
+
+    // It's normal that there is no property in the object yet
+    if (!(TK_DATA_KEY in obj)) {
+      obj[TK_DATA_KEY] = {};
+    }
+
+    let tk_data = obj[TK_DATA_KEY];
+    if (typeof tk_data !== "object") {
+      tk.dump("obj." + TK_DATA_KEY + " is NOT an object");
+      tk.debug("Resetting obj." + TK_DATA_KEY + " to an object");
+      obj[TK_DATA_KEY] = {};
+
+      return {status: "failed"};
+    }
+
+    tk_data[key] = data;
+
+    // This can still be `null` or `undefined`
+    return {status: "success"};
+  };
+
+  // Delete data to an object
+  this.TKData.removeDataWithKey = function(obj, key) {
+    if (obj === null || typeof obj === "undefined") {
+      tk.dump("obj is blank");
+      return {status: "failed", data: undefined};
+    }
+    if (typeof key !== "string") {
+      tk.dump("key is NOT a string");
+      return {status: "failed", data: undefined};
+    }
+    // We don't check data
+    // Since we could intentionally set the data to `null` or even `undefined`
+
+    // It's normal that there is no property in the object yet
+    if (!(TK_DATA_KEY in obj)) {
+      return {status: "success", data: undefined};
+    }
+
+    let tk_data = obj[TK_DATA_KEY];
+    if (typeof tk_data !== "object") {
+      tk.dump("obj." + TK_DATA_KEY + " is NOT an object");
+      tk.debug("Resetting obj." + TK_DATA_KEY + " to an object");
+      obj[TK_DATA_KEY] = {};
+
+      return {status: "failed", data: undefined};
+    }
+
+    // This can still be `null` or `undefined`
+    return {
+      status: "success",
+      data: tk_data[key]
+    };
+  };
+
 //}##########################
 //{### Pref-attribute Mapping
 //|##########################
