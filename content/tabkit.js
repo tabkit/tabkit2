@@ -4223,15 +4223,35 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
    * .sy, because although forms like .gov.sy and .org.sy are common,
    * many domains also just end in .sy
    */
-  this.setTabUriKey = function setTabUriKey(aTab) { // TODO=P3: GCODE Listen for back/forwards
+  this.setTabUriKey = function setTabUriKey(aTab, options) { // TODO=P3: GCODE Listen for back/forwards
+    tk.debug(">>> setTabUriKey >>>");
+    if (typeof options !== "object") {
+      // So we don't need to check the type of `options` below
+      options = {};
+    }
+
     var uri = aTab.linkedBrowser.currentURI;
-    if (aTab.initialURI) {
+
+    let initial_uri = "initial_uri" in options ? options.initial_uri : null;
+    if (initial_uri != null) {
       // `isBlankPageURL` is a utility function present in Fx 38.x & 45.x
       if (!uri || isBlankPageURL(uri.asciiSpec)) {
         // We can't just use _ios.newURI since sometimes initialURI can be things like google.com (without http:// or anything!)
-          uri = gBrowser.mURIFixup.createFixupURI(aTab.initialURI, gBrowser.mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
+        //
+        // `mURIFixup` is a shortcut to some utility (I guess)
+        // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#67
+        // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#62
+        //
+        // `createFixupURI` is a `native` function for "fixing" URI
+        // Declaration:
+        // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/docshell/base/nsIURIFixup.idl#117
+        // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/docshell/base/nsIURIFixup.idl#111
+        // Flags:
+        // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/docshell/base/nsIURIFixup.idl#74
+        // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/docshell/base/nsIURIFixup.idl#74
+        let mURIFixup = gBrowser.mURIFixup;
+        uri = mURIFixup.createFixupURI(initial_uri, mURIFixup.FIXUP_FLAGS_MAKE_ALTERNATE_URI);
       }
-      delete aTab.initialURI;
     }
     if (!uri)
       uri = _ios.newURI("about:blank", null, null);
@@ -4322,12 +4342,45 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     else
       aTab.setAttribute(tk.Groupings.domain, ":dG-" + uriGroup + ":"); // Just to prevent domains that are substrings of each other matching
   };
-  // Allow easy access to the initial uri a tab is loading
-  this.earlyMethodHooks.push([
-    "gBrowser.addTab",//{
-    'b.loadURIWithFlags(aURI',
-    't.initialURI = aURI; $&'
-  ]);//}
+
+  this.preInitListeners.push(function() {
+    (function() {
+      // "use strict";
+
+      if (typeof gBrowser.addTab !== "function") {
+        tk.debug("gBrowser.addTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser.addTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.addTab = function(aURI, aReferrerURI, aCharset, aPostData, aOwner, aAllowThirdPartyFixup) {
+        // "use strict";
+        var result = undefined;
+        var initialURI = aURI;
+        var tab = null;
+
+        tk.debug(">>> gBrowser.addTab >>>");
+        // `isBlankPageURL` is a utility function present in Fx 38.x & 45.x
+        // `aURI == "about:customizing"` is a logic copied from `gBrowser.addTab` in Fx 38.x & 45.x
+        // Which should mean some special tab
+        // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#1810
+        // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#1888
+        if (aURI == null || isBlankPageURL(aURI) || aURI == "about:customizing") {
+          // We don't need `initialURI` for a "blank" page
+          initialURI = null;
+        }
+        result = old_func.apply(this, arguments);
+        tab = result;
+        if (tab != null) {
+          tk.setTabUriKey(tab, {initial_uri: initialURI});
+        }
+        tk.debug("<<< gBrowser.addTab <<<");
+
+        return result;
+      };
+    })();
+  });
 
   var _seed = 0; // Used to generate ids; TODO-P6: TJS sync across windows to completely avoid duplicates
   this.generateId = function generateId() {
