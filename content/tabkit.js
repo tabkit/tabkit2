@@ -924,8 +924,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     if(window.location != "chrome://browser/content/browser.xul")
       tk.dump("preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
 
-    // Make sure we can use gBrowser from now on if this is a browser window
-    getBrowser();
+    // `getBrowser` is a deprecated which just return `gBrowser`
+    // No need to call it
     //tk.assert('gBrowser', function(e) eval(e), "gBrowser must not be null after preInitShortcuts!");
     if(!gBrowser)
       tk.dump("gBrowser must not be null after preInitShortcuts!");
