@@ -2403,17 +2403,51 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   /// Method Hooks (for group by opener):
   this.preInitSortingAndGroupingMethodHooks = function preInitSortingAndGroupingMethodHooks(event) {
-    // Calculate a stack in addTab, since event listeners can't get to it anymore due to https://bugzilla.mozilla.org/show_bug.cgi?id=390488 (fixed now, but kept this way for compatibility)
-    tk.addMethodHook([
-      'gBrowser.addTab',
+    (function() {
+      "use strict";
 
-      't.dispatchEvent(evt);',
-      'evt.shouldBeFromSS = false; \
-          if (aSkipAnimation) { \
-            evt.shouldBeFromSS = true; \
-          } \
-      $&'
-    ]);
+      if (typeof gBrowser.addTab !== "function") {
+        tk.debug("gBrowser.addTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser.addTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.addTab = function(aURI, aReferrerURI, aCharset, aPostData, aOwner, aAllowThirdPartyFixup) {
+        "use strict";
+        var result = undefined;
+        var tab = undefined;
+        var aSkipAnimation = false;
+
+        tk.debug(">>> gBrowser.addTab >>>");
+        // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#1810
+        // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#1888
+        if (arguments.length === 2 &&
+            typeof arguments[1] === "object" &&
+            ("skipAnimation" in arguments[1])) {
+          let params = arguments[1];
+          aSkipAnimation = params.skipAnimation;
+        }
+        if (aSkipAnimation) {
+          tk.addingTab({
+            added_tab_type: "sessionrestore",
+            should_keep_added_tab_position: true
+          });
+        }
+        result = old_func.apply(this, arguments);
+        tab = result;
+        if (aSkipAnimation && tab != null) {
+          tk.addingTabOver({
+            added_tab:  tab,
+            added_tab_type: "sessionrestore",
+            should_keep_added_tab_position: true
+          });
+        }
+        tk.debug("<<< gBrowser.addTab <<<");
+
+        return result;
+      };
+    })();
 
     // And an attribute based related tab source:
     var reportPhishing = document.getElementById("menu_HelpPopup_reportPhishingtoolmenu");
@@ -2972,15 +3006,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       }
     }
     else if (!("fromInitSortingAndGrouping" in event)) {
-        // Special treatment for Firefox 15 or above for session restore
-        // But only work for restoring a window, not for restoring a tab
-      if ("shouldBeFromSS" in event && event.shouldBeFromSS === true) {
-          // When skipAnimation params in addTab is true
-          // We assume it's from session restore, or you find me a better solution
-          tk.nextType = 'sessionrestore';
-          tk.dontMoveNextTab = true;
-        }
-
       // Should be buggy if this statement is true
       if (!tk.nextType) {
         tk.debug("No nextType for added tab: " + tid);
