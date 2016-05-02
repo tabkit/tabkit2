@@ -6163,6 +6163,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   /// Initialisation:
   this.initTabbarPosition = function initTabbarPosition(event) {
+    var tabs_toolbar = document.getElementById("TabsToolbar");
 
     tk.moveSidebar();
     tk.addPrefListener("tabbarPosition", tk.moveSidebar);
@@ -6177,7 +6178,29 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     _tabBar.tkLastMouseover = Date.now(); // Prevent strict errors if we get a mouseout before our first mouseover
     gBrowser.tabContainer.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
     gBrowser.tabContainer.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
-    gBrowser.parentNode.addEventListener("DOMAttrModified", tk.positionedTabbar_onToggleCollapse, true);
+
+    // `DOMAttrModified` event is deprecated
+    // `MutationObserver` should be used instead
+    // Ref:
+    // - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Mutation_events
+    // - https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+    // - https://developer.mozilla.org/en-US/docs/Web/API/MutationRecord
+    if (typeof MutationObserver === "function") {
+      let tabs_toolbar_mutation_observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type !== "attributes") { return; }
+          if (mutation.attributeName !== "collapsed") { return; }
+
+          tk.positionedTabbar_onToggleCollapse({tabs_toolbar: tabs_toolbar});
+        });
+      });
+      // Start observing
+      tabs_toolbar_mutation_observer.observe(tabs_toolbar, {
+        attributes: true,
+        attributeFilter: ["collapsed"],
+        attributeOldValue: true
+      });
+    }
 
     //Special bug workaround by Pika
     _tabContainer.addEventListener("TabClose", tk.bug608589workaround, true);
@@ -6265,38 +6288,61 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
     window.clearTimeout(tk.positionedTabbar_collapseTimer);
     tk.positionedTabbar_collapseTimer = window.setTimeout(function __collapse(lastMouseover) {
-      if (document.getElementById("tabkit-splitter").getAttribute("state") == "collapsed"
+      if (splitter.getAttribute("state") == "collapsed"
         && lastMouseover == _tabBar.tkLastMouseover)
       {
         _tabBar.collapsed = true;
       }
     }, 333, _tabBar.tkLastMouseover);
   };
-  this.positionedTabbar_onToggleCollapse = function positionedTabbar_onToggleCollapse(event) {
-    if (event.attrName != "collapsed")
-      return;
+  this.positionedTabbar_onToggleCollapse = function positionedTabbar_onToggleCollapse(options) {
+    "use strict";
+    // if (event.attrName != "collapsed")
+    //   return;
+
+    if (typeof options !== "object") {
+      options = {};
+    }
+
+    let tabs_toolbar = options.tabs_toolbar;
+    // This should not happen, but to be safe we check it
+    if (tabs_toolbar == null) { return; }
+
+    let tabs_toolbar_collapsed = tabs_toolbar.getAttribute("collapsed") === "true";
 
     var scrollbar = tk.VerticalTabBarScrollbar.getElement();
+    if (scrollbar == null) { return; }
 
-    if (event.attrChange == MutationEvent.ADDITION) {
-      event.target.collapsed = false; //target = appcontent
-      _tabBar.collapsed = true;
-      var curpos = parseInt(scrollbar.getAttribute("curpos"));
-      // It returns 0 when collapsed, so don't restore this (and it will
-      // default to 0 when re-expanded anyway, so we don't need to restore it)
-      if (!isNaN(curpos) && curpos > 0)
-        _tabBar.tkScrollPos = curpos;
+    if (tabs_toolbar_collapsed) {
+      tk.backupScrollBarPosition();
     }
-    else if (event.attrChange == MutationEvent.REMOVAL) {
-      window.setTimeout(function __restoreScrollPosition() {
-        if ("tkScrollPos" in _tabBar && scrollbar) {
-          // Restore the old scroll position, as collapsing the tab bar will have reset it
-          scrollbar.setAttribute("curpos", _tabBar.tkScrollPos);
-          delete _tabBar.tkScrollPos;
-        }
-      }, 50); // TODO: TJS Find more reliable way of setting this than 50 ms timeout...
+    else {
+      window.setTimeout(function () {
+        tk.restoreScrollBarPosition();
+      }, 100); // TODO: TJS Find more reliable way of setting this than 50 ms timeout...
     }
-    // Ignore event.attrChange == MutationEvent.MODIFICATION
+  };
+
+  this.backupScrollBarPosition = function() {
+    "use strict";
+    var scrollbar = tk.VerticalTabBarScrollbar.getElement();
+    var curpos = parseInt(scrollbar.getAttribute("curpos"));
+
+    if (!isNaN(curpos) && curpos > 0) {
+      // Restore the old scroll position, as collapsing the tab bar will have reset it
+      tk.TKData.setDataWithKey(_tabBar, "scroll_bar_position", curpos);
+    }
+  };
+
+  this.restoreScrollBarPosition = function() {
+    "use strict";
+    var scrollbar = tk.VerticalTabBarScrollbar.getElement();
+    var curpos = tk.TKData.getDataWithKey(_tabBar, "scroll_bar_position").data;
+
+    if (scrollbar != null && !isNaN(curpos) && curpos > 0) {
+      // Restore the old scroll position, as collapsing the tab bar will have reset it
+      scrollbar.setAttribute("curpos", curpos);
+    }
   };
 
   /// Methods:
