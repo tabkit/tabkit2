@@ -312,11 +312,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   var _ds = Cc["@mozilla.org/file/directory_service;1"]
         .getService(Ci.nsIProperties);
 
-  var _em = null;
-  if ("@mozilla.org/extensions/manager;1" in Cc)
-    _em = Cc["@mozilla.org/extensions/manager;1"]
-        .getService(Ci.nsIExtensionManager);
-
   var _ios = Cc["@mozilla.org/network/io-service;1"]
         .getService(Ci.nsIIOService);
 
@@ -730,95 +725,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       return; // Sometimes in Fx3+ there's a random HTMLDocument that fires a DOMContentLoaded before the main window does
 
     window.removeEventListener("DOMContentLoaded", tk.onDOMContentLoaded, false);
-
-    // Find what version of Firefox we're using TODO=P4: TJS+GCODE Do this in a less hacky way. Or better still, just drop support for Fx2
-
-    // Check compatibility with existing addons (only in Fx3+, as extensions.enabledItems doesn't exist before that, and not in Fx4+ since _em is unavailable)
-    if (_prefs.getBoolPref("checkCompatibility")
-      && _em != null
-      && gPrefService.getPrefType("extensions.enabledItems") == gPrefService.PREF_STRING)
-    {
-      // TODO=P3: GCODE Only check compatibility on first loaded window; future windows should follow what the first window did
-      var incompatible = [
-        { id: "{dc572301-7619-498c-a57d-39143191b318}", name: "Tab Mix Plus" }
-        // TODO: TJS Before adding more extensions here, change the neverCheckCompatibility pref so it's per extension instead of being global
-      ];
-      var enabledAddons = gPrefService.getCharPref("extensions.enabledItems");
-      var needsRestart = false;
-      for each (var addon in incompatible) {
-        if (enabledAddons.indexOf(addon.id) != -1) {
-          // Focus the window before prompting.
-          // This will raise any minimized window, which will
-          // make it obvious which window the prompt is for and will
-          // solve the problem of windows "obscuring" the prompt.
-          // See bug #350299 for more details
-          window.focus();
-          var check = { value: false };
-          var strings = document.getElementById("bundle_tabkit");
-          var flags = _ps.BUTTON_POS_0 * _ps.BUTTON_TITLE_IS_STRING
-                + _ps.BUTTON_POS_1 * _ps.BUTTON_TITLE_IS_STRING
-                + _ps.BUTTON_POS_2 * _ps.BUTTON_TITLE_IS_STRING;
-          var button = _ps.confirmEx(
-            window, //aParent
-            strings.getString("tab_kit"), //aDialogTitle
-            strings.getFormattedString("incompatible_warning", [ addon.name ]), //aText
-            flags, // aButtonFlags
-            strings.getFormattedString("incompatible_disable", [ addon.name ]), //aButton0Title
-            strings.getString("incompatible_ignore"), //aButton1Title // This has to be button 1 due to Bug 345067 - Issues with prompt service's confirmEx - confirmEx always returns 1 when user closes dialog window using the X button in titlebar
-            strings.getFormattedString("incompatible_disable", [ strings.getString("tab_kit") ]), //aButton2Title
-            strings.getString("incompatible_dont_ask_again"), //aCheckMsg
-            check //aCheckState
-          );
-          if (button == 0) { // Disable addon
-            _em.disableItem(addon.id);
-            needsRestart = true;
-          }
-          else if (button == 2) { // Disable Tab Kit
-            _em.disableItem("tabkit@jomel.me.uk");
-            window.removeEventListener("load", tk.onLoad, false);
-            return; // Cancel load
-          }
-          else { // Ignore
-            if (check.value)
-              _prefs.setBoolPref("checkCompatibility", false);
-          }
-        }
-      }
-
-      if (needsRestart) {
-        // TODO=P3: GCODE Try to disable incompatible extensions by disabling onLoad methods etc to avoid restarting / allow selective disabling
-        window.focus();
-        var strings = document.getElementById("bundle_tabkit"); // This line is technically redundant, but it's clearer like this
-        var flags = _ps.BUTTON_POS_0 * _ps.BUTTON_TITLE_IS_STRING
-              + _ps.BUTTON_POS_1 * _ps.BUTTON_TITLE_IS_STRING;
-        var button = _ps.confirmEx(
-          window,
-          strings.getString("tab_kit"),
-          strings.getString("incompatible_restart"),
-          flags,
-          strings.getString("incompatible_restart_now"),
-          strings.getString("incompatible_restart_later"),
-          "",  // No third button
-          null, // No checkbox
-          {value: false} // No checkbox
-        );
-
-        if (button == 0) {
-          // Notify all windows that an application quit has been requested.
-          var cancelQuit = Cc["@mozilla.org/supports-PRBool;1"]
-                   .createInstance(Components.interfaces.nsISupportsPRBool);
-          _os.notifyObservers(cancelQuit, "quit-application-requested", "restart");
-
-          if (!cancelQuit.data) { // Quit unless we were told not to
-            Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIAppStartup)
-            .quit(Ci.nsIAppStartup.eRestart | Ci.nsIAppStartup.eAttemptQuit);
-          }
-        }
-
-        window.removeEventListener("load", tk.onLoad, false);
-        return; // Cancel load if we haven't restarted
-      }
-    }
 
     // Run First Run Wizard if appropriate
     if (!_prefs.getBoolPref("firstRunWizardDone")) {
