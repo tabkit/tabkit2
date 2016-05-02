@@ -6619,16 +6619,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
           var scrollbar = tk.VerticalTabBarScrollbar.getElement();
           try {
-            scrollbar.removeEventListener("DOMAttrModified", tk.preventChangeOfAttributes, true);
-          }
-          catch (ex) {
-            // It wasn't set...
-          }
-          try {
-            scrollbar.setAttribute("increment", 24);
-            scrollbar.setAttribute("pageincrement", 48);
-            scrollbar.addEventListener("DOMAttrModified", tk.preventChangeOfAttributes, true);
-
             availWidth -= Math.max(scrollbar.boxObject.width, 22);
           }
           catch (ex) {
@@ -6679,19 +6669,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
       _tabContainer.mTabstrip.style.removeProperty("min-height");
       _tabContainer.mTabstrip.style.removeProperty("max-height");
-    }
-  };
-
-  this.preventChangeOfAttributes = function preventChangeOfAttributes(event) {
-    var scrollbar = tk.VerticalTabBarScrollbar.getElement();
-    if (event.attrName == "increment") {
-      //event.preventDefault(); // does not work for this event...
-      scrollbar.setAttribute("increment", 24);
-      event.stopPropagation();
-    }
-    else if (event.attrName == "pageincrement") {
-      scrollbar.setAttribute("pageincrement", 48);
-      event.stopPropagation();
     }
   };
 
