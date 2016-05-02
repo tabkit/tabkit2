@@ -5937,21 +5937,51 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   // See globalPreInitNewTabsByDefault in tabkit-global.js
 
   this.postInitNewTabsByDefault = function postInitNewTabsByDefault(event) {
-    if ("PlacesUIUtils" in window) {
-      // We were patching `PlacesUIUtils.openNodeIn` and `PlacesUIUtils.openNodeWithEvent` before
-      // But since they both calls `PlacesUIUtils._openNodeIn`, we just need to monky patch one place
-      if ("_openNodeIn" in PlacesUIUtils) {
-        // `PlacesUIUtils` seems to be shared by multiple windows, so it's better to just override the method once
-        PlacesUIUtils._openNodeInOriginal = PlacesUIUtils._openNodeInOriginal || PlacesUIUtils._openNodeIn;
-        PlacesUIUtils._openNodeIn = function (aNode, aWhere, aWindow) {
-          aWhere = tabkit.returnWhereWhenOpenPlaces(aWhere, aNode);
-          PlacesUIUtils._openNodeInOriginal(aNode, aWhere, aWindow);
-        }
+    (function() {
+      "use strict";
+
+      if (!("PlacesUIUtils" in window) ||
+          typeof PlacesUIUtils._openNodeIn !== "function") {
+        tk.debug("PlacesUIUtils._openNodeIn doesn't exists, replacing function failed");
+        return;
       }
 
-      // document.getElementById('placesContext_open').removeAttribute('default');
-      // document.getElementById('placesContext_open:newtab').setAttribute('default', true);
-    }
+      var old_func = PlacesUIUtils._openNodeIn;
+      // Return if method already patched
+      if (tk.TKData.getDataWithKey(old_func, "patched").data) {
+        return;
+      }
+      // Function signature should be valid for FF 38.x & 45.x
+      PlacesUIUtils._openNodeIn = function(aNode, aWhere, aWindow, aPrivate=false) {
+        "use strict";
+        var result = undefined;
+        var selected_tab_before_operation = aWindow.gBrowser.selectedTab;
+
+        aWindow.tabkit.debug(">>> PlacesUIUtils._openNodeIn >>>");
+        aWindow.tabkit.addingTab({
+          added_tab_type: "bookmark",
+          parent_tab: selected_tab_before_operation
+        });
+        aWhere = aWindow.tabkit.returnWhereWhenOpenPlaces(aWhere, aNode);
+        try {
+          result = old_func.apply(this, [aNode, aWhere, aWindow, aPrivate]);
+        }
+        finally {
+          // This might be called already
+          // But this is called again since it contains code for cleaning up
+          aWindow.tabkit.addingTabOver({
+            added_tab_type: "bookmark",
+            parent_tab: selected_tab_before_operation
+          });
+        }
+        aWindow.tabkit.debug("<<< PlacesUIUtils._openNodeIn <<<");
+
+        return result;
+      };
+
+      // Mark method as patched patched
+      tk.TKData.setDataWithKey(PlacesUIUtils._openNodeIn, "patched", true);
+    })();
   };
   this.postInitListeners.push(this.postInitNewTabsByDefault);
 
