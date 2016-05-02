@@ -1070,7 +1070,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   /// Global
   this.earlyMethodHooks = [];
-  this.lateMethodHooks = [];
 
   /// Initialisation:
   this.preInitMethodHooks = function preInitMethodHooks(event) {
@@ -1078,12 +1077,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       tk.addMethodHook(hook);
   };
   this.preInitListeners.push(this.preInitMethodHooks);
-
-  this.postInitMethodHooks = function postInitMethodHooks(event) {
-    for each (var hook in tk.lateMethodHooks)
-      tk.addMethodHook(hook);
-  };
-  this.postInitListeners.push(this.postInitMethodHooks);
 
   /// Methods:
   /* parameter: length 3 array
@@ -6870,14 +6863,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     for (var i = _tabs.length - 1; i > contextTab._tPos; i--)
       gBrowser.removeTab(_tabs[i]);
   };
-
-  /// Method hooks:
-  /* this.earlyMethodHooks.push([
-    'gBrowser.warnAboutClosingTabs',//{
-
-    'numTabs = this.tabContainer.childNodes.length;',
-    'numTabs = (typeof aAll == "number" ? aAll : this.tabContainer.childNodes.length);'
-  ]);//} */
 
 //}##########################
 //{=== Scrollbars not arrows
