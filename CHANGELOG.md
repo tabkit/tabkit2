@@ -6,6 +6,12 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.11][0.12.11] - 2016-05-02
+
+### Fixed
+- [Regression] Fix duplicate tab function in FF 45.x (again)
+
+
 ## [0.12.10][0.12.10] - 2016-05-02
 
 ### Changed
@@ -196,7 +202,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.10...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.11...HEAD
+[0.12.11]:     https://github.com/tabkit/tabkit2/compare/v0.12.10...v0.12.11
 [0.12.10]:     https://github.com/tabkit/tabkit2/compare/v0.12.9...v0.12.10
 [0.12.9]:     https://github.com/tabkit/tabkit2/compare/v0.12.8...v0.12.9
 [0.12.8]:     https://github.com/tabkit/tabkit2/compare/v0.12.7...v0.12.8
