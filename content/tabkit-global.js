@@ -202,15 +202,6 @@ window.tabkitGlobal = new function _tabkitGlobal() { // Primarily just a 'namesp
     }
   };
 
-  // TODO=P4: prepend/append/wrapMethodCode could be done without modifying the actual method to preserve closures
-  this.prependMethodCode = function prependMethodCode(methodname, codestring) {
-    tkGlobal.addMethodHook([methodname, '{', '{' + codestring]);
-  };
-
-  this.appendMethodCode = function appendMethodCode(methodname, codestring) {
-    tkGlobal.addMethodHook([methodname, /\}$/, codestring + '}']);
-  };
-
   this.wrapMethodCode = function wrapMethodCode(methodname, startcode, endcode) {
     //tkGlobal.addMethodHook([methodname, /\{([^]*)\}$/, '{' + startcode + '$&' + endcode + '}']);
     tkGlobal.addMethodHook([methodname, '{', '{' + startcode, /\}$/, endcode + '}']);
