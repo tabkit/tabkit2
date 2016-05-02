@@ -1063,21 +1063,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 //{### Method Hooks
 //|##########################
 
-  // USAGE: this.*MethodHooks.push([<original method>, <where to backup>, <search>, <replacement>]);
-  // e.g. this.lateMethodHooks.push(['gBrowser.addTab', 'gBrowser._doAddTab', 't._tPos = position;', 't._tPos = position; alert("hi!");']);
-  // Warning: if you make a backup of the original method and wish to call it, you must save it onto the same object as the original!
-  // Warning: if you replace methods that deal with private variables they won't be able to access them anymore!
-
-  /// Global
-  this.earlyMethodHooks = [];
-
-  /// Initialisation:
-  this.preInitMethodHooks = function preInitMethodHooks(event) {
-    for each (var hook in tk.earlyMethodHooks)
-      tk.addMethodHook(hook);
-  };
-  this.preInitListeners.push(this.preInitMethodHooks);
-
   /// Methods:
   /* parameter: length 3 array
   hook[0] : full path for the method
@@ -5250,20 +5235,49 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     tab.removeAttribute("outoforder"); // In case it was set
   };
 
-  /// Method Hooks
+  this.preInitListeners.push(function() {
+    "use strict";
 
-  //TODO=P4: GCODE Show warning when tabs are skipped because their group is collapsed
+    (function() {
+      "use strict";
 
-  // Show all tab titles in tooltip - one per line - when hovering over a collapsed group (instead of just the visible tab)
-  this.earlyMethodHooks.push([//{
-    "gBrowser.createTooltip",
+      if (typeof gBrowser.createTooltip !== "function") {
+        tk.debug("gBrowser.createTooltip doesn't exists, replacing function failed");
+        return;
+      }
 
-    'tab.getAttribute("label")',
-    '(tab.hasAttribute("groupcollapsed") ? tabkit.getGroupFromTab(tab).map(function __getLabel(ctab) { \
-        return ctab == tab ? "> " + ctab.label : " - " + ctab.label; \
-      }).join("\\n") \
-     : $&)'
-  ]);//}
+      var old_func = gBrowser.createTooltip;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser.createTooltip = function(event) {
+        "use strict";
+
+        var result = undefined;
+        var tab = document.tooltipNode;
+        // Logic copied from original function
+        if (tab.localName != "tab") {
+          event.preventDefault();
+          return;
+        }
+
+        tk.debug(">>> gBrowser.createTooltip >>>");
+        result = old_func.apply(this, arguments);
+        // Apply new label for collapsed grouped tabs
+        // Show all tab titles in tooltip - one per line -
+        // when hovering over a collapsed group (instead of just the visible tab)
+        if (tab.hasAttribute("groupcollapsed")) {
+          let new_label =
+            tk.getGroupFromTab(tab).map(function __getLabel(ctab) {
+              return ctab == tab ? "> " + ctab.label : " - " + ctab.label;
+            }).join("\n");
+          event.target.setAttribute("label", new_label);
+        }
+
+        tk.debug("<<< gBrowser.createTooltip <<<");
+
+        return result;
+      };
+    })();
+  });
 
   /// Implement Bug 298571 - support tab duplication (using ctrl) on tab drag and drop
   this._duplicateTab = function _duplicateTab(aTab) {
