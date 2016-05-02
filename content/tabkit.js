@@ -289,12 +289,18 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   const { Promise } = Cu.import("resource://gre/modules/Promise.jsm", {});
   const { Preferences } = Cu.import("resource://gre/modules/Preferences.jsm", {});
   // FF 45.x only
-  try {
-    const { TabStateFlusher } = Cu.import("resource:///modules/sessionstore/TabStateFlusher.jsm", {});
-  }
-  catch (e) {
-    // Do nothing
-  }
+  // Since we cannot assign twice to a `const`
+  // We create a closure to generate the value for assignment
+  const TabStateFlusher = (function() {
+    let result;
+    try {
+      result = Cu.import("resource:///modules/sessionstore/TabStateFlusher.jsm", {}).TabStateFlusher;
+    }
+    catch (e) {
+      // Do nothing
+    }
+    return result;
+  })();
 
 
 //}##########################
