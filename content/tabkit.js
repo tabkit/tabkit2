@@ -344,6 +344,26 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   var _wm = Cc["@mozilla.org/appshell/window-mediator;1"]
         .getService(Ci.nsIWindowMediator);
 
+  // References:
+  // - https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Using_the_clipboard
+  // Create a constructor for the built-in transferable class
+  const nsTransferable = Components.Constructor("@mozilla.org/widget/transferable;1", "nsITransferable");
+  // Create a wrapper to construct an nsITransferable instance and set its source to the given window, when necessary
+  function Transferable(source) {
+      var res = nsTransferable();
+      if ("init" in res) {
+          // When passed a Window object, find a suitable privacy context for it.
+          if (source instanceof Ci.nsIDOMWindow)
+              // Note: in Gecko versions >16, you can import the PrivateBrowsingUtils.jsm module
+              // and use PrivateBrowsingUtils.privacyContextFromWindow(sourceWindow) instead
+              source = source.QueryInterface(Ci.nsIInterfaceRequestor)
+                             .getInterface(Ci.nsIWebNavigation);
+
+          res.init(source);
+      }
+      return res;
+  }
+
 //}##########################
 //{### Utility Functions
 //|##########################
@@ -4114,14 +4134,12 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     // Code from http://stackoverflow.com/questions/218462/in-a-firefox-extension-how-can-i-copy-rich-text-links-to-the-clipboard
     // Extract to a method if you need this somewhere else
 
-    var transferable = Components.classes["@mozilla.org/widget/transferable;1"].createInstance(Components.interfaces.nsITransferable);
+    var transferable = Transferable();
     var unicodeString = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
     var clipboardId = Components.interfaces.nsIClipboard;
     var clipboard = Components.classes["@mozilla.org/widget/clipboard;1"].getService(clipboardId);
 
     unicodeString.data = urisStringToCopy;
-
-    if ('init' in transferable) transferable.init(null); // Gecko 16
 
     transferable.addDataFlavor("text/unicode");
     transferable.setTransferData("text/unicode", unicodeString, urisStringToCopy.length * 2);
@@ -7079,16 +7097,13 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     var unicodeString = '';
 
     try {
-      var transferable = Components.classes["@mozilla.org/widget/transferable;1"]
-                         .createInstance(Components.interfaces.nsITransferable);
+      var transferable = Transferable();
       var clipboard = Components.classes["@mozilla.org/widget/clipboard;1"].
                       createInstance(Components.interfaces.nsIClipboard);
 
       // Store the transfered data
       var unicodeStringObject = new Object();
       var unicodeStringLengthObject = new Object();
-
-      if ('init' in transferable) transferable.init(null); // Gecko 16
 
       transferable.addDataFlavor("text/unicode");
       clipboard.getData(transferable, clipboard.kGlobalClipboard);
