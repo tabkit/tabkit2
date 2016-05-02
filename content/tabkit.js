@@ -3531,18 +3531,33 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   // Tab close focus direction
   this.preInitBlurTabModifications = function preInitBlurTabModifications(event) {
-    if ("_blurTab" in gBrowser) { // [Fx3.5b4+]
-      tk.addMethodHook([//{
-        "gBrowser._blurTab",
+    (function() {
+      "use strict";
 
-        'var tab = aTab;',
-        'if (tabkit.chosenNextTab != null) { \
-          tabkit.blurTab(aTab); \
-          return; \
-        } \
-        $&' // When closing the last tab and browser.tabs.closeWindowWithLastTab is false, tk.chooseNextTab is called before the replacement tab is opened, so tk.blurTab returns null; the original _blurTab works fine in this case though
-      ]);//}
-    }
+      if (typeof gBrowser._blurTab !== "function") {
+        tk.debug("gBrowser._blurTab doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = gBrowser._blurTab;
+      // Function signature should be valid for FF 38.x & 45.x
+      gBrowser._blurTab = function(aTab) {
+        "use strict";
+
+        var result = undefined;
+
+        tk.debug(">>> gBrowser._blurTab >>>");
+        if (tk.chosenNextTab != null) {
+          tk.blurTab(aTab);
+          return;
+        }
+        result = old_func.apply(this, arguments);
+
+        tk.debug("<<< gBrowser._blurTab <<<");
+
+        return result;
+      };
+    })();
   };
   this.preInitListeners.push(this.preInitBlurTabModifications);
 
