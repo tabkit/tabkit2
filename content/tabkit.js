@@ -287,6 +287,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   const { XPCOMUtils } = Cu.import("resource://gre/modules/XPCOMUtils.jsm", {});
   const { Promise } = Cu.import("resource://gre/modules/Promise.jsm", {});
+  const { Preferences } = Cu.import("resource://gre/modules/Preferences.jsm", {});
   // FF 45.x only
   try {
     const { TabStateFlusher } = Cu.import("resource:///modules/sessionstore/TabStateFlusher.jsm", {});
@@ -3716,16 +3717,17 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
 
   this.openOptions = function openOptions() {
+    var instantApply = false;
     var dialog = _wm.getMostRecentWindow("mozilla:tabkitsettings");
     if (dialog) {
       dialog.focus();
       return;
     }
     try {
-      var instantApply = gPrefService.getBoolPref("browser.preferences.instantApply");
+      instantApply = Preferences.get("browser.preferences.instantApply");
     }
     catch (ex) {
-      var instantApply = false;
+      // Do nothing, default value already set
     }
     openDialog("chrome://tabkit/content/settings.xul", "_blank", "chrome,titlebar,toolbar,centerscreen,"
            + (instantApply ? "dialog=no" : "modal"));
