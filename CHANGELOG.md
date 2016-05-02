@@ -6,6 +6,18 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.10][0.12.10] - 2016-05-02
+
+### Changed
+- Many Many Many code patching using `eval` which is considered as a security issue has been changed to use "the new way"
+  (with property replacing + `function#apply`)
+  This *might* bring some regressions
+  (I have tested briefly for each place changed to use "the new way", but don't trust my testing)
+
+### Fixed
+- Scrollbar will now return to pre-collapse position after collapsed (vertical) tab bar expanded
+
+
 ## [0.12.9][0.12.9] - 2016-04-24
 
 ### Fixed
@@ -184,7 +196,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.9...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.10...HEAD
+[0.12.10]:     https://github.com/tabkit/tabkit2/compare/v0.12.9...v0.12.10
 [0.12.9]:     https://github.com/tabkit/tabkit2/compare/v0.12.8...v0.12.9
 [0.12.8]:     https://github.com/tabkit/tabkit2/compare/v0.12.7...v0.12.8
 [0.12.7]:     https://github.com/tabkit/tabkit2/compare/v0.12.6...v0.12.7
