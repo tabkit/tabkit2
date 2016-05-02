@@ -1060,68 +1060,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   };
 
 //}##########################
-//{### Method Hooks
-//|##########################
-
-  /// Methods:
-  /* parameter: length 3 array
-  hook[0] : full path for the method
-  hook[1] : old code
-  hook[2] : new code, use $& for writing old code(instead of copying)
-  hook[3] : as hook[1]
-  hook[4] : as hook[2]
-  so on...*/
-  this.addMethodHook = function addMethodHook(hook) {
-    try {
-      if (hook.length % 2 != 1)
-        tk.dump("Who use addMethodHook without reading the description!\n"+hook[0]+"\n"+hook[1]+"\n"+hook[2]+"\n", null);
-
-      // var namespaces = hook[0].split(".");
-
-      // try {
-        // try to get the target function without eval
-        // var object = window;
-        // while (namespaces.length > 1) {
-          // object = object[namespaces.shift()];
-        // }
-      // }
-      // catch (e) {
-        // throw TypeError(hook[0] + " is not a function");
-      // }
-      // Make backup, if requested
-      // if (hook[1])
-        // window[hook[1]] + "=" + hook[0]);
-
-      // try to get the code string, but it might not exist
-      try {
-        var code = eval(hook[0] + ".toString()");
-      } catch (ex) {
-        tk.debug("Method target: \"" + hook[0] + "\" does not exist.", ex);
-        return;
-      }
-
-      // var method = namespaces.pop();
-      // var code = object[method].toString();
-
-      for (var i = 1; i < hook.length; ) {
-        var newCode = code.replace(hook[i++], hook[i++]);
-        if (newCode == code) {
-          tk.log("Method hook of \"" + hook[0] + "\" had no effect, when replacing:\n" + uneval(hook[i-2]) + "\nwith:\n" + uneval(hook[i-1]));
-        }
-        else {
-          code = newCode;
-        }
-      }
-
-      eval(hook[0]+"="+code);
-      // object[method] = new function(code);
-    }
-    catch (ex) {
-      tk.dump("Method hook of \"" + hook[0] + "\" failed with exception:\n" + ex + "\nCode: "+(code && code.substring(0,150)), ex);
-    }
-  };
-
-//}##########################
 //{>>> Sorting & Grouping
 //|##########################
 
