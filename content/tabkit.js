@@ -2385,7 +2385,8 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
           let params = arguments[1];
           aSkipAnimation = params.skipAnimation;
         }
-        if (aSkipAnimation) {
+
+        if (aSkipAnimation && !tk.isBookmarkGroup) {
           tk.addingTab({
             added_tab_type: "sessionrestore",
             should_keep_added_tab_position: true
@@ -2393,7 +2394,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         }
         result = old_func.apply(this, arguments);
         tab = result;
-        if (aSkipAnimation && tab != null) {
+        if (aSkipAnimation && !tk.isBookmarkGroup && tab != null) {
           tk.addingTabOver({
             added_tab:  tab,
             added_tab_type: "sessionrestore",
@@ -5987,6 +5988,40 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
       // Mark method as patched patched
       tk.TKData.setDataWithKey(PlacesUIUtils._openNodeIn, "patched", true);
+    })();
+
+    // Patch function for opening a "set" of URLs from bookmark
+    (function() {
+      "use strict";
+
+      if (!("PlacesUIUtils" in window) ||
+          typeof PlacesUIUtils._openTabset !== "function") {
+        tk.debug("PlacesUIUtils._openTabset doesn't exists, replacing function failed");
+        return;
+      }
+
+      var old_func = PlacesUIUtils._openTabset;
+      // Return if method already patched
+      if (tk.TKData.getDataWithKey(old_func, "patched").data) {
+        return;
+      }
+      // Function signature should be valid for FF 38.x & 45.x
+      PlacesUIUtils._openTabset = function(aItemsToOpen, aEvent, aWindow) {
+        "use strict";
+        var result = undefined;
+
+        aWindow.tabkit.debug(">>> PlacesUIUtils._openTabset >>>");
+
+        aWindow.tabkit.isBookmarkGroup = true;
+        result = old_func.apply(this, arguments);
+
+        aWindow.tabkit.debug("<<< PlacesUIUtils._openTabset <<<");
+
+        return result;
+      };
+
+      // Mark method as patched patched
+      tk.TKData.setDataWithKey(PlacesUIUtils._openTabset, "patched", true);
     })();
   };
   this.postInitListeners.push(this.postInitNewTabsByDefault);
