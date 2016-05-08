@@ -1658,8 +1658,15 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     (function init_searchbar_handleSearchCommand() {
       "use strict";
 
-      const searchbar = document.getElementById("searchbar");
-      if (!("handleSearchCommand" in searchbar) || typeof searchbar.handleSearchCommand !== "function") {
+      // This can be `null` when there is no search bar
+      // `BrowserSearch.searchBar` is just a shortcut
+      // http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/browser.js#3527
+      // http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/browser.js#3746
+      const searchbar = BrowserSearch.searchBar;
+      if (typeof searchbar !== "object" ||
+          searchbar === null ||
+          !("handleSearchCommand" in searchbar) ||
+          typeof searchbar.handleSearchCommand !== "function") {
         tk.debug("searchbar.handleSearchCommand doesn't exists, replacing function failed");
         return;
       }
