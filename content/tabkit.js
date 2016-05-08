@@ -2302,14 +2302,16 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         var result = undefined;
 
         tk.debug(">>> gBrowser.loadTabs >>>");
-        tabkit.addingTabs(aReplace ? gBrowser.selectedTab : null);
+        tk.addingTabs({
+          first_tab: aReplace ? gBrowser.selectedTab : null,
+        });
         try {
           result = old_func.apply(this, [aURIs, aLoadInBackground, aReplace]);
         }
         finally {
           // This might be called already
           // But this is called again since it contains code for cleaning up
-          tabkit.addingTabsOver();
+          tk.addingTabsOver();
         }
         tk.debug("<<< gBrowser.loadTabs <<<");
 
@@ -2822,15 +2824,20 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
   };
 
-  this.addingTabs = function addingTabs(firstTab) {
+  this.addingTabs = function addingTabs(options) {
+    if (!(typeof options === "object" && options !== null)) {
+      options = {};
+    }
+    let first_tab = options.first_tab;
+
     try {
       if (tk.nextType) { // Unlikely
         tk.ignoreOvers++;
         return;
       }
 
-      if (firstTab) {
-        tk.addedTabs = [firstTab];
+      if (first_tab) {
+        tk.addedTabs = [first_tab];
         tk.nextType = "loadOneOrMoreURIs";
       }
       else {
