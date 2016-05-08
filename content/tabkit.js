@@ -4193,7 +4193,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
    * many domains also just end in .sy
    */
   this.setTabUriKey = function setTabUriKey(aTab, options) { // TODO=P3: GCODE Listen for back/forwards
-    tk.debug(">>> setTabUriKey >>>");
     if (typeof options !== "object") {
       // So we don't need to check the type of `options` below
       options = {};
