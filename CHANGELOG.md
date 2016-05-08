@@ -6,6 +6,14 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.12][0.12.12] - 2016-05-08
+
+### Fixed
+- Fix tabs open by opening single bookmark entry were always unrelated even user prefers them to be opened as related
+- Fix tabs opened by bookmark groups (a set of bookmark entries) were not positioned according preference
+- Fix extension malfunctioning if browser starts without search bar in layout
+
+
 ## [0.12.11][0.12.11] - 2016-05-02
 
 ### Fixed
@@ -202,7 +210,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.11...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.12...HEAD
+[0.12.12]:     https://github.com/tabkit/tabkit2/compare/v0.12.11...v0.12.12
 [0.12.11]:     https://github.com/tabkit/tabkit2/compare/v0.12.10...v0.12.11
 [0.12.10]:     https://github.com/tabkit/tabkit2/compare/v0.12.9...v0.12.10
 [0.12.9]:     https://github.com/tabkit/tabkit2/compare/v0.12.8...v0.12.9
