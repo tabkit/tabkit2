@@ -5600,12 +5600,9 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         }
       }
       else {
-        if (event.screenX <= targetTab.boxObject.screenX + targetTab.boxObject.width / 2) {
-          ind.style.left = targetTab.getBoundingClientRect().left - targetTab.boxObject.width + "px";
-        }
-        else {
-          ind.style.left = targetTab.getBoundingClientRect().left + "px";
-        }
+        // `top` still need to be calculated for multi-row mode
+        ind.style.left = targetTab.getBoundingClientRect().left + "px";
+        ind.style.top = targetTab.getBoundingClientRect().top + "px";
       }
 
       ind.style.lineHeight = targetTab.getBoundingClientRect().height + "px";
