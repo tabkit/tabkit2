@@ -6,6 +6,13 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.13][0.12.13] - 2016-05-15
+
+### Fixed
+- ! Fix items in bookmark / history sidebar or window could not be opened due to incorrect method patching
+- ! Fix drop indicator not positioned correctly in multi-row mode
+
+
 ## [0.12.12][0.12.12] - 2016-05-08
 
 ### Fixed
@@ -210,7 +217,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.12...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.13...HEAD
+[0.12.13]:     https://github.com/tabkit/tabkit2/compare/v0.12.12...v0.12.13
 [0.12.12]:     https://github.com/tabkit/tabkit2/compare/v0.12.11...v0.12.12
 [0.12.11]:     https://github.com/tabkit/tabkit2/compare/v0.12.10...v0.12.11
 [0.12.10]:     https://github.com/tabkit/tabkit2/compare/v0.12.9...v0.12.10
