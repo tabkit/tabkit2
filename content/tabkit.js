@@ -275,9 +275,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 
   const XUL_NS      = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
-  const Cc          = Components.classes;
-  const Ci          = Components.interfaces;
-  const Cu          = Components.utils;
+  const { classes: Cc, interfaces: Ci, utils: Cu } = Components;
 
   const PREF_BRANCH = "extensions.tabkit.";
 
