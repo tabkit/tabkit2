@@ -286,6 +286,7 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
   const { XPCOMUtils } = Cu.import("resource://gre/modules/XPCOMUtils.jsm", {});
   const { Promise } = Cu.import("resource://gre/modules/Promise.jsm", {});
   const { Preferences } = Cu.import("resource://gre/modules/Preferences.jsm", {});
+  const { RecentWindow } = Cu.import("resource:///modules/RecentWindow.jsm", {});
   // FF 45.x only
   // Since we cannot assign twice to a `const`
   // We create a closure to generate the value for assignment
@@ -5967,26 +5968,30 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       PlacesUIUtils._openNodeIn = function(aNode, aWhere, aWindow, aPrivate=false) {
         "use strict";
         var result = undefined;
-        var selected_tab_before_operation = aWindow.gBrowser.selectedTab;
+        // Logic copied from http://mxr.mozilla.org/mozilla-esr45/source/browser/components/places/PlacesUIUtils.jsm#744
+        var browserWindow =
+          aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser" ?
+          aWindow : RecentWindow.getMostRecentBrowserWindow();
+        var selected_tab_before_operation = browserWindow.gBrowser.selectedTab;
 
-        aWindow.tabkit.debug(">>> PlacesUIUtils._openNodeIn >>>");
-        aWindow.tabkit.addingTab({
+        browserWindow.tabkit.debug(">>> PlacesUIUtils._openNodeIn >>>");
+        browserWindow.tabkit.addingTab({
           added_tab_type: "bookmark",
           parent_tab: selected_tab_before_operation
         });
-        aWhere = aWindow.tabkit.returnWhereWhenOpenPlaces(aWhere, aNode);
+        aWhere = browserWindow.tabkit.returnWhereWhenOpenPlaces(aWhere, aNode);
         try {
           result = old_func.apply(this, [aNode, aWhere, aWindow, aPrivate]);
         }
         finally {
           // This might be called already
           // But this is called again since it contains code for cleaning up
-          aWindow.tabkit.addingTabOver({
+          browserWindow.tabkit.addingTabOver({
             added_tab_type: "bookmark",
             parent_tab: selected_tab_before_operation
           });
         }
-        aWindow.tabkit.debug("<<< PlacesUIUtils._openNodeIn <<<");
+        browserWindow.tabkit.debug("<<< PlacesUIUtils._openNodeIn <<<");
 
         return result;
       };
@@ -6014,13 +6019,17 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
       PlacesUIUtils._openTabset = function(aItemsToOpen, aEvent, aWindow) {
         "use strict";
         var result = undefined;
+        // Logic copied from http://mxr.mozilla.org/mozilla-esr45/source/browser/components/places/PlacesUIUtils.jsm#744
+        var browserWindow =
+          aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser" ?
+          aWindow : RecentWindow.getMostRecentBrowserWindow();
 
-        aWindow.tabkit.debug(">>> PlacesUIUtils._openTabset >>>");
+        browserWindow.tabkit.debug(">>> PlacesUIUtils._openTabset >>>");
 
-        aWindow.tabkit.isBookmarkGroup = true;
+        browserWindow.tabkit.isBookmarkGroup = true;
         result = old_func.apply(this, arguments);
 
-        aWindow.tabkit.debug("<<< PlacesUIUtils._openTabset <<<");
+        browserWindow.tabkit.debug("<<< PlacesUIUtils._openTabset <<<");
 
         return result;
       };
