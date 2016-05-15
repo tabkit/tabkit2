@@ -6147,9 +6147,10 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     gBrowser.tabContainer.addEventListener("mouseover", tk.positionedTabbar_onMouseover, false);
     gBrowser.tabContainer.addEventListener("mouseout", tk.positionedTabbar_onMouseout, false);
 
-    // `DOMAttrModified` event is deprecated
+    // DOM mutation event is deprecated
     // `MutationObserver` should be used instead
     // Ref:
+    // - https://developer.mozilla.org/en-US/Add-ons/Overlay_Extensions/XUL_School/Appendix_F:_Monitoring_DOM_changes
     // - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Mutation_events
     // - https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
     // - https://developer.mozilla.org/en-US/docs/Web/API/MutationRecord
