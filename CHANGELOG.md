@@ -5,6 +5,10 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+### Fixed
+- Fix selected tab was always changed even after closing an inactive tab
+  (caused by incorrect conversion of old way method patch to new way)
+
 
 ## [0.12.13][0.12.13] - 2016-05-15
 

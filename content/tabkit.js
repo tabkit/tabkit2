@@ -3505,11 +3505,20 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
         var result = undefined;
 
         tk.debug(">>> gBrowser._blurTab >>>");
-        if (tk.chosenNextTab != null) {
-          tk.blurTab(aTab);
-          return;
+        // This copied from the original method
+        // We don't want to change selected tab if the closing tab is not selected
+        // We used to patch the method so that `tk.blurTab` is only called after this condition check
+        // But with new way of method patching we need to duplicate the condition check here
+        if (!aTab.selected) {
+          // Do nothing
         }
-        result = old_func.apply(this, arguments);
+        // Select next selected tab according to TabKit preferences
+        else if (tk.chosenNextTab != null) {
+          tk.blurTab(aTab);
+        }
+        else {
+          result = old_func.apply(this, arguments);
+        }
 
         tk.debug("<<< gBrowser._blurTab <<<");
 
