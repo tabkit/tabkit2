@@ -5,6 +5,9 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+
+## [0.12.14][0.12.14] - 2016-05-22
+
 ### Fixed
 - Fix selected tab was always changed even after closing an inactive tab
   (caused by incorrect conversion of old way method patch to new way)
@@ -221,7 +224,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.13...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.14...HEAD
+[0.12.14]:     https://github.com/tabkit/tabkit2/compare/v0.12.13...v0.12.14
 [0.12.13]:     https://github.com/tabkit/tabkit2/compare/v0.12.12...v0.12.13
 [0.12.12]:     https://github.com/tabkit/tabkit2/compare/v0.12.11...v0.12.12
 [0.12.11]:     https://github.com/tabkit/tabkit2/compare/v0.12.10...v0.12.11
