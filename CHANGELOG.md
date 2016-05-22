@@ -9,8 +9,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [0.12.13][0.12.13] - 2016-05-15
 
 ### Fixed
-- ! Fix items in bookmark / history sidebar or window could not be opened due to incorrect method patching
-- ! Fix drop indicator not positioned correctly in multi-row mode
+- Fix items in bookmark / history sidebar or window could not be opened due to incorrect method patching
+- Fix drop indicator not positioned correctly in multi-row mode
 
 
 ## [0.12.12][0.12.12] - 2016-05-08
