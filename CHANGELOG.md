@@ -6,6 +6,15 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.15][0.12.15] - 2016-06-19
+
+### Changed
+- Declare as compatible with 38.x (PikachuEXE is still using 38.x)
+
+### Fixed
+- Try to fix multiple screen issue by removing DPI related stuff
+
+
 ## [0.12.14][0.12.14] - 2016-05-22
 
 ### Fixed
@@ -224,7 +233,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.14...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.15...HEAD
+[0.12.15]:     https://github.com/tabkit/tabkit2/compare/v0.12.14...v0.12.15
 [0.12.14]:     https://github.com/tabkit/tabkit2/compare/v0.12.13...v0.12.14
 [0.12.13]:     https://github.com/tabkit/tabkit2/compare/v0.12.12...v0.12.13
 [0.12.12]:     https://github.com/tabkit/tabkit2/compare/v0.12.11...v0.12.12
