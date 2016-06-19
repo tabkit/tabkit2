@@ -13,9 +13,6 @@ pref("extensions.tabkit.indentAmount", 19);
 pref("extensions.tabkit.tabbarFullscreenBehaviour", "auto_collapse_with_spitter_visible");
 pref("extensions.tabkit.tabbar_fullscreen_value_meaning_in_callback", "value_before_change");
 
-//--- DPI value ---
-pref("extensions.tabkit.DPIValue", 96);
-
 //--- Firefox feature related ---
 pref("extensions.tabkit.firefox.tabsontop.force_disable.enabled", true);
 //}

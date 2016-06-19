@@ -45,10 +45,6 @@
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.options.value_before_change.label "Value Before Change">
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.options.value_after_change.label "Value After Change">
 
-<!ENTITY DPISettings.caption "DPI related">
-<!ENTITY DPIValue.label "Your current DPI value">
-<!ENTITY DPIValue.accesskey "D">
-
 <!ENTITY pane.tabbar.group.firefox.caption "Firefox Built-in Features Related">
 <!ENTITY pane.tabbar.group.firefox.tabsontop.force_disable.label "Force Disable TabsOnTop">
 

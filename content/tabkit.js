@@ -7355,38 +7355,6 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
 //{=== DPI
 //|##########################
 
-  //Private Constant
-  var _DPI_MIN = 96;
-  var _DPI_MAX = 192;
-
-  this.initDPI = function initDPI(event) {
-    tk.addPrefListener("DPIValue", tk.updateComponentSizeByDPI);
-  };
-  this.initListeners.push(this.initDPI);
-
-  this.updateComponentSizeByDPI = function updateComponentSizeByDPI() {
-
-    var DPIValue = _prefs.getIntPref("DPIValue");
-
-    tk.debug('DPIValue before = ' + DPIValue);
-
-    // auto fix out of range value
-    if (DPIValue < _DPI_MIN) {
-      _prefs.setIntPref("DPIValue",_DPI_MIN);
-      DPIValue = _DPI_MIN;
-    }
-    if (DPIValue > _DPI_MAX) {
-      _prefs.setIntPref("DPIValue",_DPI_MAX);
-      DPIValue = _DPI_MAX;
-    }
-
-    // calculate and set value for "layout.css.devPixelsPerPx"
-    var result = DPIValue / 96; //Result always relative to 96, not changable (unless Firefox did it)
-    tk.debug('DPIValue after = ' + DPIValue);
-    tk.debug('Going to set layout.css.devPixelsPerPx to ' + result);
-    gPrefService.setCharPref("layout.css.devPixelsPerPx", result.toFixed(2));
-  };
-
 
   // ### Panorama Related
   this.Panorama = this.Panorama || {};

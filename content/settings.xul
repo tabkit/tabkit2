@@ -22,8 +22,6 @@
       <preference id="tabbar_fullscreen_behaviour-pref" name="extensions.tabkit.tabbarFullscreenBehaviour" type="string"/>
       <preference id="tabbar_fullscreen_value_meaning_in_callback-pref" name="extensions.tabkit.tabbar_fullscreen_value_meaning_in_callback" type="string"/>
 
-      <preference id="dpivalue-pref" name="extensions.tabkit.DPIValue" type="int"/>
-
       <preference id="firefox-tabsontop-force_disable-enabled-pref" name="extensions.tabkit.firefox.tabsontop.force_disable.enabled" type="bool"/>
     </preferences>
 
@@ -151,20 +149,6 @@
           </row>
         </rows>
       </grid>
-    </groupbox>
-
-    <groupbox id="dpisettings">
-      <caption label="&DPISettings.caption;"/>
-
-      <hbox class="indent" align="center">
-        <label control="dpivalue"
-               value="&DPIValue.label;"
-               accesskey="&DPIValue.accesskey;"/>
-        <textbox id="dpivalue"
-                 type="number"
-                 min="96" max="192"
-                 preference="dpivalue-pref"/>
-      </hbox>
     </groupbox>
 
     <groupbox id="pane-tabbar__group-firefox">
