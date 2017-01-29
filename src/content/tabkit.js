@@ -7167,21 +7167,37 @@ window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide
     }
 
     var uris = tk.detectURIsFromText(unicodeString);
+    tk.debug("uris: ");
+    tk.debug(uris.toString());
 
     if (uris.length == 0) {
       return;
     }
 
-    var firstTab = gBrowser.addTab(uris.shift());
-    var lastTab = firstTab;
+    var first_tab = gBrowser.addTab(uris.shift());
+    var last_tab = first_tab;
+
     for each (var uri in uris) {
-      lastTab = gBrowser.addTab(uri);
+      tk.addingTab({
+        parent_tab: first_tab,
+        added_tab_type: "related"
+      });
+      let new_tab = gBrowser.addTab(uri);
+      tk.addingTabOver({
+        added_tab: new_tab,
+        added_tab_type: "related",
+        parent_tab: first_tab,
+        should_keep_added_tab_position: false
+      });
+
+      last_tab = new_tab;
     }
+
+
     if (!gPrefService.getBoolPref("browser.tabs.loadInBackground")) {
-      gBrowser.selectedTab = firstTab;
+      gBrowser.selectedTab = first_tab;
     }
-    // Even has one tab, lastTab == firstTab so this method would do nothing
-    tk.makeGroupBetweenTwoTabs(firstTab, lastTab);
+    // No need to group tabs since they are already "related"
   };
 
   // @return [Array]

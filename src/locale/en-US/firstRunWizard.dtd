@@ -1,0 +1,14 @@
+<!ENTITY firstRunWizard.title "Tab Kit First Run Wizard">
+
+<!ENTITY layoutChoice.desc "Please choose which tab bar layout you would like to use. You can change this later by going to Tools -&gt; Add-ons, selecting Tab Kit, clicking Options, then under the Tab Bar panel adjust 'The tab bar should be shown [...] of the window' and 'Show the tab bar on multiple rows' as appropriate.">
+
+<!ENTITY treeTabs.label "Tree Tabs (recommended)">
+<!ENTITY treeTabs.desc "Show tab bar as a tree along the left edge of the window">
+
+<!ENTITY multiRowTabs.label "Multi-row Tabs">
+<!ENTITY multiRowTabs.desc "Show tab bar in normal (top) position, on multiple rows if necessary">
+
+<!ENTITY normalTabs.label "Normal Tabs">
+<!ENTITY normalTabs.desc "Show tab bar as normal without Tab Kit">
+
+<!ENTITY documentation.text "N.B. The best way to get started with Tab Kit is probably to read through the Options menu (Tools -&gt; Add-ons -&gt; Tab Kit -&gt; Options), which lists all the features available. Tab Kit also adds a submenu to the tab right-click menu with some useful commands. More comprehensive documentation is in the works (help appreciated!)">

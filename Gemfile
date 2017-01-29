@@ -4,4 +4,4 @@ source 'https://rubygems.org'
 gem 'rake'
 
 # for building xpi file
-gem 'rubyzip'
+gem 'rubyzip', '>= 1.0.0'

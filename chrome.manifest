@@ -1,9 +1,0 @@
-content	tabkit	content/
-
-overlay	chrome://browser/content/browser.xul	chrome://tabkit/content/browserOverlay.xul
-
-locale	tabkit	en-US locale/en-US/
-
-skin	tabkit	classic/1.0	skin/classic/
-
-style chrome://browser/content/browser.xul chrome://tabkit/content/variable.css
