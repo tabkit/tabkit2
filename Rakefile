@@ -44,7 +44,11 @@ task :build, [:version, :is_beta] do |t, args|
   ### Files to include
 
   # ["content/bindings.xml"]
-  paths_of_files_to_zip = Dir.glob "src/**/*"
+  gulp_build_task_run_successfully = system("gulp build")
+  unless gulp_build_task_run_successfully
+    throw "gulp build failed"
+  end
+  paths_of_files_to_zip = Dir.glob "build/**/*"
   no_of_files = paths_of_files_to_zip.size
 
   ### File name
@@ -73,7 +77,7 @@ task :build, [:version, :is_beta] do |t, args|
       # Two arguments:
       # - The name of the file as it will appear in the archive
       # - The original file, including the path to find it
-      zipfile.add(file_path.gsub(%r|^src/|, ""), file_path)
+      zipfile.add(file_path.gsub(%r|^build/|, ""), file_path)
     end
   end
 

@@ -1,0 +1,18 @@
+{
+  "name": "tabkit2",
+  "version": "0.0.0",
+  "description": "",
+  "author": "",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.2",
+    "gulp-babel": "^6.1.2",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babelify": "^7.3.0",
+    "eslint": "^3.14.0",
+    "eslint-plugin-flowtype": "^2.30.0",
+    "flow-bin": "^0.38.0",
+    "stylelint": "^7.7.1"
+  }
+}

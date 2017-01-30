@@ -1,0 +1,7 @@
+{
+  "comments": false,
+  "retainLines": true,
+  "plugins": [
+    "transform-flow-strip-types"
+  ],
+}
