@@ -18,11 +18,11 @@ function Listener(dep) {
 }
 
 function onLoad() {
-  for each (var dep in dependencies) {
+  dependencies.forEach(function(dep) {
     var listener = new Listener(dep);
     listener.handleEvent(null);
     document.getElementById(dep[0] + "-pref").addEventListener("change", listener, false);
-  }
+  });
 
   var multipleRows = document.getElementById("multiplerows");
   if (document.getElementById("tabrows").value == "1")
