@@ -1,6 +1,8 @@
 // Code modified from
 // https://60devs.com/development-of-cross-browser-browser-extensions-using-es6-babeljs.html
 
+"use strict";
+
 var gulp  = require("gulp");
 var del   = require("del");
 var babel = require("gulp-babel");
@@ -15,14 +17,14 @@ gulp.task("watch", ["build"], function() {
 
 gulp.task("clean:build", function () {
   return del.sync([
-    build_path
+    build_path,
   ]);
 });
 
 // we"re building js for ff
 gulp.task("build:process:js", function() {
   return gulp.src([
-    "./src/**/*.js"
+    "./src/**/*.js",
   ])
   .pipe(babel())
   .on("error", console.error.bind(console))
@@ -33,7 +35,7 @@ gulp.task("build:process:js", function() {
 // here we just copy it
 gulp.task("build:process:css", function() {
   return gulp.src([
-    "./src/**/*.css"
+    "./src/**/*.css",
   ])
   .on("error", console.error.bind(console))
   .pipe(gulp.dest(build_path));

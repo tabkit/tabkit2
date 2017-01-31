@@ -8,6 +8,8 @@ declare var gBrowser: Object;
 declare var BrowserSearch: Object;
 // https://dxr.mozilla.org/comm-esr45/source/mozilla/browser/components/places/content/placesOverlay.xul#31
 declare var PlacesUIUtils: Object;
+// https://dxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#134
+declare var gPrefService: Object;
 
 // Firefox 38 only...
 // Missing since FF 45

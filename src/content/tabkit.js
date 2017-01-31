@@ -35,6 +35,28 @@
  * n.b. If you edit this in SciTE the //{ and //} cause the code to fold nicely.
  */
 
+/*
+ * Too tiring to "fix" this
+*/
+/* eslint strict: ["off"] */
+/*
+ * Too tiring to "fix" this
+*/
+/* eslint vars-on-top: ["off"] */
+/*
+ * Since flow is already checking undefined vars-on-top
+ * There is no need to check again with eslint
+*/
+/* eslint no-undef: ["off"] */
+
+/* Temporarily ignore these rules otherwise too many warnings */
+/* eslint no-redeclare: ["off"] */
+/* eslint block-scoped-var: ["off"] */
+/* eslint quotes: ["off"] */
+/* eslint no-param-reassign: ["off"] */
+/* eslint comma-dangle: ["off"] */
+/* eslint key-spacing: ["off"] */
+
 (function (window) {
   window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide our stuff in
 
@@ -55,8 +77,6 @@
     const TAB_MIN_WIDTH = 50;
 
 
-    const { XPCOMUtils } = Cu.import("resource://gre/modules/XPCOMUtils.jsm", {});
-    const { Promise } = Cu.import("resource://gre/modules/Promise.jsm", {});
     const { Preferences } = Cu.import("resource://gre/modules/Preferences.jsm", {});
     const { RecentWindow } = Cu.import("resource:///modules/RecentWindow.jsm", {});
     // FF 45.x only
@@ -79,22 +99,16 @@
   //|##########################
 
     // Make sure we can use gPrefService from now on (even if this isn't a browser window!)
-    if (typeof gPrefService == "undefined" || !gPrefService)
-      var gPrefService = Cc["@mozilla.org/preferences-service;1"].
+    if (typeof gPrefService === "undefined" || gPrefService == null)
+      gPrefService = Cc["@mozilla.org/preferences-service;1"].
                getService(Ci.nsIPrefBranch);
 
     /// Private globals:
     var _console = Cc["@mozilla.org/consoleservice;1"]
           .getService(Ci.nsIConsoleService);
 
-    var _ds = Cc["@mozilla.org/file/directory_service;1"]
-          .getService(Ci.nsIProperties);
-
     var _ios = Cc["@mozilla.org/network/io-service;1"]
           .getService(Ci.nsIIOService);
-
-    var _os = Cc["@mozilla.org/observer-service;1"]
-          .getService(Ci.nsIObserverService);
 
     var _prefs = Cc["@mozilla.org/preferences-service;1"]
            .getService(Ci.nsIPrefService)
@@ -127,18 +141,19 @@
     const nsTransferable = Components.Constructor("@mozilla.org/widget/transferable;1", "nsITransferable");
     // Create a wrapper to construct an nsITransferable instance and set its source to the given window, when necessary
     function Transferable(source) {
-        var res = nsTransferable();
-        if ("init" in res) {
-            // When passed a Window object, find a suitable privacy context for it.
-            if (source instanceof Ci.nsIDOMWindow)
-                // Note: in Gecko versions >16, you can import the PrivateBrowsingUtils.jsm module
-                // and use PrivateBrowsingUtils.privacyContextFromWindow(sourceWindow) instead
-                source = source.QueryInterface(Ci.nsIInterfaceRequestor)
-                               .getInterface(Ci.nsIWebNavigation);
+      var res = nsTransferable();
+      var final_source = source;
+      if ("init" in res) {
+        // When passed a Window object, find a suitable privacy context for it.
+        if (final_source instanceof Ci.nsIDOMWindow)
+          // Note: in Gecko versions >16, you can import the PrivateBrowsingUtils.jsm module
+          // and use PrivateBrowsingUtils.privacyContextFromWindow(sourceWindow) instead
+          final_source = final_source.QueryInterface(Ci.nsIInterfaceRequestor)
+                         .getInterface(Ci.nsIWebNavigation);
 
-            res.init(source);
-        }
-        return res;
+        res.init(final_source);
+      }
+      return res;
     }
 
   //}##########################
@@ -157,12 +172,13 @@
     this.logs = {
       dump: [],
       log: [],
-      debug: []
+      debug: [],
     };
 
     // For errors or warnings, with automatic line numbers, call stack, etc.
     this.dump = function dump(error, actualException) {
       try {
+        var stack;
         if (_prefs.getBoolPref("debug")) {
           var scriptError = Cc["@mozilla.org/scripterror;1"].
                     createInstance(Ci.nsIScriptError);
@@ -171,10 +187,10 @@
             actualException = error;
           var haveException = actualException ? true : false;
           if (haveException && actualException.stack) {
-            var stack = actualException.stack;
+            stack = actualException.stack;
           }
           else {
-            var stack = new Error().stack; // Get call stack (could use Components.stack.caller instead)
+            stack = new Error().stack; // Get call stack (could use Components.stack.caller instead)
             stack = stack.substring(stack.indexOf("\n", stack.indexOf("\n")+1)+1); // Remove the two lines due to calling this
           }
           var message = 'TK Error: "' + error + '"\nat:\u00A0' + stack.replace("\n@:0", "").replace(/\n/g, "\n    "); // \u00A0 is a non-breaking space
@@ -193,6 +209,7 @@
         }
       }
       catch (ex) {
+        // Do nothing
       }
     };
 
@@ -206,6 +223,7 @@
         }
       }
       catch (ex) {
+        // Do nothing
       }
     };
 
@@ -219,6 +237,7 @@
         }
       }
       catch (ex) {
+        // Do nothing
       }
     };
 
@@ -308,12 +327,12 @@
     this.addDelayedEventListener = function addDelayedEventListener(target, eventType, listener) {
       if (typeof listener == "object") {
         target.addEventListener(eventType, function __delayedEventListener(event) {
-          window.setTimeout(function(listener) { listener.handleEvent(event); }, 0, listener);
+          window.setTimeout(function(listener2) { listener2.handleEvent(event); }, 0, listener);
         }, false);
       }
       else {
         target.addEventListener(eventType, function __delayedEventListener(event) {
-          window.setTimeout(function(listener) { listener(event); }, 0, listener);
+          window.setTimeout(function(listener2) { listener2(event); }, 0, listener);
         }, false);
       }
     };
@@ -568,7 +587,7 @@
 
     this.UAStyleSheets = [ "chrome://tabkit/content/ua.css" ];
 
-    this.preInitUAStyleSheets = function preInitUAStyleSheets(event) {
+    this.preInitUAStyleSheets = function preInitUAStyleSheets(_event) {
       // [Fx3only] it seems
       var sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
       var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
@@ -621,13 +640,11 @@
 
     /// Private Globals:
     var _tabContainer;
-    //var _tabstrip;
-    var _tabInnerBox;
     var _tabs;
     var _tabBar;
 
     /// Initialisation:
-    this.preInitShortcuts = function preInitShortcuts(event) {
+    this.preInitShortcuts = function preInitShortcuts(_event) {
       //tk.assert('window.location == "chrome://browser/content/browser.xul"', function(e) eval(e), "preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
       if(window.location != "chrome://browser/content/browser.xul")
         tk.dump("preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
@@ -639,8 +656,6 @@
         tk.dump("gBrowser must not be null after preInitShortcuts!");
 
       _tabContainer = gBrowser.tabContainer;
-      //_tabstrip = _tabContainer.mTabstrip;
-      _tabInnerBox = document.getAnonymousElementByAttribute(_tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox");
       _tabs = gBrowser.tabs;
       _tabBar = document.getElementById("TabsToolbar");
     };
@@ -656,7 +671,7 @@
     var _localPrefListeners = {};
 
     /// Initialisation:
-    this.preInitPrefsObservers = function preInitPrefsObservers(event) {
+    this.preInitPrefsObservers = function preInitPrefsObservers(_event) {
       // Make sure we can use addObserver on this
       gPrefService.QueryInterface(Ci.nsIPrefBranch);
 
@@ -692,7 +707,7 @@
             this.listeners.forEach(function(listener) {
               listener(aData);
             });
-          }
+          },
         };
 
         gPrefService.addObserver(prefString, _globalPrefObservers[prefString], false);
@@ -721,15 +736,15 @@
     this.TKData.getDataWithKey = function(obj, key) {
       if (obj === null || typeof obj === "undefined") {
         tk.dump("obj is blank");
-        return {status: "failed", data: undefined};
+        return {status: "failed", data: null};
       }
       if (typeof key !== "string") {
         tk.dump("key is NOT a string");
-        return {status: "failed", data: undefined};
+        return {status: "failed", data: null};
       }
 
       if (!(TK_DATA_KEY in obj)) {
-      return {status: "success", data: undefined};
+        return {status: "success", data: null};
       }
 
       let tk_data = obj[TK_DATA_KEY];
@@ -737,11 +752,11 @@
         tk.dump("obj." + TK_DATA_KEY + " is NOT an object");
         // No cleaning operation here, since this method is for reading only
 
-        return {status: "failed", data: undefined};
+        return {status: "failed", data: null};
       }
 
       if (!(key in tk_data)) {
-        return {status: "success", data: undefined};
+        return {status: "success", data: null};
       }
 
       // This can still be `null` or `undefined`
@@ -785,18 +800,18 @@
     this.TKData.removeDataWithKey = function(obj, key) {
       if (obj === null || typeof obj === "undefined") {
         tk.dump("obj is blank");
-        return {status: "failed", data: undefined};
+        return {status: "failed", data: null};
       }
       if (typeof key !== "string") {
         tk.dump("key is NOT a string");
-        return {status: "failed", data: undefined};
+        return {status: "failed", data: null};
       }
       // We don't check data
       // Since we could intentionally set the data to `null` or even `undefined`
 
       // It's normal that there is no property in the object yet
       if (!(TK_DATA_KEY in obj)) {
-        return {status: "success", data: undefined};
+        return {status: "success", data: null};
       }
 
       let tk_data = obj[TK_DATA_KEY];
@@ -805,13 +820,13 @@
         tk.debug("Resetting obj." + TK_DATA_KEY + " to an object");
         obj[TK_DATA_KEY] = {};
 
-        return {status: "failed", data: undefined};
+        return {status: "failed", data: null};
       }
 
       // This can still be `null` or `undefined`
       return {
         status: "success",
-        data: tk_data[key]
+        data: tk_data[key],
       };
     };
 
@@ -822,7 +837,7 @@
     this.mapPrefToAttribute = function mapPrefToAttribute(prefName, test, node, attributeName) {
       var listener = function() {
         var value = test(prefName);
-        if (value !== undefined) {
+        if (value != null) {
           node.setAttribute(attributeName, value);
         }
         else {
@@ -837,7 +852,7 @@
     };
 
     this.mapBoolPrefToAttribute = function mapBoolPrefToAttribute(prefName, node, attributeName) {
-      tk.mapPrefToAttribute(prefName, function() { return _prefs.getBoolPref(prefName) ? "true" : undefined; }, node, attributeName);
+      tk.mapPrefToAttribute(prefName, function() { return _prefs.getBoolPref(prefName) ? "true" : null; }, node, attributeName);
     };
 
   //}##########################
@@ -855,20 +870,20 @@
       lastViewed: "lastViewedKey",  // == Visual Studio: last used tabs to far left (except they go to the right for consistency :/)
       origin:  "possibleparent", // == Tabs Open Relative [n.b. possibleparent is _not_ a key, it is special cased]
       title:    "label",
-      uri:    "uriKey"
+      uri:    "uriKey",
     };
 
     this.Groupings = {
       none:    "",
       opener:  "openerGroup", // Can be internally sorted by origin
-      domain:  "uriGroup"   // Can be internally sorted by uri
+      domain:  "uriGroup",   // Can be internally sorted by uri
     };
 
     this.RelativePositions = {
       left:        1,
       right:        2,
       rightOfRecent:    3,    // Right of consecutive tabs sharing a possibleparent marked recent; all recent tabs are reset on TabSelect
-      rightOfConsecutive: 4    // Right of consecutive tabs sharing a possibleparent
+      rightOfConsecutive: 4,    // Right of consecutive tabs sharing a possibleparent
     };
 
     // Sort keys in here will have larger items sorted to the top/left of the tabbar
@@ -891,7 +906,7 @@
     this.__defineGetter__("activeSort", function __get_activeSort() {
       var sortName = _prefs.getCharPref("lastActiveSort");
 
-      if (!sortName in tk.Sorts) {
+      if (!(sortName in tk.Sorts)) {
         sortName = "creation";
       }
 
@@ -910,7 +925,7 @@
     this.__defineGetter__("activeGrouping", function __get_activeGrouping() {
       var groupingName = _prefs.getCharPref("lastActiveGrouping");
 
-      if (!groupingName in tk.Groupings) {
+      if (!(groupingName in tk.Groupings)) {
         groupingName = "none";
       }
 
@@ -928,8 +943,8 @@
 
     this.__defineGetter__("openRelativePosition", function __get_openRelativePosition() {
       var positionName = _prefs.getCharPref("openRelativePosition");
-        if (!positionName in tk.RelativePositions)
-          positionName = "rightOfRecent";
+      if (!(positionName in tk.RelativePositions))
+        positionName = "rightOfRecent";
       return positionName;
     });
     this.__defineSetter__("openRelativePosition", function __set_openRelativePosition(positionName) {
@@ -972,7 +987,7 @@
 
 
     /// Initialisation:
-    this.initSortingAndGrouping = function initSortingAndGrouping(event) {
+    this.initSortingAndGrouping = function initSortingAndGrouping(_event) {
 
       tk.detectTheme();
 
@@ -1014,7 +1029,7 @@
 
       // Bool value and attribute existence are inversed
       tk.mapPrefToAttribute("colorTabNotLabel", function() {
-        return _prefs.getBoolPref("colorTabNotLabel") ? undefined : "true";
+        return _prefs.getBoolPref("colorTabNotLabel") ? null : "true";
       }, gBrowser.tabContainer, "tabkit-color-label-not-tab");
 
       // Set attributes for tabs that opened before we were able to register our listeners (in particular the initial xul:tab never fires a TabOpen event, and may never load either if it remains blank, but sometimes other tabs load first too)
@@ -1050,7 +1065,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.faviconize.quickFav.dblclick = function(e) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> faviconize.quickFav.dblclick >>>");
           var tab = e.target;
@@ -1146,7 +1161,7 @@
       }
     };
 
-    this.postInitSortingAndGrouping = function postInitSortingAndGrouping(event) {
+    this.postInitSortingAndGrouping = function postInitSortingAndGrouping(_event) {
       // Persist Attributes
       if (_ss) {
         _ss.persistTabAttribute("tabid");
@@ -1183,13 +1198,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         BrowserSearch.loadSearchFromContext = function(terms) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> BrowserSearch.loadSearchFromContext >>>");
           let selected_tab_before_operation = gBrowser.selectedTab;
           tk.addingTab({
             added_tab_type: "unrelated",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           try {
             result = old_func.apply(this, [terms]);
@@ -1199,7 +1214,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "unrelated",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           tk.debug("<<< BrowserSearch.loadSearchFromContext <<<");
@@ -1223,13 +1238,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         BrowserSearch.loadAddEngines = function() {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> BrowserSearch.loadAddEngines >>>");
-          let selected_tab_before_operation = gBrowser.selectedTab
+          let selected_tab_before_operation = gBrowser.selectedTab;
           tk.addingTab({
             added_tab_type: "unrelated",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           try {
             result = old_func.apply(this, []);
@@ -1239,7 +1254,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "unrelated",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           tk.debug("<<< BrowserSearch.loadAddEngines <<<");
@@ -1261,13 +1276,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.gotoHistoryIndex = function(aEvent) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.gotoHistoryIndex >>>");
-          let selected_tab_before_operation = gBrowser.selectedTab
+          let selected_tab_before_operation = gBrowser.selectedTab;
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           try {
             result = old_func.apply(this, [aEvent]);
@@ -1277,7 +1292,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "related",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           tk.debug("<<< window.gotoHistoryIndex <<<");
@@ -1299,13 +1314,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.BrowserBack = function(aEvent) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.BrowserBack >>>");
-          let selected_tab_before_operation = gBrowser.selectedTab
+          let selected_tab_before_operation = gBrowser.selectedTab;
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           try {
             result = old_func.apply(this, [aEvent]);
@@ -1315,7 +1330,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "related",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           tk.debug("<<< window.BrowserBack <<<");
@@ -1337,13 +1352,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.BrowserForward = function(aEvent) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.BrowserForward >>>");
-          let selected_tab_before_operation = gBrowser.selectedTab
+          let selected_tab_before_operation = gBrowser.selectedTab;
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           try {
             result = old_func.apply(this, [aEvent]);
@@ -1353,7 +1368,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "related",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           tk.debug("<<< window.BrowserForward <<<");
@@ -1375,13 +1390,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.BrowserReloadOrDuplicate = function(aEvent) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.BrowserReloadOrDuplicate >>>");
-          let selected_tab_before_operation = gBrowser.selectedTab
+          let selected_tab_before_operation = gBrowser.selectedTab;
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           try {
             result = old_func.apply(this, [aEvent]);
@@ -1391,7 +1406,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "related",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           tk.debug("<<< window.BrowserReloadOrDuplicate <<<");
@@ -1413,13 +1428,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         BrowserSearch.loadSearch = function(searchText, useNewTab, purpose) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> BrowserSearch.loadSearch >>>");
-          let selected_tab_before_operation = gBrowser.selectedTab
+          let selected_tab_before_operation = gBrowser.selectedTab;
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           try {
             result = old_func.apply(this, [searchText, useNewTab, purpose]);
@@ -1429,7 +1444,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "related",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           tk.debug("<<< BrowserSearch.loadSearch <<<");
@@ -1459,12 +1474,12 @@
         // Function signature should be valid for FF 38.x & 45.x
         searchbar.handleSearchCommand = function(aEvent, aEngine, aForceNewTab) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> searchbar.handleSearchCommand >>>");
           tk.addingTab({
             added_tab_type: "unrelated",
-            parent_tab: gBrowser.selectedTab
+            parent_tab: gBrowser.selectedTab,
           });
           try {
             result = old_func.apply(this, [aEvent, aEngine, aForceNewTab]);
@@ -1473,7 +1488,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "unrelated"
+              added_tab_type: "unrelated",
             });
           }
           tk.debug("<<< searchbar.handleSearchCommand <<<");
@@ -1495,13 +1510,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.handleLinkClick = function(event, href, linkNode) {
           "use strict";
-          var result = undefined;
+          var result;
           var selected_tab_before_event_handling = gBrowser.selectedTab;
 
           tk.debug(">>> window.handleLinkClick >>>");
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab:     selected_tab_before_event_handling
+            parent_tab:     selected_tab_before_event_handling,
           });
           try {
             result = old_func.apply(this, [event, href, linkNode]);
@@ -1511,7 +1526,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: "related",
-              parent_tab:     selected_tab_before_event_handling
+              parent_tab:     selected_tab_before_event_handling,
             });
           }
           tk.debug("<<< window.handleLinkClick <<<");
@@ -1534,11 +1549,11 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.middleMousePaste = function(event) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.middleMousePaste >>>");
           tk.addingTab({
-            added_tab_type: "newtab"
+            added_tab_type: "newtab",
           });
           try {
             result = old_func.apply(this, [event]);
@@ -1547,7 +1562,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "newtab"
+              added_tab_type: "newtab",
             });
           }
           tk.debug("<<< window.middleMousePaste <<<");
@@ -1572,11 +1587,11 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.newTabButtonObserver.onDrop = function(event) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.newTabButtonObserver.onDrop >>>");
           tk.addingTab({
-            added_tab_type: "newtab"
+            added_tab_type: "newtab",
           });
           try {
             result = old_func.apply(this, [event]);
@@ -1585,7 +1600,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "newtab"
+              added_tab_type: "newtab",
             });
           }
           tk.debug("<<< window.newTabButtonObserver.onDrop <<<");
@@ -1608,7 +1623,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.BrowserOpenTab = function(optional_options) {
           "use strict";
-          var result = undefined;
+          var result;
           // Default value
           var added_tab_type = "newtab";
           if (typeof optional_options === "object" &&
@@ -1633,7 +1648,7 @@
           tk.debug(">>> window.BrowserOpenTab >>>");
           tk.addingTab({
             added_tab_type: added_tab_type,
-            parent_tab:     parent_tab
+            parent_tab:     parent_tab,
           });
           try {
             result = old_func.apply(this, []);
@@ -1666,7 +1681,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.delayedOpenTab = function(aUrl, aReferrer, aCharset, aPostData, aAllowThirdPartyFixup) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.delayedOpenTab >>>");
           tk.addingTab({
@@ -1704,11 +1719,12 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.gURLBar.handleCommand = function(aTriggeringEvent) {
           "use strict";
-          var result = undefined;
+          var result;
+          var finalTriggeringEvent = aTriggeringEvent;
 
           tk.debug(">>> window.gURLBar.handleCommand >>>");
           tk.addingTab({
-            added_tab_type: "newtab"
+            added_tab_type: "newtab",
           });
           try {
             // Open new tab for address bar by default if preference set
@@ -1716,7 +1732,7 @@
               if (aTriggeringEvent instanceof KeyboardEvent) {
                 // Creates a new event object from the old one with some properties modified
                 // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/KeyboardEvent
-                aTriggeringEvent = new KeyboardEvent(aTriggeringEvent.type, {
+                finalTriggeringEvent = new KeyboardEvent(aTriggeringEvent.type, {
                   key:          aTriggeringEvent.key,
                   code:         aTriggeringEvent.code,
                   location:     aTriggeringEvent.location,
@@ -1748,7 +1764,7 @@
               else if (aTriggeringEvent instanceof MouseEvent) {
                 // Creates a new event object from the old one with some properties modified
                 // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/MouseEvent
-                aTriggeringEvent = new MouseEvent(aTriggeringEvent.type, {
+                finalTriggeringEvent = new MouseEvent(aTriggeringEvent.type, {
                   screenX:        aTriggeringEvent.screenX,
                   screenY:        aTriggeringEvent.screenY,
                   clientX:        aTriggeringEvent.clientX,
@@ -1777,13 +1793,13 @@
                 });
               }
             }
-            result = old_func.apply(this, [aTriggeringEvent]);
+            result = old_func.apply(this, [finalTriggeringEvent]);
           }
           finally {
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "newtab"
+              added_tab_type: "newtab",
             });
           }
           tk.debug("<<< window.gURLBar.handleCommand <<<");
@@ -1808,7 +1824,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.gBrowser._endRemoveTab = function(aTab) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.gBrowser._endRemoveTab >>>");
           tk.addingTab({
@@ -1848,7 +1864,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.nsContextMenu.prototype.openLinkInTab = function() {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.nsContextMenu.prototype.openLinkInTab >>>");
           tk.addingTab({
@@ -1888,7 +1904,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.nsContextMenu.prototype.openFrameInTab = function() {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.nsContextMenu.prototype.openFrameInTab >>>");
           tk.addingTab({
@@ -1928,7 +1944,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.nsContextMenu.prototype.viewBGImage = function(e) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.nsContextMenu.prototype.viewBGImage >>>");
           tk.addingTab({
@@ -1968,7 +1984,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.nsContextMenu.prototype.addDictionaries = function() {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.nsContextMenu.prototype.addDictionaries >>>");
           tk.addingTab({
@@ -2008,7 +2024,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.nsContextMenu.prototype.viewMedia = function(e) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.nsContextMenu.prototype.viewMedia >>>");
           tk.addingTab({
@@ -2049,13 +2065,13 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.nsBrowserAccess.prototype.openURI = function(aURI, aOpener, aWhere, aContext) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> window.nsBrowserAccess.prototype.openURI >>>");
           var added_tab_type = aContext == Ci.nsIBrowserDOMWindow.OPEN_EXTERNAL ? "unrelated" : "related";
           tk.addingTab({
             added_tab_type: added_tab_type,
-            parent_tab: gBrowser.selectedTab
+            parent_tab: gBrowser.selectedTab,
           });
           try {
             result = old_func.apply(this, [aURI, aOpener, aWhere, aContext]);
@@ -2064,7 +2080,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: added_tab_type
+              added_tab_type: added_tab_type,
             });
           }
           tk.debug("<<< window.nsBrowserAccess.prototype.openURI <<<");
@@ -2090,7 +2106,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         gBrowser.loadTabs = function(aURIs, aLoadInBackground, aReplace) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> gBrowser.loadTabs >>>");
           tk.addingTabs({
@@ -2124,11 +2140,10 @@
           return;
         }
 
-        var old_func = gBrowser.tabContainer._animateTabMove;
         // Function signature should be valid for FF 38.x & 45.x
-        gBrowser.tabContainer._animateTabMove = function(event) {
+        gBrowser.tabContainer._animateTabMove = function(__event) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> gBrowser.loadTabs >>>");
           this._handleTabSelect();
@@ -2137,7 +2152,7 @@
           return result;
         };
       })();
-    }
+    };
     this.postInitListeners.push(this.postInitSortingAndGrouping);
 
     /// More globals (for group by opener):
@@ -2150,7 +2165,7 @@
     this.addedTabs       = [];
 
     /// Method Hooks (for group by opener):
-    this.preInitSortingAndGroupingMethodHooks = function preInitSortingAndGroupingMethodHooks(event) {
+    this.preInitSortingAndGroupingMethodHooks = function preInitSortingAndGroupingMethodHooks(_event) {
       (function() {
         "use strict";
 
@@ -2161,10 +2176,10 @@
 
         var old_func = gBrowser.addTab;
         // Function signature should be valid for FF 38.x & 45.x
-        gBrowser.addTab = function(aURI, aReferrerURI, aCharset, aPostData, aOwner, aAllowThirdPartyFixup) {
+        gBrowser.addTab = function(_aURI, _aReferrerURI, _aCharset, _aPostData, _aOwner, _aAllowThirdPartyFixup) {
           "use strict";
-          var result = undefined;
-          var tab = undefined;
+          var result;
+          var tab;
           var aSkipAnimation = false;
 
           tk.debug(">>> gBrowser.addTab >>>");
@@ -2244,10 +2259,6 @@
 
     // See globalPreInitSortingAndGroupingMethodHooks in tabkit-global.js
 
-    this.postInitSortingAndGroupingMethodHooks = function postInitSortingAndGroupingMethodHooks(event) {
-    };
-    this.postInitListeners.push(this.postInitSortingAndGroupingMethodHooks);
-
     /// Methods dealing with new tabs:
     this.addingTab = function addingTab(type_or_options, parent, dontMoveNextTab) {
       try {
@@ -2275,11 +2286,11 @@
         }
         else {
           tk.nextType = type_or_options;
-        tk.isBookmarkGroup = false;
-        tk.nextParent = parent != undefined ? parent : gBrowser.selectedTab;
+          tk.isBookmarkGroup = false;
+          tk.nextParent = parent != null ? parent : gBrowser.selectedTab;
           // Will convert to `bool`
-        tk.dontMoveNextTab = dontMoveNextTab ? true : false;
-      }
+          tk.dontMoveNextTab = dontMoveNextTab ? true : false;
+        }
       }
       catch (ex) {
         tk.dump(ex);
@@ -2360,7 +2371,6 @@
 
           // Get pid, set possibleparent
           var pid = parent ? tk.getTabId(parent) : null;
-          var tid = tk.getTabId(tab);
           if (pid != null) {
             tab.setAttribute("possibleparent", pid);
           }
@@ -2869,7 +2879,6 @@
         var tab = _tabs[index];
 
         var uriKey = tab.getAttribute(tk.Sorts.uri);
-        var uriGroup = tab.getAttribute(tk.Groupings.domain);
 
         tk.setTabUriKey(tab);
 
@@ -2930,7 +2939,7 @@
       // Delay __sortgroup_onTabRestored timers until sortgroup_onSSTabRestoring stops getting called
       _sortgroup_onSSTabRestoring_timers.forEach(function(lt) {
         window.clearTimeout(lt.timeout);
-        lt.timeout = window.setTimeout(function(lt) {lt.listener();}, 100, lt);
+        lt.timeout = window.setTimeout(function(lt2) {lt2.listener();}, 100, lt);
       });
 
       // TODO=P4: GCODE Check tabs are restored correctly (and test groupcollapsed and hidden)
@@ -3017,13 +3026,7 @@
               // This tab is where the group will congregate, so make sure it's not in the middle of a group!
               tk.keepGroupsTogether();
 
-              //~ if (tab.hasAttribute("groupcollapsed")) {
-                // It is the only "done" tab so far. // TODO=P4: TJS? If there is already a groupcollapsed but not hidden tab being restored show that instead.
-                tk.tabSetHidden(tab, false); // visibility of a tab
-              //~ }
-              //~ else {
-                //~ tk.tabSetHidden(tab, false); visibility of a tab
-              //~ }
+              tk.tabSetHidden(tab, false); // visibility of a tab
             }
           }
         }
@@ -3043,7 +3046,10 @@
 
         delete tab.groupNotChecked;
       });
-      _sortgroup_onSSTabRestoring_timers.push({listener:listener, timeout:window.setTimeout(function(listener) {listener();}, 100, listener)}); // TODO=P5: TJS Tweak timeout - lower values cause less jumping, but may slow down restoring an entire window
+      _sortgroup_onSSTabRestoring_timers.push({
+        listener: listener,
+        timeout:  window.setTimeout(function(listener2) {listener2();}, 100, listener),
+      }); // TODO=P5: TJS Tweak timeout - lower values cause less jumping, but may slow down restoring an entire window
     };
 
     this.sortgroup_onTabMoved = function sortgroup_onTabMoved(event) {
@@ -3103,12 +3109,12 @@
 
       if (tab.hasAttribute("groupcollapsed") && !tab.hidden) { // visibility of a tab
         // Make sure collapsed groups don't get totally hidden!
-        window.setTimeout(function __uncollapseTab(gid, next, prev) {
-          if (gBrowser.selectedTab.getAttribute("groupid") != gid) {
-            if (next && next.getAttribute("groupid") == gid)
-              tk.tabSetHidden(next, false); // visibility of a tab
-            else if (prev && prev.getAttribute("groupid") == gid) // Almost always true
-              tk.tabSetHidden(prev, false); // visibility of a tab
+        window.setTimeout(function __uncollapseTab(gid2, next2, prev2) {
+          if (gBrowser.selectedTab.getAttribute("groupid") != gid2) {
+            if (next2 && next2.getAttribute("groupid") == gid2)
+              tk.tabSetHidden(next2, false); // visibility of a tab
+            else if (prev2 && prev2.getAttribute("groupid") == gid2) // Almost always true
+              tk.tabSetHidden(prev2, false); // visibility of a tab
           }
         }, 0, gid, tab.nextSibling, tab.previousSibling);
 
@@ -3236,19 +3242,19 @@
 
       // Update radio buttons & checkboxes (esp. for new windows)
       switch (tk.newTabPosition == 2 ? tk.activeSort : "none") {
-        case "uri": (document.getElementById("menu_tabkit-sortgroup-sortByUri"): any).setAttribute("checked", "true"); break;
-        case "lastLoaded": (document.getElementById("menu_tabkit-sortgroup-sortByLastLoaded"): any).setAttribute("checked", "true"); break;
-        case "lastViewed": (document.getElementById("menu_tabkit-sortgroup-sortByLastViewed"): any).setAttribute("checked", "true"); break;
-        case "creation": (document.getElementById("menu_tabkit-sortgroup-sortByCreation"): any).setAttribute("checked", "true"); break;
-        case "origin": (document.getElementById("menu_tabkit-sortgroup-sortByOrigin"): any).setAttribute("checked", "true"); break;
-        case "title": (document.getElementById("menu_tabkit-sortgroup-sortByTitle"): any).setAttribute("checked", "true"); break;
-        default: // Clear all radio buttons
-          (document.getElementById("menu_tabkit-sortgroup-sortByUri"): any).removeAttribute("checked");
-          (document.getElementById("menu_tabkit-sortgroup-sortByLastLoaded"): any).removeAttribute("checked");
-          (document.getElementById("menu_tabkit-sortgroup-sortByLastViewed"): any).removeAttribute("checked");
-          (document.getElementById("menu_tabkit-sortgroup-sortByCreation"): any).removeAttribute("checked");
-          (document.getElementById("menu_tabkit-sortgroup-sortByOrigin"): any).removeAttribute("checked");
-          (document.getElementById("menu_tabkit-sortgroup-sortByTitle"): any).removeAttribute("checked");
+      case "uri": (document.getElementById("menu_tabkit-sortgroup-sortByUri"): any).setAttribute("checked", "true"); break;
+      case "lastLoaded": (document.getElementById("menu_tabkit-sortgroup-sortByLastLoaded"): any).setAttribute("checked", "true"); break;
+      case "lastViewed": (document.getElementById("menu_tabkit-sortgroup-sortByLastViewed"): any).setAttribute("checked", "true"); break;
+      case "creation": (document.getElementById("menu_tabkit-sortgroup-sortByCreation"): any).setAttribute("checked", "true"); break;
+      case "origin": (document.getElementById("menu_tabkit-sortgroup-sortByOrigin"): any).setAttribute("checked", "true"); break;
+      case "title": (document.getElementById("menu_tabkit-sortgroup-sortByTitle"): any).setAttribute("checked", "true"); break;
+      default: // Clear all radio buttons
+        (document.getElementById("menu_tabkit-sortgroup-sortByUri"): any).removeAttribute("checked");
+        (document.getElementById("menu_tabkit-sortgroup-sortByLastLoaded"): any).removeAttribute("checked");
+        (document.getElementById("menu_tabkit-sortgroup-sortByLastViewed"): any).removeAttribute("checked");
+        (document.getElementById("menu_tabkit-sortgroup-sortByCreation"): any).removeAttribute("checked");
+        (document.getElementById("menu_tabkit-sortgroup-sortByOrigin"): any).removeAttribute("checked");
+        (document.getElementById("menu_tabkit-sortgroup-sortByTitle"): any).removeAttribute("checked");
       }
       switch (tk.autoGroupNewTabs ? tk.activeGrouping : "none") {
       case "domain":
@@ -3262,9 +3268,9 @@
         (document.getElementById("menu_tabkit-sortgroup-groupByOpener"): any).removeAttribute("checked");
       }
       switch (tk.newTabPosition) {
-        default: /*case 0:*/ (document.getElementById("menu_tabkit-sortgroup-newtabs-farRight"): any).setAttribute("checked", "true"); break;
-        case 1: (document.getElementById("menu_tabkit-sortgroup-newtabs-nextToCurrent"): any).setAttribute("checked", "true"); break;
-        case 2: (document.getElementById("menu_tabkit-sortgroup-newtabs-lastSort"): any).setAttribute("checked", "true");
+      default: /*case 0:*/ (document.getElementById("menu_tabkit-sortgroup-newtabs-farRight"): any).setAttribute("checked", "true"); break;
+      case 1: (document.getElementById("menu_tabkit-sortgroup-newtabs-nextToCurrent"): any).setAttribute("checked", "true"); break;
+      case 2: (document.getElementById("menu_tabkit-sortgroup-newtabs-lastSort"): any).setAttribute("checked", "true");
       }
       if (tk.autoGroupNewTabs)
         (document.getElementById("menu_tabkit-sortgroup-newtabs-autoGroup"): any).setAttribute("checked", "true");
@@ -3295,7 +3301,7 @@
 
 
     // Tab close focus direction
-    this.preInitBlurTabModifications = function preInitBlurTabModifications(event) {
+    this.preInitBlurTabModifications = function preInitBlurTabModifications(_event) {
       (function() {
         "use strict";
 
@@ -3309,7 +3315,7 @@
         gBrowser._blurTab = function(aTab) {
           "use strict";
 
-          var result = undefined;
+          var result;
 
           tk.debug(">>> gBrowser._blurTab >>>");
           // This copied from the original method
@@ -3348,7 +3354,7 @@
       }
     };
 
-    this.blurTab = function blurTab(tab) { // [Fx3.5b4+]
+    this.blurTab = function blurTab(_tab) { // [Fx3.5b4+]
       if (tk.chosenNextTab) {
         gBrowser.selectedTab = tk.chosenNextTab;
         tk.chosenNextTab = null;
@@ -3806,8 +3812,9 @@
         var tab = tabsToClose[i];
         if (tab != contextTab) // No need to set parent for contentTab
           tab.setAttribute("possibleparent", possibleparent);
-          tab.treeLevel = contextTab.treeLevel || 0;
-          tab.style.marginLeft = contextTab.style.marginLeft || "";
+
+        tab.treeLevel = contextTab.treeLevel || 0;
+        tab.style.marginLeft = contextTab.style.marginLeft || "";
       }
     };
     this.bookmarkGroup = function bookmarkGroup(contextTab) {
@@ -3824,18 +3831,18 @@
       if ("showBookmarkDialog" in PlacesUIUtils) {
         // Based on PlacesCommandHook.bookmarkCurrentPages
         var aURIList = group.map(function __getUri(tab) {
-            return tab.linkedBrowser.webNavigation.currentURI;
+          return tab.linkedBrowser.webNavigation.currentURI;
         });
         //Since Firefox removed the API
         //Got to do it ourselves (copied from old version of Firefox (showMinimalAddMultiBookmarkUI)
         //Comment: Why they remove the API?
         if (aURIList.length == 0)
-          throw("bookmarkGroup expects a list of nsIURI objects");
+          throw(new Error("bookmarkGroup expects a list of nsIURI objects"));
         var info = {
           action: "add",
           type: "folder",
           hiddenRows: ["description"],
-          URIList: aURIList
+          URIList: aURIList,
         };
         PlacesUIUtils.showBookmarkDialog(info, window.top, true);
       }
@@ -3862,7 +3869,7 @@
         tk.colorizeTab(tab);
       });
     };
-    this.reColorAllGroups = function reColorAllGroups(contextTab) {
+    this.reColorAllGroups = function reColorAllGroups(_contextTab) {
       // Delete all known colors first, then regenerate again
       var groups = tk.getAllGroups();
 
@@ -3890,11 +3897,11 @@
 
       // Based on PlacesCommandHook.bookmarkCurrentPages
       var aURIList = group.map(function __getUri(tab) {
-          return tab.linkedBrowser.webNavigation.currentURI;
+        return tab.linkedBrowser.webNavigation.currentURI;
       });
 
       if (aURIList.length == 0)
-        throw("copyGroupURIs expects a list of nsIURI objects");
+        throw(new Error("copyGroupURIs expects a list of nsIURI objects"));
 
       let urisStringToCopy = '';
       aURIList.forEach(function(uri) {
@@ -4068,7 +4075,7 @@
         // I shall use about:config as an example
 
         var uriKey = uri.scheme + "/" + uri.path; // e.g. /about/config
-        uriGroup = uri.asciiSpec.replace(/^[^:]*\:\/*([^\/]+).*$/, "$1"); // e.g. config // this could probably be improved on
+        uriGroup = uri.asciiSpec.replace(/^[^:]*:\/*([^/]+).*$/, "$1"); // e.g. config // this could probably be improved on
       }
       else {
         try { /*[Fx3only]*/
@@ -4134,7 +4141,7 @@
           */
 
           var uriKey = key + "/" + uri.scheme + "/" + uri.path;
-          uriGroup = parts[3] || parts[6] || parts[7] || uri.asciiSpec.replace(/^[^:]*\:\/*([^\/]+).*$/, "$1");
+          uriGroup = parts[3] || parts[6] || parts[7] || uri.asciiSpec.replace(/^[^:]*:\/*([^/]+).*$/, "$1");
         }
       }
 
@@ -4157,9 +4164,9 @@
 
         var old_func = gBrowser.addTab;
         // Function signature should be valid for FF 38.x & 45.x
-        gBrowser.addTab = function(aURI, aReferrerURI, aCharset, aPostData, aOwner, aAllowThirdPartyFixup) {
+        gBrowser.addTab = function(aURI, _aReferrerURI, _aCharset, _aPostData, _aOwner, _aAllowThirdPartyFixup) {
           // "use strict";
-          var result = undefined;
+          var result;
           var initialURI = aURI;
           var tab = null;
 
@@ -4444,10 +4451,10 @@
       group.forEach(function(tab) {
         var pp = tab.getAttribute("possibleparent");
         if (pp) {
-          for (var i = stack.length - 1; i >= 0; i--) {
-            if (stack[i] == pp) {
+          for (var j = stack.length - 1; j >= 0; j--) {
+            if (stack[j] == pp) {
               stack.push(tk.getTabId(tab));
-              tab.treeLevel = Math.min(i + 1, maxlevel); // For external use, e.g. dragging subtrees
+              tab.treeLevel = Math.min(j + 1, maxlevel); // For external use, e.g. dragging subtrees
               if (!groupcollapsed && subtreesEnabled) {
                 tab.style.setProperty("margin-left", (indent * tab.treeLevel) + "px", "important");
               }
@@ -4455,7 +4462,7 @@
             }
             stack.pop();
           }
-          if (i >= 0)
+          if (j >= 0)
             return;
         }
         tab.treeLevel = 0;
@@ -4561,7 +4568,7 @@
 
     this.allocateColor = function allocateColor(tab, ignoreSurroundingGroups) {
       if (ignoreSurroundingGroups == null) {
-        ignoreSurroundingGroups = false
+        ignoreSurroundingGroups = false;
       }
 
       var tabGroupID = tab.getAttribute("groupid");
@@ -4606,14 +4613,14 @@
         // Convert gids into colors
         var hues = [];
         var hueDistance = {};
-        gids.forEach(function(gid) {
-          var match = /\d+/.exec(tk.getWindowValue("knownColor:" + gid)); // Find first number
-          var hue = Number(match[0]);
-          hues.push(hue);
-          switch (gidDist[gid]) {
-            case 0: hueDistance[hue] = 60; break; // Neighbouring groups should be at least 60 apart in hue
-            case 1: hueDistance[hue] = 60; break; // Groups one group away from each other should also be 60 apart
-            case 2: hueDistance[hue] = 45;    // Groups two groups away from each other should be 45 apart
+        gids.forEach(function(gidInEach) {
+          var match = /\d+/.exec(tk.getWindowValue("knownColor:" + gidInEach)); // Find first number
+          var hueInEach = Number(match[0]);
+          hues.push(hueInEach);
+          switch (gidDist[gidInEach]) {
+          case 0: hueDistance[hueInEach] = 60; break; // Neighbouring groups should be at least 60 apart in hue
+          case 1: hueDistance[hueInEach] = 60; break; // Groups one group away from each other should also be 60 apart
+          case 2: hueDistance[hueInEach] = 45;    // Groups two groups away from each other should be 45 apart
           }
         });
 
@@ -4724,13 +4731,19 @@
           menuItem.style.backgroundImage = bgStyle.backgroundImage;
         }
         menuItem.style.MozAppearance = "none";
-        window.setTimeout(function __colorAllTabsMenuText(tab, menuItem) {
+        window.setTimeout(function __colorAllTabsMenuText(tabInTimeout, menuItemInTimeout) {
           try {
-            var menuText = document.getAnonymousElementByAttribute(menuItem, "class", "menu-iconic-text");
+            var menuText = document.getAnonymousElementByAttribute(menuItemInTimeout, "class", "menu-iconic-text");
             if (menuText == null) { return; }
             let style = ((menuText: any).style: any);
-            style.fontStyle = tab.hasAttribute("read") ? "normal" : "italic";
-            var fgStyle = window.getComputedStyle(document.getAnonymousElementByAttribute(tab, "class", "tab-text tab-label"), null);
+            style.fontStyle = tabInTimeout.hasAttribute("read") ? "normal" : "italic";
+            var fgStyle = window.getComputedStyle(
+              document.getAnonymousElementByAttribute(
+                tabInTimeout,
+                "class",
+                "tab-text tab-label",
+              ), null,
+            );
             style.setProperty("background-color", fgStyle.backgroundColor, "important");
             style.setProperty("color", fgStyle.color, "important");
           }
@@ -4744,7 +4757,7 @@
       }
     };
 
-    this.colorAllTabsMenu = function colorAllTabsMenu(event) {
+    this.colorAllTabsMenu = function colorAllTabsMenu(_event) {
       if (!gBrowser.mCurrentTab.mCorrespondingMenuitem)
         return;
       for (var i = 0; i < _tabs.length; i++) {
@@ -4805,9 +4818,9 @@
       for (var gid in newGroups) {
         var group = newGroups[gid];
         if (group.length > 1) {
-          group.forEach(function(tab) {
+          for (let tab in group) {
             tk.setGID(tab, gid);
-          });
+          }
 
           // Move all tabs to where the median positioned tab currently is // TODO=P4: TJS if tk.newTabPosition == 2 && tk.activeSort in tk.DateSorts move to most recent tab instead?
           var mi = group.length >> 1;
@@ -4823,8 +4836,8 @@
       if (groupingName == "domain") {
         if (_prefs.getBoolPref("autoSortDomainGroups")) {
           var groups = tk.getAllGroups();
-          groups.forEach(function(gid) {
-            if (gid.indexOf(":dG-") != -1)
+          groups.forEach(function(gidInGroup) {
+            if (gidInGroup.indexOf(":dG-") != -1)
               tk.sortTabsBy("uri", gid);
           });
         }
@@ -4844,7 +4857,7 @@
 
     // If gid is specified, assumes the group is already together (else it will be arbitrarily positioned)
     this.sortTabsBy = function sortTabsBy(sortName, gid) { // gid is optional
-      if (!sortName in tk.Sorts) {
+      if (!(sortName in tk.Sorts)) {
         tk.dump("sortTabsBy: Bad sortName: \"" + sortName + "\"");
         return;
       }
@@ -5013,7 +5026,7 @@
 
       if (!sortName)
         sortName = tk.activeSort;
-      if (!sortName in tk.Sorts || sortName == "origin") {
+      if (!(sortName in tk.Sorts) || sortName == "origin") {
         tk.dump("Cannot insert by \"" + sortName + "\"");
         return;
       }
@@ -5057,7 +5070,7 @@
         gBrowser.createTooltip = function(event) {
           "use strict";
 
-          var result = undefined;
+          var result;
           var tab = document.tooltipNode;
           // Logic copied from original function
           if (tab.localName != "tab") {
@@ -5405,7 +5418,7 @@
     };
 
     // this.chosenNewIndex = null;
-    this.preInitTabDragModifications = function preInitTabDragModifications(event) {
+    this.preInitTabDragModifications = function preInitTabDragModifications(_event) {
       gBrowser.tabContainer.addEventListener("dragover", function(event) {//for drop indicator
         var ind = this._tabDropIndicator.parentNode;
         // if (!this.hasAttribute("multirow")) {
@@ -5417,13 +5430,7 @@
 
         var newIndex = tk._getDropIndex(event);
         var targetTab = this.childNodes[newIndex < this.childNodes.length ? newIndex : newIndex - 1];
-        var ltr = getComputedStyle(this).direction == "ltr";
         var isVertical = tk.TabBar.Mode.getIsVerticalMode();
-
-        var position = isVertical ? "screenY" : "screenX";
-        var size = isVertical ? "height" : "width";
-        var start = isVertical ? "top" : "left";
-        var end = isVertical ? "bottom" : "right";
 
         //When dragging over the tab itself, targetTab is undefined, so should just exit here
         if (typeof targetTab == "undefined" || !targetTab) {
@@ -5453,11 +5460,11 @@
         event.stopPropagation();
       }, true);
 
-      gBrowser.tabContainer.addEventListener("dragexit", function(event) {
+      gBrowser.tabContainer.addEventListener("dragexit", function(__event) {
         this._tabDropIndicator.collapsed = true;
       }, true);
 
-      gBrowser.tabContainer.addEventListener("dragend", function(event) {
+      gBrowser.tabContainer.addEventListener("dragend", function(__event) {
         this._tabDropIndicator.collapsed = true;
       }, true);
 
@@ -5514,7 +5521,7 @@
       gBrowser.tabContainer.addEventListener("drop", tk._onDrop, true);
     };
     this.preInitListeners.push(this.preInitTabDragModifications);
-    this.postInitTabDragModifications = function postInitTabDragModifications(event) { // TODO=P4: TJS Test
+    this.postInitTabDragModifications = function postInitTabDragModifications(_event) { // TODO=P4: TJS Test
       // if ("_onDrop" in gBrowser) { // [Fx3.5+]
         // gBrowser.old_onDrop = gBrowser._onDrop;
         // gBrowser._onDrop = tk._onDrop;
@@ -5537,10 +5544,6 @@
         return;
 
       var isVertical = tk.TabBar.Mode.getIsVerticalMode();
-      var position = isVertical ? "screenY" : "screenX";
-      var size = isVertical ? "height" : "width";
-      var start = isVertical ? "top" : "left";
-      var end = isVertical ? "bottom" : "right";
 
       var resultIndex = 0;
       var targetPos = targetTab._tPos;
@@ -5562,7 +5565,7 @@
       }
 
       return resultIndex;
-    }
+    };
 
 
 
@@ -5665,7 +5668,7 @@
      * Tab Mix Plus - http://www.tidycms.com/ocean/extensions/Tab_Mix_Plus/TMPHelp2.pdf
      */
 
-    this.initProtectedTabs = function initProtectedTabs(event) {
+    this.initProtectedTabs = function initProtectedTabs(_event) {
       // Function called by removing tab
       // Prevent "protected" tabs to be closed
       // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#2017
@@ -5682,7 +5685,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         gBrowser.removeTab = function(aTab, aParams) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> gBrowser.removeTab >>>");
           if (tk.getTabIsProtected(aTab)) {
@@ -5707,7 +5710,7 @@
     };
     this.initListeners.push(this.initProtectedTabs);
 
-    this.postInitProtectedTabs = function postInitProtectedTabs(event) {
+    this.postInitProtectedTabs = function postInitProtectedTabs(_event) {
       // In firefox 15 session store module call must not be too early, reason unknown
       // Persist Attributes
       if (_ss)
@@ -5727,7 +5730,7 @@
       }
     };
 
-    this.protectedTabs_updateContextMenu = function protectedTabs_updateContextMenu(event) {
+    this.protectedTabs_updateContextMenu = function protectedTabs_updateContextMenu(_event) {
       var tab = gBrowser.mContextTab || gBrowser.selectedTab;
       var isProtected = tab.getAttribute("protected") == "true";
 
@@ -5792,7 +5795,7 @@
 
     // See globalPreInitNewTabsByDefault in tabkit-global.js
 
-    this.postInitNewTabsByDefault = function postInitNewTabsByDefault(event) {
+    this.postInitNewTabsByDefault = function postInitNewTabsByDefault(_event) {
       (function() {
         "use strict";
 
@@ -5809,7 +5812,7 @@
         }
         // Function signature should be valid for FF 38.x & 45.x
         window.PlacesUIUtils._openNodeIn = function(aNode, aWhere, aWindow, aPrivate=false) {
-          var result = undefined;
+          var result;
           // Logic copied from http://mxr.mozilla.org/mozilla-esr45/source/browser/components/places/PlacesUIUtils.jsm#744
           var browserWindow =
             aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser" ?
@@ -5860,7 +5863,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         window.PlacesUIUtils._openTabset = function(aItemsToOpen, aEvent, aWindow) {
           "use strict";
-          var result = undefined;
+          var result;
           // Logic copied from http://mxr.mozilla.org/mozilla-esr45/source/browser/components/places/PlacesUIUtils.jsm#744
           var browserWindow =
             aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser" ?
@@ -5932,9 +5935,7 @@
 
     /// Initialisation:
 
-    var tabWidthStyleSheet = null;  //for storing stylesheet for tab minWidth rule
-
-    this.initTabMinWidth = function initTabMinWidth(event) {
+    this.initTabMinWidth = function initTabMinWidth(_event) {
       tk.addGlobalPrefListener("extensions.tabkit.tabs.tabMinWidth", tk.resetTabMinWidth);
       var ss = document.styleSheets;
       for (let i = ss.length - 1; i >= 0; i--) {
@@ -5948,7 +5949,7 @@
 
     /// Pref Listener/method:
     // Note: this is also used by multi-row tabs
-    this.resetTabMinWidth = function resetTabMinWidth(pref) {
+    this.resetTabMinWidth = function resetTabMinWidth(_pref) {
       tk.setTabMinWidth(gPrefService.getIntPref("extensions.tabkit.tabs.tabMinWidth")); //Minimum minWidth of tab is 100, a built-in CSS rule
     };
 
@@ -5981,7 +5982,7 @@
     };
 
     /// Initialisation:
-    this.initTabbarPosition = function initTabbarPosition(event) {
+    this.initTabbarPosition = function initTabbarPosition(_event) {
       var tabs_toolbar = document.getElementById("TabsToolbar");
 
       tk.moveSidebar();
@@ -6031,14 +6032,14 @@
     this.TabBar.Callbacks = this.TabBar.Callbacks || {};
 
     /// Event listeners:
-    this.bug608589workaround = function bug608589workaround(event) {
+    this.bug608589workaround = function bug608589workaround(_event) {
       //As stated in bug 608589, if animation is enabled,
       // there is a chance the animation cannot finish and the tab will disappear but not closed(since waiting for animation)
       // I can still reproduce this problem up to firefox nightly 10
       // this workaround will stay here until a real fix is released
       if (gPrefService.getBoolPref("browser.tabs.animate"))
         gPrefService.setBoolPref("browser.tabs.animate",false);
-    }
+    };
     this.positionedTabbar_onTabOpen = function positionedTabbar_onTabOpen(event) {
       var tab = event.target;
       if (tk.TabBar.Mode.getIsVerticalMode() && document.getElementById("tabkit-splitter")) {
@@ -6055,7 +6056,7 @@
       // this could be buggy and/or impact performance
       // tk.colorizeTab(tab);
     };
-    this.positionedTabbar_onTabSelect = function positionedTabbar_onTabSelect(event) {
+    this.positionedTabbar_onTabSelect = function positionedTabbar_onTabSelect(_event) {
       var tab = gBrowser.selectedTab;
       if (tk.TabBar.Mode.getIsVerticalMode()) {
 
@@ -6080,11 +6081,11 @@
       }
       tk.colorizeTab(tab);
     };
-    this.positionedTabbar_onResize = function positionedTabbar_onResize(event) {
+    this.positionedTabbar_onResize = function positionedTabbar_onResize(_event) {
       var width = parseInt(_tabBar.width != "" ? _tabBar.width : 250);  //temp default value, MEDIC!!
       _prefs.setIntPref("tabSidebarWidth", Math.min(width, 576)); // Upper limit on default width so can't be wider than maximised browser window, even on 800x600 screen
     };
-    this.positionedTabbar_onMouseover = function positionedTabbar_onMouseover(event) {
+    this.positionedTabbar_onMouseover = function positionedTabbar_onMouseover(_event) {
       var splitter = document.getElementById("tabkit-splitter");
       if (!splitter || splitter.getAttribute("state") != "collapsed")
         return;
@@ -6101,7 +6102,7 @@
         _tabBar.collapsed = false;
       }
     };
-    this.positionedTabbar_onMouseout = function positionedTabbar_onMouseout(event) {
+    this.positionedTabbar_onMouseout = function positionedTabbar_onMouseout(_event) {
       var splitter = document.getElementById("tabkit-splitter");
       if (!splitter || splitter.getAttribute("state") != "collapsed")
         return;
@@ -6262,7 +6263,6 @@
       // Calculate new orient attributes
       var flipOrient = (pos == tk.Positions.LEFT || pos == tk.Positions.RIGHT);
       var fromHorizontal = flipOrient ? "vertical" : "horizontal";
-      var fromVertical = flipOrient ? "horizontal" : "vertical";
 
       // Calculate new direction attribute
       var flipDirection = (pos == tk.Positions.RIGHT || pos == tk.Positions.BOTTOM);
@@ -6273,8 +6273,6 @@
         (appcontent.parentNode: any).insertBefore(tabsToolbar, appcontent);
       }
       else if (pos == tk.Positions.TOP) {
-        var searchBox = document.getElementById("tabkit-filtertabs-box");
-        var checkPtI = 1;
         var menubar = document.getElementById("toolbar-menubar");
         if (menubar == null) {
           return;
@@ -6357,7 +6355,7 @@
   //|##########################
 
     /// Initialisation:
-    this.initMultiRowTabs = function initMultiRowTabs(event) {
+    this.initMultiRowTabs = function initMultiRowTabs(_event) {
       _tabContainer.mTabstrip.addEventListener("overflow", tk._preventMultiRowFlowEvent, true);
       _tabContainer.mTabstrip.addEventListener("underflow", tk._preventMultiRowFlowEvent, true);
 
@@ -6444,7 +6442,9 @@
             try {
               _tabContainer.mTabstrip._scrollBoxObject.scrollTo(0,0);
             }
-            catch (ex) {}
+            catch (ex) {
+              // Do nothing
+            }
           }
 
           var maxRows = _prefs.getIntPref("tabRows");
@@ -6481,7 +6481,7 @@
           // Disable multi-row tabs
           if (_tabContainer.getAttribute("multirow") == "true")
             needsDisabling = true;
-            var needsScrolling = true;
+          var needsScrolling = true;
           _tabContainer.setAttribute("multirow", "false");
         }
       }
@@ -6502,7 +6502,9 @@
             }
             _tabContainer.mTabstrip._scrollBoxObject.ensureElementIsVisible(gBrowser.selectedTab);
           }
-          catch (ex) {}
+          catch (ex) {
+            // Do nothing
+          }
         }
 
         _tabContainer.mTabstrip.style.removeProperty("min-height");
@@ -6541,7 +6543,7 @@
      // Old bug that went away as of 3.6.10 (or earlier): Sometimes tabs remembered that the search bar was focused, and would confusingly focus it when you switch to them (in the same way as they used to remember whether the address bar was focused on a per-tab basis). Tabs no longer seem to remember this (nor for the address bar).
 
     /// Initialisation:
-    this.initSearchBar = function initSearchBar(event) {
+    this.initSearchBar = function initSearchBar(_event) {
       var strings = (document.getElementById("bundle_tabkit"): any);
 
       var vbox = document.createElementNS(XUL_NS, "vbox");
@@ -6556,7 +6558,7 @@
       textbox.setAttribute("clickSelectsAll", "true");
       textbox.setAttribute("newlines", "replacewithspaces");
       textbox.addEventListener("command", function() {
-        tk.filterTabs(this.value)
+        tk.filterTabs(this.value);
       });
       textbox.addEventListener("input", function() {
         let el_tabkit_filtertabs_includetext = document.getElementById('tabkit-filtertabs-includetext');
@@ -6576,7 +6578,7 @@
       checkbox.setAttribute("id", "tabkit-filtertabs-includetext");
       checkbox.setAttribute("label", strings.getString("include_page_text"));
       checkbox.addEventListener("command", function() {
-        tk.filterTabs((document.getElementById('tabkit-filtertabs-query'): any).value)
+        tk.filterTabs((document.getElementById('tabkit-filtertabs-query'): any).value);
       });
       checkbox.setAttribute("collapsed", "true");
       vbox.appendChild(checkbox);
@@ -6601,7 +6603,7 @@
 
       var terms = query.split(/\s+/g);
       let el_tabkit_filtertabs_includetext = document.getElementById("tabkit-filtertabs-includetext");
-      if (el_tabkit_filtertabs_includetext == null) { return };
+      if (el_tabkit_filtertabs_includetext == null) { return; }
       var includePageText = (el_tabkit_filtertabs_includetext: any).checked;
 
       // Filter tabs
@@ -6621,7 +6623,9 @@
           uri = tab.linkedBrowser.currentURI.spec;
           try {
             uri = decodeURI(uri);
-          } catch (ex) {}
+          } catch (ex) {
+            // Do nothing
+          }
         }
         let title = tab.label;
         let details = (title + " " + uri).toLowerCase();
@@ -6712,7 +6716,7 @@
     /// Private Globals:
 
     /// Initialisation:
-    this.initMouseGestures = function initMouseGestures(event) {
+    this.initMouseGestures = function initMouseGestures(_event) {
       // event `wheel` is supported since Firefox 17, but was buggy (tested on 38.3.0)
       // It's not always fired
       // https://developer.mozilla.org/en-US/docs/Web/Events/wheel
@@ -6745,7 +6749,9 @@
       try {
         // The external preference key entry(s) could be missing, so we use try catch here
         isUsingTabSheelSwitch = gPrefService.getBoolPref("extensions.tabkit.mouse-gestures.tabWheelSwitchHover");
-      } catch(ex) {}
+      } catch(ex) {
+        // Do nothing
+      }
 
       var name = event.originalTarget.localName;
       // If scroll on scrollbar or similar thing, scroll,
@@ -6802,7 +6808,7 @@
     var _allTabsInnerBox;
 
     /// Initialisation:
-    this.initScrollbarsNotArrows = function initScrollbarsNotArrows(event) {
+    this.initScrollbarsNotArrows = function initScrollbarsNotArrows(_event) {
       //tk.mapBoolPrefToAttribute("scrollbarsNotArrows", document.documentElement, "scrollbarsnotarrows"); // disabling the attribute didn't disable the overflow auto, so it's best to only apply changes to new windows
       if (_prefs.getBoolPref("scrollbarsNotArrows"))
         (document.documentElement: any).setAttribute("scrollbarsnotarrows", "true");
@@ -6811,7 +6817,7 @@
     this.initListeners.push(this.initScrollbarsNotArrows);
 
     /// Event Listeners:
-    this.scrollAllTabsMenu = function scrollAllTabsMenu(event) {
+    this.scrollAllTabsMenu = function scrollAllTabsMenu(_event) {
       if (!_allTabsInnerBox) {
         var arrowScrollBox = _tabContainer.mAllTabsPopup.popupBoxObject.firstChild;
         if (!arrowScrollBox) {
@@ -6828,14 +6834,14 @@
   //|##########################
 
     /// Initialisation:
-    this.initOpenSelectedLinks = function initOpenSelectedLinks(event) {
+    this.initOpenSelectedLinks = function initOpenSelectedLinks(_event) {
       tk.addDelayedEventListener(document.getElementById("contentAreaContextMenu"), "popupshowing", tk.openSelectedLinks_onPopupShowing);
     };
     this.initListeners.push(this.initOpenSelectedLinks);
 
     /// Event Listeners:
     // TODO=P4: GCODE Localize Open Selected Links
-    this.openSelectedLinks_onPopupShowing = function openSelectedLinks_onPopupShowing(event) {
+    this.openSelectedLinks_onPopupShowing = function openSelectedLinks_onPopupShowing(_event) {
       var topMenuItem = (document.getElementById("context_tabkit-opentopselectedlinks"): any);
       var menuItem = (document.getElementById("context_tabkit-openselectedlinks"): any);
       var textMenuItem = (document.getElementById("context_tabkit-openselectedtextlinks"): any);
@@ -6952,8 +6958,6 @@
       if (focusedWindow == window)
         focusedWindow = window.content;
 
-      var uris = [];
-
       var selectedText = focusedWindow.getSelection().toString();
       return tk.detectURIsFromText(selectedText);
     };
@@ -7009,7 +7013,7 @@
     };
 
     // Open the URL(s) in clipboard & create a group with opened tabs (if > 1)
-    this.openClipboardLinks = function openClipboardLinks(contextTab) {
+    this.openClipboardLinks = function openClipboardLinks(_contextTab) {
       var unicodeString = '';
 
       try {
@@ -7073,7 +7077,7 @@
       // example URLs mustn't end in brackets, dots, or commas). It will however correctly
       // recognise urls such as http://en.wikipedia.org/wiki/Rock_(disambiguation) by
       // specifically permitting singly-nested matching brackets.
-      var matches = textToDetect.match(/\b(?:(?:https?|ftp):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/ig);
+      var matches = textToDetect.match(/\b(?:(?:https?|ftp):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[A-Z0-9+&@#/%=~_|$])/ig);
       if (matches == null) {
         return uris;
       }
@@ -7094,7 +7098,7 @@
   //}##########################
   //{=== Modification for Fx4+
   //|##########################
-    this.postInitFx4Modifications = function postInitFx4Modifications(event) {
+    this.postInitFx4Modifications = function postInitFx4Modifications(_event) {
       // Not sure if pinned tab works in horizontal mode, but still BAM!
       (function() {
         "use strict";
@@ -7108,7 +7112,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         gBrowser.pinTab = function(aTab) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> gBrowser.pinTab >>>");
           if (tk.TabBar.Mode.getIsVerticalMode()) {
@@ -7136,7 +7140,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         gBrowser.tabContainer._lockTabSizing = function(aTab) {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> gBrowser.tabContainer._lockTabSizing >>>");
           result = old_func.apply(this, [aTab]);
@@ -7154,7 +7158,7 @@
         };
       })();
     };
-    this.postInitFx4TabEffects = function postInitFx4TabEffects(event) {
+    this.postInitFx4TabEffects = function postInitFx4TabEffects(_event) {
       // https://developer.mozilla.org/en-US/docs/Web/Events/fullscreen
       window.addEventListener("fullscreen", tk.onFullScreenToggle, false);
     };
@@ -7162,7 +7166,7 @@
     this.postInitListeners.push(this.postInitFx4TabEffects);
 
     // Good for HTML5 full screen video viewing
-    this.onFullScreenToggle = function onFullScreenToggle(event) {
+    this.onFullScreenToggle = function onFullScreenToggle(_event) {
       var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
 
       if (tabsToolbar == null) {
@@ -7224,7 +7228,7 @@
         gPrefService.setBoolPref("browser.tabs.onTop", false);
       }
     };
-    this.initOnPrefTabsonTopChanged = function initOnPrefTabsonTopChanged(event) {
+    this.initOnPrefTabsonTopChanged = function initOnPrefTabsonTopChanged(_event) {
       tk.addGlobalPrefListener("browser.tabs.onTop", tk.onPrefTabsonTopChanged);
 
       // Run it once on start
@@ -7241,7 +7245,7 @@
     // ### Panorama Related
     this.Panorama = this.Panorama || {};
     this.Panorama.Initializers = this.Panorama.Initializers || {};
-    this.Panorama.Initializers.addMethodHookOnPostInit = function addMethodHookOnPostInit(event) {
+    this.Panorama.Initializers.addMethodHookOnPostInit = function addMethodHookOnPostInit(_event) {
       // Disable Panorama, why use Panorama when you have Tabkit?
       // This feature is removed from 45.x
       (function() {
@@ -7258,7 +7262,7 @@
         // Function signature should be valid for FF 38.x & 45.x
         TabView.toggle = function() {
           "use strict";
-          var result = undefined;
+          var result;
 
           tk.debug(">>> TabView.toggle >>>");
           if (tk.localPrefService.getBoolPref("panorama.enabled") === false) {
