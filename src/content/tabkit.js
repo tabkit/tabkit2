@@ -53,7 +53,6 @@
 /* eslint no-redeclare: ["off"] */
 /* eslint block-scoped-var: ["off"] */
 /* eslint no-param-reassign: ["off"] */
-/* eslint key-spacing: ["off"] */
 
 (function (window) {
   window.tabkit = new function _tabkit() { // Primarily just a 'namespace' to hide our stuff in
@@ -4484,30 +4483,30 @@
       var theme = gPrefService.getCharPref("general.skins.selectedSkin");
       const goodThemes = { // Themes that work well
         // TODO=P4: GCODE Keep testing themes...
-        "classic/1.0"   : { platform: /Win32/ }, // Default Windows theme ("Strata" in Fx3, "Firefox (default)" in Fx2)
-        "abstractPCNightly": {},       // Abstract Classic
-        "abstract_zune" : { dark: true }, // Abstract Zune     (n.b. current tab has solid black bg that hides groups)
-        "aero_fox"     : { dark: true }, // Aero Fox        (n.b. current tab has solid black bg that hides groups)
-        "aero_silver_fox"  : {},       // Aero Silver Fox Basic
-        "aquatint_gloss"   : { dark: true }, // Aquatint Black Gloss  (n.b. current tab has solid black bg that hides groups)
-        "aquatintII"     : {},       // Aquatint Redone
-        "AzertyIII"   : {},      // Azerty III
-        "blackx"       : {},       // BlackX 2
-        "cfoxmodern"     : {},       // CrystalFox Modern
-        "kempelton"   : {},      // Kempelton
-        "MacOSX"       : {},       // MacOSX Theme - https://addons.mozilla.org/en-US/firefox/addon/7172
-        "pitchdark"   : {},      // PitchDark
-        "phoenityreborn"   : {},       // Phoenity Reborn
-        "qute"       : {},       // Qute
-        "vistaxp"     : {},      // Vista on XP
-        "xpvista"     : {},        // XP on Vista
+        "classic/1.0":        { platform: /Win32/ }, // Default Windows theme ("Strata" in Fx3, "Firefox (default)" in Fx2)
+        "abstractPCNightly":  {},       // Abstract Classic
+        "abstract_zune":      { dark: true }, // Abstract Zune     (n.b. current tab has solid black bg that hides groups)
+        "aero_fox":           { dark: true }, // Aero Fox        (n.b. current tab has solid black bg that hides groups)
+        "aero_silver_fox":    {},       // Aero Silver Fox Basic
+        "aquatint_gloss":     { dark: true }, // Aquatint Black Gloss  (n.b. current tab has solid black bg that hides groups)
+        "aquatintII":         {},       // Aquatint Redone
+        "AzertyIII":          {},      // Azerty III
+        "blackx":             {},       // BlackX 2
+        "cfoxmodern":         {},       // CrystalFox Modern
+        "kempelton":          {},      // Kempelton
+        "MacOSX":             {},       // MacOSX Theme - https://addons.mozilla.org/en-US/firefox/addon/7172
+        "pitchdark":          {},      // PitchDark
+        "phoenityreborn":     {},       // Phoenity Reborn
+        "qute":               {},       // Qute
+        "vistaxp":            {},      // Vista on XP
+        "xpvista":            {},        // XP on Vista
       };
       const badThemes = { // Themes with solid tab backgrounds, a -moz-appearance, or other problems
         /* Anything not listed above is assumed to be a 'bad' theme, so it's only really
          * useful to list the dark ones, though Tango is obviously worth mentioning */
       //  "classic/1.0"   : { platform: /Linux/ }, // Default Linux theme ("Tango" in Fx3)
-        "nasanightlaunch"  : { dark: true },    // NASA Night Launch - https://addons.mozilla.org/en-US/firefox/addon/4908
-        "NG_Classic"     : { dark: true },    // Newgrounds Classic
+        "nasanightlaunch": { dark: true },    // NASA Night Launch - https://addons.mozilla.org/en-US/firefox/addon/4908
+        "NG_Classic":      { dark: true },    // Newgrounds Classic
       };
       if (theme in goodThemes && (!("platform" in goodThemes[theme]) || goodThemes[theme].platform.test(navigator.platform))) {
         if (forceThemeCompatibility == 1)
