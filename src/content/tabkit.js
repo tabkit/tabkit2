@@ -682,7 +682,7 @@
     // Presumeably more efficient than simply adding a global observer for each one...
     this.localPrefsListener = function localPrefsListener(changedPref) {
       changedPref = changedPref.substring(PREF_BRANCH.length); // Remove prefix for these local prefs
-      for (var prefName in _localPrefListeners) {
+      for (let prefName of _localPrefListeners) {
         if (changedPref.substring(0, prefName.length) == prefName) {
           _localPrefListeners[prefName].forEach(function(listener) {
             listener(changedPref);
@@ -3870,12 +3870,12 @@
       // Delete all known colors first, then regenerate again
       var groups = tk.getAllGroups();
 
-      for (var gid in groups) {
+      for (let gid in groups) {
         var knownColorKey = "knownColor:" + gid;
         tk.deleteWindowValue(knownColorKey);
       }
 
-      for (var gid in groups) {
+      for (let gid in groups) {
         groups[gid].forEach(function(tab) {
           tk.colorizeTab(tab);
         });
@@ -4275,7 +4275,7 @@
       return group;
     };
 
-    this.getAllGroups = function getAllGroups() {
+    this.getAllGroups = function getAllGroups(): Object {
       var groups = {};
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
@@ -4547,7 +4547,7 @@
       // Used to reset each group's saturation and lightness when the prefs are changed
       // TODO=P4: GCODE Make this deal with restored old groups too (perhaps require that the hsl values are within the right ranges, otherwise regen them)
       var groups = tk.getAllGroups();
-      for (var gid in groups) {
+      for (let gid in groups) {
         try {
           var hue = /hsl\((\d+),/.exec(tk.getWindowValue("knownColor:" + gid))[1];
           var sat = tk.randInt(_prefs.getIntPref("minSaturation"), _prefs.getIntPref("maxSaturation"));
@@ -4812,11 +4812,11 @@
         }
       }
 
-      for (var gid in newGroups) {
-        var group = newGroups[gid];
+      for (let _gid in newGroups) {
+        var group = newGroups[_gid];
         if (group.length > 1) {
           for (let tab in group) {
-            tk.setGID(tab, gid);
+            tk.setGID(tab, _gid);
           }
 
           // Move all tabs to where the median positioned tab currently is // TODO=P4: TJS if tk.newTabPosition == 2 && tk.activeSort in tk.DateSorts move to most recent tab instead?
@@ -4833,18 +4833,19 @@
       if (groupingName == "domain") {
         if (_prefs.getBoolPref("autoSortDomainGroups")) {
           var groups = tk.getAllGroups();
-          groups.forEach(function(gidInGroup) {
+          for (let gidInGroup in groups) {
             if (gidInGroup.indexOf(":dG-") != -1)
-              tk.sortTabsBy("uri", gid);
-          });
+              tk.sortTabsBy("uri", gidInGroup);
+          }
         }
       }
       else if (groupingName == "opener") {
         if (_prefs.getBoolPref("autoSortOpenerGroups")) {
           var groups = tk.getAllGroups();
-          for (var gid in groups)
-            if (gid.indexOf(":oG-") != -1 || gid.indexOf(":tmpOG-") != -1)
-              tk.sortTabsBy("origin", gid);
+          for (let gidInGroup in groups) {
+            if (gidInGroup.indexOf(":oG-") != -1 || gidInGroup.indexOf(":tmpOG-") != -1)
+              tk.sortTabsBy("origin", gidInGroup);
+          }
         }
       }
 
@@ -4918,7 +4919,7 @@
       else {
         var groups = tk.getAllGroups();
       }
-      for (var groupid in groups) {
+      for (let groupid in groups) {
         var g = groups[groupid];
 
         // We need grouped tabs to have keys whether or not we intend to internally sort them, so we can set the medians
