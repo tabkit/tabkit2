@@ -52,7 +52,6 @@
 /* Temporarily ignore these rules otherwise too many warnings */
 /* eslint no-redeclare: ["off"] */
 /* eslint block-scoped-var: ["off"] */
-/* eslint quotes: ["off"] */
 /* eslint no-param-reassign: ["off"] */
 /* eslint key-spacing: ["off"] */
 
@@ -192,7 +191,7 @@
             stack = new Error().stack; // Get call stack (could use Components.stack.caller instead)
             stack = stack.substring(stack.indexOf("\n", stack.indexOf("\n")+1)+1); // Remove the two lines due to calling this
           }
-          var message = 'TK Error: "' + error + '"\nat:\u00A0' + stack.replace("\n@:0", "").replace(/\n/g, "\n    "); // \u00A0 is a non-breaking space
+          var message = "TK Error: \"" + error + "\"\nat:\u00A0" + stack.replace("\n@:0", "").replace(/\n/g, "\n    "); // \u00A0 is a non-breaking space
           var sourceName   = (haveException && "fileName"  in actualException && actualException.fileName)   ? actualException.fileName  : Components.stack.caller.filename;
           var sourceLine   = (haveException && "sourceLine"   in actualException && actualException.sourceLine)   ? actualException.sourceLine   : Components.stack.caller.sourceLine; // Unfortunately this is probably null
           var lineNumber   = (haveException && "lineNumber"   in actualException && actualException.lineNumber)   ? actualException.lineNumber   : Components.stack.caller.lineNumber; // error.lineNumber isn't always accurate, unfortunately - sometimes might be better to just ignore it
@@ -456,11 +455,11 @@
     };
 
     this.getTabId = function (tab) {
-      if (!tab.hasAttribute('tabid')) {
+      if (!tab.hasAttribute("tabid")) {
         tk.generateNewTabId(tab);
       }
 
-      return tab.getAttribute('tabid');
+      return tab.getAttribute("tabid");
     };
 
     this.generateNewTabId = function (tab) {
@@ -2219,15 +2218,15 @@
         reportPhishing.
           setAttribute(
             "oncommand",
-            'tk.addingTab({ \
-              added_tab_type: "related", \
+            "tk.addingTab({ \
+              added_tab_type: 'related', \
               parent_tab: gBrowser.selectedTab \
-            }); try {' + original_command_str + '} \
+            }); try {" + original_command_str + "} \
             finally { \
               tk.addingTabOver({ \
-                added_tab_type: "related" \
+                added_tab_type: 'related' \
               }); \
-            }'
+            }"
           );
       }
 
@@ -2242,15 +2241,15 @@
         goMenu.
           setAttribute(
             "oncommand",
-            'tk.addingTab({ \
-              added_tab_type: "history", \
+            "tk.addingTab({ \
+              added_tab_type: 'history', \
               parent_tab: gBrowser.selectedTab \
-            }); try {' + original_command_str + '} \
+            }); try {" + original_command_str + "} \
             finally { \
               tk.addingTabOver({ \
-                added_tab_type: "history" \
+                added_tab_type: 'history' \
               }); \
-            }'
+            }"
           );
       }
     };
@@ -3143,7 +3142,7 @@
         return;
 
       if (event.target.hasAttribute("groupid")
-        && (event.button == 1 || event.button == 0 && event.originalTarget.getAttribute('anonid') === 'close-button')
+        && (event.button == 1 || event.button == 0 && event.originalTarget.getAttribute("anonid") === "close-button")
         && !event.altKey
         && navigator.platform.indexOf("Mac") == -1 ? event.ctrlKey : event.metaKey)
       {
@@ -3159,7 +3158,7 @@
     this.sortgroup_onDblclickTab = function sortgroup_onDblclickTab(event) {
       var tab = event.target;
       if (tab.localName == "tab") {
-        if (event.originalTarget.getAttribute('anonid') == 'close-button')
+        if (event.originalTarget.getAttribute("anonid") == "close-button")
         {
           if (!event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey
             && tk.TabBar.Mode.getIsVerticalMode()) {
@@ -3902,9 +3901,9 @@
       if (aURIList.length == 0)
         throw(new Error("copyGroupURIs expects a list of nsIURI objects"));
 
-      let urisStringToCopy = '';
+      let urisStringToCopy = "''";
       aURIList.forEach(function(uri) {
-        urisStringToCopy = urisStringToCopy + uri.spec + '\n';
+        urisStringToCopy = urisStringToCopy + uri.spec + "\n";
       });
 
       // Code from http://stackoverflow.com/questions/218462/in-a-firefox-extension-how-can-i-copy-rich-text-links-to-the-clipboard
@@ -4674,7 +4673,7 @@
       var lightness = tk.randInt(_prefs.getIntPref("minLightness"), _prefs.getIntPref("maxLightness"));
 
       // TODO=P3: GCODE Stop memory-leaking known colors (for the duration of a session)
-      var resultColor = "hsl(@hue, @saturation%, @lightness%)".replace('@hue', hue.toString()).replace('@saturation', saturation).replace('@lightness', lightness);
+      var resultColor = "hsl(@hue, @saturation%, @lightness%)".replace("@hue", hue.toString()).replace("@saturation", saturation).replace("@lightness", lightness);
       tk.setWindowValue(knownColorKey, resultColor);
       return resultColor;
     };
@@ -5738,7 +5737,7 @@
         (document.getElementById("menu_tabkit-tab-toggleProtected"): any).setAttribute("checked", isProtected);
       }
       if (tk.context_closeTab != null) {
-        tk.context_closeTab.setAttribute('disabled', isProtected.toString());
+        tk.context_closeTab.setAttribute("disabled", isProtected.toString());
       }
     };
 
@@ -5890,7 +5889,7 @@
       }
 
       /* bookmarklets*/
-      if (aNode.uri.indexOf('javascript:') == 0) {
+      if (aNode.uri.indexOf("javascript:") == 0) {
         return aWhere;
       }
 
@@ -6560,13 +6559,13 @@
         tk.filterTabs(this.value);
       });
       textbox.addEventListener("input", function() {
-        let el_tabkit_filtertabs_includetext = document.getElementById('tabkit-filtertabs-includetext');
+        let el_tabkit_filtertabs_includetext = document.getElementById("tabkit-filtertabs-includetext");
         if (el_tabkit_filtertabs_includetext == null) { return; }
         (el_tabkit_filtertabs_includetext: any).collapsed = !this.value;
       });
       textbox.addEventListener("blur", function() {
         // Clearing the query doesn't always trigger an input event, so additionally check when it gets blurred
-        let el_tabkit_filtertabs_includetext = document.getElementById('tabkit-filtertabs-includetext');
+        let el_tabkit_filtertabs_includetext = document.getElementById("tabkit-filtertabs-includetext");
         if (el_tabkit_filtertabs_includetext == null) { return; }
 
         (el_tabkit_filtertabs_includetext: any).collapsed = !this.value;
@@ -6577,7 +6576,7 @@
       checkbox.setAttribute("id", "tabkit-filtertabs-includetext");
       checkbox.setAttribute("label", strings.getString("include_page_text"));
       checkbox.addEventListener("command", function() {
-        tk.filterTabs((document.getElementById('tabkit-filtertabs-query'): any).value);
+        tk.filterTabs((document.getElementById("tabkit-filtertabs-query"): any).value);
       });
       checkbox.setAttribute("collapsed", "true");
       vbox.appendChild(checkbox);
@@ -6919,9 +6918,9 @@
           var node = treeWalker.currentNode;
 
           if (!node.href
-            || (node.href.indexOf('http') != 0
-              && node.href.indexOf('file') != 0
-              && node.href.indexOf('ftp') != 0))
+            || (node.href.indexOf("http") != 0
+              && node.href.indexOf("file") != 0
+              && node.href.indexOf("ftp") != 0))
           {
             continue;
           }
@@ -7013,7 +7012,7 @@
 
     // Open the URL(s) in clipboard & create a group with opened tabs (if > 1)
     this.openClipboardLinks = function openClipboardLinks(_contextTab) {
-      var unicodeString = '';
+      var unicodeString = "";
 
       try {
         var transferable = Transferable();
