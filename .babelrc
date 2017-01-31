@@ -2,6 +2,7 @@
   "comments": false,
   "retainLines": true,
   "plugins": [
-    "transform-flow-strip-types"
+    "transform-flow-strip-types",
+    "check-es2015-constants"
   ],
 }
