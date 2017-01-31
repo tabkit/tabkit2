@@ -54,7 +54,6 @@
 /* eslint block-scoped-var: ["off"] */
 /* eslint quotes: ["off"] */
 /* eslint no-param-reassign: ["off"] */
-/* eslint comma-dangle: ["off"] */
 /* eslint key-spacing: ["off"] */
 
 (function (window) {
@@ -1658,7 +1657,7 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
               added_tab_type: added_tab_type,
-              parent_tab:     parent_tab
+              parent_tab:     parent_tab,
             });
           }
           tk.debug("<<< window.BrowserOpenTab <<<");
@@ -1685,7 +1684,7 @@
 
           tk.debug(">>> window.delayedOpenTab >>>");
           tk.addingTab({
-            added_tab_type: "newtab"
+            added_tab_type: "newtab",
           });
           try {
             result = old_func.apply(this, [aUrl, aReferrer, aCharset, aPostData, aAllowThirdPartyFixup]);
@@ -1694,7 +1693,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "newtab"
+              added_tab_type: "newtab",
             });
           }
           tk.debug("<<< window.delayedOpenTab <<<");
@@ -1828,7 +1827,7 @@
 
           tk.debug(">>> window.gBrowser._endRemoveTab >>>");
           tk.addingTab({
-            added_tab_type: "newtab"
+            added_tab_type: "newtab",
           });
           try {
             result = old_func.apply(this, [aTab]);
@@ -1837,7 +1836,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "newtab"
+              added_tab_type: "newtab",
             });
           }
           tk.debug("<<< window.gBrowser._endRemoveTab <<<");
@@ -1869,7 +1868,7 @@
           tk.debug(">>> window.nsContextMenu.prototype.openLinkInTab >>>");
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: gBrowser.selectedTab
+            parent_tab: gBrowser.selectedTab,
           });
           try {
             result = old_func.apply(this, []);
@@ -1878,7 +1877,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "related"
+              added_tab_type: "related",
             });
           }
           tk.debug("<<< window.nsContextMenu.prototype.openLinkInTab <<<");
@@ -1909,7 +1908,7 @@
           tk.debug(">>> window.nsContextMenu.prototype.openFrameInTab >>>");
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: gBrowser.selectedTab
+            parent_tab: gBrowser.selectedTab,
           });
           try {
             result = old_func.apply(this, []);
@@ -1918,7 +1917,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "related"
+              added_tab_type: "related",
             });
           }
           tk.debug("<<< window.nsContextMenu.prototype.openFrameInTab <<<");
@@ -1949,7 +1948,7 @@
           tk.debug(">>> window.nsContextMenu.prototype.viewBGImage >>>");
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: gBrowser.selectedTab
+            parent_tab: gBrowser.selectedTab,
           });
           try {
             result = old_func.apply(this, [e]);
@@ -1958,7 +1957,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "related"
+              added_tab_type: "related",
             });
           }
           tk.debug("<<< window.nsContextMenu.prototype.viewBGImage <<<");
@@ -1989,7 +1988,7 @@
           tk.debug(">>> window.nsContextMenu.prototype.addDictionaries >>>");
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: gBrowser.selectedTab
+            parent_tab: gBrowser.selectedTab,
           });
           try {
             result = old_func.apply(this, []);
@@ -1998,7 +1997,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "related"
+              added_tab_type: "related",
             });
           }
           tk.debug("<<< window.nsContextMenu.prototype.addDictionaries <<<");
@@ -2029,7 +2028,7 @@
           tk.debug(">>> window.nsContextMenu.prototype.viewMedia >>>");
           tk.addingTab({
             added_tab_type: "related",
-            parent_tab: gBrowser.selectedTab
+            parent_tab: gBrowser.selectedTab,
           });
           try {
             result = old_func.apply(this, [e]);
@@ -2038,7 +2037,7 @@
             // This might be called already
             // But this is called again since it contains code for cleaning up
             tk.addingTabOver({
-              added_tab_type: "related"
+              added_tab_type: "related",
             });
           }
           tk.debug("<<< window.nsContextMenu.prototype.viewMedia <<<");
@@ -2195,7 +2194,7 @@
           if (aSkipAnimation && !tk.isBookmarkGroup) {
             tk.addingTab({
               added_tab_type: "sessionrestore",
-              should_keep_added_tab_position: true
+              should_keep_added_tab_position: true,
             });
           }
           result = old_func.apply(this, arguments);
@@ -2204,7 +2203,7 @@
             tk.addingTabOver({
               added_tab:  tab,
               added_tab_type: "sessionrestore",
-              should_keep_added_tab_position: true
+              should_keep_added_tab_position: true,
             });
           }
           tk.debug("<<< gBrowser.addTab <<<");
@@ -2743,7 +2742,7 @@
 
       { depth: 1, name: "sss_duplicateTab",   type: "sessionrestore", DontMoveTab: true }, //sss_duplicateTab [[[1. sss_duplicateTab 2. duplicateTab ...]]]
       { depth: 1, name: "sss_undoCloseTab",   type: "sessionrestore", DontMoveTab: true }, //sss_undoCloseTab [[[1. sss_undoCloseTab 2. undoCloseTab 3. undoCloseTab 4. oncommand]]]
-      { depth: 1, name: "sss_restoreWindow",   type: "sessionrestore", DontMoveTab: true }  //sss_restoreWindow, Firefox 14 or below
+      { depth: 1, name: "sss_restoreWindow",   type: "sessionrestore", DontMoveTab: true },  //sss_restoreWindow, Firefox 14 or below
     ];
     this.sourceTypes.sort(function __compareSourceDepths(a, b) { return b.depth - a.depth; }); // Sort by decreasing d(epth)
 
@@ -2769,7 +2768,7 @@
           tk.addingTabOver({
             added_tab: tab,
             added_tab_type: tk.isBookmarkGroup ? "bookmark" : "newtab",
-            should_keep_added_tab_position: false
+            should_keep_added_tab_position: false,
           });
           tk.addedTabs = [tab];
           tk.nextType = "loadTabs"; // But it can now be treated as "loadOneOrMoreURIs";
@@ -2785,7 +2784,7 @@
         tk.isBookmarkGroup = false;
         tk.addingTabOver({
           parent_tab: gBrowser.selectedTab,
-          added_tab:  tab
+          added_tab:  tab,
         });
       }
 
@@ -3549,8 +3548,8 @@
       BrowserOpenTab({
         tab_kit_options: {
           added_tab_type: "related",
-          parent_tab: contextTab
-        }
+          parent_tab: contextTab,
+        },
       });
       var newTab = document.getAnonymousElementByAttribute(gBrowser, "linkedpanel", gBrowser.mPanelContainer.lastChild.id);
       tk.addingTabOver();
@@ -3582,7 +3581,7 @@
           added_tab_type: "related",
           added_tab:      new_tab,
           parent_tab:     parent_tab,
-          should_keep_added_tab_position: false
+          should_keep_added_tab_position: false,
         });
 
         var gid = tk.getTabGroupId(parent_tab);
@@ -4502,14 +4501,14 @@
         "phoenityreborn"   : {},       // Phoenity Reborn
         "qute"       : {},       // Qute
         "vistaxp"     : {},      // Vista on XP
-        "xpvista"     : {}        // XP on Vista
+        "xpvista"     : {},        // XP on Vista
       };
       const badThemes = { // Themes with solid tab backgrounds, a -moz-appearance, or other problems
         /* Anything not listed above is assumed to be a 'bad' theme, so it's only really
          * useful to list the dark ones, though Tango is obviously worth mentioning */
       //  "classic/1.0"   : { platform: /Linux/ }, // Default Linux theme ("Tango" in Fx3)
         "nasanightlaunch"  : { dark: true },    // NASA Night Launch - https://addons.mozilla.org/en-US/firefox/addon/4908
-        "NG_Classic"     : { dark: true }    // Newgrounds Classic
+        "NG_Classic"     : { dark: true },    // Newgrounds Classic
       };
       if (theme in goodThemes && (!("platform" in goodThemes[theme]) || goodThemes[theme].platform.test(navigator.platform))) {
         if (forceThemeCompatibility == 1)
@@ -5227,7 +5226,7 @@
           tk.addingTab({
             added_tab_type: added_tab_type,
             parent_tab:     parent_tab,
-            should_keep_added_tab_position: should_keep_added_tab_position
+            should_keep_added_tab_position: should_keep_added_tab_position,
           });
 
           // tk.chosenNewIndex = newIndex;
@@ -5241,7 +5240,7 @@
             added_tab_type: added_tab_type,
             added_tab:      copiedTab,
             parent_tab:     parent_tab,
-            should_keep_added_tab_position: should_keep_added_tab_position
+            should_keep_added_tab_position: should_keep_added_tab_position,
           });
 
           // Backup attributes at this time, so we can restore them later if needed
@@ -5822,7 +5821,7 @@
           browserWindow.tabkit.debug(">>> PlacesUIUtils._openNodeIn >>>");
           browserWindow.tabkit.addingTab({
             added_tab_type: "bookmark",
-            parent_tab: selected_tab_before_operation
+            parent_tab: selected_tab_before_operation,
           });
           aWhere = browserWindow.tabkit.returnWhereWhenOpenPlaces(aWhere, aNode);
           try {
@@ -5833,7 +5832,7 @@
             // But this is called again since it contains code for cleaning up
             browserWindow.tabkit.addingTabOver({
               added_tab_type: "bookmark",
-              parent_tab: selected_tab_before_operation
+              parent_tab: selected_tab_before_operation,
             });
           }
           browserWindow.tabkit.debug("<<< PlacesUIUtils._openNodeIn <<<");
@@ -5978,7 +5977,7 @@
       TOP: 0,
       LEFT: 1,
       RIGHT: 2,
-      BOTTOM: 3
+      BOTTOM: 3,
     };
 
     /// Initialisation:
@@ -6019,7 +6018,7 @@
         tabs_toolbar_mutation_observer.observe(tabs_toolbar, {
           attributes: true,
           attributeFilter: ["collapsed"],
-          attributeOldValue: true
+          attributeOldValue: true,
         });
       }
 
@@ -6203,15 +6202,15 @@
       var normallyHorizontal = [
         browser,
         sidebar_splitter,
-        sidebar_header
+        sidebar_header,
       ];
       var normallyVertical = [
         sidebar_box,
-        appcontent
+        appcontent,
       ];
       var normallyNormal = [
         sidebar_box,
-        sidebar_header
+        sidebar_header,
       ];
 
       // Set new attributes
@@ -6911,7 +6910,7 @@
           {
             acceptNode: function(node) {
               return node.localName.toLowerCase() == "a" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
-            }
+            },
           },
           true
         );
@@ -6983,27 +6982,27 @@
 
       tk.addingTab({
         parent_tab: selected_tab_before_operation,
-        added_tab_type: "related"
+        added_tab_type: "related",
       });
       var first_tab = gBrowser.addTab(uris.shift());
       tk.addingTabOver({
         added_tab: first_tab,
         added_tab_type: "related",
         parent_tab: selected_tab_before_operation,
-        should_keep_added_tab_position: false
+        should_keep_added_tab_position: false,
       });
 
       uris.forEach(function(uri) {
         tk.addingTab({
           parent_tab: selected_tab_before_operation,
-          added_tab_type: "related"
+          added_tab_type: "related",
         });
         let new_tab = gBrowser.addTab(uri);
         tk.addingTabOver({
           added_tab: new_tab,
           added_tab_type: "related",
           parent_tab: selected_tab_before_operation,
-          should_keep_added_tab_position: false
+          should_keep_added_tab_position: false,
         });
       });
 
