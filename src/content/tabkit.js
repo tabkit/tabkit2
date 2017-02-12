@@ -3070,8 +3070,9 @@
       // Update possibleparents
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
-        if (t.getAttribute("possibleparent") == tid)
+        if (t.getAttribute("possibleparent") == tid) {
           t.setAttribute("possibleparent", pid);
+        }
       }
       tk.updateIndents();
 
@@ -3796,8 +3797,10 @@
       var tabsToClose = tk.getSubtreeFromTab(contextTab);
       for (var i = tabsToClose.length - 1; i >= 0; i--) {
         var tab = tabsToClose[i];
-        if (tab != contextTab) // No need to set parent for contentTab
+        // No need to set parent for contentTab
+        if (tab != contextTab) {
           tab.setAttribute("possibleparent", possibleparent);
+        }
 
         tab.treeLevel = contextTab.treeLevel || 0;
         tab.style.marginLeft = contextTab.style.marginLeft || "";
