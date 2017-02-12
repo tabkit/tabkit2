@@ -2922,17 +2922,6 @@
       if (tab.getAttribute("selected") == "true")
         tab.setAttribute(tk.Sorts.lastViewed, Date.now());
 
-      // Deal with duplicated tabs
-      if (arguments.callee.caller
-        && arguments.callee.caller.caller
-        && arguments.callee.caller.caller.caller
-        && arguments.callee.caller.caller.caller.name == "sss_duplicateTab")
-      {
-        tk.generateNewTabId(tab); // Tab must have its own unique tabid
-        tk.removeGID(tab); // Let duplicateTab's caller worry about groups
-        return; // Don't call __sortgroup_onTabRestored (which might move the tab) - duplicating method must deal with this
-      }
-
       // Delay __sortgroup_onTabRestored timers until sortgroup_onSSTabRestoring stops getting called
       _sortgroup_onSSTabRestoring_timers.forEach(function(lt) {
         window.clearTimeout(lt.timeout);
