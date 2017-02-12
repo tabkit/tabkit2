@@ -884,14 +884,14 @@
     };
 
     // Sort keys in here will have larger items sorted to the top/left of the tabbar
-    this.ReverseSorts = {};
+    this.ReverseSorts = new Map();
     //this.ReverseSorts["lastLoaded"] = true; // TODO=P5: GCODE pref
     //this.ReverseSorts["lastViewed"] = true; // TODO=P5: GCODE pref
 
     // Sort keys listed here should be converted to numbers before comparison
-    this.NumericSorts = {};
-    this.NumericSorts["lastLoaded"] = true;
-    this.NumericSorts["lastViewed"] = true;
+    this.NumericSorts = new Map();
+    this.NumericSorts.set("lastLoaded", true);
+    this.NumericSorts.set("lastViewed", true);
 
     //~ // Sort keys listed here are dates, so groups should probably be positioned by most recent instead of median
     //~ this.DateSorts = {};
@@ -4852,8 +4852,8 @@
         return;
       }
 
-      var isReverse = (sortName in tk.ReverseSorts);
-      var isNumeric = (sortName in tk.NumericSorts);
+      var isReverse = tk.ReverseSorts.has(sortName);
+      var isNumeric = tk.NumericSorts.has(sortName);
       //~ var isDate = (sortName in tk.DateSorts);
       var isOrigin = (sortName == "origin");
 
@@ -5021,8 +5021,8 @@
         return;
       }
 
-      var isReverse = (sortName in tk.ReverseSorts);
-      var isNumeric = (sortName in tk.NumericSorts);
+      var isReverse = tk.ReverseSorts.has(sortName);
+      var isNumeric = tk.NumericSorts.has(sortName);
 
       var attr = tk.Sorts[sortName];
       tab.key = isNumeric ? Number(tab.getAttribute(attr)) : tab.getAttribute(attr);
