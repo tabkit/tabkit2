@@ -663,9 +663,11 @@
   //|##########################
 
     /// Private globals:
-    var _globalPrefObservers = {};
+    type LocalPrefListenerFunc = (changedPref: string) => any;
 
-    var _localPrefListeners = {};
+    var _globalPrefObservers : Map<string, Object> = new Map();
+
+    var _localPrefListeners : Map<string, Array<LocalPrefListenerFunc>> = new Map();
 
     /// Initialisation:
     this.preInitPrefsObservers = function preInitPrefsObservers(_event) {
@@ -682,23 +684,28 @@
     // Presumeably more efficient than simply adding a global observer for each one...
     this.localPrefsListener = function localPrefsListener(changedPref) {
       changedPref = changedPref.substring(PREF_BRANCH.length); // Remove prefix for these local prefs
-      for (let prefName of _localPrefListeners) {
-        if (changedPref.substring(0, prefName.length) == prefName) {
-          _localPrefListeners[prefName].forEach(function(listener) {
-            listener(changedPref);
-          });
+
+      _localPrefListeners.forEach((listeners, prefName) => {
+        if (changedPref.substring(0, prefName.length) !== prefName) {
+          return;
         }
-      }
+
+        listeners.forEach(function(listener) {
+          listener(changedPref);
+        });
+      });
     };
 
     /// Methods:
     this.addGlobalPrefListener = function addGlobalPrefListener(prefString, prefListener) {
-      if (!_globalPrefObservers[prefString]) {
-        _globalPrefObservers[prefString] = {
+      let the_global_pref_observer = _globalPrefObservers.get(prefString);
+
+      if (!the_global_pref_observer) {
+        the_global_pref_observer = {
           listeners: [],
 
           observe: function(aSubject, aTopic, aData) {
-            if (aTopic != "nsPref:changed") return;
+            if (aTopic !== "nsPref:changed") return;
             // aSubject is the nsIPrefBranch we're observing (after appropriate QI)
             // aData is the name of the pref that's been changed (relative to aSubject)
             this.listeners.forEach(function(listener) {
@@ -707,18 +714,31 @@
           },
         };
 
-        gPrefService.addObserver(prefString, _globalPrefObservers[prefString], false);
-        window.addEventListener("unload", function() { gPrefService.removeObserver(prefString, _globalPrefObservers[prefString]); }, false);
+        gPrefService.addObserver(prefString, the_global_pref_observer, false);
+        window.addEventListener(
+          "unload",
+          function() {
+            gPrefService.removeObserver(prefString, the_global_pref_observer);
+          },
+          false,
+        );
       }
 
-      _globalPrefObservers[prefString].listeners.push(prefListener);
+      the_global_pref_observer.listeners.push(prefListener);
+      _globalPrefObservers.set(prefString, the_global_pref_observer);
     };
 
-    this.addPrefListener = function addPrefListener(prefName, listener) {
-      if (!_localPrefListeners[prefName]) {
-        _localPrefListeners[prefName] = [];
+    this.addPrefListener = function addPrefListener(
+      prefName: string,
+      listener: LocalPrefListenerFunc,
+    ): any {
+      let the_local_pref_listeners = _localPrefListeners.get(prefName);
+
+      if (!the_local_pref_listeners) {
+        the_local_pref_listeners = [];
       }
-      _localPrefListeners[prefName].push(listener);
+      the_local_pref_listeners.push(listener);
+      _localPrefListeners.set(prefName, the_local_pref_listeners);
     };
 
   // ##########################
