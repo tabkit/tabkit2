@@ -1514,44 +1514,6 @@
         };
       })();
 
-      // Should be handling click events on link in a webpage
-      (function init_window_handleLinkClick() {
-        "use strict";
-
-        if (!("handleLinkClick" in window) || typeof window.handleLinkClick !== "function") {
-          tk.debug("window.handleLinkClick doesn't exists, replacing function failed");
-          return;
-        }
-
-        var old_func = window.handleLinkClick;
-        // Function signature should be valid for FF 38.x & 45.x
-        window.handleLinkClick = function(event, href, linkNode) {
-          "use strict";
-          var result;
-          var selected_tab_before_event_handling = gBrowser.selectedTab;
-
-          tk.debug(">>> window.handleLinkClick >>>");
-          tk.addingTab({
-            added_tab_type: "related",
-            parent_tab:     selected_tab_before_event_handling,
-          });
-          try {
-            result = old_func.apply(this, [event, href, linkNode]);
-          }
-          finally {
-            // This might be called already
-            // But this is called again since it contains code for cleaning up
-            tk.addingTabOver({
-              added_tab_type: "related",
-              parent_tab:     selected_tab_before_event_handling,
-            });
-          }
-          tk.debug("<<< window.handleLinkClick <<<");
-
-          return result;
-        };
-      })();
-
       // Not sure what is this
       // This is converted from code brought from Tab Kit 1
       (function init_window_middleMousePaste() {
@@ -1899,6 +1861,47 @@
             });
           }
           tk.debug("<<< window.nsContextMenu.prototype.openLinkInTab <<<");
+
+          return result;
+        };
+      })();
+
+      // Function called by adding new tab
+      (function() {
+        "use strict";
+
+        if (!("openLinkIn" in window) ||
+            typeof window.openLinkIn !== "function") {
+          tk.debug("window.openLinkIn doesn't exists, replacing function failed");
+          return;
+        }
+
+        var old_func = window.openLinkIn;
+        // https://dxr.mozilla.org/mozilla-release/search?q=function+openLinkIn&redirect=false
+        window.openLinkIn = function(url, where, _params) {
+          "use strict";
+          var result;
+
+          tk.debug(">>> window.openLinkIn >>>");
+          if (where == "tab") {
+            tk.addingTab({
+              added_tab_type: "related",
+              parent_tab: gBrowser.selectedTab,
+            });
+          }
+          try {
+            result = old_func.apply(this, arguments);
+          }
+          finally {
+            // This might be called already
+            // But this is called again since it contains code for cleaning up
+            if (where == "tab") {
+              tk.addingTabOver({
+                added_tab_type: "related",
+              });
+            }
+          }
+          tk.debug("<<< window.openLinkIn <<<");
 
           return result;
         };
