@@ -1851,7 +1851,7 @@
             parent_tab: gBrowser.selectedTab,
           });
           try {
-            result = old_func.apply(this, []);
+            result = old_func.apply(this, arguments);
           }
           finally {
             // This might be called already
