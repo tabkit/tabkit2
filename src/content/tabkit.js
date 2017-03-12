@@ -1,6 +1,6 @@
 // @flow weak
 
-/* Tab Kit 2nd Edition(Tab Kit 2 for short) - http://code.google.com/p/tabkit-2nd-edition/
+/* Tab Kit 2nd Edition(Tab Kit 2 for short)
  *
  * Copyright (c) 2007-2010 John Mellor
  * Copyright (c) 2011-2012 Leung Ho Kuen <pikachuexe@gmail.com>
