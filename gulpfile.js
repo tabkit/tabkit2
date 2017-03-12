@@ -3,16 +3,24 @@
 
 "use strict";
 
-var gulp  = require("gulp");
-var del   = require("del");
-var babel = require("gulp-babel");
+const gulp  = require("gulp");
+const del   = require("del");
+const babel = require("gulp-babel");
+const zip   = require("gulp-zip");
+const dateFormat = require("dateformat");
+const Promise = require("bluebird");
 
-var build_path = "./build/";
+require("any-promise/register")("bluebird", {Promise: Promise});
+const fsp = require("mz/fs");
+const fileExists = require("file-exists");
+
+
+const build_path = "./build/";
 
 // watch is helpful for development
-gulp.task("watch", ["build"], function() {
-  gulp.watch("./src/**/*.js", ["build:process:js"]);
-  gulp.watch("./src/**/*.css", ["build:process:css"]);
+gulp.task("watch", ["build:src"], function() {
+  gulp.watch("./src/**/*.js", ["build:src:js"]);
+  gulp.watch("./src/**/*.css", ["build:src:css"]);
 });
 
 gulp.task("clean:build", function () {
@@ -22,7 +30,7 @@ gulp.task("clean:build", function () {
 });
 
 // we"re building js for ff
-gulp.task("build:process:js", function() {
+gulp.task("build:src:js", function() {
   return gulp.src([
     "./src/**/*.js",
   ])
@@ -31,9 +39,9 @@ gulp.task("build:process:js", function() {
   .pipe(gulp.dest(build_path));
 });
 
-// we can tweak our css. E.g. autoprefix it but
+// we can tweak our css. E.g. auto-prefix it but
 // here we just copy it
-gulp.task("build:process:css", function() {
+gulp.task("build:src:css", function() {
   return gulp.src([
     "./src/**/*.css",
   ])
@@ -42,7 +50,7 @@ gulp.task("build:process:css", function() {
 });
 
 gulp.task(
-  "build:copy:all-files",
+  "build:src:static_files",
   [
     "clean:build",
   ],
@@ -57,9 +65,40 @@ gulp.task(
   }
 );
 
+gulp.task(
+  "build:xpi:official_release", ["build:src"],
+  function() {
+    const final_install_rdf_path = "./src/install.rdf";
+    const product_path = "./product";
+    const product_ext = ".xpi";
+
+    return fsp.readFile(final_install_rdf_path, {encoding: "utf8"})
+    .then(function(content) {
+      const matchData = /<em:version>(.+)<\/em:version>/i.exec(content);
+      return matchData[1];
+    })
+    .then(function(version_string) {
+      if (typeof version_string !== "string" || version_string.length === 0) {
+        throw new Error("Something is wrong, version is nil");
+      }
+
+      let product_filename = `tabkit2_${version_string}`;
+
+      if (fileExists.sync(`${product_path}/${product_filename}${product_ext}`)) {
+        let now = new Date();
+        product_filename = `${product_filename}-${dateFormat(now, "yyyy-mm-dd-hhMMss")}`;
+      }
+
+      return gulp.src(`${build_path}/**/*`)
+      .pipe(zip(`${product_filename}${product_ext}`))
+      .pipe(gulp.dest(product_path));
+    });
+  }
+);
+
 // a single command for each piece
-gulp.task("build", [
-  "build:copy:all-files",
-  "build:process:js",
-  "build:process:css",
+gulp.task("build:src", [
+  "build:src:static_files",
+  "build:src:js",
+  "build:src:css",
 ]);

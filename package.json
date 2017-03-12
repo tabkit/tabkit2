@@ -6,14 +6,23 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-cli": "^1.2.2",
+
     "gulp-babel": "^6.1.2",
+    "babelify": "^7.3.0",
     "babel-eslint": "^7.1.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-check-es2015-constants": "^6.22.0",
-    "babelify": "^7.3.0",
+
     "eslint": "^3.14.0",
     "eslint-plugin-flowtype": "^2.30.0",
     "flow-bin": "^0.38.0",
-    "stylelint": "^7.7.1"
+
+    "stylelint": "^7.7.1",
+
+    "mz": "^2.6.0",
+    "bluebird": "^3.5.0",
+    "file-exists": "^3.0.2",
+    "dateformat": "^2.0.0",
+    "gulp-zip": "^4.0.0"
   }
 }
