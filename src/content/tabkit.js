@@ -663,9 +663,11 @@
   //|##########################
 
     /// Private globals:
-    var _globalPrefObservers = {};
+    type LocalPrefListenerFunc = (changedPref: string) => any;
 
-    var _localPrefListeners = {};
+    var _globalPrefObservers : Map<string, Object> = new Map();
+
+    var _localPrefListeners : Map<string, Array<LocalPrefListenerFunc>> = new Map();
 
     /// Initialisation:
     this.preInitPrefsObservers = function preInitPrefsObservers(_event) {
@@ -682,23 +684,28 @@
     // Presumeably more efficient than simply adding a global observer for each one...
     this.localPrefsListener = function localPrefsListener(changedPref) {
       changedPref = changedPref.substring(PREF_BRANCH.length); // Remove prefix for these local prefs
-      for (let prefName of _localPrefListeners) {
-        if (changedPref.substring(0, prefName.length) == prefName) {
-          _localPrefListeners[prefName].forEach(function(listener) {
-            listener(changedPref);
-          });
+
+      _localPrefListeners.forEach((listeners, prefName) => {
+        if (changedPref.substring(0, prefName.length) !== prefName) {
+          return;
         }
-      }
+
+        listeners.forEach(function(listener) {
+          listener(changedPref);
+        });
+      });
     };
 
     /// Methods:
     this.addGlobalPrefListener = function addGlobalPrefListener(prefString, prefListener) {
-      if (!_globalPrefObservers[prefString]) {
-        _globalPrefObservers[prefString] = {
+      let the_global_pref_observer = _globalPrefObservers.get(prefString);
+
+      if (!the_global_pref_observer) {
+        the_global_pref_observer = {
           listeners: [],
 
           observe: function(aSubject, aTopic, aData) {
-            if (aTopic != "nsPref:changed") return;
+            if (aTopic !== "nsPref:changed") return;
             // aSubject is the nsIPrefBranch we're observing (after appropriate QI)
             // aData is the name of the pref that's been changed (relative to aSubject)
             this.listeners.forEach(function(listener) {
@@ -707,18 +714,31 @@
           },
         };
 
-        gPrefService.addObserver(prefString, _globalPrefObservers[prefString], false);
-        window.addEventListener("unload", function() { gPrefService.removeObserver(prefString, _globalPrefObservers[prefString]); }, false);
+        gPrefService.addObserver(prefString, the_global_pref_observer, false);
+        window.addEventListener(
+          "unload",
+          function() {
+            gPrefService.removeObserver(prefString, the_global_pref_observer);
+          },
+          false,
+        );
       }
 
-      _globalPrefObservers[prefString].listeners.push(prefListener);
+      the_global_pref_observer.listeners.push(prefListener);
+      _globalPrefObservers.set(prefString, the_global_pref_observer);
     };
 
-    this.addPrefListener = function addPrefListener(prefName, listener) {
-      if (!_localPrefListeners[prefName]) {
-        _localPrefListeners[prefName] = [];
+    this.addPrefListener = function addPrefListener(
+      prefName: string,
+      listener: LocalPrefListenerFunc,
+    ): any {
+      let the_local_pref_listeners = _localPrefListeners.get(prefName);
+
+      if (!the_local_pref_listeners) {
+        the_local_pref_listeners = [];
       }
-      _localPrefListeners[prefName].push(listener);
+      the_local_pref_listeners.push(listener);
+      _localPrefListeners.set(prefName, the_local_pref_listeners);
     };
 
   // ##########################
@@ -884,14 +904,14 @@
     };
 
     // Sort keys in here will have larger items sorted to the top/left of the tabbar
-    this.ReverseSorts = {};
+    this.ReverseSorts = new Map();
     //this.ReverseSorts["lastLoaded"] = true; // TODO=P5: GCODE pref
     //this.ReverseSorts["lastViewed"] = true; // TODO=P5: GCODE pref
 
     // Sort keys listed here should be converted to numbers before comparison
-    this.NumericSorts = {};
-    this.NumericSorts["lastLoaded"] = true;
-    this.NumericSorts["lastViewed"] = true;
+    this.NumericSorts = new Map();
+    this.NumericSorts.set("lastLoaded", true);
+    this.NumericSorts.set("lastViewed", true);
 
     //~ // Sort keys listed here are dates, so groups should probably be positioned by most recent instead of median
     //~ this.DateSorts = {};
@@ -1494,44 +1514,6 @@
         };
       })();
 
-      // Should be handling click events on link in a webpage
-      (function init_window_handleLinkClick() {
-        "use strict";
-
-        if (!("handleLinkClick" in window) || typeof window.handleLinkClick !== "function") {
-          tk.debug("window.handleLinkClick doesn't exists, replacing function failed");
-          return;
-        }
-
-        var old_func = window.handleLinkClick;
-        // Function signature should be valid for FF 38.x & 45.x
-        window.handleLinkClick = function(event, href, linkNode) {
-          "use strict";
-          var result;
-          var selected_tab_before_event_handling = gBrowser.selectedTab;
-
-          tk.debug(">>> window.handleLinkClick >>>");
-          tk.addingTab({
-            added_tab_type: "related",
-            parent_tab:     selected_tab_before_event_handling,
-          });
-          try {
-            result = old_func.apply(this, [event, href, linkNode]);
-          }
-          finally {
-            // This might be called already
-            // But this is called again since it contains code for cleaning up
-            tk.addingTabOver({
-              added_tab_type: "related",
-              parent_tab:     selected_tab_before_event_handling,
-            });
-          }
-          tk.debug("<<< window.handleLinkClick <<<");
-
-          return result;
-        };
-      })();
-
       // Not sure what is this
       // This is converted from code brought from Tab Kit 1
       (function init_window_middleMousePaste() {
@@ -1869,7 +1851,7 @@
             parent_tab: gBrowser.selectedTab,
           });
           try {
-            result = old_func.apply(this, []);
+            result = old_func.apply(this, arguments);
           }
           finally {
             // This might be called already
@@ -1879,6 +1861,47 @@
             });
           }
           tk.debug("<<< window.nsContextMenu.prototype.openLinkInTab <<<");
+
+          return result;
+        };
+      })();
+
+      // Function called by adding new tab
+      (function() {
+        "use strict";
+
+        if (!("openLinkIn" in window) ||
+            typeof window.openLinkIn !== "function") {
+          tk.debug("window.openLinkIn doesn't exists, replacing function failed");
+          return;
+        }
+
+        var old_func = window.openLinkIn;
+        // https://dxr.mozilla.org/mozilla-release/search?q=function+openLinkIn&redirect=false
+        window.openLinkIn = function(url, where, _params) {
+          "use strict";
+          var result;
+
+          tk.debug(">>> window.openLinkIn >>>");
+          if (where == "tab") {
+            tk.addingTab({
+              added_tab_type: "related",
+              parent_tab: gBrowser.selectedTab,
+            });
+          }
+          try {
+            result = old_func.apply(this, arguments);
+          }
+          finally {
+            // This might be called already
+            // But this is called again since it contains code for cleaning up
+            if (where == "tab") {
+              tk.addingTabOver({
+                added_tab_type: "related",
+              });
+            }
+          }
+          tk.debug("<<< window.openLinkIn <<<");
 
           return result;
         };
@@ -2922,17 +2945,6 @@
       if (tab.getAttribute("selected") == "true")
         tab.setAttribute(tk.Sorts.lastViewed, Date.now());
 
-      // Deal with duplicated tabs
-      if (arguments.callee.caller
-        && arguments.callee.caller.caller
-        && arguments.callee.caller.caller.caller
-        && arguments.callee.caller.caller.caller.name == "sss_duplicateTab")
-      {
-        tk.generateNewTabId(tab); // Tab must have its own unique tabid
-        tk.removeGID(tab); // Let duplicateTab's caller worry about groups
-        return; // Don't call __sortgroup_onTabRestored (which might move the tab) - duplicating method must deal with this
-      }
-
       // Delay __sortgroup_onTabRestored timers until sortgroup_onSSTabRestoring stops getting called
       _sortgroup_onSSTabRestoring_timers.forEach(function(lt) {
         window.clearTimeout(lt.timeout);
@@ -3081,8 +3093,9 @@
       // Update possibleparents
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
-        if (t.getAttribute("possibleparent") == tid)
+        if (t.getAttribute("possibleparent") == tid) {
           t.setAttribute("possibleparent", pid);
+        }
       }
       tk.updateIndents();
 
@@ -3807,8 +3820,10 @@
       var tabsToClose = tk.getSubtreeFromTab(contextTab);
       for (var i = tabsToClose.length - 1; i >= 0; i--) {
         var tab = tabsToClose[i];
-        if (tab != contextTab) // No need to set parent for contentTab
+        // No need to set parent for contentTab
+        if (tab != contextTab) {
           tab.setAttribute("possibleparent", possibleparent);
+        }
 
         tab.treeLevel = contextTab.treeLevel || 0;
         tab.style.marginLeft = contextTab.style.marginLeft || "";
@@ -4860,8 +4875,8 @@
         return;
       }
 
-      var isReverse = (sortName in tk.ReverseSorts);
-      var isNumeric = (sortName in tk.NumericSorts);
+      var isReverse = tk.ReverseSorts.has(sortName);
+      var isNumeric = tk.NumericSorts.has(sortName);
       //~ var isDate = (sortName in tk.DateSorts);
       var isOrigin = (sortName == "origin");
 
@@ -5029,8 +5044,8 @@
         return;
       }
 
-      var isReverse = (sortName in tk.ReverseSorts);
-      var isNumeric = (sortName in tk.NumericSorts);
+      var isReverse = tk.ReverseSorts.has(sortName);
+      var isNumeric = tk.NumericSorts.has(sortName);
 
       var attr = tk.Sorts[sortName];
       tab.key = isNumeric ? Number(tab.getAttribute(attr)) : tab.getAttribute(attr);
