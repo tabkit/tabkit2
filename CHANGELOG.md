@@ -244,7 +244,7 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 
 [unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.16...HEAD
-[0.12.15]:     https://github.com/tabkit/tabkit2/compare/v0.12.15...v0.12.16
+[0.12.16]:     https://github.com/tabkit/tabkit2/compare/v0.12.15...v0.12.16
 [0.12.15]:     https://github.com/tabkit/tabkit2/compare/v0.12.14...v0.12.15
 [0.12.14]:     https://github.com/tabkit/tabkit2/compare/v0.12.13...v0.12.14
 [0.12.13]:     https://github.com/tabkit/tabkit2/compare/v0.12.12...v0.12.13
