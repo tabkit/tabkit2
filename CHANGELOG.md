@@ -6,6 +6,16 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.16][0.12.16] - 2017-03-12
+
+### Changed
+- Declare as compatible with 52.x  
+  FF 45.x should just use old versions  
+
+### Fixed
+- Not working on FF 52
+
+
 ## [0.12.15][0.12.15] - 2016-06-19
 
 ### Changed
@@ -233,7 +243,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.15...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.16...HEAD
+[0.12.15]:     https://github.com/tabkit/tabkit2/compare/v0.12.15...v0.12.16
 [0.12.15]:     https://github.com/tabkit/tabkit2/compare/v0.12.14...v0.12.15
 [0.12.14]:     https://github.com/tabkit/tabkit2/compare/v0.12.13...v0.12.14
 [0.12.13]:     https://github.com/tabkit/tabkit2/compare/v0.12.12...v0.12.13
