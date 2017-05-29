@@ -21,6 +21,13 @@ const build_path = "./build/";
 gulp.task("watch", ["build:src"], function() {
   gulp.watch("./src/**/*.js", ["build:src:js"]);
   gulp.watch("./src/**/*.css", ["build:src:css"]);
+  gulp.watch(
+    [
+      "./src/**/*",
+      "!./src/**/*.js",
+      "!./src/**/*.css",
+    ],
+    ["build:src:static_files"]);
 });
 
 gulp.task("clean:build", function () {
