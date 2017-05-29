@@ -6736,7 +6736,7 @@
       //
       // We keep using event `DOMMouseScroll`. It's deprecated but more reliable.
       // https://developer.mozilla.org/en-US/docs/Web/Events/DOMMouseScroll
-      gBrowser.tabContainer.addEventListener("DOMMouseScroll", tk.onTabWheelGesture, true);
+      gBrowser.tabContainer.addEventListener("wheel", tk.onTabWheelGesture, true);
 
       // Move Close Tab Before/After to the tab context menu (from the Tools menu)
       var tabContextMenu = gBrowser.tabContextMenu;
@@ -6779,14 +6779,14 @@
         }
 
         if (tk.TabBar.Mode.getIsVerticalMode())
-          var delta = (Math.abs(event.detail) != 1 ? event.detail : (event.detail < 0 ? -3 : 3)) * 24;
+          var delta = (Math.abs(event.deltaY) != 1 ? event.deltaY : (event.deltaY < 0 ? -3 : 3)) * 24;
         else if (gBrowser.tabContainer.getAttribute("multirow") == "true")
-          var delta = event.detail < 0 ? -48 : 48; // 2*24
+          var delta = event.deltaY < 0 ? -48 : 48; // 2*24
         else
           return;
 
         var curpos = scrollbar.getAttribute("curpos");
-        curpos = curpos == "NaN" ? 0 : Number(curpos);
+        curpos = isNaN(curpos) ? 0 : Number(curpos);
         var maxpos = Number(scrollbar.getAttribute("maxpos"));
         var newpos = Math.min(maxpos, Math.max(0, curpos + delta));
         scrollbar.setAttribute("curpos", newpos);
