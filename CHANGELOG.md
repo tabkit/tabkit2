@@ -6,6 +6,12 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.12.17][0.12.17] - 2017-05-29
+
+### Fixed
+- Fix scrollbar malfunctioning due to usage of deprecated event  
+
+
 ## [0.12.16][0.12.16] - 2017-03-12
 
 ### Changed
@@ -243,7 +249,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.16...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.17...HEAD
+[0.12.16]:     https://github.com/tabkit/tabkit2/compare/v0.12.16...v0.12.17
 [0.12.16]:     https://github.com/tabkit/tabkit2/compare/v0.12.15...v0.12.16
 [0.12.15]:     https://github.com/tabkit/tabkit2/compare/v0.12.14...v0.12.15
 [0.12.14]:     https://github.com/tabkit/tabkit2/compare/v0.12.13...v0.12.14
