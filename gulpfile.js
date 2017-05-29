@@ -4,6 +4,7 @@
 "use strict";
 
 const gulp  = require("gulp");
+const gulpsync = require("gulp-sync")(gulp);
 const del   = require("del");
 const babel = require("gulp-babel");
 const zip   = require("gulp-zip");
@@ -58,9 +59,6 @@ gulp.task("build:src:css", function() {
 
 gulp.task(
   "build:src:static_files",
-  [
-    "clean:build",
-  ],
   function() {
     return gulp.src([
       "./src/**/*",
@@ -104,8 +102,14 @@ gulp.task(
 );
 
 // a single command for each piece
-gulp.task("build:src", [
-  "build:src:static_files",
-  "build:src:js",
-  "build:src:css",
-]);
+gulp.task(
+  "build:src",
+  gulpsync.sync([
+    "clean:build",
+    [
+      "build:src:static_files",
+      "build:src:js",
+      "build:src:css",
+    ],
+  ])
+);
