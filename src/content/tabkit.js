@@ -6279,7 +6279,7 @@
 
       // Calculate new direction attribute
       var flipDirection = (pos == tk.Positions.RIGHT || pos == tk.Positions.BOTTOM);
-      var newDirection = flipDirection ? "reverse" : "normal";
+      var newDirection = flipDirection ? "normal" : "reverse";
 
       // Now activate our css
       if (flipOrient) {
