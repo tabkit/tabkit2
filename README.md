@@ -22,7 +22,7 @@ Tab Kit makes tabs more efficient for power users, allowing a wide variety of tw
 
 
 ## Download / Installation
-- [TabKit 2 on Palemoon Addon website](http://addons.palemoon.org/addon/tabkit2/)  
+- [Tab Kit 2 on Palemoon Addon website](http://addons.palemoon.org/addon/tabkit2/)  
 - [More Palemoon Add-ons](http://addons.palemoon.org/extensions/)  
 
 
