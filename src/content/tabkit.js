@@ -1,6 +1,6 @@
 // @flow weak
 
-/* Tab Kit 2nd Edition(Tab Kit 2 for short)
+/* Tab Kit 2
  *
  * Copyright (c) 2007-2010 John Mellor
  * Copyright (c) 2011-2012 Leung Ho Kuen <pikachuexe@gmail.com>
@@ -7129,7 +7129,7 @@
 
           tk.debug(">>> gBrowser.pinTab >>>");
           if (tk.TabBar.Mode.getIsVerticalMode()) {
-            alert("Sorry, Tab Kit 2nd Edition does not support App Tabs in Vertical mode");
+            alert("Sorry, Tab Kit 2 does not support App Tabs in Vertical mode");
           }
           else {
             result = old_func.apply(this, [aTab]);
