@@ -12,8 +12,6 @@
     "plugin:flowtype/recommended",
     "eslint:recommended"
   ],
-  "__comment": "the above setting would use eslint defualt rules for more rules plz visit http://eslint.org/docs/rules/",
-  "__comment2": "most of text_editor/IDE should have support to eslint google it",
   "parserOptions": {
     "sourceType": "script"
   },
