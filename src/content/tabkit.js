@@ -7186,11 +7186,8 @@
         return;
       }
 
-      // This value is the value before switch, tested in FF 31.1.0 & 36.0.1
+      // This value is the value before switch, tested in Pale Moon 27.8.3
       var isFullScreenBeforeEvent = window.fullScreen;
-      if (_prefs.getCharPref("tabbar_fullscreen_value_meaning_in_callback") == "value_after_change") {
-        isFullScreenBeforeEvent = !isFullScreenBeforeEvent;
-      }
 
       var willBeFullScreen = !isFullScreenBeforeEvent;
       var splitter = document.getElementById("tabkit-splitter");
