@@ -6,6 +6,21 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.13.1][0.13.1] - 2018-04-05
+
+### Fixed
+- Fix vertical tab bar not hiding in fullscreen mode
+
+
+## [0.13.0][0.13.0] - 2017-12-28
+
+### Changed
+- Declare extension as written for Pale Moon
+
+### Fixed
+- Fix some bugs when using this extension on Pale Moon
+
+
 ## [0.12.17][0.12.17] - 2017-05-29
 
 ### Fixed
@@ -249,8 +264,10 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.12.17...HEAD
-[0.12.16]:     https://github.com/tabkit/tabkit2/compare/v0.12.16...v0.12.17
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.13.1...HEAD
+[0.13.1]:     https://github.com/tabkit/tabkit2/compare/v0.13.0...v0.13.1
+[0.13.0]:     https://github.com/tabkit/tabkit2/compare/v0.12.17...v0.13.0
+[0.12.17]:     https://github.com/tabkit/tabkit2/compare/v0.12.16...v0.12.17
 [0.12.16]:     https://github.com/tabkit/tabkit2/compare/v0.12.15...v0.12.16
 [0.12.15]:     https://github.com/tabkit/tabkit2/compare/v0.12.14...v0.12.15
 [0.12.14]:     https://github.com/tabkit/tabkit2/compare/v0.12.13...v0.12.14
