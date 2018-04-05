@@ -7215,6 +7215,7 @@
       if (willBeFullScreen) {
         tk.debug("gonna set splitter collapsed");
         splitter.setAttribute("state", "collapsed");
+        tabsToolbar.setAttribute("collapsed", "true");
 
         if (should_hide_spitter_on_collapse) {
           tk.debug("gonna set splitter hidden");
