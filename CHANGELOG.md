@@ -6,6 +6,12 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.13.2][0.13.2] - 2018-06-10
+
+### Fixed
+- Add back fullscreen mode related preference for PaleMoon 28
+
+
 ## [0.13.1][0.13.1] - 2018-04-05
 
 ### Fixed
@@ -264,7 +270,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.13.1...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.13.2...HEAD
+[0.13.2]:     https://github.com/tabkit/tabkit2/compare/v0.13.1...v0.13.2
 [0.13.1]:     https://github.com/tabkit/tabkit2/compare/v0.13.0...v0.13.1
 [0.13.0]:     https://github.com/tabkit/tabkit2/compare/v0.12.17...v0.13.0
 [0.12.17]:     https://github.com/tabkit/tabkit2/compare/v0.12.16...v0.12.17
