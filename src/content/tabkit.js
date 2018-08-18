@@ -7194,6 +7194,7 @@
 
       var willBeFullScreen = !isFullScreenBeforeEvent;
       var splitter = document.getElementById("tabkit-splitter");
+      var appcontent = document.getElementById("appcontent");
 
       // Type: String
       // Values:
@@ -7221,6 +7222,9 @@
           tk.debug("gonna set splitter hidden");
           splitter.setAttribute("hidden", "true");
         }
+        // For unknown reason(s) the appcontent is also collapsed with the tab bar
+        // So we "fix" it by reverting it
+        appcontent.setAttribute("collapsed", "false");
       }
       else {
         tk.debug("gonna set splitter open");
@@ -7231,6 +7235,9 @@
           tk.debug("gonna set splitter visible");
           splitter.removeAttribute("hidden");
         }
+        // For unknown reason(s) the appcontent is also collapsed with the tab bar
+        // So we "fix" it by reverting it
+        appcontent.setAttribute("collapsed", "false");
       }
     };
 
