@@ -6,6 +6,12 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.13.3][0.13.3] - 2018-08-18
+
+### Fixed
+- Workaround the webpage "frame" being collapsed with the tab bar on fullscreen
+
+
 ## [0.13.2][0.13.2] - 2018-06-10
 
 ### Fixed
@@ -270,7 +276,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.13.2...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.13.3...HEAD
+[0.13.3]:     https://github.com/tabkit/tabkit2/compare/v0.13.2...v0.13.3
 [0.13.2]:     https://github.com/tabkit/tabkit2/compare/v0.13.1...v0.13.2
 [0.13.1]:     https://github.com/tabkit/tabkit2/compare/v0.13.0...v0.13.1
 [0.13.0]:     https://github.com/tabkit/tabkit2/compare/v0.12.17...v0.13.0
