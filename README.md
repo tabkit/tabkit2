@@ -1,6 +1,19 @@
 # Tab Kit 2
 
-This project aims to make the original [Tab Kit(TK)](https://addons.mozilla.org/en-us/firefox/addon/tab-kit/) Pale Moon compatible.  
+This project aims to make the original [Tab Kit(TK)](https://addons.mozilla.org/en-us/firefox/addon/tab-kit/) Pale Moon compatible. 
+
+
+## Firefox Support Is Gone, Welcome Pale Moon
+Since Firefox 57+ only supports their new kind of extension ("WebExtensions"), supporting it would require a complete rewrite.  
+With the time (I got a day job) and the knowledge (WebExtensions is completely different in code layout, functionality support) I have,  
+I decide to switch to support Pale Moon. It supports XUL extensions (the "old" extension type) like DownThemAll forever.
+
+You have several altermatives here:
+- Pale Moon with Tab Kit 2 (download from below, don't use the Firefox one!)
+- Vivaldi (Chromium based browser with vertical tab + another kind of tab grouping)
+- Firefox with another extension with tab tree support
+
+I am using Pale Moon + Vivaldi myself.
 
 
 ## Description from original Tab Kit (modified)
