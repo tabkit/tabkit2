@@ -180,7 +180,7 @@
           var scriptError = Cc["@mozilla.org/scripterror;1"].
                     createInstance(Ci.nsIScriptError);
 
-          if (!actualException && typeof error == "object")
+          if (!actualException && typeof error === "object")
             actualException = error;
           var haveException = actualException ? true : false;
           if (haveException && actualException.stack) {
@@ -239,7 +239,7 @@
     };
 
     /* USAGE:
-     *   tk.assert('true != false', function(e) eval(e), "True should not equal false");
+     *   tk.assert('true !== false', function(e) eval(e), "True should not equal false");
      */
     this.assert = function assert(condition, localEval, message) {
       if (!_prefs.getBoolPref("debug") || localEval(condition))
@@ -264,14 +264,14 @@
 
 
     this.startsWith = function startsWith(str, start) {
-      return str.indexOf(start) == 0;
+      return str.indexOf(start) === 0;
     };
 
     this.endsWith = function endsWith(str, end) {
       var startPos = str.length - end.length;
       if (startPos < 0)
         return false;
-      return str.lastIndexOf(end, startPos) == startPos;
+      return str.lastIndexOf(end, startPos) === startPos;
     };
 
 
@@ -322,7 +322,7 @@
 
 
     this.addDelayedEventListener = function addDelayedEventListener(target, eventType, listener) {
-      if (typeof listener == "object") {
+      if (typeof listener === "object") {
         target.addEventListener(eventType, function __delayedEventListener(event) {
           window.setTimeout(function(listener2) { listener2.handleEvent(event); }, 0, listener);
         }, false);
@@ -342,9 +342,9 @@
       if (!scrollbar) {
         /*
         // Alternative way to scroll things (can only scroll within an <xul:scrollbox> though)
-        if (overflowPane.localName != "scrollbox")
+        if (overflowPane.localName !== "scrollbox")
           overflowPane = overflowPane.parentNode;
-        if (overflowPane.localName == "scrollbox") {
+        if (overflowPane.localName === "scrollbox") {
           var nsIScrollBoxObject = overflowPane.boxObject.QueryInterface(Ci.nsIScrollBoxObject);
           nsIScrollBoxObject.ensureElementIsVisible(element);
         }
@@ -382,7 +382,7 @@
 
 
       // Make sure overflowPane is never scrolled halfway across elements at both the top and bottom
-      if ((lastY - firstY) % height == 0 && curpos % height != 0 && (curpos + paneHeight + firstY - lastY) % height != 0) {
+      if ((lastY - firstY) % height === 0 && curpos % height !== 0 && (curpos + paneHeight + firstY - lastY) % height !== 0) {
         curpos = height * Math.round(curpos / height);
       }
 
@@ -416,7 +416,7 @@
         var newIndex = target._tPos;
         if (newIndex > tabToMove._tPos)
           newIndex--;
-        if (newIndex != tabToMove._tPos)
+        if (newIndex !== tabToMove._tPos)
           gBrowser.moveTabTo(tabToMove, newIndex);
       }
       catch (ex) {
@@ -429,7 +429,7 @@
         var newIndex = target._tPos + 1;
         if (newIndex > tabToMove._tPos)
           newIndex--;
-        if (newIndex != tabToMove._tPos)
+        if (newIndex !== tabToMove._tPos)
           gBrowser.moveTabTo(tabToMove, newIndex);
       }
       catch (ex) {
@@ -539,7 +539,7 @@
     /// Event Listeners:
     // This gets called for new browser windows, once the DOM tree is loaded
     this.onDOMContentLoaded = function onDOMContentLoaded(event) {
-      if (event.originalTarget != document)
+      if (event.originalTarget !== document)
         return; // Sometimes in Fx3+ there's a random HTMLDocument that fires a DOMContentLoaded before the main window does
 
       window.removeEventListener("DOMContentLoaded", tk.onDOMContentLoaded, false);
@@ -559,7 +559,7 @@
 
     // This gets called for new browser windows, once they've completely finished loading
     this.onLoad = function onLoad(event) {
-      if (event.originalTarget != document)
+      if (event.originalTarget !== document)
         return;
 
       window.removeEventListener("load", tk.onLoad, false);
@@ -604,7 +604,7 @@
         var styleSheet = (document.styleSheets[i]: any);
         for (var j = 0; j < styleSheet.cssRules.length; j++) {
           var cssRule = styleSheet.cssRules[j];
-          if ("selectorText" in cssRule && cssRule.selectorText && cssRule.selectorText.toLowerCase() == ruleName) {
+          if ("selectorText" in cssRule && cssRule.selectorText && cssRule.selectorText.toLowerCase() === ruleName) {
             if (deleteIt) {
               styleSheet.deleteRule(j);
               return true;
@@ -642,8 +642,8 @@
 
     /// Initialisation:
     this.preInitShortcuts = function preInitShortcuts(_event) {
-      //tk.assert('window.location == "chrome://browser/content/browser.xul"', function(e) eval(e), "preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
-      if(window.location != "chrome://browser/content/browser.xul")
+      //tk.assert('window.location === "chrome://browser/content/browser.xul"', function(e) eval(e), "preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
+      if(window.location !== "chrome://browser/content/browser.xul")
         tk.dump("preInitShortcuts should only be run in browser windows, as tabkit.js is only loaded into browser.xul");
 
       // `getBrowser` is a deprecated which just return `gBrowser`
@@ -1883,7 +1883,7 @@
           var result;
 
           tk.debug(">>> window.openLinkIn >>>");
-          if (where == "tab") {
+          if (where === "tab") {
             tk.addingTab({
               added_tab_type: "related",
               parent_tab: gBrowser.selectedTab,
@@ -1895,7 +1895,7 @@
           finally {
             // This might be called already
             // But this is called again since it contains code for cleaning up
-            if (where == "tab") {
+            if (where === "tab") {
               tk.addingTabOver({
                 added_tab_type: "related",
               });
@@ -2088,7 +2088,7 @@
           var result;
 
           tk.debug(">>> window.nsBrowserAccess.prototype.openURI >>>");
-          var added_tab_type = aContext == Ci.nsIBrowserDOMWindow.OPEN_EXTERNAL ? "unrelated" : "related";
+          var added_tab_type = aContext === Ci.nsIBrowserDOMWindow.OPEN_EXTERNAL ? "unrelated" : "related";
           tk.addingTab({
             added_tab_type: added_tab_type,
             parent_tab: gBrowser.selectedTab,
@@ -2379,7 +2379,7 @@
           var tab = added_tabs_from_params_or_global.pop();
 
           // Keep recentlyadded tags up to date
-          if (!parent || parent != tk.lastParent)
+          if (!parent || parent !== tk.lastParent)
             for (var i = 0; i < _tabs.length; i++)
               _tabs[i].removeAttribute("recentlyadded");
           tk.lastParent = tk.nextParent;
@@ -2412,8 +2412,8 @@
             type = "unrelated";
           }
 
-          // Set openerGroup (reused later if autoGroupNewTabs and activeGrouping == "opener")
-          if (type == "related" && pid && parent) {
+          // Set openerGroup (reused later if autoGroupNewTabs and activeGrouping === "opener")
+          if (type === "related" && pid && parent) {
             var ogAttr = tk.Groupings.opener;
             var openerGroup = parent.getAttribute(ogAttr);
             if (openerGroup) {
@@ -2433,7 +2433,7 @@
               && tab.previousSibling
               && tab.nextSibling
               && tab.previousSibling.getAttribute("groupid")
-              && tab.previousSibling.getAttribute("groupid") == tab.nextSibling.getAttribute("groupid"))
+              && tab.previousSibling.getAttribute("groupid") === tab.nextSibling.getAttribute("groupid"))
             {
               if (type === "unrelated") {
                 tk.keepGroupsTogether();
@@ -2444,28 +2444,28 @@
                 tab.setAttribute("outoforder", "true");
               }
             }
-            else if (tk.activeGrouping == "opener") {
-              if (type == "related" && pid && parent) {
+            else if (tk.activeGrouping === "opener") {
+              if (type === "related" && pid && parent) {
                 var pgid = parent.getAttribute("groupid");
                 // If tabNeedsPlacing or is already in place
                 if (tabNeedsPlacing
-                  || (pgid ? ((tab.previousSibling && tab.previousSibling.getAttribute("groupid") == pgid)
-                        || (tab.nextSibling && tab.nextSibling.getAttribute("groupid") == pgid))
-                       : ((tab.previousSibling && tab.previousSibling == parent)
-                        || (tab.nextSibling && tab.nextSibling == parent))))
+                  || (pgid ? ((tab.previousSibling && tab.previousSibling.getAttribute("groupid") === pgid)
+                        || (tab.nextSibling && tab.nextSibling.getAttribute("groupid") === pgid))
+                       : ((tab.previousSibling && tab.previousSibling === parent)
+                        || (tab.nextSibling && tab.nextSibling === parent))))
                 {
                   // Group tab
                   var grouped = false;
                   if (pgid) {
                     // TODO=P4: ??? allow forcing all groups to act as openergroups?
-                    //if (pgid.indexOf(openerGroup) != -1 || pgid.indexOf(":tmpOG-") != -1) {
-                    if (pgid.indexOf(":oG-") != -1 || pgid.indexOf(":tmpOG-") != -1) { // So :oG-bookmarkGroup- works as intended
+                    //if (pgid.indexOf(openerGroup) !== -1 || pgid.indexOf(":tmpOG-") !== -1) {
+                    if (pgid.indexOf(":oG-") !== -1 || pgid.indexOf(":tmpOG-") !== -1) { // So :oG-bookmarkGroup- works as intended
                       tk.setGID(tab, pgid);
                       grouped = true;
                     }
                   }
                   else if (!pgid) {
-                    if (tk.getGroupById(openerGroup).length != 0 || tk.getUngroupedTabsByAttr(ogAttr, openerGroup).length != 2) {
+                    if (tk.getGroupById(openerGroup).length !== 0 || tk.getUngroupedTabsByAttr(ogAttr, openerGroup).length !== 2) {
                       openerGroup = ":tmpOG-" + pid;
                     }
                     tk.setGID(parent, openerGroup);
@@ -2480,9 +2480,9 @@
 
                     var newPos = tk.newTabPosition;
                     var autoSortOpenerGroups = _prefs.getBoolPref("autoSortOpenerGroups");
-                    if ((autoSortOpenerGroups && (tk.countGroups(gid) == 1 || tk.activeSort == "origin")) // We can't really autosort merged groups
-                      || newPos == 1
-                      || (newPos == 2 && tk.activeSort == "origin"))
+                    if ((autoSortOpenerGroups && (tk.countGroups(gid) === 1 || tk.activeSort === "origin")) // We can't really autosort merged groups
+                      || newPos === 1
+                      || (newPos === 2 && tk.activeSort === "origin"))
                     { // Next to current
                       switch (tk.openRelativePosition) {
                       case "left":
@@ -2493,21 +2493,21 @@
                         break;
                       default: //case "rightOfRecent": case "rightOfConsecutive":
                         var target = parent;
-                        while (target.nextSibling && target.nextSibling.getAttribute("groupid") == gid && target.nextSibling.hasAttribute("recentlyadded"))
+                        while (target.nextSibling && target.nextSibling.getAttribute("groupid") === gid && target.nextSibling.hasAttribute("recentlyadded"))
                           target = target.nextSibling;
                         tk.moveAfter(tab, target);
                         tab.setAttribute("recentlyadded", "true");
                       }
                       tab.setAttribute("outoforder", "true");
                     }
-                    else if (newPos == 0) { // At far right
+                    else if (newPos === 0) { // At far right
                       var target = parent;
-                      while (target.nextSibling && target.nextSibling.getAttribute("groupid") == gid)
+                      while (target.nextSibling && target.nextSibling.getAttribute("groupid") === gid)
                         target = target.nextSibling;
                       tk.moveAfter(tab, target);
                       tab.setAttribute("outoforder", "true");
                     }
-                    else { // By last sort (newPos == 2)
+                    else { // By last sort (newPos === 2)
                       tk.insertTab(tab, gid);
                     }
 
@@ -2516,21 +2516,21 @@
                 }
               }
             }
-            else if (tk.activeGrouping == "domain") {
+            else if (tk.activeGrouping === "domain") {
               var domain = tab.getAttribute(tk.Groupings.domain);
               if (domain) {
                 var group = tk.getGroupById(domain);
                 // If tabNeedsPlacing or is already in place
                 if (tabNeedsPlacing
-                  || ((group.length > 0) ? ((tab.previousSibling && tab.previousSibling.getAttribute("groupid").indexOf(domain) != -1)
-                                || (tab.nextSibling && tab.nextSibling.getAttribute("groupid").indexOf(domain) != -1))
-                               : ((tab.previousSibling && tab.previousSibling.getAttribute(tk.Groupings.domain) == domain)
-                                || (tab.nextSibling && tab.nextSibling.getAttribute(tk.Groupings.domain) == domain))))
+                  || ((group.length > 0) ? ((tab.previousSibling && tab.previousSibling.getAttribute("groupid").indexOf(domain) !== -1)
+                                || (tab.nextSibling && tab.nextSibling.getAttribute("groupid").indexOf(domain) !== -1))
+                               : ((tab.previousSibling && tab.previousSibling.getAttribute(tk.Groupings.domain) === domain)
+                                || (tab.nextSibling && tab.nextSibling.getAttribute(tk.Groupings.domain) === domain))))
                 {
                   // Group tab
-                  if (group.length == 0) {
+                  if (group.length === 0) {
                     group = tk.getUngroupedTabsByAttr(tk.Groupings.domain, domain);
-                    if (group.length == 2) // TODO=P2: GCODE Replace this simplistic check with an attribute remembering whether tabs were explicitly ungrouped, or are happy to be made into a domain group
+                    if (group.length === 2) // TODO=P2: GCODE Replace this simplistic check with an attribute remembering whether tabs were explicitly ungrouped, or are happy to be made into a domain group
                       for (var i = 0; i < group.length; i++)
                         tk.setGID(group[i], domain);
                     else
@@ -2544,16 +2544,16 @@
                   if (tabNeedsPlacing && group.length > 0) {
                     // Position tab
                     var autoSortDomainGroups = _prefs.getBoolPref("autoSortDomainGroups");
-                    if (autoSortDomainGroups && tk.countGroups(domain) == 1) { // We can't really autosort merged groups
+                    if (autoSortDomainGroups && tk.countGroups(domain) === 1) { // We can't really autosort merged groups
                       tk.insertTab(tab, domain, "uri");
                     }
                     else {
                       var newPos = tk.newTabPosition;
-                      if (newPos == 2)
-                        newPos = (tk.activeSort == "origin") ? 1 : (autoSortDomainGroups ? 0 : newPos);
-                      if (newPos == 1 && (!pid || parent && parent.getAttribute("groupid").indexOf(domain) == -1))
+                      if (newPos === 2)
+                        newPos = (tk.activeSort === "origin") ? 1 : (autoSortDomainGroups ? 0 : newPos);
+                      if (newPos === 1 && (!pid || parent && parent.getAttribute("groupid").indexOf(domain) === -1))
                         newPos = 0;
-                      if (newPos == 1) { // Next to current
+                      if (newPos === 1) { // Next to current
                         switch (tk.openRelativePosition) {
                         case "left":
                           tk.moveBefore(tab, parent);
@@ -2566,21 +2566,21 @@
                           if (target == null) {
                             break;
                           }
-                          while (target.nextSibling && target.nextSibling.getAttribute("groupid") == domain && target.nextSibling.hasAttribute("recentlyadded"))
+                          while (target.nextSibling && target.nextSibling.getAttribute("groupid") === domain && target.nextSibling.hasAttribute("recentlyadded"))
                             target = target.nextSibling;
                           tk.moveAfter(tab, target);
                           tab.setAttribute("recentlyadded", "true");
                         }
                         tab.setAttribute("outoforder", "true");
                       }
-                      else if (newPos == 0 && parent) { // At far right
+                      else if (newPos === 0 && parent) { // At far right
                         var target = parent;
-                        while (target.nextSibling && target.nextSibling.getAttribute("groupid") == gid)
+                        while (target.nextSibling && target.nextSibling.getAttribute("groupid") === gid)
                           target = target.nextSibling;
                         tk.moveAfter(tab, target);
                         tab.setAttribute("outoforder", "true");
                       }
-                      else { // By last sort (newPos == 2)
+                      else { // By last sort (newPos === 2)
                         tk.insertTab(tab, domain);
                       }
                     }
@@ -2594,9 +2594,9 @@
 
           if (tabNeedsPlacing) {
             var newPos = tk.newTabPosition;
-            if (newPos == 2 && tk.activeSort == "origin")
+            if (newPos === 2 && tk.activeSort === "origin")
               newPos = 1;
-            if (newPos == 1 && !pid)
+            if (newPos === 1 && !pid)
               newPos = 0;
             switch (newPos) {
             case 1: // Next to current
@@ -2606,20 +2606,20 @@
               }
               var pagid = parent.getAttribute("groupid");
               // First exit any groups
-              if (tk.openRelativePosition == "left") {
+              if (tk.openRelativePosition === "left") {
                 if (pagid)
-                  while (target.previousSibling && target.previousSibling.getAttribute("groupid") == pagid)
+                  while (target.previousSibling && target.previousSibling.getAttribute("groupid") === pagid)
                     target = target.previousSibling;
                 tk.moveBefore(tab, target);
               }
               else {
                 if (pagid)
-                  while (target.nextSibling && target.nextSibling.getAttribute("groupid") == pagid)
+                  while (target.nextSibling && target.nextSibling.getAttribute("groupid") === pagid)
                     target = target.nextSibling;
-                while (tk.openRelativePosition != "right" && target.nextSibling && !target.nextSibling.hasAttribute("groupid") && target.nextSibling.hasAttribute("recentlyadded"))
+                while (tk.openRelativePosition !== "right" && target.nextSibling && !target.nextSibling.hasAttribute("groupid") && target.nextSibling.hasAttribute("recentlyadded"))
                   target = target.nextSibling;
                 tk.moveAfter(tab, target);
-                if (tk.openRelativePosition != "right")
+                if (tk.openRelativePosition !== "right")
                   tab.setAttribute("recentlyadded", "true");
               }
               tab.setAttribute("outoforder", "true");
@@ -2783,7 +2783,7 @@
         tk.addedTabs.push(tab);
         // A quick hack to avoid code duplication: we use addingTabOver to position
         // the first tab, then we can treat the rest as a loadOneOrMoreURIs
-        if (tk.nextType == "loadTabs" && tk.addedTabs.length == 1) {
+        if (tk.nextType === "loadTabs" && tk.addedTabs.length === 1) {
           tk.nextType = tk.isBookmarkGroup ? "bookmark" : "newtab";
           tk.dontMoveNextTab = false;
           tk.addingTabOver({
@@ -2816,7 +2816,7 @@
       tab.setAttribute(tk.Sorts.lastViewed, Date.now());
 
       // Arguably should only apply if select outside of the last parent's children
-      if (tk.openRelativePosition == "rightOfRecent")
+      if (tk.openRelativePosition === "rightOfRecent")
         for (var i = 0; i < _tabs.length; i++)
           _tabs[i].removeAttribute("recentlyadded");
 
@@ -2850,7 +2850,7 @@
       var gid = gBrowser.selectedTab.getAttribute("groupid");
       var fixIndents = tk.subtreesEnabled();
       var indent = _prefs.getIntPref("indentAmount");
-      if (group[0].getAttribute("groupid") == gid) {
+      if (group[0].getAttribute("groupid") === gid) {
         group.forEach(function(t) {
           t.removeAttribute("groupcollapsed");
           tk.tabSetHidden(t, false); // visibility of a tab
@@ -2866,7 +2866,7 @@
           if (fixIndents)
             t.style.marginLeft = "";
         });
-        if (visible.length == 0) {
+        if (visible.length === 0) {
           group.sort(tk.compareTabViewedExceptUnread);
           tk.tabSetHidden(group[group.length - 1], false); // visibility of a tab
         }
@@ -2880,7 +2880,7 @@
 
           //2. decide which to show: First tab in group or last viewed tab
           var firstTab = group[0];
-          var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") == "selected" ? visible.pop() : firstTab;  //which tab to show? decision here
+          var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") === "selected" ? visible.pop() : firstTab;  //which tab to show? decision here
 
           //3. show it
           tk.tabSetHidden(targetTab, false); // visibility of a tab
@@ -2903,12 +2903,12 @@
         tk.setTabUriKey(tab);
 
         // Allow autogrouping tabs by domain when loading a page into an about:blank tab
-        if (event.originalTarget.nodeName == "#document" // Ignore image loads (especially favicons!)
-          && uriKey == "zzzzzzzzzzzzzzz/about/blank"   // Tab was blank...
-          && uriKey != tab.getAttribute(tk.Sorts.uri)  // ...but now has a url
+        if (event.originalTarget.nodeName === "#document" // Ignore image loads (especially favicons!)
+          && uriKey === "zzzzzzzzzzzzzzz/about/blank"   // Tab was blank...
+          && uriKey !== tab.getAttribute(tk.Sorts.uri)  // ...but now has a url
           && !tab.hasAttribute("groupid")
           && tk.autoGroupNewTabs
-          && tk.activeGrouping == "domain")
+          && tk.activeGrouping === "domain")
         {
           var pid = tab.getAttribute("possibleparent");
           tk.nextType = pid ? "pageload" : "unrelated";
@@ -2926,7 +2926,7 @@
 
     this.sortgroup_onTabLoaded = function sortgroup_onTabLoaded(event) {
       try {
-        if (event.originalTarget.nodeName == "#document") { // Ignore image loads (especially favicons!)
+        if (event.originalTarget.nodeName === "#document") { // Ignore image loads (especially favicons!)
           var index = gBrowser.getBrowserIndexForDocument(event.originalTarget);
           var tab = _tabs[index];
           tab.setAttribute(tk.Sorts.lastLoaded, Date.now());
@@ -2942,7 +2942,7 @@
       var tab = event.originalTarget;
 
       // Prevent restoring the lastViewedKey from overwriting the fact that the tab is currently being viewed
-      if (tab.getAttribute("selected") == "true")
+      if (tab.getAttribute("selected") === "true")
         tab.setAttribute(tk.Sorts.lastViewed, Date.now());
 
       // Delay __sortgroup_onTabRestored timers until sortgroup_onSSTabRestoring stops getting called
@@ -2967,7 +2967,7 @@
         if (gid) {
           var group = tk.getGroupById(gid, true); // True to include singletons
 
-          if (group.length == 1) {
+          if (group.length === 1) {
             tk.removeGID(tab, true);
           }
           else {
@@ -2976,7 +2976,7 @@
             var before = true;
             for (let i = 0; i < group.length; i++) {
               let t = group[i];
-              if (t == tab) {
+              if (t === tab) {
                 if (last)
                   break;
                 before = false;
@@ -2992,12 +2992,12 @@
               if (last._tPos < tab._tPos) {
                 var target = last;
                 while (target.nextSibling
-                     && target.nextSibling != tab
-                     && target.nextSibling.getAttribute("groupid") == gid)
+                     && target.nextSibling !== tab
+                     && target.nextSibling.getAttribute("groupid") === gid)
                 {
                   target = target.nextSibling;
                 }
-                if (target.nextSibling != tab)
+                if (target.nextSibling !== tab)
                   tk.moveAfter(tab, last);
               }
               else {
@@ -3006,18 +3006,18 @@
                 // restored later (e.g. if last was the selected tab so got restored first)
                 var target = last;
                 while (target.previousSibling
-                     && target.previousSibling != tab
-                     && target.previousSibling.getAttribute("groupid") == gid)
+                     && target.previousSibling !== tab
+                     && target.previousSibling.getAttribute("groupid") === gid)
                 {
                   target = target.previousSibling;
                 }
-                if (target.previousSibling != tab)
+                if (target.previousSibling !== tab)
                   tk.moveBefore(tab, last);
               }
 
               if (last.hasAttribute("groupcollapsed")) {
                 tab.setAttribute("groupcollapsed", "true");
-                if (tab.getAttribute("selected") == "true") {
+                if (tab.getAttribute("selected") === "true") {
                   group.forEach(function(t) {
                     tk.tabSetHidden(t, true); // visibility of a tab
                   });
@@ -3042,7 +3042,7 @@
         if (tab.hasAttribute("groupid")) {
           tk.colorizeTab(tab); // Maintain tab color
         }
-        else if (tk.ignoreOvers == 0) {
+        else if (tk.ignoreOvers === 0) {
           // See if this tab needs grouping (but don't move it!)
           tk.nextType = "unrelated";
           tk.nextParent = null;
@@ -3093,7 +3093,7 @@
       // Update possibleparents
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
-        if (t.getAttribute("possibleparent") == tid) {
+        if (t.getAttribute("possibleparent") === tid) {
           t.setAttribute("possibleparent", pid);
         }
       }
@@ -3101,18 +3101,18 @@
 
       // Ungroup singleton groups
       if (gid) {
-        if (!tab.previousSibling || tab.previousSibling.getAttribute("groupid") != gid) {
+        if (!tab.previousSibling || tab.previousSibling.getAttribute("groupid") !== gid) {
           var next = tab.nextSibling;
-          if (!next || next.getAttribute("groupid") != gid)
+          if (!next || next.getAttribute("groupid") !== gid)
             tk.dump("Group was already a singleton?! (no next)");
-          else if (!next.nextSibling || next.nextSibling.getAttribute("groupid") != gid)
+          else if (!next.nextSibling || next.nextSibling.getAttribute("groupid") !== gid)
             tk.removeGID(next, true);
         }
-        else if (!tab.nextSibling || tab.nextSibling.getAttribute("groupid") != gid) {
+        else if (!tab.nextSibling || tab.nextSibling.getAttribute("groupid") !== gid) {
           var prev = tab.previousSibling;
-          if (!prev || prev.getAttribute("groupid") != gid)
+          if (!prev || prev.getAttribute("groupid") !== gid)
             tk.dump("Group was already a singleton?! (no prev)");
-          else if (!prev.previousSibling || prev.previousSibling.getAttribute("groupid") != gid)
+          else if (!prev.previousSibling || prev.previousSibling.getAttribute("groupid") !== gid)
             tk.removeGID(prev, true);
         }
       }
@@ -3120,10 +3120,10 @@
       if (tab.hasAttribute("groupcollapsed") && !tab.hidden) { // visibility of a tab
         // Make sure collapsed groups don't get totally hidden!
         window.setTimeout(function __uncollapseTab(gid2, next2, prev2) {
-          if (gBrowser.selectedTab.getAttribute("groupid") != gid2) {
-            if (next2 && next2.getAttribute("groupid") == gid2)
+          if (gBrowser.selectedTab.getAttribute("groupid") !== gid2) {
+            if (next2 && next2.getAttribute("groupid") === gid2)
               tk.tabSetHidden(next2, false); // visibility of a tab
-            else if (prev2 && prev2.getAttribute("groupid") == gid2) // Almost always true
+            else if (prev2 && prev2.getAttribute("groupid") === gid2) // Almost always true
               tk.tabSetHidden(prev2, false); // visibility of a tab
           }
         }, 0, gid, tab.nextSibling, tab.previousSibling);
@@ -3133,13 +3133,13 @@
     };
 
     this.sortgroup_onTabMousedown = function sortgroup_onTabMousedown(event) {
-      if (event.target.localName != "tab")
+      if (event.target.localName !== "tab")
         return;
 
       if (event.target.hasAttribute("groupid")
         && event.target.hasAttribute("groupcollapsed")
-        && event.originalTarget.className == "tab-icon-image"
-        && event.button == 0
+        && event.originalTarget.className === "tab-icon-image"
+        && event.button === 0
         && !event.ctrlKey && !event.shiftKey && !event.altKey)
       {
         tk.toggleGroupCollapsed(event.target);
@@ -3150,13 +3150,13 @@
     };
 
     this.sortgroup_onClickTab = function sortgroup_onClickTab(event) {
-      if (event.target.localName != "tab")
+      if (event.target.localName !== "tab")
         return;
 
       if (event.target.hasAttribute("groupid")
-        && (event.button == 1 || event.button == 0 && event.originalTarget.getAttribute("anonid") === "close-button")
+        && (event.button === 1 || event.button === 0 && event.originalTarget.getAttribute("anonid") === "close-button")
         && !event.altKey
-        && navigator.platform.indexOf("Mac") == -1 ? event.ctrlKey : event.metaKey)
+        && navigator.platform.indexOf("Mac") === -1 ? event.ctrlKey : event.metaKey)
       {
         if (event.shiftKey)
           tk.closeChildren(event.target);
@@ -3169,8 +3169,8 @@
     };
     this.sortgroup_onDblclickTab = function sortgroup_onDblclickTab(event) {
       var tab = event.target;
-      if (tab.localName == "tab") {
-        if (event.originalTarget.getAttribute("anonid") == "close-button")
+      if (tab.localName === "tab") {
+        if (event.originalTarget.getAttribute("anonid") === "close-button")
         {
           if (!event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey
             && tk.TabBar.Mode.getIsVerticalMode()) {
@@ -3216,7 +3216,7 @@
     };
 
     this.updateSortGroupMenu = function updateSortGroupMenu(event) {
-      if (event.target != event.currentTarget) return;
+      if (event.target !== event.currentTarget) return;
 
       var popup = event.target;
       var contextTab = gBrowser.mContextTab ? gBrowser.mContextTab : gBrowser.selectedTab;
@@ -3230,7 +3230,7 @@
       }
 
       // Only enable Make Group if contextTab isn't selectedTab
-      (document.getElementById("cmd_tabkit-sortgroup-tab-makeGroup"): any).setAttribute("disabled", (contextTab == gBrowser.selectedTab));
+      (document.getElementById("cmd_tabkit-sortgroup-tab-makeGroup"): any).setAttribute("disabled", (contextTab === gBrowser.selectedTab));
 
       // Show/hide items that only apply to groups
       var isGroup = contextTab.hasAttribute("groupid");
@@ -3251,7 +3251,7 @@
       }
 
       // Update radio buttons & checkboxes (esp. for new windows)
-      switch (tk.newTabPosition == 2 ? tk.activeSort : "none") {
+      switch (tk.newTabPosition === 2 ? tk.activeSort : "none") {
       case "uri": (document.getElementById("menu_tabkit-sortgroup-sortByUri"): any).setAttribute("checked", "true"); break;
       case "lastLoaded": (document.getElementById("menu_tabkit-sortgroup-sortByLastLoaded"): any).setAttribute("checked", "true"); break;
       case "lastViewed": (document.getElementById("menu_tabkit-sortgroup-sortByLastViewed"): any).setAttribute("checked", "true"); break;
@@ -3294,7 +3294,7 @@
     /// Helper functions and method hooks:
     var _keepGroupsTogether_timeoutID = -1;
     this.keepGroupsTogether = function keepGroupsTogether() {
-      if (_keepGroupsTogether_timeoutID != -1) // Wait until this stops getting called
+      if (_keepGroupsTogether_timeoutID !== -1) // Wait until this stops getting called
         window.clearTimeout(_keepGroupsTogether_timeoutID);
       _keepGroupsTogether_timeoutID = window.setTimeout(function () {
         // TODO=P4: GCODE Check for singletons too
@@ -3302,7 +3302,7 @@
         for (let gid in all_groups) {
           let group = all_groups[gid];
           for (var i = group.length - 2; i >= 0; i--)
-            if (group[i].nextSibling != group[i + 1])
+            if (group[i].nextSibling !== group[i + 1])
               tk.moveBefore(group[i], group[i + 1]);
         }
         _keepGroupsTogether_timeoutID = -1;
@@ -3360,7 +3360,7 @@
       }
       else {
         tk.dump("Hadn't chosen next tab!");
-        return index == tabCount ? index - 1 : index;
+        return index === tabCount ? index - 1 : index;
       }
     };
 
@@ -3381,18 +3381,18 @@
       var gid = tab.getAttribute("groupid");
 
       // _removingTabs is [Fx3.5+ (not including 3.1b3)] (bug 462673)
-      while (prev && "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(prev) != -1)
+      while (prev && "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(prev) !== -1)
         prev = prev.previousSibling;
-      while (next && "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(next) != -1)
+      while (next && "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(next) !== -1)
         next = next.nextSibling;
 
       // Skip hidden tabs unless they're in the same group (or there's no alternative tab)
       var oldPrev = prev, oldNext = next;
-      while (prev && (prev.hidden && prev.getAttribute("groupid") != gid // visibility of a tab
-              || "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(prev) != -1))
+      while (prev && (prev.hidden && prev.getAttribute("groupid") !== gid // visibility of a tab
+              || "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(prev) !== -1))
         prev = prev.previousSibling;
-      while (next && (next.hidden && next.getAttribute("groupid") != gid // visibility of a tab
-              || "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(next) != -1))
+      while (next && (next.hidden && next.getAttribute("groupid") !== gid // visibility of a tab
+              || "_removingTabs" in gBrowser && gBrowser._removingTabs.indexOf(next) !== -1))
         next = next.nextSibling;
       if (!prev && !next) {
         prev = oldPrev;
@@ -3407,12 +3407,12 @@
 
       switch (_prefs.getIntPref("customCloseOrder")) {
       case 1: // G-Left
-        if (!gid || prev.getAttribute("groupid") == gid || next.getAttribute("groupid") != gid)
+        if (!gid || prev.getAttribute("groupid") === gid || next.getAttribute("groupid") !== gid)
           return prev;
         else
           return next;
       case 2: // G-Right
-        if (gid && next.getAttribute("groupid") != gid && prev.getAttribute("groupid") == gid)
+        if (gid && next.getAttribute("groupid") !== gid && prev.getAttribute("groupid") === gid)
           return prev;
         else
           return next;
@@ -3421,11 +3421,11 @@
       case 4: // Right
         return next;
       default: //case 0: // Auto // TODO=P4: ??? Can I improve tree level in auto-sorted opener groups?
-        var defaultTab = (tk.openRelativePosition == "left") ? prev : next;
+        var defaultTab = (tk.openRelativePosition === "left") ? prev : next;
         if (!gid)
           return defaultTab;
-        if (next.getAttribute("groupid") != gid) {
-          if (prev.getAttribute("groupid") != gid) {
+        if (next.getAttribute("groupid") !== gid) {
+          if (prev.getAttribute("groupid") !== gid) {
             tk.log("Might have been a singleton group at position " + tab._tPos + " ?");
             return defaultTab;
           }
@@ -3433,26 +3433,26 @@
             return prev;
           }
         }
-        if (prev.getAttribute("groupid") != gid) {
+        if (prev.getAttribute("groupid") !== gid) {
           return next;
         }
-        if (gid.indexOf(":oG-") == -1 && gid.indexOf(":tmpOG-") == -1) {
+        if (gid.indexOf(":oG-") === -1 && gid.indexOf(":tmpOG-") === -1) {
           return defaultTab;
         }
         // The tab and siblings share an opener based group, so see if we can use possibleparents to choose close order
         var tid = tk.getTabId(tab);
         var pid = tab.getAttribute("possibleparent");
         var openerGroup = tab.getAttribute(tk.Groupings.opener);
-        if (prev.getAttribute(tk.Groupings.opener) == openerGroup) {
-          if (next.getAttribute(tk.Groupings.opener) != openerGroup) {
+        if (prev.getAttribute(tk.Groupings.opener) === openerGroup) {
+          if (next.getAttribute(tk.Groupings.opener) !== openerGroup) {
             return prev;
           }
           else {
             // Both siblings are in the same openerGroup, so choose based on possibleparents
             // (i.e. return to parent/sibling unless the default direction takes you to a sibling/child)
-            if (defaultTab == next) {
-              if (next.getAttribute("possibleparent") == pid // sibling
-                || next.getAttribute("possibleparent") == tid) // child
+            if (defaultTab === next) {
+              if (next.getAttribute("possibleparent") === pid // sibling
+                || next.getAttribute("possibleparent") === tid) // child
               {
                 return next;
               }
@@ -3461,8 +3461,8 @@
               }
             }
             else {
-              if (prev.getAttribute("possibleparent") == pid // sibling
-                || prev.getAttribute("possibleparent") == tid) // child
+              if (prev.getAttribute("possibleparent") === pid // sibling
+                || prev.getAttribute("possibleparent") === tid) // child
               {
                 return prev;
               }
@@ -3472,7 +3472,7 @@
             }
           }
         }
-        if (next.getAttribute(tk.Groupings.opener) == openerGroup) {
+        if (next.getAttribute(tk.Groupings.opener) === openerGroup) {
           return next;
         }
         return defaultTab;
@@ -3501,13 +3501,13 @@
     };
 
     this.toggleGroupByDomain = function toggleGroupByDomain() {
-      if (tk.autoGroupNewTabs && tk.activeGrouping == "domain")
+      if (tk.autoGroupNewTabs && tk.activeGrouping === "domain")
         tk.activeGrouping = "none";
       else
         tk.groupTabsBy("domain");
     };
     this.toggleGroupByOpener = function toggleGroupByOpener() {
-      if (tk.autoGroupNewTabs && tk.activeGrouping == "opener")
+      if (tk.autoGroupNewTabs && tk.activeGrouping === "opener")
         tk.activeGrouping = "none";
       else
         tk.groupTabsBy("opener");
@@ -3565,15 +3565,15 @@
       var newTab = document.getAnonymousElementByAttribute(gBrowser, "linkedpanel", gBrowser.mPanelContainer.lastChild.id);
       tk.addingTabOver();
       var gid = contextTab.getAttribute("groupid");
-      if (tk.openRelativePosition == "left") {
-        if (gid && contextTab.previousSibling && contextTab.previousSibling.getAttribute("groupid") == gid) {
+      if (tk.openRelativePosition === "left") {
+        if (gid && contextTab.previousSibling && contextTab.previousSibling.getAttribute("groupid") === gid) {
           tk.setGID(newTab, gid);
           newTab.setAttribute("outoforder", "true");
         }
         tk.moveBefore(newTab, contextTab);
       }
       else {
-        if (gid && contextTab.nextSibling && contextTab.nextSibling.getAttribute("groupid") == gid) {
+        if (gid && contextTab.nextSibling && contextTab.nextSibling.getAttribute("groupid") === gid) {
           tk.setGID(newTab, gid);
           newTab.setAttribute("outoforder", "true");
         }
@@ -3630,7 +3630,7 @@
     };
     this.makeGroup = function makeGroup(contextTab) {
       // TODO=P3: GCODE replace redundant .hidden calls
-      if (!contextTab || contextTab == gBrowser.selectedTab)
+      if (!contextTab || contextTab === gBrowser.selectedTab)
         return;
 
       tk.makeGroupBetweenTwoTabs(contextTab, gBrowser.selectedTab);
@@ -3643,7 +3643,7 @@
       if (!tabA || !tabB) {
         return;
       }
-      if (tabA == tabB) {
+      if (tabA === tabB) {
         return;
       }
 
@@ -3689,21 +3689,21 @@
       var last = _tabs[end];
       var lastGID = last.getAttribute("groupid");
       var lastNext = last.nextSibling ? last.nextSibling.getAttribute("groupid") : "";
-      if (firstGID != lastGID
-        || firstPrev != firstGID
-        || lastNext != lastGID)
+      if (firstGID !== lastGID
+        || firstPrev !== firstGID
+        || lastNext !== lastGID)
       {
         if (firstGID
-          && firstPrev == firstGID
+          && firstPrev === firstGID
           && (!first.previousSibling.previousSibling
-            || first.previousSibling.previousSibling.getAttribute("groupid") != firstGID))
+            || first.previousSibling.previousSibling.getAttribute("groupid") !== firstGID))
         {
           tk.removeGID(first.previousSibling, true);
         }
         if (lastGID
-          && lastNext == lastGID
+          && lastNext === lastGID
           && (!last.nextSibling.nextSibling
-            || last.nextSibling.nextSibling.getAttribute("groupid") != lastGID))
+            || last.nextSibling.nextSibling.getAttribute("groupid") !== lastGID))
         {
           tk.removeGID(last.nextSibling, true);
         }
@@ -3730,7 +3730,7 @@
 
 
     this.closeFromHereToCurrent = function closeFromHereToCurrent(contextTab) {
-      if (!contextTab || contextTab == gBrowser.selectedTab)
+      if (!contextTab || contextTab === gBrowser.selectedTab)
         return;
 
       var start = Math.min(contextTab._tPos, gBrowser.selectedTab._tPos);
@@ -3769,14 +3769,14 @@
       }
       else {
         var firstTab = group[0];
-        var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") == "selected" ? contextTab : firstTab; //which tab to show? decision here
+        var targetTab = _prefs.getCharPref("collapsedGroupVisibleTab") === "selected" ? contextTab : firstTab; //which tab to show? decision here
 
         group.forEach(function(tab) {
           tab.setAttribute("groupcollapsed", "true");
-          if (tab != targetTab) {
+          if (tab !== targetTab) {
 
             //select context tab if not selected (prevent not completely collepesed group)
-            if (tab == gBrowser.selectedTab)
+            if (tab === gBrowser.selectedTab)
               gBrowser.selectedTab = targetTab;
 
             tk.tabSetHidden(tab, true); // visibility of a tab */
@@ -3821,7 +3821,7 @@
       for (var i = tabsToClose.length - 1; i >= 0; i--) {
         var tab = tabsToClose[i];
         // No need to set parent for contentTab
-        if (tab != contextTab) {
+        if (tab !== contextTab) {
           tab.setAttribute("possibleparent", possibleparent);
         }
 
@@ -3848,7 +3848,7 @@
         //Since Firefox removed the API
         //Got to do it ourselves (copied from old version of Firefox (showMinimalAddMultiBookmarkUI)
         //Comment: Why they remove the API?
-        if (aURIList.length == 0)
+        if (aURIList.length === 0)
           throw(new Error("bookmarkGroup expects a list of nsIURI objects"));
         var info = {
           action: "add",
@@ -3912,7 +3912,7 @@
         return tab.linkedBrowser.webNavigation.currentURI;
       });
 
-      if (aURIList.length == 0)
+      if (aURIList.length === 0)
         throw(new Error("copyGroupURIs expects a list of nsIURI objects"));
 
       let urisStringToCopy = "''";
@@ -3975,7 +3975,7 @@
 
       var tabsToClose = tk.getSubtreeFromTab(contextTab);
       for (var i = tabsToClose.length - 1; i >= 0; i--) {
-        if (tabsToClose[i] != contextTab) // Don't close parent
+        if (tabsToClose[i] !== contextTab) // Don't close parent
           gBrowser.removeTab(tabsToClose[i]);
       }
     };
@@ -4082,7 +4082,7 @@
         var uriKey = "zzzzzzzzzzzzzzz/about/blank"; // Sort blank tabs to end
         // uriGroup isn't needed in this case
       }
-      else if (uri.asciiHost == "") {
+      else if (uri.asciiHost === "") {
 
         // I shall use about:config as an example
 
@@ -4105,7 +4105,7 @@
           // TODO=P4: TJS Make sure we only fall back to the old code in Firefox 2
         }
         catch (ex) {
-          if (uri.asciiSpec != "chrome://speeddial/content/speeddial.xul") // Don't bother logging this error on Fx2, as the Effective TLD Service doesn't exist
+          if (uri.asciiSpec !== "chrome://speeddial/content/speeddial.xul") // Don't bother logging this error on Fx2, as the Effective TLD Service doesn't exist
             tk.debug("Error using nsIEffectiveTLDService:\n"+ex);
 
           var parts = /^(.*\.)?(([^.]+)\.[^.]{2,8}\.(?:a[ru]|c[kory]|do|eg|fj|gu|i[dl]|k[hr]|lb|m[moty]|n[ipz]|p[aey]|sv|t[hr]|u[gky]|ve|yu|za))$|^(.*\.)?(([^.]+)\.[^.0-9]{2,})$|^(.*)$/i.exec(uri.asciiHost);
@@ -4159,7 +4159,7 @@
 
       aTab.setAttribute(tk.Sorts.uri, uriKey);
 
-      if (uriKey == "zzzzzzzzzzzzzzz/about/blank")
+      if (uriKey === "zzzzzzzzzzzzzzz/about/blank")
         aTab.removeAttribute(tk.Groupings.domain); // Blank tabs should not get grouped together
       else
         aTab.setAttribute(tk.Groupings.domain, ":dG-" + (uriGroup || "") + ":"); // Just to prevent domains that are substrings of each other matching
@@ -4184,11 +4184,11 @@
 
           tk.debug(">>> gBrowser.addTab >>>");
           // `isBlankPageURL` is a utility function present in Fx 38.x & 45.x
-          // `aURI == "about:customizing"` is a logic copied from `gBrowser.addTab` in Fx 38.x & 45.x
+          // `aURI === "about:customizing"` is a logic copied from `gBrowser.addTab` in Fx 38.x & 45.x
           // Which should mean some special tab
           // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#1810
           // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#1888
-          if (aURI == null || isBlankPageURL(aURI) || aURI == "about:customizing") {
+          if (aURI == null || isBlankPageURL(aURI) || aURI === "about:customizing") {
             // We don't need `initialURI` for a "blank" page
             initialURI = null;
           }
@@ -4212,7 +4212,7 @@
     this.getTabById = function getTabById(tid) {
       for (var i = 0; i < _tabs.length; i++) {
         var tab = _tabs[i];
-        if (tk.getTabId(tab) == tid)
+        if (tk.getTabId(tab) === tid)
           return tab;
       }
       tk.debug("Tab id not found: " + tid + "\n" + tk.quickStack());
@@ -4228,7 +4228,7 @@
       var tabs = [];
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
-        if (!t.hasAttribute("groupid") && (value ? t.getAttribute(attr) == value : t.hasAttribute(attr)))
+        if (!t.hasAttribute("groupid") && (value ? t.getAttribute(attr) === value : t.hasAttribute(attr)))
           tabs.push(t);
       }
       return tabs;
@@ -4239,10 +4239,10 @@
       var group = [];
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
-        if (t.getAttribute("groupid").indexOf(gid) != -1) {
+        if (t.getAttribute("groupid").indexOf(gid) !== -1) {
           group.push(t);
         }
-        else if (lookForSingletons && t.getAttribute("singletonid").indexOf(gid) != -1) {
+        else if (lookForSingletons && t.getAttribute("singletonid").indexOf(gid) !== -1) {
           tk.setGID(t, gid);
           group.push(t);
           //lookForSingletons = false; // Possible optimisation
@@ -4269,7 +4269,7 @@
       var group = [];
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
-        if (t.getAttribute("groupid") == gid)
+        if (t.getAttribute("groupid") === gid)
           group.push(t);
       }
       */
@@ -4277,11 +4277,11 @@
       // because it must work across browser windows for onDrop
       var group = [ tab ];
       var cur;
-      while ((cur = group[group.length-1].previousSibling) && cur.getAttribute("groupid") == gid) {
+      while ((cur = group[group.length-1].previousSibling) && cur.getAttribute("groupid") === gid) {
         group.push(cur);
       }
       group.reverse(); // Probably mildly faster than unshifting them in the first place
-      while ((cur = group[group.length-1].nextSibling) && cur.getAttribute("groupid") == gid) {
+      while ((cur = group[group.length-1].nextSibling) && cur.getAttribute("groupid") === gid) {
         group.push(cur);
       }
 
@@ -4315,12 +4315,12 @@
 
       for (var i = 0; i < _tabs.length; i++) {
         var t = _tabs[i];
-        if (t.getAttribute("groupid") == gid) {
+        if (t.getAttribute("groupid") === gid) {
           if (t.hasAttribute("groupcollapsed")) {
             tab.setAttribute("groupcollapsed", "true");
             for (let st of tk.getGroupById(gid)) {
               if (!st.hidden) { // visibility of a tab
-                if (st.getAttribute("selected") == "true") {
+                if (st.getAttribute("selected") === "true") {
                   tk.tabSetHidden(tab, true); // visibility of a tab
                 }
                 else {
@@ -4362,7 +4362,7 @@
           var oldGroup = [];
           for (var i = 0; i < _tabs.length; i++) {
             var t = _tabs[i];
-            if (t !== tab && t.getAttribute("groupid") == tgid)
+            if (t !== tab && t.getAttribute("groupid") === tgid)
               oldGroup.push(t);
           }
           if (oldGroup.length > 0)
@@ -4405,7 +4405,7 @@
       var gid = tab.getAttribute("groupid");
       tk.updateIndents(group);
       var tabs = [ tab ];
-      for (var t = tab.nextSibling; t && t.treeLevel && t.treeLevel > tab.treeLevel && t.getAttribute("groupid") == gid; t = t.nextSibling)
+      for (var t = tab.nextSibling; t && t.treeLevel && t.treeLevel > tab.treeLevel && t.getAttribute("groupid") === gid; t = t.nextSibling)
         tabs.push(t);
       return tabs;
     };
@@ -4464,7 +4464,7 @@
         var pp = tab.getAttribute("possibleparent");
         if (pp) {
           for (var j = stack.length - 1; j >= 0; j--) {
-            if (stack[j] == pp) {
+            if (stack[j] === pp) {
               stack.push(tk.getTabId(tab));
               tab.treeLevel = Math.min(j + 1, maxlevel); // For external use, e.g. dragging subtrees
               if (!groupcollapsed && subtreesEnabled) {
@@ -4524,12 +4524,12 @@
         "NG_Classic":      { dark: true },    // Newgrounds Classic
       };
       if (theme in goodThemes && (!("platform" in goodThemes[theme]) || goodThemes[theme].platform.test(navigator.platform))) {
-        if (forceThemeCompatibility == 1)
+        if (forceThemeCompatibility === 1)
           forceThemeCompatibility = 0;
         darkTheme = ("dark" in goodThemes[theme]);
       }
       else {
-        if (forceThemeCompatibility == 1)
+        if (forceThemeCompatibility === 1)
           forceThemeCompatibility = 2;
         darkTheme = (theme in badThemes) ? ("dark" in badThemes[theme]) : false;
       }
@@ -4600,7 +4600,7 @@
       // Get up to three gids before tab
       for (var i = tab._tPos - 1, n = 0; i >= 0 && n < 3; i--) {
         var gid = _tabs[i].getAttribute("groupid");
-        if (gid && gids.indexOf(gid) == -1 && tk.getWindowValue("knownColor:" + gid)) {
+        if (gid && gids.indexOf(gid) === -1 && tk.getWindowValue("knownColor:" + gid)) {
           gids.push(gid);
           gidDist[gid] = n;
           n++;
@@ -4609,7 +4609,7 @@
       // Get up to three gids after tab
       for (var i = tab._tPos + 1, n = 0; i < _tabs.length && n < 3; i++) {
         var gid = _tabs[i].getAttribute("groupid");
-        if (gid && gids.indexOf(gid) == -1 && tk.getWindowValue("knownColor:" + gid)) {
+        if (gid && gids.indexOf(gid) === -1 && tk.getWindowValue("knownColor:" + gid)) {
           gids.push(gid);
           gidDist[gid] = n;
           n++;
@@ -4716,7 +4716,7 @@
         var bgColor = tk.allocateColor(tab);
 
         //add by Pika, coloring for Fx4+
-        if (bgColor != "") {
+        if (bgColor !== "") {
           bgColor = "-moz-linear-gradient(@HSL_Top, @HSL_Bottom)".replace("@HSL_Top",bgColor).replace("@HSL_Bottom",bgColor);
         }
         else {
@@ -4737,7 +4737,7 @@
           menuItem.style.backgroundImage = bgSample.style.backgroundImage;
         }
         else if ((gBrowser.tabContainer.hasAttribute("tabkit-highlight-unread-tab") && !tab.hasAttribute("read"))
-             || (gBrowser.tabContainer.hasAttribute("tabkit-highlight-current-tab") && tab.getAttribute("selected") == "true"))
+             || (gBrowser.tabContainer.hasAttribute("tabkit-highlight-current-tab") && tab.getAttribute("selected") === "true"))
         {
           var bgStyle = window.getComputedStyle(bgSample, null);
           menuItem.style.backgroundImage = bgStyle.backgroundImage;
@@ -4802,13 +4802,13 @@
         var t = _tabs[i];
         if (!t.hasAttribute("groupid")) {
           var gid = t.getAttribute(groupingAttr);
-          if (gid != "") {
+          if (gid !== "") {
             var group = tk.getGroupById(gid);
             if (group.length > 0) {
               // TODO=P4: ??? move next to parent if it's in the group
-              if (tk.newTabPosition == 2 && tk.activeSort != "origin"
-                && (groupingName != "domain" || !_prefs.getBoolPref("autoSortDomainGroups")) // We're going to sort all the groups anyway
-                && (groupingName != "opener" || !_prefs.getBoolPref("autoSortOpenerGroups"))) // We're going to sort all the groups anyway
+              if (tk.newTabPosition === 2 && tk.activeSort !== "origin"
+                && (groupingName !== "domain" || !_prefs.getBoolPref("autoSortDomainGroups")) // We're going to sort all the groups anyway
+                && (groupingName !== "opener" || !_prefs.getBoolPref("autoSortOpenerGroups"))) // We're going to sort all the groups anyway
               {
                 tk.insertTab(t, gid);
               }
@@ -4834,7 +4834,7 @@
             tk.setGID(tab, _gid);
           }
 
-          // Move all tabs to where the median positioned tab currently is // TODO=P4: TJS if tk.newTabPosition == 2 && tk.activeSort in tk.DateSorts move to most recent tab instead?
+          // Move all tabs to where the median positioned tab currently is // TODO=P4: TJS if tk.newTabPosition === 2 && tk.activeSort in tk.DateSorts move to most recent tab instead?
           var mi = group.length >> 1;
           var median = group[mi];
           for (var i = 0; i < mi; i++)
@@ -4845,26 +4845,26 @@
       }
 
       // Sort all groupingName groups
-      if (groupingName == "domain") {
+      if (groupingName === "domain") {
         if (_prefs.getBoolPref("autoSortDomainGroups")) {
           var groups = tk.getAllGroups();
           for (let gidInGroup in groups) {
-            if (gidInGroup.indexOf(":dG-") != -1)
+            if (gidInGroup.indexOf(":dG-") !== -1)
               tk.sortTabsBy("uri", gidInGroup);
           }
         }
       }
-      else if (groupingName == "opener") {
+      else if (groupingName === "opener") {
         if (_prefs.getBoolPref("autoSortOpenerGroups")) {
           var groups = tk.getAllGroups();
           for (let gidInGroup in groups) {
-            if (gidInGroup.indexOf(":oG-") != -1 || gidInGroup.indexOf(":tmpOG-") != -1)
+            if (gidInGroup.indexOf(":oG-") !== -1 || gidInGroup.indexOf(":tmpOG-") !== -1)
               tk.sortTabsBy("origin", gidInGroup);
           }
         }
       }
 
-      if (groupingName != tk.activeGrouping)
+      if (groupingName !== tk.activeGrouping)
         tk.activeGrouping = groupingName;
     };
 
@@ -4878,7 +4878,7 @@
       var isReverse = tk.ReverseSorts.has(sortName);
       var isNumeric = tk.NumericSorts.has(sortName);
       //~ var isDate = (sortName in tk.DateSorts);
-      var isOrigin = (sortName == "origin");
+      var isOrigin = (sortName === "origin");
 
       if (isOrigin) {
         // We need to calculate a set of keys we can sort by
@@ -4897,12 +4897,12 @@
           var pp = tabset[i].getAttribute("possibleparent");
           if (pp) {
             for (var j = i - 1; j >= 0; j--) {
-              if (tk.getTabId(tabset[j]) == pp) {
-                if (tk.openRelativePosition == "left") {
+              if (tk.getTabId(tabset[j]) === pp) {
+                if (tk.openRelativePosition === "left") {
                   tabset.splice(j, 0, tabset.splice(i, 1)[0]); // Move i before j
                 }
                 else {
-                  if (tk.openRelativePosition != "right") { // rightOfRecent is treated as rightOfConsecutive, since we don't know about tab selections
+                  if (tk.openRelativePosition !== "right") { // rightOfRecent is treated as rightOfConsecutive, since we don't know about tab selections
                     if (lastParent === pp) {
                       j += recentChildren++;
                     }
@@ -4943,9 +4943,9 @@
             g[i].key = isNumeric ? Number(g[i].getAttribute(attr)) : g[i].getAttribute(attr).toLowerCase();
 
         if (gid
-          || tk.countGroups(groupid) != 1
-          || ((groupid.indexOf(":dG-") == -1 || !_prefs.getBoolPref("autoSortDomainGroups"))
-            && ((groupid.indexOf(":oG-") == -1 && groupid.indexOf(":tmpOG-") == -1) || !_prefs.getBoolPref("autoSortOpenerGroups"))))
+          || tk.countGroups(groupid) !== 1
+          || ((groupid.indexOf(":dG-") === -1 || !_prefs.getBoolPref("autoSortDomainGroups"))
+            && ((groupid.indexOf(":oG-") === -1 && groupid.indexOf(":tmpOG-") === -1) || !_prefs.getBoolPref("autoSortOpenerGroups"))))
         {
           // Sort group (by insertion sort)
           for (var i = 1; i < g.length; i++) {
@@ -4965,8 +4965,8 @@
 
         if (!gid) {
           // TODO=P4: ??? ignore outoforder tabs?
-          if (sortName == "origin")
-            var representative = (tk.openRelativePosition == "left") ? g.concat().sort(tk.compareTabCreated)[0].key : g[0].key;
+          if (sortName === "origin")
+            var representative = (tk.openRelativePosition === "left") ? g.concat().sort(tk.compareTabCreated)[0].key : g[0].key;
           //~ else if (isDate) // TODO=P4: TJS Should I?
             //~ var representative = g[ g.length - 1 ].key
           else // Median
@@ -5011,15 +5011,15 @@
           }
         }
 
-        if (tk.activeSort != sortName)
+        if (tk.activeSort !== sortName)
           tk.activeSort = sortName;
       }
     };
 
     /* Usage:
-      - tk.insertTab(tab); inserts a tab into _tabs by tk.activeSort (ASSUMES tk.newTabPosition == 2 && tk.activeSort != "origin")
-      - tk.insertTab(tab, gid); inserts a tab into tk.getGroupById(gid) by tk.activeSort (ASSUMES tk.newTabPosition == 2 && tk.activeSort != "origin")
-      - tk.insertTab(tab, gid, sortName); inserts a tab into tk.getGroupById(gid) using sortName (ASSUMES sortName != "origin") */
+      - tk.insertTab(tab); inserts a tab into _tabs by tk.activeSort (ASSUMES tk.newTabPosition === 2 && tk.activeSort !== "origin")
+      - tk.insertTab(tab, gid); inserts a tab into tk.getGroupById(gid) by tk.activeSort (ASSUMES tk.newTabPosition === 2 && tk.activeSort !== "origin")
+      - tk.insertTab(tab, gid, sortName); inserts a tab into tk.getGroupById(gid) using sortName (ASSUMES sortName !== "origin") */
     this.insertTab = function insertTab(tab, gid, sortName) { // gid and grouping are optional
       if (gid) {
         var tabset = tk.getGroupById(gid);
@@ -5030,16 +5030,16 @@
           tabset.push(_tabs[i]);
       }
       var tabIndex = tabset.indexOf(tab);
-      if (tabIndex != -1)
+      if (tabIndex !== -1)
         tabset.splice(tabIndex, 1);
-      if (tabset.length == 0) {
+      if (tabset.length === 0) {
         tk.dump("insertTab: tabset is empty!");
         return;
       }
 
       if (!sortName)
         sortName = tk.activeSort;
-      if (!(sortName in tk.Sorts) || sortName == "origin") {
+      if (!(sortName in tk.Sorts) || sortName === "origin") {
         tk.dump("Cannot insert by \"" + sortName + "\"");
         return;
       }
@@ -5086,7 +5086,7 @@
           var result;
           var tab = document.tooltipNode;
           // Logic copied from original function
-          if (tab.localName != "tab") {
+          if (tab.localName !== "tab") {
             event.preventDefault();
             return;
           }
@@ -5099,7 +5099,7 @@
           if ((tab: any).hasAttribute("groupcollapsed")) {
             let new_label =
               tk.getGroupFromTab(tab).map(function __getLabel(ctab) {
-                return ctab == tab ? "> " + ctab.label : " - " + ctab.label;
+                return ctab === tab ? "> " + ctab.label : " - " + ctab.label;
               }).join("\n");
             event.target.setAttribute("label", new_label);
           }
@@ -5132,15 +5132,15 @@
     this._onDrop = function _onDrop(event) { // [Fx4+]
       var dt = event.dataTransfer;
       var dropEffect = dt.dropEffect;
-      // if (dropEffect == "link")
+      // if (dropEffect === "link")
         // return gBrowser.old_onDrop(event);
 
-      var targetTab = event.target.localName == "tab" ? event.target : null;
+      var targetTab = event.target.localName === "tab" ? event.target : null;
       if (!targetTab || targetTab.hasAttribute("pinned"))
         return;
 
       var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-      if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned"))
+      if (!draggedTab || draggedTab === targetTab || draggedTab.hasAttribute("pinned"))
         return;
 
       this._tabDropIndicator.collapsed = true;
@@ -5161,19 +5161,19 @@
       var cleanupCallbacks = [];
 
       // Prevent accidentally dragging into a collapsed group
-      if (aGid && aGid == bGid && afterTab && afterTab.hasAttribute("groupcollapsed")) {
+      if (aGid && aGid === bGid && afterTab && afterTab.hasAttribute("groupcollapsed")) {
         for (let t of tk.getGroupFromTab(afterTab)) {
           if (!t.hidden) { // visibility of a tab
             if (t._tPos < afterTab._tPos) {
               beforeTab = afterTab;
-              while (beforeTab.nextSibling && beforeTab.nextSibling.getAttribute("groupid") == aGid)
+              while (beforeTab.nextSibling && beforeTab.nextSibling.getAttribute("groupid") === aGid)
                 beforeTab = beforeTab.nextSibling;
               afterTab = beforeTab.nextSibling; // May be null
               newIndex = beforeTab._tPos + 1;
             }
             else {
               var afterTab = (beforeTab: any);
-              while (afterTab.previousSibling && afterTab.previousSibling.getAttribute("groupid") == bGid)
+              while (afterTab.previousSibling && afterTab.previousSibling.getAttribute("groupid") === bGid)
                 afterTab = afterTab.previousSibling;
               beforeTab = afterTab.previousSibling; // May be null
               newIndex = afterTab._tPos;
@@ -5192,8 +5192,8 @@
       var tabs = [];
       var shiftDragSubtree = false;
 
-      var tabIsCopied = (dropEffect == "copy");
-      var tabIsFromAnotherWindow = (draggedTab.parentNode != gBrowser.tabContainer);
+      var tabIsCopied = (dropEffect === "copy");
+      var tabIsFromAnotherWindow = (draggedTab.parentNode !== gBrowser.tabContainer);
 
       if (draggedGid && (event.shiftKey && _prefs.getBoolPref("shiftDragGroups")
              || draggedTab.hasAttribute("groupcollapsed"))) {
@@ -5222,7 +5222,7 @@
         tabs = [ draggedTab ];
       }
 
-      var singleTab = (tabs.length == 1);
+      var singleTab = (tabs.length === 1);
       // Move/copy the tab(s)
       var tabsReverse = tabs.slice(); // Copy
       tabsReverse.reverse(); // In-place reverse
@@ -5233,8 +5233,8 @@
           // Tab was copied or from another window, so tab will be recreated instead of moved directly
 
           // Only allow beforeTab not afterTab because addingTabOver only indents newTab if it is after draggedTab (since addingTabOver just sets possibleparent to the source tab)
-          let added_tab_type  = singleTab && draggedTab == beforeTab ? "related" : "unrelated";
-          let parent_tab      = singleTab && draggedTab == beforeTab ? draggedTab : null;
+          let added_tab_type  = singleTab && draggedTab === beforeTab ? "related" : "unrelated";
+          let parent_tab      = singleTab && draggedTab === beforeTab ? draggedTab : null;
           let should_keep_added_tab_position = true;
 
           tk.addingTab({
@@ -5288,7 +5288,7 @@
               });
           }
 
-          if (singleTab && draggedTab == beforeTab) {
+          if (singleTab && draggedTab === beforeTab) {
             return true; // addingTabOver will already have grouped the tab etc, so skip ___onDropCallback
           }
         }
@@ -5331,8 +5331,8 @@
         // Group/indent the new/moved tabs
         var newGid = null;
         var app = null;
-        var draggedIntoGroup = (aGid && aGid == bGid);
-        var draggedIntoSameGroup = (draggedGid && (aGid == draggedGid || bGid == draggedGid));
+        var draggedIntoGroup = (aGid && aGid === bGid);
+        var draggedIntoSameGroup = (draggedGid && (aGid === draggedGid || bGid === draggedGid));
 
         if (draggedIntoGroup || draggedIntoSameGroup) {
           if (draggedIntoSameGroup)
@@ -5346,7 +5346,7 @@
             app = afterTab.getAttribute("possibleparent");
             // But only if afterTab's possibleparent is in the same group as it
             var parent = tk.getTabById(app);
-            if (!parent || parent.getAttribute("groupid") != aGid)
+            if (!parent || parent.getAttribute("groupid") !== aGid)
               app = null;
           }
         }
@@ -5393,15 +5393,15 @@
         if (singleTab) {
           if (draggedGid) {
             // TODO=P4: TJS Refactor out into a checkIfSingleton method
-            if (dPrev && dPrev.getAttribute("groupid") == draggedGid
-              && (!dPrev.previousSibling || dPrev.previousSibling.getAttribute("groupid") != draggedGid)
-              && (!dPrev.nextSibling || dPrev.nextSibling.getAttribute("groupid") != draggedGid))
+            if (dPrev && dPrev.getAttribute("groupid") === draggedGid
+              && (!dPrev.previousSibling || dPrev.previousSibling.getAttribute("groupid") !== draggedGid)
+              && (!dPrev.nextSibling || dPrev.nextSibling.getAttribute("groupid") !== draggedGid))
             {
               tk.removeGID(dPrev, true);
             }
-            else if (dNext && dNext.getAttribute("groupid") == draggedGid
-              && (!dNext.previousSibling || dNext.previousSibling.getAttribute("groupid") != draggedGid)
-              && (!dNext.nextSibling || dNext.nextSibling.getAttribute("groupid") != draggedGid))
+            else if (dNext && dNext.getAttribute("groupid") === draggedGid
+              && (!dNext.previousSibling || dNext.previousSibling.getAttribute("groupid") !== draggedGid)
+              && (!dNext.nextSibling || dNext.nextSibling.getAttribute("groupid") !== draggedGid))
             {
               tk.removeGID(dNext, true);
             }
@@ -5411,7 +5411,7 @@
           if (shiftDragSubtree) {
             // Make sure old group isn't now a singleton
             var group = tk.getGroupById(draggedGid);
-            if (group.length == 1)
+            if (group.length === 1)
               tk.removeGID(group[0], true);
           }
         }
@@ -5446,7 +5446,7 @@
         var isVertical = tk.TabBar.Mode.getIsVerticalMode();
 
         //When dragging over the tab itself, targetTab is undefined, so should just exit here
-        if (typeof targetTab == "undefined" || !targetTab) {
+        if (typeof targetTab === "undefined" || !targetTab) {
           return;
         }
 
@@ -5483,17 +5483,17 @@
 
       //contain important logic, but no use itself
       /* gBrowser.tabContainer.addEventListener("dragover", function(event) {//setAttribute for after use I guess?
-        var targetTab = event.target.localName == "tab" ? event.target : null;
+        var targetTab = event.target.localName === "tab" ? event.target : null;
         if (!targetTab || targetTab.hasAttribute("pinned"))
           return;
 
         var dt = event.dataTransfer;
         var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-        if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode != this)
+        if (!draggedTab || draggedTab === targetTab || draggedTab.hasAttribute("pinned") || draggedTab.parentNode !== this)
           return;
 
         var dropEffect = dt.dropEffect;
-        if (dropEffect == "link" || dropEffect == "copy") {
+        if (dropEffect === "link" || dropEffect === "copy") {
           targetTab.removeAttribute("dragover");
           return;
         }
@@ -5547,13 +5547,13 @@
     this.postInitListeners.push(this.postInitTabDragModifications);
 
     this._getDropIndex = function _getDropIndex(event) {  //since the default functions sucks on vertical mode
-      var targetTab = event.target.localName == "tab" ? event.target : null;
+      var targetTab = event.target.localName === "tab" ? event.target : null;
       if (!targetTab || targetTab.hasAttribute("pinned"))
         return;
 
       var dt = event.dataTransfer;
       var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-      if (!draggedTab || draggedTab == targetTab || draggedTab.hasAttribute("pinned"))
+      if (!draggedTab || draggedTab === targetTab || draggedTab.hasAttribute("pinned"))
         return;
 
       var isVertical = tk.TabBar.Mode.getIsVerticalMode();
@@ -5623,7 +5623,7 @@
         //};
         this.onKeyPress = function onKeyPress(event) {
           if (!event.isTrusted
-            || event.keyCode != event.DOM_VK_TAB
+            || event.keyCode !== event.DOM_VK_TAB
             || !event.ctrlKey
             || event.altKey
             || event.metaKey
@@ -5643,7 +5643,7 @@
         };
         this.onKeyUp = function onKeyUp(event) {
           if (!event.isTrusted
-            || event.keyCode != event.DOM_VK_CONTROL
+            || event.keyCode !== event.DOM_VK_CONTROL
             || !tk.isCtrlTabSwitching)
           {
             return;
@@ -5733,8 +5733,8 @@
 
     this.protectedTabs_onClick = function protectedTabs_onClick(event) {
       var isCloseButton = (event.originalTarget.className.indexOf("tab-close-button") > -1);
-      var isMouseClick = (event.button == 0 || event.button == 1);
-      var isProtectedTab = ((event.target.localName == "tab") && event.target.getAttribute("protected") == "true");
+      var isMouseClick = (event.button === 0 || event.button === 1);
+      var isProtectedTab = ((event.target.localName === "tab") && event.target.getAttribute("protected") === "true");
 
       if (isCloseButton && isMouseClick && isProtectedTab)
       {
@@ -5745,7 +5745,7 @@
 
     this.protectedTabs_updateContextMenu = function protectedTabs_updateContextMenu(_event) {
       var tab = gBrowser.mContextTab || gBrowser.selectedTab;
-      var isProtected = tab.getAttribute("protected") == "true";
+      var isProtected = tab.getAttribute("protected") === "true";
 
       let el_menu_tabkit_tab_toggleProtected = document.getElementById("menu_tabkit-tab-toggleProtected");
       if (el_menu_tabkit_tab_toggleProtected != null) {
@@ -5828,7 +5828,7 @@
           var result;
           // Logic copied from http://mxr.mozilla.org/mozilla-esr45/source/browser/components/places/PlacesUIUtils.jsm#744
           var browserWindow =
-            aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser" ?
+            aWindow && aWindow.document.documentElement.getAttribute("windowtype") === "navigator:browser" ?
             aWindow : RecentWindow.getMostRecentBrowserWindow();
           var selected_tab_before_operation = browserWindow.gBrowser.selectedTab;
 
@@ -5879,7 +5879,7 @@
           var result;
           // Logic copied from http://mxr.mozilla.org/mozilla-esr45/source/browser/components/places/PlacesUIUtils.jsm#744
           var browserWindow =
-            aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser" ?
+            aWindow && aWindow.document.documentElement.getAttribute("windowtype") === "navigator:browser" ?
             aWindow : RecentWindow.getMostRecentBrowserWindow();
 
           browserWindow.tabkit.debug(">>> PlacesUIUtils._openTabset >>>");
@@ -5904,7 +5904,7 @@
       }
 
       /* bookmarklets*/
-      if (aNode.uri.indexOf("javascript:") == 0) {
+      if (aNode.uri.indexOf("javascript:") === 0) {
         return aWhere;
       }
 
@@ -5928,12 +5928,12 @@
       // tk.debug("clicking on folder");return aWhere;
 
       // Reverse bookmark open location: new tab <--> current tab
-      if ((aWhere == "tab") || (aWhere == "tabshifted")) {
+      if ((aWhere === "tab") || (aWhere === "tabshifted")) {
         // tk.debug("return current");
         return "current";
       }
 
-      if (aWhere == "current") {
+      if (aWhere === "current") {
         // tk.debug("return tab");
         return "tab";
       }
@@ -5952,7 +5952,7 @@
       tk.addGlobalPrefListener("extensions.tabkit.tabs.tabMinWidth", tk.resetTabMinWidth);
       var ss = document.styleSheets;
       for (let i = ss.length - 1; i >= 0; i--) {
-        if (ss[i].href == "chrome://tabkit/content/variable.css") {
+        if (ss[i].href === "chrome://tabkit/content/variable.css") {
           tk.tabWidthStyleSheet = ss[i];
           break;
         }
@@ -6095,12 +6095,12 @@
       tk.colorizeTab(tab);
     };
     this.positionedTabbar_onResize = function positionedTabbar_onResize(_event) {
-      var width = parseInt(_tabBar.width != "" ? _tabBar.width : 250);  //temp default value, MEDIC!!
+      var width = parseInt(_tabBar.width !== "" ? _tabBar.width : 250);  //temp default value, MEDIC!!
       _prefs.setIntPref("tabSidebarWidth", Math.min(width, 576)); // Upper limit on default width so can't be wider than maximised browser window, even on 800x600 screen
     };
     this.positionedTabbar_onMouseover = function positionedTabbar_onMouseover(_event) {
       var splitter = document.getElementById("tabkit-splitter");
-      if (!splitter || splitter.getAttribute("state") != "collapsed")
+      if (!splitter || splitter.getAttribute("state") !== "collapsed")
         return;
 
       // Increment counter, so __collapse can tell if there has been a mouseover since the timer was started
@@ -6117,13 +6117,13 @@
     };
     this.positionedTabbar_onMouseout = function positionedTabbar_onMouseout(_event) {
       var splitter = document.getElementById("tabkit-splitter");
-      if (!splitter || splitter.getAttribute("state") != "collapsed")
+      if (!splitter || splitter.getAttribute("state") !== "collapsed")
         return;
 
       window.clearTimeout(tk.positionedTabbar_collapseTimer);
       tk.positionedTabbar_collapseTimer = window.setTimeout(function __collapse(lastMouseover) {
-        if (splitter.getAttribute("state") == "collapsed"
-          && lastMouseover == _tabBar.tkLastMouseover)
+        if (splitter.getAttribute("state") === "collapsed"
+          && lastMouseover === _tabBar.tkLastMouseover)
         {
           _tabBar.collapsed = true;
         }
@@ -6131,7 +6131,7 @@
     };
     this.positionedTabbar_onToggleCollapse = function positionedTabbar_onToggleCollapse(options) {
       "use strict";
-      // if (event.attrName != "collapsed")
+      // if (event.attrName !== "collapsed")
       //   return;
 
       if (typeof options !== "object") {
@@ -6181,11 +6181,11 @@
 
     /// Methods:
     this.moveSidebar = function moveSidebar(tabbarPosition) {
-      if (typeof tabbarPosition != "number") tabbarPosition = _prefs.getIntPref("tabbarPosition");
+      if (typeof tabbarPosition !== "number") tabbarPosition = _prefs.getIntPref("tabbarPosition");
 
       // Strange behavior when put on top or bottom, remove those options
       var flip_direction = false;
-      if (tabbarPosition == tk.Positions.LEFT) {
+      if (tabbarPosition === tk.Positions.LEFT) {
         flip_direction = true;
       }
       // Special support for extension "All-In-One Sidebar"
@@ -6195,7 +6195,7 @@
         return;
       }
 
-      var need_move_sidebar = ((tabbarPosition == tk.Positions.LEFT) || (tabbarPosition == tk.Positions.RIGHT));
+      var need_move_sidebar = ((tabbarPosition === tk.Positions.LEFT) || (tabbarPosition === tk.Positions.RIGHT));
 
       // Calculate new orient attributes
       var fromHorizontal = "horizontal";
@@ -6262,7 +6262,7 @@
 
     //Edited by PikachuEXE, NOT tested
     this.moveTabbar = function moveTabbar(pos) {
-      if (typeof pos != "number") pos = _prefs.getIntPref("tabbarPosition");
+      if (typeof pos !== "number") pos = _prefs.getIntPref("tabbarPosition");
 
       //Start Edit by Pika
       var tabsToolbar = document.getElementById("TabsToolbar"); //FF4+ tabbar
@@ -6274,25 +6274,25 @@
       }
 
       // Calculate new orient attributes
-      var flipOrient = (pos == tk.Positions.LEFT || pos == tk.Positions.RIGHT);
+      var flipOrient = (pos === tk.Positions.LEFT || pos === tk.Positions.RIGHT);
       var fromHorizontal = flipOrient ? "vertical" : "horizontal";
 
       // Calculate new direction attribute
-      var flipDirection = (pos == tk.Positions.RIGHT || pos == tk.Positions.BOTTOM);
+      var flipDirection = (pos === tk.Positions.RIGHT || pos === tk.Positions.BOTTOM);
       var newDirection = flipDirection ? "normal" : "reverse";
 
       // Now activate our css
       if (flipOrient) {
         (appcontent.parentNode: any).insertBefore(tabsToolbar, appcontent);
       }
-      else if (pos == tk.Positions.TOP) {
+      else if (pos === tk.Positions.TOP) {
         var menubar = document.getElementById("toolbar-menubar");
         if (menubar == null) {
           return;
         }
         (menubar.parentNode: any).insertBefore(tabsToolbar, menubar);
       }
-      else if (pos == tk.Positions.BOTTOM) {
+      else if (pos === tk.Positions.BOTTOM) {
         var a = document.getElementById("browser-bottombox");
         (a: any).parentNode.insertBefore(tabsToolbar, a);
       }
@@ -6319,7 +6319,7 @@
         // Remove any space or flexible space in tab bar(which makes vertical tab bar works strange)
         for (var i = 0; i < tabsToolbar.children.length; i++) {
           var thisNode = tabsToolbar.children.item(i);
-          if (thisNode.localName == "toolbarspacer" || thisNode.localName == "toolbarspring") {
+          if (thisNode.localName === "toolbarspacer" || thisNode.localName === "toolbarspring") {
             (thisNode.parentNode: any).removeChild(thisNode);  //if you remove here you affect the length and index of after objects, the next one will escape check, so need to decrease index
             i--;
           }
@@ -6430,7 +6430,7 @@
       var tabbarPosition = _prefs.getIntPref("tabbarPosition");
       var needsDisabling = false;
       var availWidth = 0;
-      if ((tabbarPosition == tk.Positions.TOP || tabbarPosition == tk.Positions.BOTTOM) && _prefs.getIntPref("tabRows") > 1) {
+      if ((tabbarPosition === tk.Positions.TOP || tabbarPosition === tk.Positions.BOTTOM) && _prefs.getIntPref("tabRows") > 1) {
         if (!gBrowser.getStripVisibility()) {
           var rows = 0;
         }
@@ -6441,7 +6441,7 @@
               visibleTabs--;
           //var newTabButton = _tabs[_tabs.length-1].boxObject.nextSibling; // [Fx3.5+]
           //seems not needed in FF4+
-          // if (newTabButton && newTabButton.className == "tabs-newtab-button")
+          // if (newTabButton && newTabButton.className === "tabs-newtab-button")
             // visibleTabs++; // Treat the new tab button as a tab for our purposes
           var minWidth = _prefs.getIntPref("tabs.tabMinWidth");
           availWidth = _tabContainer.mTabstrip._scrollbox.boxObject.width;
@@ -6450,7 +6450,7 @@
         }
         if (rows > 1) {
           // Enable multi-row tabs
-          if (_tabContainer.getAttribute("multirow") != "true") {
+          if (_tabContainer.getAttribute("multirow") !== "true") {
             _tabContainer.setAttribute("multirow", "true");
             try {
               _tabContainer.mTabstrip._scrollBoxObject.scrollTo(0,0);
@@ -6492,7 +6492,7 @@
         }
         else {
           // Disable multi-row tabs
-          if (_tabContainer.getAttribute("multirow") == "true")
+          if (_tabContainer.getAttribute("multirow") === "true")
             needsDisabling = true;
           var needsScrolling = true;
           _tabContainer.setAttribute("multirow", "false");
@@ -6501,7 +6501,7 @@
       else if (_tabContainer.hasAttribute("multirow")) {
         // Turn off multi-row tabs
         needsDisabling = true;
-        var needsScrolling = (_tabContainer.getAttribute("multirow") == "true");
+        var needsScrolling = (_tabContainer.getAttribute("multirow") === "true");
         _tabContainer.removeAttribute("multirow");
       }
 
@@ -6526,16 +6526,16 @@
     };
 
     this.multiRow_onTabSelect = function multiRow_onTabSelect() {
-      if (_tabContainer.getAttribute("multirow") == "true") {
+      if (_tabContainer.getAttribute("multirow") === "true") {
         var tab = gBrowser.selectedTab;
 
         tk.scrollToElement(document.getAnonymousElementByAttribute(gBrowser.tabContainer.mTabstrip._scrollbox, "class", "box-inherit scrollbox-innerbox"), tab);
 
         // Tabs on different rows shouldn't get before/afterselected attributes
-        if (tab.previousSibling != null && tab.boxObject.y != tab.previousSibling.boxObject.y) {
+        if (tab.previousSibling != null && tab.boxObject.y !== tab.previousSibling.boxObject.y) {
           tab.previousSibling.removeAttribute("beforeselected");
         }
-        if (tab.nextSibling != null && tab.boxObject.y != tab.nextSibling.boxObject.y) {
+        if (tab.nextSibling != null && tab.boxObject.y !== tab.nextSibling.boxObject.y) {
           tab.nextSibling.removeAttribute("afterselected");
         }
       }
@@ -6627,7 +6627,7 @@
 
         // Try to match title/uri
         let uri = null;
-        //if (tab.getAttribute("tk_frozen") == "true") {
+        //if (tab.getAttribute("tk_frozen") === "true") {
         //  let entry = tk.getActiveTabDataEntry(tab);
         //  if (entry)
         //    uri = entry.url;
@@ -6770,7 +6770,7 @@
       // If scroll on scrollbar or similar thing, scroll,
       // otherwise only scroll when it is not used for switching tabs
       if (!isUsingTabSheelSwitch ||
-        (name == "scrollbar" || name == "scrollbarbutton" || name == "slider" || name == "thumb")) {
+        (name === "scrollbar" || name === "scrollbarbutton" || name === "slider" || name === "thumb")) {
         // Scrollwheeling above an overflow scrollbar should still scroll 3 lines if vertical or 2 lines if multi-row tab bar
         var scrollbar = tk.VerticalTabBarScrollbar.getElement();
         if (!scrollbar) {
@@ -6779,8 +6779,8 @@
         }
 
         if (tk.TabBar.Mode.getIsVerticalMode())
-          var delta = (Math.abs(event.deltaY) != 1 ? event.deltaY : (event.deltaY < 0 ? -3 : 3)) * 24;
-        else if (gBrowser.tabContainer.getAttribute("multirow") == "true")
+          var delta = (Math.abs(event.deltaY) !== 1 ? event.deltaY : (event.deltaY < 0 ? -3 : 3)) * 24;
+        else if (gBrowser.tabContainer.getAttribute("multirow") === "true")
           var delta = event.deltaY < 0 ? -48 : 48; // 2*24
         else
           return;
@@ -6908,7 +6908,7 @@
 
     this.openSelectedLinks_getURIs = function openSelectedLinks_getURIs() {
       var focusedWindow = (document: any).commandDispatcher.focusedWindow; // Support frames
-      if (focusedWindow == window)
+      if (focusedWindow === window)
         focusedWindow = window.content;
 
       var selection = focusedWindow.getSelection();
@@ -6923,7 +6923,7 @@
           NodeFilter.SHOW_ELEMENT,
           {
             acceptNode: function(node) {
-              return node.localName.toLowerCase() == "a" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+              return node.localName.toLowerCase() === "a" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
             },
           },
           true
@@ -6933,9 +6933,9 @@
           var node = treeWalker.currentNode;
 
           if (!node.href
-            || (node.href.indexOf("http") != 0
-              && node.href.indexOf("file") != 0
-              && node.href.indexOf("ftp") != 0))
+            || (node.href.indexOf("http") !== 0
+              && node.href.indexOf("file") !== 0
+              && node.href.indexOf("ftp") !== 0))
           {
             continue;
           }
@@ -6947,7 +6947,7 @@
             continue;
           uri = uri.spec;
           */
-          if (uris.indexOf(uri) == -1)
+          if (uris.indexOf(uri) === -1)
             uris.push(uri);
 
           var size = parseInt(focusedWindow.getComputedStyle(node, null).getPropertyValue("font-size"));
@@ -6958,7 +6958,7 @@
           else if (size < largestSize)
             continue;
 
-          if (topUris.indexOf(uri) == -1)
+          if (topUris.indexOf(uri) === -1)
             topUris.push(uri);
         }
       }
@@ -6968,7 +6968,7 @@
 
     this.openSelectedLinks_getTextURIs = function openSelectedLinks_getTextURIs() {
       var focusedWindow = (document: any).commandDispatcher.focusedWindow; // Support frames
-      if (focusedWindow == window)
+      if (focusedWindow === window)
         focusedWindow = window.content;
 
       var selectedText = focusedWindow.getSelection().toString();
@@ -7053,13 +7053,13 @@
       tk.debug("uris: ");
       tk.debug(uris.toString());
 
-      if (uris.length == 0) {
+      if (uris.length === 0) {
         return;
       }
 
       var uris = tk.detectURIsFromText(unicodeString);
 
-      if (uris.length == 0) {
+      if (uris.length === 0) {
         return;
       }
 
@@ -7074,14 +7074,14 @@
       if (!gPrefService.getBoolPref("browser.tabs.loadInBackground")) {
         gBrowser.selectedTab = firstTab;
       }
-      // Even has one tab, lastTab == firstTab so this method would do nothing
+      // Even has one tab, lastTab === firstTab so this method would do nothing
       tk.makeGroupBetweenTwoTabs(firstTab, lastTab);
     };
 
     // @return [Array]
     this.detectURIsFromText = function detectURIsFromText(textToDetect) {
       var uris = [];
-      if (textToDetect == "")
+      if (textToDetect === "")
         return uris;
 
       // Using regex from http://www.regexguru.com/2008/11/detecting-urls-in-a-block-of-text/
@@ -7101,7 +7101,7 @@
         if (uri == null)
           continue;
         uri = uri.spec;
-        if (uris.indexOf(uri) == -1)
+        if (uris.indexOf(uri) === -1)
           uris.push(uri);
       }
 
@@ -7188,7 +7188,7 @@
 
       // This value is the value before switch, tested in FF 31.1.0 & 36.0.1
       var isFullScreenBeforeEvent = window.fullScreen;
-      if (_prefs.getCharPref("tabbar_fullscreen_value_meaning_in_callback") == "value_after_change") {
+      if (_prefs.getCharPref("tabbar_fullscreen_value_meaning_in_callback") === "value_after_change") {
         isFullScreenBeforeEvent = !isFullScreenBeforeEvent;
       }
 
