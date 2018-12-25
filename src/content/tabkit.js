@@ -5172,7 +5172,7 @@
               newIndex = beforeTab._tPos + 1;
             }
             else {
-              var afterTab = (beforeTab: any);
+              afterTab = (beforeTab: any);
               while (afterTab.previousSibling && afterTab.previousSibling.getAttribute("groupid") === bGid)
                 afterTab = afterTab.previousSibling;
               beforeTab = afterTab.previousSibling; // May be null
