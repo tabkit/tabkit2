@@ -7303,6 +7303,75 @@
     };
     this.preInitListeners.push(this.preInitDebugAids); */
 
+
+    // region API
+
+    this.api = {
+      getParentTab: function(tab) {
+        // Only tab in group has parent
+        if (tk.getTabGroupId(tab) == null)  { return null }
+
+        const tabs_in_group = tk.getGroupFromTab(tab)
+        // Should not happen just be safe
+        if (tabs_in_group == null)  { return null }
+
+        const possible_parent_tab_id = tab.getAttribute("possibleparent")
+
+        return tabs_in_group.find((tab_in_group) => {
+          if (tab_in_group === tab) { return false }
+
+          return tk.getTabId(tab_in_group) === possible_parent_tab_id
+        })
+      },
+      getChildTabs: function(tab) {
+        // Only tab in group has children
+        if (tk.getTabGroupId(tab) == null)  { return null }
+
+        const tabs_in_group = tk.getGroupFromTab(tab)
+        // Should not happen just be safe
+        if (tabs_in_group == null)  { return null }
+
+        const tab_id = tk.getTabId(tab)
+
+        return tabs_in_group.filter((tab_in_group) => {
+          if (tab_in_group === tab) { return false }
+
+          return tab_in_group.getAttribute("possibleparent") === tab_id
+        })
+      },
+      addChildTabs: function(tab, new_child_tabs) {
+        // For now we only allow adding tabs to an already grouped tabs
+        const tab_group_id = tk.getTabGroupId(tab)
+        if (tab_group_id == null)  { return }
+
+        const tabs_in_group = tk.getGroupFromTab(tab)
+        // Should not happen just be safe
+        if (tabs_in_group == null)  { return }
+
+        const tab_id = tk.getTabId(tab)
+
+        new_child_tabs.forEach((new_child_tab) => {
+          new_child_tab.setAttribute("possibleparent", tab_id)
+        })
+        // Not calling `updateIndents` for performance
+        // Expose it later if necessary
+        // tk.updateIndents()
+      },
+      resetTab: function(tab) {
+        // Only call this before removing a tab AND
+        // children tabs have been handled manually (using API methods defined)
+        //
+        // Calling this should disable our built-in tree processing
+        // in event listeners like `sortgroup_onTabRemoved`
+        tab.removeAttribute("groupid")
+        tab.removeAttribute("tabid")
+        tab.removeAttribute("possibleparent")
+      },
+    }
+
+    // endregion API
+
+
   //}##########################
   //|### End of tabkit object
   //|##########################
