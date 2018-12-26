@@ -2128,7 +2128,6 @@
           "use strict";
           var result;
 
-          tk.debug(">>> gBrowser.loadTabs >>>");
           tk.addingTabs({
             first_tab: aReplace ? gBrowser.selectedTab : null,
           });
@@ -2140,7 +2139,6 @@
             // But this is called again since it contains code for cleaning up
             tk.addingTabsOver();
           }
-          tk.debug("<<< gBrowser.loadTabs <<<");
 
           return result;
         };
@@ -2165,9 +2163,7 @@
           "use strict";
           var result;
 
-          tk.debug(">>> gBrowser.loadTabs >>>");
           this._handleTabSelect();
-          tk.debug("<<< gBrowser.tabContainer._animateTabMove <<<");
 
           return result;
         };
@@ -2202,7 +2198,6 @@
           var tab;
           var aSkipAnimation = false;
 
-          tk.debug(">>> gBrowser.addTab >>>");
           // FF 38.x: http://mxr.mozilla.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#1810
           // FF 45.x: http://mxr.mozilla.org/mozilla-esr45/source/browser/base/content/tabbrowser.xml#1888
           if (arguments.length === 2 &&
@@ -2227,7 +2222,6 @@
               should_keep_added_tab_position: true,
             });
           }
-          tk.debug("<<< gBrowser.addTab <<<");
 
           return result;
         };
@@ -3327,7 +3321,6 @@
 
           var result;
 
-          tk.debug(">>> gBrowser._blurTab >>>");
           // This copied from the original method
           // We don't want to change selected tab if the closing tab is not selected
           // We used to patch the method so that `tk.blurTab` is only called after this condition check
@@ -3342,8 +3335,6 @@
           else {
             result = old_func.apply(this, arguments);
           }
-
-          tk.debug("<<< gBrowser._blurTab <<<");
 
           return result;
         };
@@ -4182,7 +4173,6 @@
           var initialURI = aURI;
           var tab = null;
 
-          tk.debug(">>> gBrowser.addTab >>>");
           // `isBlankPageURL` is a utility function present in Fx 38.x & 45.x
           // `aURI === "about:customizing"` is a logic copied from `gBrowser.addTab` in Fx 38.x & 45.x
           // Which should mean some special tab
@@ -4197,7 +4187,6 @@
           if (tab != null) {
             tk.setTabUriKey(tab, {initial_uri: initialURI});
           }
-          tk.debug("<<< gBrowser.addTab <<<");
 
           return result;
         };
@@ -5091,7 +5080,6 @@
             return;
           }
 
-          tk.debug(">>> gBrowser.createTooltip >>>");
           result = old_func.apply(this, arguments);
           // Apply new label for collapsed grouped tabs
           // Show all tab titles in tooltip - one per line -
@@ -5103,8 +5091,6 @@
               }).join("\n");
             event.target.setAttribute("label", new_label);
           }
-
-          tk.debug("<<< gBrowser.createTooltip <<<");
 
           return result;
         };
@@ -5700,14 +5686,12 @@
           "use strict";
           var result;
 
-          tk.debug(">>> gBrowser.removeTab >>>");
           if (tk.getTabIsProtected(aTab)) {
             tk.beep();
           }
           else {
             result = old_func.apply(this, [aTab, aParams]);
           }
-          tk.debug("<<< gBrowser.removeTab <<<");
 
           return result;
         };
@@ -7127,14 +7111,12 @@
           "use strict";
           var result;
 
-          tk.debug(">>> gBrowser.pinTab >>>");
           if (tk.TabBar.Mode.getIsVerticalMode()) {
             alert("Sorry, Tab Kit 2 does not support App Tabs in Vertical mode");
           }
           else {
             result = old_func.apply(this, [aTab]);
           }
-          tk.debug("<<< gBrowser.pinTab <<<");
 
           return result;
         };
@@ -7155,7 +7137,6 @@
           "use strict";
           var result;
 
-          tk.debug(">>> gBrowser.tabContainer._lockTabSizing >>>");
           result = old_func.apply(this, [aTab]);
           // Reset max-width
           let numPinned = this.tabbrowser._numPinnedTabs;
@@ -7165,7 +7146,6 @@
             // clear the value
             tab.style.setProperty("max-width", "");
           }
-          tk.debug("<<< gBrowser.tabContainer._lockTabSizing <<<");
 
           return result;
         };
