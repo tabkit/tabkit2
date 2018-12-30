@@ -42,8 +42,16 @@ Tab Kit makes tabs more efficient for power users, allowing a wide variety of tw
 ## Extra Extensions
 
 Some features are extracted into other extensions (which can be used separately):
-- Some coloring features extracted into **Tab Kit - Tab Highlighter**([Download](https://addons.mozilla.org/en-US/firefox/addon/tab-kit-tab-highlighter/), [Code Repo](https://github.com/tabkit/tab-highlighter))
-- Some mouse gesture features extracted into **Tab Kit - Mouse Gestures**([Download](https://addons.mozilla.org/en-US/firefox/addon/tab-kit-mouse-gestures/), [Code Repo](https://github.com/tabkit/mouse-gestures))
+- Some coloring features extracted into **Tab Kit - Tab Highlighter**([Download](http://addons.palemoon.org/addon/tabkit-tab-highlighter/), [Code Repo](https://github.com/tabkit/tab-highlighter))
+- Some mouse gesture features extracted into **Tab Kit - Mouse Gestures**([Download](http://addons.palemoon.org/addon/tabkit-mouse-gestures/), [Code Repo](https://github.com/tabkit/mouse-gestures))
+
+### Examples
+
+### Q: How can I have a plain gray tab bar background? ([Source](https://github.com/tabkit/tabkit2/issues/142#issuecomment-379464167))
+
+Install [Tab Kit - Tab Highlighter](https://github.com/tabkit/tab-highlighter)
+  
+![a](https://user-images.githubusercontent.com/1018543/40882958-1295bef6-6724-11e8-8bda-bd3c03efd83f.png)
 
 
 ## Issue
