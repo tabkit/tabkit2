@@ -6,6 +6,12 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
 
+## [0.14.0][0.14.0] - 2018-12-30
+
+### Added
+- Add API for other extensions to call for compatibility([#151](https://github.com/tabkit/tabkit2/pull/151))
+
+
 ## [0.13.3][0.13.3] - 2018-08-18
 
 ### Fixed
@@ -276,7 +282,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.13.3...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.14.0...HEAD
+[0.14.0]:     https://github.com/tabkit/tabkit2/compare/v0.13.3...v0.14.0
 [0.13.3]:     https://github.com/tabkit/tabkit2/compare/v0.13.2...v0.13.3
 [0.13.2]:     https://github.com/tabkit/tabkit2/compare/v0.13.1...v0.13.2
 [0.13.1]:     https://github.com/tabkit/tabkit2/compare/v0.13.0...v0.13.1
