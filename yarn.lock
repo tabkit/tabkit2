@@ -931,10 +931,10 @@ d@1, d@^1.0.1:
     es5-ext "^0.10.50"
     type "^1.0.1"
 
-"dateformat@>= 2.0.0":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-4.3.1.tgz#e010ca5915f0c7d47e5b4e4287dd5ecb41125a96"
-  integrity sha512-xhq1wI5BQ0TMJDvio0BLP8lNeYlhAvmh/7H52H9n6kfzqSmRpIhH5KEIjJ7onFEAh5CQVrAP2MAG8wZ6j0BKzQ==
+"dateformat@>= 4.5.1":
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-4.5.1.tgz#c20e7a9ca77d147906b6dc2261a8be0a5bd2173c"
+  integrity sha512-OD0TZ+B7yP7ZgpJf5K2DIbj3FZvFvxgFUuaqA/V5zTjAtAAXZ1E8bktHxmAGs4x5b7PflqA9LeQ84Og7wYtF7Q==
 
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
