@@ -10,7 +10,7 @@
     "bluebird": ">= 3.5.0",
     "dateformat": ">= 4.5.1",
     "del": ">= 5.1.0",
-    "eslint": ">= 7.23.0",
+    "eslint": ">= 7.25.0",
     "eslint-plugin-flowtype": ">= 5.4.0",
     "file-exists": ">= 3.0.2",
     "flow-bin": ">= 0.147.0",
