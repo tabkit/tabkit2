@@ -1,7 +1,0 @@
-{
-  "comments": false,
-  "retainLines": true,
-  "plugins": [
-    "@babel/plugin-transform-flow-strip-types"
-  ],
-}
