@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "",
   "author": "",
+  "scripts": {
+    "dev": "gulp watch",
+
+    "release": "gulp build_xpi_official_release"
+  },
   "devDependencies": {
     "@babel/plugin-transform-flow-strip-types": ">= 7.14.5",
     "babel-eslint": ">= 7.1.1",
@@ -19,7 +24,9 @@
     "gulp-cli": ">= 1.2.2",
     "gulp-zip": ">= 5.1.0",
     "mz": ">= 2.6.0",
-    "stylelint": ">= 13.13.1"
+    "stylelint": ">= 13.13.1",
+    "stylelint-csstree-validator": ">= 1.9.0",
+    "stylelint-order": ">= 4.1.0"
   },
   "license": "GPL-2.0+"
 }

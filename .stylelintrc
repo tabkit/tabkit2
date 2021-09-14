@@ -1,0 +1,192 @@
+{
+  "plugins": [
+    "stylelint-order",
+    "stylelint-csstree-validator"
+  ],
+  "rules": {
+    "color-hex-case": "lower",
+    "color-hex-length": "long",
+    "color-no-invalid-hex": true,
+
+    "font-family-name-quotes": "always-where-recommended",
+
+    "number-leading-zero": "always",
+    "number-no-trailing-zeros": true,
+
+    "string-no-newline": true,
+    "string-quotes": "double",
+
+    "length-zero-no-unit": true,
+
+    "time-min-milliseconds": 100,
+
+    "unit-case": "lower",
+    "unit-no-unknown": true,
+    "unit-whitelist": ["px", "em", "rem", "%", "s", "deg", "rad", "grad", "turn", "pc", "dppx"],
+
+    "value-keyword-case": "lower",
+
+    "shorthand-property-no-redundant-values": null,
+
+    "property-case": "lower",
+
+    "declaration-bang-space-after": "never",
+    "declaration-bang-space-before": "always",
+    "declaration-colon-space-after": null,
+    "declaration-block-no-duplicate-properties": [
+      true,
+      {
+        "ignore": ["consecutive-duplicates"],
+        "ignoreProperties": ["/^\\*/"]
+      }
+    ],
+    "declaration-block-no-shorthand-property-overrides": true,
+    "declaration-block-semicolon-newline-after": "always",
+    "declaration-block-semicolon-newline-before": "never-multi-line",
+    "declaration-block-semicolon-space-after": null,
+    "declaration-block-semicolon-space-before": "never",
+    "declaration-block-single-line-max-declarations": 1,
+    "declaration-block-trailing-semicolon": "always",
+
+    "block-closing-brace-newline-after": "always",
+    "block-closing-brace-space-before": "always-single-line",
+    "block-no-empty": null,
+    "block-opening-brace-newline-after": "always",
+    "block-closing-brace-newline-before": "always",
+    "block-opening-brace-space-after": "always-single-line",
+    "block-opening-brace-space-before": "always",
+
+    "selector-combinator-space-after": "always",
+    "selector-combinator-space-before": "always",
+    "selector-descendant-combinator-no-non-space": true,
+    "csstree/validator": true,
+    "selector-pseudo-class-case": "lower",
+    "selector-pseudo-class-no-unknown": true,
+    "selector-pseudo-element-case": "lower",
+    "selector-pseudo-element-no-unknown": true,
+    "selector-type-case": "lower",
+    "selector-max-empty-lines": 0,
+
+    "comment-no-empty": true,
+
+    "indentation": [
+      2,
+      {
+        "ignore": ["inside-parens"]
+      }
+    ],
+
+    "no-empty-source": true,
+    "no-eol-whitespace": true,
+    "no-extra-semicolons": true,
+
+    "order/order": [
+      "dollar-variables",
+      "declarations",
+      "rules"
+    ],
+
+    "order/properties-order": [
+      {
+        "groupName": "positioning",
+        "emptyLineBefore": "always",
+        "properties": [
+          "position",
+          "top",
+          "bottom",
+          "left",
+          "right",
+          "z-index"
+        ],
+        "order": "flexible",
+        "noEmptyLineBetween": true
+      },
+
+      {
+        "groupName": "spacing",
+        "emptyLineBefore": "always",
+        "properties": [
+          "margin",
+          "margin-top",
+          "margin-bottom",
+          "margin-left",
+          "margin-right",
+          "border",
+          "border-top",
+          "border-bottom",
+          "border-left",
+          "border-right",
+          "border-width",
+          "border-style",
+          "border-color",
+          "border-radius",
+          "padding",
+          "padding-top",
+          "padding-bottom",
+          "padding-left",
+          "padding-right"
+        ],
+        "noEmptyLineBetween": true
+      },
+
+      {
+        "groupName": "dimensions",
+        "emptyLineBefore": "always",
+        "properties": [
+          "display",
+          "overflow",
+
+          "height",
+          "width",
+          "min-height",
+          "min-width",
+          "max-height",
+          "max-width",
+
+          "box-sizing",
+
+          "flex",
+          "flex-basis",
+          "flex-direction",
+          "flex-flow",
+          "flex-grow",
+          "flex-shrink",
+          "flex-wrap",
+          "align-content",
+          "align-items",
+          "align-self",
+          "justify-content",
+          "order"
+        ],
+        "order": "flexible",
+        "noEmptyLineBetween": true
+      },
+
+      {
+        "groupName": "coloring",
+        "emptyLineBefore": "always",
+        "properties": [
+          "color",
+          "background-color"
+        ],
+        "noEmptyLineBetween": true
+      },
+
+      {
+        "groupName": "font",
+        "emptyLineBefore": "always",
+        "properties": [
+          "font-family",
+          "font-size",
+          "font-weight",
+          "text-decoration",
+          "line-height",
+          "text-align",
+          "text-transform"
+        ],
+        "order": "flexible",
+        "noEmptyLineBetween": true
+      }
+    ]
+  }
+}
