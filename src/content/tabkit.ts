@@ -99,46 +99,46 @@
 
     // Make sure we can use gPrefService from now on (even if this isn't a browser window!)
     if (typeof gPrefService === "undefined" || gPrefService == null)
-      gPrefService = Cc["@mozilla.org/preferences-service1"]
+      gPrefService = Cc["@mozilla.org/preferences-service;1"]
       .getService(Ci.nsIPrefBranch)
 
     /// Private globals:
-    const _console = Cc["@mozilla.org/consoleservice1"]
+    const _console = Cc["@mozilla.org/consoleservice;1"]
     .getService(Ci.nsIConsoleService)
 
-    const _ios = Cc["@mozilla.org/network/io-service1"]
+    const _ios = Cc["@mozilla.org/network/io-service;1"]
     .getService(Ci.nsIIOService)
 
-    const _prefs = Cc["@mozilla.org/preferences-service1"]
+    const _prefs = Cc["@mozilla.org/preferences-service;1"]
     .getService(Ci.nsIPrefService)
     .getBranch(PREF_BRANCH)
 
     this.localPrefService = _prefs
 
-    const _ps = Cc["@mozilla.org/embedcomp/prompt-service1"]
+    const _ps = Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)
 
-    const _sm = Cc["@mozilla.org/scriptsecuritymanager1"]
+    const _sm = Cc["@mozilla.org/scriptsecuritymanager;1"]
     .getService(Ci.nsIScriptSecurityManager)
 
     let _ss: any = null
     // For tk.get/setWindowValue // TODO=P1: Remove if redundant
     const _winvars: {[key: string]: string} = {}
-    if ("@mozilla.org/browser/sessionstore1" in Cc) {
-      _ss = Cc["@mozilla.org/browser/sessionstore1"]
+    if ("@mozilla.org/browser/sessionstore;1" in Cc) {
+      _ss = Cc["@mozilla.org/browser/sessionstore;1"]
       .getService(Ci.nsISessionStore)
     }
 
-    const _sound = Cc["@mozilla.org/sound1"]
+    const _sound = Cc["@mozilla.org/sound;1"]
     .getService(Ci.nsISound)
 
-    const _wm = Cc["@mozilla.org/appshell/window-mediator1"]
+    const _wm = Cc["@mozilla.org/appshell/window-mediator;1"]
     .getService(Ci.nsIWindowMediator)
 
     // References:
     // - https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Using_the_clipboard
     // Create a constructor for the built-in transferable class
-    const nsTransferable = Components.Constructor("@mozilla.org/widget/transferable1", "nsITransferable")
+    const nsTransferable = Components.Constructor("@mozilla.org/widget/transferable;1", "nsITransferable")
     // Create a wrapper to construct an nsITransferable instance and set its source to the given window, when necessary
     function Transferable(source: any) {
       const res = nsTransferable()
@@ -180,7 +180,7 @@
       try {
         let stack: any
         if (_prefs.getBoolPref("debug")) {
-          const scriptError = Cc["@mozilla.org/scripterror1"]
+          const scriptError = Cc["@mozilla.org/scripterror;1"]
           .createInstance(Ci.nsIScriptError)
 
           if (!actualException && typeof error === "object")
@@ -286,7 +286,7 @@
       const result = {}
       // data is an array of bytes
       const data = converter.convertToByteArray(str, result)
-      const ch = Cc["@mozilla.org/security/hash1"]
+      const ch = Cc["@mozilla.org/security/hash;1"]
       .createInstance(Ci.nsICryptoHash)
       ch.init(ch.MD5)
       ch.update(data, data.length)
@@ -589,8 +589,8 @@
 
     this.preInitUAStyleSheets = function preInitUAStyleSheets() {
       // [Fx3only] it seems
-      const sss = Cc["@mozilla.org/content/style-sheet-service1"].getService(Ci.nsIStyleSheetService)
-      const ios = Cc["@mozilla.org/network/io-service1"].getService(Ci.nsIIOService)
+      const sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService)
+      const ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService)
       tk.UAStyleSheets.forEach(function(s: string) {
         const uri = ios.newURI(s, null, null)
         if (!sss.sheetRegistered(uri, sss.AGENT_SHEET))
@@ -3941,9 +3941,9 @@
       // Extract to a method if you need this somewhere else
 
       const transferable = ((Transferable as any)() as any)
-      const unicodeString = Components.classes["@mozilla.org/supports-string1"].createInstance(Components.interfaces.nsISupportsString)
+      const unicodeString = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString)
       const clipboardId = Components.interfaces.nsIClipboard
-      const clipboard = Components.classes["@mozilla.org/widget/clipboard1"].getService(clipboardId)
+      const clipboard = Components.classes["@mozilla.org/widget/clipboard;1"].getService(clipboardId)
 
       unicodeString.data = urisStringToCopy
 
@@ -4109,7 +4109,7 @@
       }
       else {
         try { /*[Fx3only]*/
-          const eTLDService = Cc["@mozilla.org/network/effective-tld-service1"]
+          const eTLDService = Cc["@mozilla.org/network/effective-tld-service;1"]
           .getService(Ci.nsIEffectiveTLDService)
 
           // I shall use http://www.google.co.uk/webhp?hl=en&complete=1 as an example
@@ -6694,7 +6694,7 @@
             const end = document.createRange()
             end.setStart(body, count)
             end.setEnd(body, count)
-            const finder = Cc["@mozilla.org/embedcomp/rangefind1"]
+            const finder = Cc["@mozilla.org/embedcomp/rangefind;1"]
             .createInstance()
             .QueryInterface(Components.interfaces.nsIFind)
             finder.caseSensitive = false
@@ -7042,7 +7042,7 @@
 
       try {
         const transferable = ((Transferable as any)() as any)
-        const clipboard = Components.classes["@mozilla.org/widget/clipboard1"]
+        const clipboard = Components.classes["@mozilla.org/widget/clipboard;1"]
         .createInstance(Components.interfaces.nsIClipboard)
 
         // Store the transferred data
