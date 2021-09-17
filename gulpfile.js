@@ -20,12 +20,12 @@ const build_path = "./build/"
 // watch is helpful for development
 function watch() {
   build_src()
-  gulp.watch("./src/**/*.js", build_src_js)
+  gulp.watch("./src/**/*.{js,ts}", build_src_js)
   gulp.watch("./src/**/*.css", build_src_css)
   gulp.watch(
     [
       "./src/**/*",
-      "!./src/**/*.js",
+      "!./src/**/*.{js,ts}",
       "!./src/**/*.css",
     ],
     build_src_static_files,
@@ -41,7 +41,7 @@ function clean_build() {
 // we"re building js for ff
 function build_src_js() {
   return gulp.src([
-    "./src/**/*.js",
+    "./src/**/*.{js,ts}",
   ])
   .pipe(babel())
   .on("error", console.error.bind(console))
@@ -61,7 +61,7 @@ function build_src_css() {
 function build_src_static_files() {
   return gulp.src([
     "./src/**/*",
-    "!./src/**/*.js",
+    "!./src/**/*.{js,ts}",
     "!./src/**/*.css",
   ])
   .on("error", console.error.bind(console))
