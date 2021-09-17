@@ -47,8 +47,12 @@
 /* eslint no-redeclare: ["off"] */
 /* eslint block-scoped-var: ["off"] */
 /* eslint no-param-reassign: ["off"] */
+
 // Too many warnings if `any` not used
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+// Necessary for method monkey patching
+/* eslint-disable prefer-rest-params */
 
 
 
@@ -1098,7 +1102,7 @@
             return
           }
           else {
-            result = old_func.apply(this, [e])
+            result = old_func.apply(this, arguments)
           }
           tk.debug("<<< faviconize.quickFav.dblclick <<<")
 
@@ -1220,7 +1224,7 @@
 
         const old_func = BrowserSearch.loadSearchFromContext
         // Function signature should be valid for FF 38.x & 45.x
-        BrowserSearch.loadSearchFromContext = function(terms: any) {
+        BrowserSearch.loadSearchFromContext = function(_terms: any) {
           "use strict"
           let result
 
@@ -1231,7 +1235,7 @@
             parent_tab: selected_tab_before_operation,
           })
           try {
-            result = old_func.apply(this, [terms])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1271,7 +1275,7 @@
             parent_tab: selected_tab_before_operation,
           })
           try {
-            result = old_func.apply(this, [])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1298,7 +1302,7 @@
 
         const old_func = window.gotoHistoryIndex
         // Function signature should be valid for FF 38.x & 45.x
-        window.gotoHistoryIndex = function(aEvent: Event) {
+        window.gotoHistoryIndex = function(_aEvent: Event) {
           "use strict"
           let result
 
@@ -1309,7 +1313,7 @@
             parent_tab: selected_tab_before_operation,
           })
           try {
-            result = old_func.apply(this, [aEvent])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1336,7 +1340,7 @@
 
         const old_func = window.BrowserBack
         // Function signature should be valid for FF 38.x & 45.x
-        window.BrowserBack = function(aEvent) {
+        window.BrowserBack = function(_aEvent) {
           "use strict"
           let result
 
@@ -1347,7 +1351,7 @@
             parent_tab: selected_tab_before_operation,
           })
           try {
-            result = old_func.apply(this, [aEvent])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1374,7 +1378,7 @@
 
         const old_func = window.BrowserForward
         // Function signature should be valid for FF 38.x & 45.x
-        window.BrowserForward = function(aEvent) {
+        window.BrowserForward = function(_aEvent) {
           "use strict"
           let result
 
@@ -1385,7 +1389,7 @@
             parent_tab: selected_tab_before_operation,
           })
           try {
-            result = old_func.apply(this, [aEvent])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1412,7 +1416,7 @@
 
         const old_func = window.BrowserReloadOrDuplicate
         // Function signature should be valid for FF 38.x & 45.x
-        window.BrowserReloadOrDuplicate = function(aEvent) {
+        window.BrowserReloadOrDuplicate = function(_aEvent) {
           "use strict"
           let result
 
@@ -1423,7 +1427,7 @@
             parent_tab: selected_tab_before_operation,
           })
           try {
-            result = old_func.apply(this, [aEvent])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1533,7 +1537,7 @@
 
         const old_func = window.middleMousePaste
         // Function signature should be valid for FF 38.x & 45.x
-        window.middleMousePaste = function(event) {
+        window.middleMousePaste = function(_event) {
           "use strict"
           let result
 
@@ -1542,7 +1546,7 @@
             added_tab_type: "newtab",
           })
           try {
-            result = old_func.apply(this, [event])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1571,7 +1575,7 @@
 
         const old_func = window.newTabButtonObserver.onDrop
         // Function signature should be valid for FF 38.x & 45.x
-        window.newTabButtonObserver.onDrop = function(event) {
+        window.newTabButtonObserver.onDrop = function(_event) {
           "use strict"
           let result
 
@@ -1580,7 +1584,7 @@
             added_tab_type: "newtab",
           })
           try {
-            result = old_func.apply(this, [event])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1804,7 +1808,7 @@
 
         const old_func = window.gBrowser._endRemoveTab
         // Function signature should be valid for FF 38.x & 45.x
-        window.gBrowser._endRemoveTab = function(aTab: Tab) {
+        window.gBrowser._endRemoveTab = function(_aTab: Tab) {
           "use strict"
           let result
 
@@ -1813,7 +1817,7 @@
             added_tab_type: "newtab",
           })
           try {
-            result = old_func.apply(this, [aTab])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1854,7 +1858,7 @@
             parent_tab: gBrowser.selectedTab,
           })
           try {
-            result = old_func.apply(this, [])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1935,7 +1939,7 @@
             parent_tab: gBrowser.selectedTab,
           })
           try {
-            result = old_func.apply(this, [])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -1965,7 +1969,7 @@
 
         const old_func = window.nsContextMenu.prototype.viewBGImage
         // Function signature should be valid for FF 38.x & 45.x
-        window.nsContextMenu.prototype.viewBGImage = function(e: any) {
+        window.nsContextMenu.prototype.viewBGImage = function(_e: any) {
           "use strict"
           let result
 
@@ -1975,7 +1979,7 @@
             parent_tab: gBrowser.selectedTab,
           })
           try {
-            result = old_func.apply(this, [e])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -2015,7 +2019,7 @@
             parent_tab: gBrowser.selectedTab,
           })
           try {
-            result = old_func.apply(this, [])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -2046,7 +2050,7 @@
         const old_func = window.nsContextMenu.prototype.viewMedia
         // Function signature should be valid for FF 38.x & 45.x
         // https://searchfox.org/mozilla-esr45/source/browser/base/content/nsContextMenu.js#1133
-        window.nsContextMenu.prototype.viewMedia = function(e: any) {
+        window.nsContextMenu.prototype.viewMedia = function(_e: any) {
           "use strict"
           let result
 
@@ -2056,7 +2060,7 @@
             parent_tab: gBrowser.selectedTab,
           })
           try {
-            result = old_func.apply(this, [e])
+            result = old_func.apply(this, arguments)
           }
           finally {
             // This might be called already
@@ -2184,7 +2188,7 @@
     /// Method Hooks (for group by opener):
     this.preInitSortingAndGroupingMethodHooks = function preInitSortingAndGroupingMethodHooks() {
       (function() {
-        "use strict"
+        // "use strict"
 
         if (typeof gBrowser.addTab !== "function") {
           tk.debug("gBrowser.addTab doesn't exists, replacing function failed")
@@ -2193,8 +2197,8 @@
 
         const old_func = gBrowser.addTab
         // Function signature should be valid for FF 38.x & 45.x
-        gBrowser.addTab = function(_aURI: mozURI, _aReferrerURI: any, _aCharset: string, _aPostData: any, _aOwner: any, _aAllowThirdPartyFixup: boolean) {
-          "use strict"
+        gBrowser.addTab = function(_aURI: string, _aReferrerURI: any, _aCharset: string, _aPostData: any, _aOwner: any, _aAllowThirdPartyFixup: boolean) {
+          // "use strict"
           let aSkipAnimation = false
 
           // FF 38.x: https://searchfox.org/mozilla-esr38/source/browser/base/content/tabbrowser.xml#1810
@@ -2211,7 +2215,7 @@
               should_keep_added_tab_position: true,
             })
           }
-          const result = old_func.apply(this, [_aURI, _aReferrerURI, _aCharset, _aPostData, _aOwner, _aAllowThirdPartyFixup])
+          const result = old_func.apply(this, arguments)
           const tab = result
           if (aSkipAnimation && !tk.isBookmarkGroup && tab != null) {
             tk.addingTabOver({
@@ -2783,7 +2787,7 @@
     this.sourceTypes.sort(function __compareSourceDepths(a: {depth: number}, b: {depth: number}) { return b.depth - a.depth }) // Sort by decreasing d(epth)
 
     /// Event Handlers:
-    this.sortgroup_onTabAdded = function sortgroup_onTabAdded(event: Event) {
+    this.sortgroup_onTabAdded = function sortgroup_onTabAdded(event: {target: Tab, fromInitSortingAndGrouping?: boolean}) {
       const tab = event.target as Tab
 
       const tid = tk.generateNewTabId(tab)
@@ -3363,7 +3367,7 @@
             tk.blurTab(aTab)
           }
           else {
-            result = old_func.apply(this, [aTab])
+            result = old_func.apply(this, arguments)
           }
 
           return result
@@ -4194,7 +4198,7 @@
 
         const old_func = gBrowser.addTab
         // Function signature should be valid for FF 38.x & 45.x
-        gBrowser.addTab = function(aURI: any, _aReferrerURI: any, _aCharset: string, _aPostData: any, _aOwner: any, _aAllowThirdPartyFixup: boolean) {
+        gBrowser.addTab = function(aURI: string, _aReferrerURI: any, _aCharset: string, _aPostData: any, _aOwner: any, _aAllowThirdPartyFixup: boolean) {
           // "use strict"
           let initialURI = aURI
 
@@ -4207,7 +4211,7 @@
             // We don't need `initialURI` for a "blank" page
             initialURI = null
           }
-          const result = old_func.apply(this, [aURI, _aReferrerURI, _aCharset, _aPostData, _aOwner, _aAllowThirdPartyFixup])
+          const result = old_func.apply(this, arguments)
           const tab = result
           if (tab != null) {
             tk.setTabUriKey(tab, {initial_uri: initialURI})
@@ -5107,7 +5111,7 @@
             return
           }
 
-          const result = old_func.apply(this, [event])
+          const result = old_func.apply(this, arguments)
           // Apply new label for collapsed grouped tabs
           // Show all tab titles in tooltip - one per line -
           // when hovering over a collapsed group (instead of just the visible tab)
@@ -7127,7 +7131,7 @@
 
         const old_func = gBrowser.pinTab
         // Function signature should be valid for FF 38.x & 45.x
-        gBrowser.pinTab = function(aTab: Tab) {
+        gBrowser.pinTab = function(_aTab: Tab) {
           "use strict"
           let result
 
@@ -7135,7 +7139,7 @@
             alert("Sorry, Tab Kit 2 does not support App Tabs in Vertical mode")
           }
           else {
-            result = old_func.apply(this, [aTab])
+            result = old_func.apply(this, arguments)
           }
 
           return result
@@ -7153,10 +7157,10 @@
 
         const old_func = gBrowser.tabContainer._lockTabSizing
         // Function signature should be valid for FF 38.x & 45.x
-        gBrowser.tabContainer._lockTabSizing = function(aTab: Tab) {
+        gBrowser.tabContainer._lockTabSizing = function(_aTab: Tab) {
           "use strict"
 
-          const result = old_func.apply(this, [aTab])
+          const result = old_func.apply(this, arguments)
           // Reset max-width
           const numPinned = this.tabbrowser._numPinnedTabs as number
           const tabs = this.tabbrowser.visibleTabs
@@ -7289,7 +7293,7 @@
             alert("Sorry, but Tabkit 2 does not support Panorama (They use the same API). Why use Panorama when you have Tabkit 2? :)")
           }
           else {
-            result = old_func.apply(this, [])
+            result = old_func.apply(this, arguments)
           }
           tk.debug("<<< TabView.toggle <<<")
 
