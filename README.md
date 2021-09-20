@@ -72,7 +72,10 @@ See https://github.com/tabkit/tabkit2/blob/master/CHANGELOG.md
 ## Collaboration
 Since we are on GitHub  
 Just fork, change and send pull request  
-I will check frequently (since I also use GitHub at work)
+I will check frequently (since I also use GitHub at work)  
+
+### Extension Development
+See [Extension Development](doc/extension_development.md)
 
 
 ## License
