@@ -17,7 +17,7 @@
     "babel-eslint": ">= 7.1.1",
     "babelify": ">= 7.3.0",
     "bluebird": ">= 3.5.0",
-    "dateformat": ">= 4.5.1",
+    "dateformat": ">= 5.0.1",
     "del": ">= 5.1.0",
     "eslint": ">= 7.32.0",
     "file-exists": ">= 3.0.2",
