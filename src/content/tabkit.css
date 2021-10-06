@@ -53,6 +53,20 @@
   -moz-border-radius: 3px 3px 3px 3px;
 }
 
+
+/* >> Close button visibility << */
+/* Shown on active tab only */
+.tabbrowser-tabs[tabkit-close-button-visibility="active-tab-only"] .tabbrowser-tab:not([selected="true"]) .tab-close-button {
+  display: none;
+}
+/* Shown on all tabs (by default is this and no custom style required) */
+/* Hidden on all tabs */
+.tabbrowser-tabs[tabkit-close-button-visibility="none"] .tab-close-button {
+  display: none;
+}
+/* >> Close button visibility << */
+
+
 /******************************
  * Tab bar & sidebar position *
  ******************************/
@@ -216,7 +230,7 @@
 
 /* Fix tabkit-splitter cannot be dragged when the width of vertical tabbar is too small */
 /* The content of vertical tabbar got overlays the splitter so that it (almost) cannot dragged */
-#tabkit-splitter {
+#tabkit-splitter {
   position: relative;
   z-index: 0;
 }
