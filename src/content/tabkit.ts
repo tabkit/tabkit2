@@ -6453,7 +6453,6 @@
       // 0: Active tab only, 1: All tabs, 2: None, 3: Button at end of tab strip
 
       const closeButtonsVisibilityPrefVal = gPrefService.getIntPref("extensions.tabkit.tabs.closeButtons")
-      tk.debug(`closeButtonPrefVal: ${closeButtonsVisibilityPrefVal}`)
       if (closeButtonsVisibilityPrefVal === 0) {
         gBrowser.tabContainer.setAttribute("tabkit-close-button-visibility", "active-tab-only")
       }
