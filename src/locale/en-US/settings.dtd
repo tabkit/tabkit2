@@ -138,7 +138,7 @@
 <!ENTITY newTabPosition.accesskey "N">
 <!ENTITY newTabPosition.lastSort.label "according to the last sort">
 <!ENTITY newTabPosition.nextToCurrent.label "next to the current tab">
-<!ENTITY newTabPosition.farRight.label "at far right of the tab bar">
+<!ENTITY newTabPosition.farRight.label "as last tab">
 <!ENTITY lastActiveSort.label "The 'last sort' was">
 <!ENTITY lastActiveSort.accesskey "S">
 <!ENTITY lastActiveSort.address.label "by address">
