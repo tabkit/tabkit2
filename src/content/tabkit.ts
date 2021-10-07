@@ -6447,6 +6447,25 @@
       let minWidth = null as null | number
       let needsScrolling = false
 
+      // region close button visibility
+
+      // Copied from
+      // 0: Active tab only, 1: All tabs, 2: None
+
+      const closeButtonsVisibilityPrefVal = gPrefService.getIntPref("extensions.tabkit.tabs.closeButtons")
+      if (closeButtonsVisibilityPrefVal === 0) {
+        gBrowser.tabContainer.setAttribute("tabkit-close-button-visibility", "active-tab-only")
+      }
+      else if (closeButtonsVisibilityPrefVal === 2) {
+        gBrowser.tabContainer.setAttribute("tabkit-close-button-visibility", "none")
+      }
+      else {
+        // closeButtonsVisibilityPrefVal === 1
+        gBrowser.tabContainer.removeAttribute("tabkit-close-button-visibility")
+      }
+
+      // endregion close button visibility
+
       if ((tabbarPosition === tk.Positions.TOP || tabbarPosition === tk.Positions.BOTTOM) && _prefs.getIntPref("tabRows") > 1) {
         if (!gBrowser.getStripVisibility()) {
           rows = 0

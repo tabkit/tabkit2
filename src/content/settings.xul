@@ -198,7 +198,6 @@
           <menuitem value="0" label="&closeButtons.active.label;"/>
           <menuitem value="1" label="&closeButtons.all.label;"/>
           <menuitem value="2" label="&closeButtons.none.label;"/>
-          <menuitem value="3" label="&closeButtons.end.label;"/>
         </menupopup>
         </menulist>
       </hbox>
