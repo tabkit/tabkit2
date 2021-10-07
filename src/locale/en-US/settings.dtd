@@ -39,6 +39,11 @@
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.auto_collapse_with_spitter_hidden.label "Auto collapse (Spitter hidden)">
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.options.do_nothing.label "Do nothing">
 
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line1 "Only applicable to vertical tab bar">
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line2 "Splitter is the thin component between">
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line3 "the vertical tab bar and the web page content box">
+<!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line4 "which allows resizing and tab bar collapsing">
+
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.label "Firefox Fullscreen Value Meaning In Event Callback">
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.description.line1 "Firefox's behaviour for fullscreen is slightly different in different versions.">
 <!ENTITY tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_value_in_callback_select_box.description.line2 "Just change this value if you encounter reverse behaviour.">
