@@ -23,7 +23,7 @@ pref("extensions.tabkit.firefox.tabsontop.force_disable.enabled", true);
 // Original author commented it making it buggy in new versions, so I just uncomment them - Pika
 // Change them to be within extension scope since extensions should not alter general preference - Pika
 pref("extensions.tabkit.tabs.tabMinWidth", 100);
-pref("extensions.tabkit.tabs.closeButtons", 1); // 0: Active tab only, 1: All tabs, 2: None, 3: Button at end of tab strip
+pref("extensions.tabkit.tabs.closeButtons", 1); // 0: Active tab only, 1: All tabs, 2: None
 
 //--- Appearance ---
 pref("extensions.tabkit.disableSearchBar", false);

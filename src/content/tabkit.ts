@@ -6450,7 +6450,7 @@
       // region close button visibility
 
       // Copied from
-      // 0: Active tab only, 1: All tabs, 2: None, 3: Button at end of tab strip
+      // 0: Active tab only, 1: All tabs, 2: None
 
       const closeButtonsVisibilityPrefVal = gPrefService.getIntPref("extensions.tabkit.tabs.closeButtons")
       if (closeButtonsVisibilityPrefVal === 0) {

@@ -59,7 +59,6 @@
 <!ENTITY closeButtons.active.label "show on the active tab only">
 <!ENTITY closeButtons.all.label "show on all tabs">
 <!ENTITY closeButtons.none.label "don't show any close buttons">
-<!ENTITY closeButtons.end.label "show a single close button at the end of the tab bar">
 
 <!ENTITY appearance.caption "Appearance">
 <!ENTITY disableSearchBar.label "Disable Search Bar">
