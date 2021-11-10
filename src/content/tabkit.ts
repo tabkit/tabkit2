@@ -6634,6 +6634,10 @@
 
       //Option for on/off search bar
       tk.mapBoolPrefToAttribute("disableSearchBar", document.getElementById("tabkit-filtertabs-box"), "hidden")
+
+      // Workaround for tab disappearing bug
+      // See https://github.com/tabkit/tabkit2/issues/197
+      tk.filterTabs(" ")
     }
     this.initListeners.push(this.initSearchBar)
 
