@@ -5,6 +5,38 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 
 ## [Unreleased][unreleased] - YYYY-MM-DD
 
+### Added
+- Nothing
+
+### Changed
+- Nothing
+
+### Fixed
+- Nothing
+
+
+## 0.15.0 (Planned) - 2021-12-xx
+
+
+### Added
+- Implement close button visibility
+  https://github.com/tabkit/tabkit2/pull/198
+  The option was there but the feature was not
+
+### Changed
+- Update text for preference panel
+  https://github.com/tabkit/tabkit2/pull/200
+
+### Fixed
+- Workaround tab disappearing issue
+  https://github.com/tabkit/tabkit2/pull/210
+
+### Dev
+- Converted JS Source Code from Flow to TypeScript
+  https://github.com/tabkit/tabkit2/pull/192
+- Added doc for extension development
+  https://github.com/tabkit/tabkit2#extension-development
+
 
 ## [0.14.0][0.14.0] - 2018-12-30
 
