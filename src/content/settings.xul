@@ -119,6 +119,22 @@
               </menupopup>
             </menulist>
           </row>
+          <row align="center">
+            <groupbox id="">
+              <row align="center">
+                <label value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line1;"/>
+              </row>
+              <row align="center">
+                <label value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line2;"/>
+              </row>
+              <row align="center">
+                <label value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line3;"/>
+              </row>
+              <row align="center">
+                <label value="&tabkit.settings_panel.ui_for_settings.tabbar_fullscreen_behaviour_select_box.description.line4;"/>
+              </row>
+            </groupbox>
+          </row>
 
           <row align="center">
             <label
