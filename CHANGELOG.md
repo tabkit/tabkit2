@@ -15,7 +15,7 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Nothing
 
 
-## 0.15.0 (Planned) - 2021-12-xx
+## [0.15.0][0.15.0] - 2021-12-13
 
 
 ### Added
@@ -314,7 +314,8 @@ This project does NOT adhere to [Semantic Versioning](http://semver.org/) YET (W
 - Change: Several options does not cache per window anymore, Not sure if this will cause bugs
 
 
-[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/tabkit/tabkit2/compare/v0.15.0...HEAD
+[0.15.0]:     https://github.com/tabkit/tabkit2/compare/v0.14.0...v0.15.0
 [0.14.0]:     https://github.com/tabkit/tabkit2/compare/v0.13.3...v0.14.0
 [0.13.3]:     https://github.com/tabkit/tabkit2/compare/v0.13.2...v0.13.3
 [0.13.2]:     https://github.com/tabkit/tabkit2/compare/v0.13.1...v0.13.2

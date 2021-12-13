@@ -5,12 +5,12 @@
 	<RDF:Description RDF:about="rdf:#$qrzWX2"
 					em:id="{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}"
 					em:minVersion="28.0.0"
-					em:maxVersion="28.*" />
+					em:maxVersion="29.*" />
 	<RDF:Description RDF:about="urn:mozilla:install-manifest">
 					<em:type>2</em:type>
 					<em:id>tabkit2@pikachuexe.amateur.hk</em:id>
 					<em:name>Tab Kit 2</em:name>
-					<em:version>0.14.0</em:version>
+					<em:version>0.15.0</em:version>
 					<em:creator>PikachuEXE</em:creator>
 					<em:developer>John Mellor</em:developer>
 					<em:contributor>Ivor Hewitt</em:contributor>
