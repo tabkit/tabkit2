@@ -86,4 +86,5 @@ In case you want to try building your own:
 - Update version number and/or other stuff in `src/install.rdf`
 - `npm run release`
 - Find the built XPI file(s) in folder `product`
+- Upload via https://addons.palemoon.org/panel/
 
