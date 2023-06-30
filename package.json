@@ -27,7 +27,7 @@
     "gulp-zip": ">= 5.1.0",
     "mz": ">= 2.6.0",
     "stylelint": ">= 14.16.1",
-    "stylelint-csstree-validator": ">= 2.1.0",
+    "stylelint-csstree-validator": ">= 3.0.0",
     "stylelint-order": ">= 6.0.3",
     "typescript": "^5.0.4"
   },
