@@ -29,7 +29,7 @@
     "stylelint": ">= 14.16.1",
     "stylelint-csstree-validator": ">= 2.1.0",
     "stylelint-order": ">= 6.0.3",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   },
   "license": "GPL-2.0+"
 }
