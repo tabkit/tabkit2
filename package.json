@@ -28,7 +28,7 @@
     "mz": ">= 2.6.0",
     "stylelint": ">= 15.11.0",
     "stylelint-csstree-validator": ">= 3.0.0",
-    "stylelint-order": ">= 6.0.3",
+    "stylelint-order": ">= 6.0.4",
     "typescript": "^5.3.3"
   },
   "license": "GPL-2.0+"
