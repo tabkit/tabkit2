@@ -3,16 +3,14 @@
 
 "use strict"
 
-const gulp  = require("gulp")
-const del   = require("del")
-const babel = require("gulp-babel")
-const zip   = require("gulp-zip")
-const dateFormat = require("dateformat")
-const Promise = require("bluebird")
+import gulp from "gulp"
+import { deleteSync } from "del"
+import babel from "gulp-babel"
+import zip  from "gulp-zip"
+import dateFormat from "dateformat"
 
-require("any-promise/register")("bluebird", {Promise: Promise})
-const fsp = require("mz/fs")
-const fileExists = require("file-exists")
+import fs from "node:fs/promises"
+import fileExists from "file-exists"
 
 
 const build_path = "./build/"
@@ -33,7 +31,7 @@ function watch() {
 }
 
 function clean_build() {
-  return del([
+  return deleteSync([
     build_path,
   ])
 }
@@ -84,7 +82,7 @@ function build_xpi_official_release_impl() {
   const product_path = "./product"
   const product_ext = ".xpi"
 
-  return fsp.readFile(final_install_rdf_path, {encoding: "utf8"})
+  return fs.readFile(final_install_rdf_path, {encoding: "utf8"})
   .then(function (content) {
     const matchData = /<em:version>(.+)<\/em:version>/i.exec(content)
     return matchData[1]
@@ -112,7 +110,7 @@ const build_xpi_official_release = gulp.series(
   build_xpi_official_release_impl,
 )
 
-exports.default = watch
-exports.clean_build = clean_build
-exports.watch = watch
-exports.build_xpi_official_release = build_xpi_official_release
+gulp.task("default", watch)
+gulp.task("clean_build", clean_build)
+gulp.task("watch", watch)
+gulp.task("build_xpi_official_release", build_xpi_official_release)
