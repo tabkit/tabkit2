@@ -4,7 +4,7 @@
 "use strict"
 
 import gulp from "gulp"
-import { deleteSync } from "del"
+import { deleteAsync } from "del"
 import babel from "gulp-babel"
 import zip  from "gulp-zip"
 import dateFormat from "dateformat"
@@ -31,10 +31,11 @@ function watch() {
 }
 
 function clean_build() {
-  return deleteSync([
+  return deleteAsync([
     build_path,
   ])
 }
+gulp.task("clean_build", () => clean_build())
 
 // we"re building js for ff
 function build_src_js() {
@@ -45,6 +46,7 @@ function build_src_js() {
   .on("error", console.error.bind(console))
   .pipe(gulp.dest(build_path))
 }
+gulp.task("build_src_js", build_src_js)
 
 // we can tweak our css. E.g. auto-prefix it but
 // here we just copy it
@@ -55,6 +57,7 @@ function build_src_css() {
   .on("error", console.error.bind(console))
   .pipe(gulp.dest(build_path))
 }
+gulp.task("build_src_css", build_src_css)
 
 function build_src_static_files() {
   return gulp.src([
@@ -65,14 +68,15 @@ function build_src_static_files() {
   .on("error", console.error.bind(console))
   .pipe(gulp.dest(build_path))
 }
+gulp.task("build_src_static_files", build_src_static_files)
 
 // a single command for each piece
 const build_src = gulp.series(
-  clean_build,
+  "clean_build",
   gulp.parallel(
-    build_src_js,
-    build_src_css,
-    build_src_static_files,
+    "build_src_js",
+    "build_src_css",
+    "build_src_static_files",
   ),
 )
 
@@ -110,7 +114,6 @@ const build_xpi_official_release = gulp.series(
   build_xpi_official_release_impl,
 )
 
-gulp.task("default", watch)
-gulp.task("clean_build", clean_build)
-gulp.task("watch", watch)
-gulp.task("build_xpi_official_release", build_xpi_official_release)
+gulp.task("default", () => watch())
+gulp.task("watch", () => watch())
+gulp.task("build_xpi_official_release", () => build_xpi_official_release())
