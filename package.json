@@ -23,7 +23,7 @@
     "file-exists": ">= 3.0.2",
     "gulp": ">= 3.9.1",
     "gulp-babel": ">= 6.1.2",
-    "gulp-cli": ">= 1.2.2",
+    "gulp-cli": ">= 3.0.0",
     "gulp-zip": ">= 6.0.0",
     "mz": ">= 2.6.0",
     "stylelint": ">= 15.11.0",
