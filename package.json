@@ -8,7 +8,7 @@
     "release": "gulp build_xpi_official_release"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.7",
+    "@babel/core": "^7.25.2",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/preset-typescript": "^7.24.7",
