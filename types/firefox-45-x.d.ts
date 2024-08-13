@@ -154,12 +154,15 @@ declare interface Window {
   }
 
   gBrowser?: {
+    selectedTab: Tab;
+
     _endRemoveTab?: (tab: Tab) => any
 
     loadTabs?: (aURIs: string[], aLoadInBackground: boolean, aReplace: boolean) => any
 
     addTab: (_aURI: string, _aReferrerURI: string, _aCharset: string, _aPostData: any, _aOwner: any, _aAllowThirdPartyFixup: boolean) => any
     removeTab: (aTab: Tab, aParams?: any) => any
+    moveTabTo: (aTab: Tab, aIndex: number) => any
   }
 
   nsContextMenu?: nsContextMenu.prototype

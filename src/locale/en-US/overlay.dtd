@@ -114,6 +114,9 @@
 
 <!ENTITY unprotectAllInGroup.label "Unprotect All Tabs in Group">
 
+<!ENTITY copyToNewWindowMenu.label "Copy Group To Window">
+<!ENTITY moveGroupToWindow.label "Move Group To Window">
+
 <!ENTITY closeGroup.label "Close Group">
 <!ENTITY closeGroup.accesskey "G">
 <!ENTITY closeGroup.modifiers "alt shift">

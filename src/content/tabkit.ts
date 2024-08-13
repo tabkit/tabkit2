@@ -444,6 +444,98 @@
       }
     }
 
+    this.moveTabGroupToWindow = function moveTabGroupToWindow(tabToMove: Tab, targetTabId: string) {
+      tk.copyTabGroupToWindow(tabToMove, targetTabId)
+      tk.closeGroup(tabToMove)
+    }
+
+    this.copyTabGroupToWindow = function copyTabGroupToWindow(tabToMove: Tab, targetTabId: string) {
+      // Find window by tab ID
+      const windowsEnumerator = _wm.getEnumerator("navigator:browser")
+      let targetWindow = null as null | Window
+      while(windowsEnumerator.hasMoreElements()) {
+        const win = windowsEnumerator.getNext()
+        if (window !== win && tk.getTabId(win.gBrowser.selectedTab) === targetTabId) {
+          targetWindow = win
+          break
+        }
+      }
+      const targetTab = targetWindow.gBrowser.selectedTab
+
+      const gid = tabToMove.getAttribute("groupid")
+      if (!gid) { return }
+
+      const group = tk.getGroupById(gid)
+
+
+      // Tab was copied or from another window, so tab will be recreated instead of moved directly
+
+      // Move/copy the tab(s)
+      const tabsToAdd = group.slice() // Copy
+      const newTabs = [] as Tab[]
+      const newIndex = targetTab._tPos + 1
+      tabsToAdd.forEach((tab: Tab, idx: number) => {
+        const added_tab_type  = "unrelated"
+        const parent_tab  = null as null
+        const should_keep_added_tab_position = true
+
+        targetWindow.tabkit.addingTab({
+          added_tab_type: added_tab_type,
+          parent_tab:     parent_tab,
+          should_keep_added_tab_position: true,
+        })
+
+        const copiedTab = targetWindow.tabkit._duplicateTab(tab)
+        targetWindow.gBrowser.moveTabTo(copiedTab, newIndex + idx)
+
+        newTabs.push(copiedTab)
+        targetWindow.tabkit.addingTabOver({
+          added_tab_type: added_tab_type,
+          added_tab:      copiedTab,
+          parent_tab:     parent_tab,
+          should_keep_added_tab_position: should_keep_added_tab_position,
+        })
+
+        // Backup attributes at this time, so we can restore them later if needed
+        const tab_attributes_backup = targetWindow.tabkit.getTabAttributesForTabKit(copiedTab)
+
+        // In FF 45.x (and later maybe)
+        // The attributes are restored again asynchronously
+        // So we need to restore the attributes after that operation
+        if (typeof TabStateFlusher === "object" &&
+        "flush" in TabStateFlusher &&
+        typeof TabStateFlusher.flush === "function") {
+
+          const browser = tab.linkedBrowser
+          TabStateFlusher.flush(browser).then(() => {
+            targetWindow.tabkit.setTabAttributesForTabKit(copiedTab, tab_attributes_backup)
+          })
+        }
+      })
+
+      // region possibleparent
+
+      // Create a new groupid
+      const newGid = ":oG-copiedGroupOrSubtree-" + tk.generateId()
+      const tabIdMapping = {} as {[key: string]: string}
+      newTabs.forEach((newTab, i) => {
+        // Map tabids of original tabs to tabids of their clones
+        tabIdMapping[tk.getTabId(tabsToAdd[i])] = tk.getTabId(newTab)
+
+        let tpp = tabsToAdd[i].getAttribute("possibleparent")
+        if (tpp in tabIdMapping) {
+          tpp = tabIdMapping[tpp]
+        }
+        newTab.setAttribute("possibleparent", tpp)
+        tk.setGID(newTab, newGid)
+      })
+
+      // endregion possibleparent
+
+      targetWindow.tabkit.updateIndents()
+      targetWindow.focus()
+    }
+
 
     this.quickStack = function quickStack() {
       // Intended mainly for outputting to the console
@@ -3276,6 +3368,57 @@
         ;(document.getElementById("menu_tabkit-sortgroup-group-expand") as any).collapsed = !groupCollapsed
       }
 
+      // region multi-window
+
+      const windowsEnumerator = _wm.getEnumerator("navigator:browser")
+      const otherWindows = []
+      while(windowsEnumerator.hasMoreElements()) {
+        const win = windowsEnumerator.getNext()
+        if (window !== win) {
+          otherWindows.push(win)
+        }
+      }
+      const isMultiWindow = otherWindows.length > 0
+      const multiWindowOnly = (popup as any).getElementsByAttribute("multiwindowonly", "true")
+      const multiWindowOnlyShouldBeShown = isMultiWindow && isGroup
+      for (let i = multiWindowOnly.length - 1; i >= 0; i--) {
+        multiWindowOnly[i].hidden = !multiWindowOnlyShouldBeShown
+      }
+
+      const copyGroupToNewWindowMenuElement = document.getElementById("menu_tabkit-sortgroup-group-copyToNewWindow")
+      // Clear content
+      copyGroupToNewWindowMenuElement.innerHTML = ""
+      if (multiWindowOnlyShouldBeShown) {
+        const menu = copyGroupToNewWindowMenuElement
+        const menupopup = document.createElement("menupopup")
+        otherWindows.forEach((w) => {
+          const menuitem = document.createElement("menuitem")
+          menuitem.setAttribute("label", w.gBrowser.selectedTab.linkedBrowser.contentTitle || w.gBrowser.selectedTab.linkedBrowser.webNavigation.currentURI.spec)
+          const tabid = tk.getTabId(w.gBrowser.selectedTab)
+          menuitem.setAttribute("oncommand", `tabkit.copyTabGroupToWindow(TabContextMenu.contextTab, "${tabid}");`)
+          menupopup.appendChild(menuitem)
+        })
+        menu.appendChild(menupopup)
+      }
+
+      const moveGroupToNewWindowMenuElement = document.getElementById("menu_tabkit-sortgroup-group-moveGroupToWindow")
+      // Clear content
+      moveGroupToNewWindowMenuElement.innerHTML = ""
+      if (multiWindowOnlyShouldBeShown) {
+        const menu = moveGroupToNewWindowMenuElement
+        const menupopup = document.createElement("menupopup")
+        otherWindows.forEach((w) => {
+          const menuitem = document.createElement("menuitem")
+          menuitem.setAttribute("label", w.gBrowser.selectedTab.linkedBrowser.contentTitle || w.gBrowser.selectedTab.linkedBrowser.webNavigation.currentURI.spec)
+          const tabid = tk.getTabId(w.gBrowser.selectedTab)
+          menuitem.setAttribute("oncommand", `tabkit.moveTabGroupToWindow(TabContextMenu.contextTab, "${tabid}");`)
+          menupopup.appendChild(menuitem)
+        })
+        menu.appendChild(menupopup)
+      }
+
+      // endregion multi-window
+
       // Update radio buttons & checkboxes (esp. for new windows)
       switch (tk.newTabPosition === 2 ? tk.activeSort : "none") {
         case "uri": (document.getElementById("menu_tabkit-sortgroup-sortByUri") as any).setAttribute("checked", "true"); break
@@ -3635,8 +3778,8 @@
       const tab_attributes_backup = tk.getTabAttributesForTabKit(newTab)
 
       // In FF 45.x (and later maybe)
-      // The attributes are restored again asynchronizedly
-      // So we need to restore the atttributes after that operation
+      // The attributes are restored again asynchronously
+      // So we need to restore the attributes after that operation
       if (typeof TabStateFlusher === "object" &&
           "flush" in TabStateFlusher &&
           typeof TabStateFlusher.flush === "function") {
@@ -5278,8 +5421,8 @@
           const tab_attributes_backup = tk.getTabAttributesForTabKit(copiedTab)
 
           // In FF 45.x (and later maybe)
-          // The attributes are restored again asynchronizedly
-          // So we need to restore the atttributes after that operation
+          // The attributes are restored again asynchronously
+          // So we need to restore the attributes after that operation
           if (typeof TabStateFlusher === "object" &&
               "flush" in TabStateFlusher &&
               typeof TabStateFlusher.flush === "function") {

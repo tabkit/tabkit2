@@ -282,6 +282,20 @@
                 label="&unprotectAllInGroup.label;"
                 command="cmd_tabkit-sortgroup-group-unprotectAllInGroup"
                 groupsonly="true"/>
+
+      <menu id="menu_tabkit-sortgroup-group-copyToNewWindow"
+            label="&copyToNewWindowMenu.label;"
+            groupsonly="true"
+            multiwindowonly="true">
+      </menu>
+      <menu id="menu_tabkit-sortgroup-group-moveGroupToWindow"
+            label="&moveGroupToWindow.label;"
+            groupsonly="true"
+            multiwindowonly="true">
+      </menu>
+
+      <menuseparator groupsonly="true"/>
+
       <menuitem id="menu_tabkit-sortgroup-group-close"
                 label="&closeGroup.label;"
                 accesskey="&closeGroup.accesskey;"
