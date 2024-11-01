@@ -19,7 +19,7 @@
     "bluebird": ">= 3.5.0",
     "dateformat": "4.6.3",
     "del": ">= 7.1.0",
-    "eslint": ">= 9.11.1",
+    "eslint": ">= 9.13.0",
     "file-exists": ">= 3.0.2",
     "gulp": ">= 5.0.0",
     "gulp-babel": ">= 6.1.2",
