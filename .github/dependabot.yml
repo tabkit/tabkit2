@@ -10,6 +10,20 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
+    groups:
+      babel:
+        patterns:
+          - "@babel/*"
+          - "babel-*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@eslint/*"
+      stylelint:
+        patterns:
+          - "stylelint"
+          - "stylelint-*"
 
   - package-ecosystem: github-actions
     directory: "/"
