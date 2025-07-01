@@ -24,6 +24,10 @@ updates:
         patterns:
           - "stylelint"
           - "stylelint-*"
+      gulp:
+        patterns:
+          - "gulp"
+          - "gulp-*"
 
   - package-ecosystem: github-actions
     directory: "/"
