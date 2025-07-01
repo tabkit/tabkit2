@@ -1527,17 +1527,17 @@ graceful-fs@^4.2.10, graceful-fs@^4.2.11, graceful-fs@^4.2.8:
     through2 "^2.0.0"
     vinyl-sourcemaps-apply "^0.2.0"
 
-"gulp-cli@>= 1.2.2", gulp-cli@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/gulp-cli/-/gulp-cli-3.0.0.tgz#577008f5323fad6106b44db24803c27c3a649841"
-  integrity sha512-RtMIitkT8DEMZZygHK2vEuLPqLPAFB4sntSxg4NoDta7ciwGZ18l7JuhCTiS5deOJi2IoK0btE+hs6R4sfj7AA==
+"gulp-cli@>= 3.1.0", gulp-cli@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/gulp-cli/-/gulp-cli-3.1.0.tgz#92590e9b209142b176c95ad5c7066d2592017268"
+  integrity sha512-zZzwlmEsTfXcxRKiCHsdyjZZnFvXWM4v1NqBJSYbuApkvVKivjcmOS2qruAJ+PkEHLFavcDKH40DPc1+t12a9Q==
   dependencies:
     "@gulpjs/messages" "^1.1.0"
     chalk "^4.1.2"
     copy-props "^4.0.0"
     gulplog "^2.2.0"
     interpret "^3.1.1"
-    liftoff "^5.0.0"
+    liftoff "^5.0.1"
     mute-stdout "^2.0.0"
     replace-homedir "^2.0.0"
     semver-greatest-satisfied-range "^2.0.0"
@@ -1876,10 +1876,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-liftoff@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/liftoff/-/liftoff-5.0.0.tgz#0e5ed275bc334caec0e551ecf08bb22be583e236"
-  integrity sha512-a5BQjbCHnB+cy+gsro8lXJ4kZluzOijzJ1UVVfyJYZC+IP2pLv1h4+aysQeKuTmyO8NAqfyQAk4HWaP/HjcKTg==
+liftoff@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/liftoff/-/liftoff-5.0.1.tgz#e2329e7f1e19e98c8dba71185f2078e6dbbc5c1f"
+  integrity sha512-wwLXMbuxSF8gMvubFcFRp56lkFV69twvbU5vDPbaw+Q+/rF8j0HKjGbIdlSi+LuJm9jf7k9PB+nTxnsLMPcv2Q==
   dependencies:
     extend "^3.0.2"
     findup-sync "^5.0.0"
