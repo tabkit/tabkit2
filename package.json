@@ -26,7 +26,7 @@
     "gulp-cli": ">= 3.1.0",
     "gulp-zip": ">= 6.1.0",
     "mz": ">= 2.6.0",
-    "stylelint": ">= 16.21.0",
+    "stylelint": ">= 16.23.0",
     "stylelint-csstree-validator": ">= 3.0.0",
     "stylelint-order": ">= 7.0.0",
     "typescript": "^5.8.3"
