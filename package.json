@@ -18,7 +18,7 @@
     "babelify": ">= 7.3.0",
     "bluebird": ">= 3.5.0",
     "dateformat": "4.6.3",
-    "del": ">= 8.0.0",
+    "del": ">= 8.0.1",
     "eslint": ">= 9.34.0",
     "file-exists": ">= 3.0.2",
     "gulp": ">= 5.0.1",
