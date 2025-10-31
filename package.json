@@ -8,10 +8,10 @@
     "release": "gulp build_xpi_official_release"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.4",
+    "@babel/core": "^7.28.5",
     "@babel/plugin-transform-class-properties": "^7.27.1",
     "@babel/plugin-transform-object-rest-spread": "^7.28.4",
-    "@babel/preset-typescript": "^7.27.1",
+    "@babel/preset-typescript": "^7.28.5",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "babel-eslint": ">= 7.1.1",
