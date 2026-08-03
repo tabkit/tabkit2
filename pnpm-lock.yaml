@@ -2,6 +2,7 @@ lockfileVersion: '9.0'
 
 settings:
   autoInstallPeers: true
+  dedupePeers: true
   excludeLinksFromLockfile: false
 
 importers:
@@ -22,13 +23,13 @@ importers:
         version: 8.0.1(@babel/core@8.0.1)
       '@typescript-eslint/eslint-plugin':
         specifier: ^4.33.0
-        version: 4.33.0(@typescript-eslint/parser@4.33.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2))(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)
+        version: 4.33.0(@typescript-eslint/parser@4.33.0)(eslint@10.8.0)(supports-color@10.2.2)(typescript@7.0.2)
       '@typescript-eslint/parser':
         specifier: ^4.33.0
-        version: 4.33.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)
+        version: 4.33.0(eslint@10.8.0)(supports-color@10.2.2)(typescript@7.0.2)
       babel-eslint:
         specifier: '>= 7.1.1'
-        version: 10.1.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)
+        version: 10.1.0(eslint@10.8.0)(supports-color@10.2.2)
       babelify:
         specifier: '>= 7.3.0'
         version: 10.0.0(@babel/core@8.0.1)
@@ -67,10 +68,10 @@ importers:
         version: 17.14.1(supports-color@10.2.2)(typescript@7.0.2)
       stylelint-csstree-validator:
         specifier: '>= 4.0.0'
-        version: 4.0.0(stylelint@17.14.1(supports-color@10.2.2)(typescript@7.0.2))
+        version: 4.0.0(stylelint@17.14.1)
       stylelint-order:
         specifier: '>= 8.1.1'
-        version: 8.1.1(stylelint@17.14.1(supports-color@10.2.2)(typescript@7.0.2))
+        version: 8.1.1(stylelint@17.14.1)
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
@@ -2148,7 +2149,7 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
-  '@csstools/css-calc@3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
+  '@csstools/css-calc@3.2.1(@csstools/css-parser-algorithms@4.0.0)(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
@@ -2163,7 +2164,7 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
-  '@csstools/media-query-list-parser@5.0.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
+  '@csstools/media-query-list-parser@5.0.0(@csstools/css-parser-algorithms@4.0.0)(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
@@ -2176,7 +2177,7 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.1.4
 
-  '@eslint-community/eslint-utils@4.9.0(eslint@10.8.0(supports-color@10.2.2))':
+  '@eslint-community/eslint-utils@4.9.0(eslint@10.8.0)':
     dependencies:
       eslint: 10.8.0(supports-color@10.2.2)
       eslint-visitor-keys: 3.4.3
@@ -2286,10 +2287,10 @@ snapshots:
       '@types/expect': 1.20.4
       '@types/node': 22.2.0
 
-  '@typescript-eslint/eslint-plugin@4.33.0(@typescript-eslint/parser@4.33.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2))(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)':
+  '@typescript-eslint/eslint-plugin@4.33.0(@typescript-eslint/parser@4.33.0)(eslint@10.8.0)(supports-color@10.2.2)(typescript@7.0.2)':
     dependencies:
-      '@typescript-eslint/experimental-utils': 4.33.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)
-      '@typescript-eslint/parser': 4.33.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)
+      '@typescript-eslint/experimental-utils': 4.33.0(eslint@10.8.0)(supports-color@10.2.2)(typescript@7.0.2)
+      '@typescript-eslint/parser': 4.33.0(eslint@10.8.0)(supports-color@10.2.2)(typescript@7.0.2)
       '@typescript-eslint/scope-manager': 4.33.0
       debug: 4.4.3(supports-color@10.2.2)
       eslint: 10.8.0(supports-color@10.2.2)
@@ -2303,7 +2304,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/experimental-utils@4.33.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)':
+  '@typescript-eslint/experimental-utils@4.33.0(eslint@10.8.0)(supports-color@10.2.2)(typescript@7.0.2)':
     dependencies:
       '@types/json-schema': 7.0.15
       '@typescript-eslint/scope-manager': 4.33.0
@@ -2311,12 +2312,12 @@ snapshots:
       '@typescript-eslint/typescript-estree': 4.33.0(supports-color@10.2.2)(typescript@7.0.2)
       eslint: 10.8.0(supports-color@10.2.2)
       eslint-scope: 5.1.1
-      eslint-utils: 3.0.0(eslint@10.8.0(supports-color@10.2.2))
+      eslint-utils: 3.0.0(eslint@10.8.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  '@typescript-eslint/parser@4.33.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)':
+  '@typescript-eslint/parser@4.33.0(eslint@10.8.0)(supports-color@10.2.2)(typescript@7.0.2)':
     dependencies:
       '@typescript-eslint/scope-manager': 4.33.0
       '@typescript-eslint/types': 4.33.0
@@ -2483,7 +2484,7 @@ snapshots:
 
   b4a@1.6.6: {}
 
-  babel-eslint@10.1.0(eslint@10.8.0(supports-color@10.2.2))(supports-color@10.2.2):
+  babel-eslint@10.1.0(eslint@10.8.0)(supports-color@10.2.2):
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/parser': 7.29.7
@@ -2687,7 +2688,7 @@ snapshots:
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
-  eslint-utils@3.0.0(eslint@10.8.0(supports-color@10.2.2)):
+  eslint-utils@3.0.0(eslint@10.8.0):
     dependencies:
       eslint: 10.8.0(supports-color@10.2.2)
       eslint-visitor-keys: 2.1.0
@@ -2702,7 +2703,7 @@ snapshots:
 
   eslint@10.8.0(supports-color@10.2.2):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@10.8.0(supports-color@10.2.2))
+      '@eslint-community/eslint-utils': 4.9.0(eslint@10.8.0)
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.23.5(supports-color@10.2.2)
       '@eslint/config-helpers': 0.7.0
@@ -3456,12 +3457,12 @@ snapshots:
     dependencies:
       ansi-regex: 6.2.2
 
-  stylelint-csstree-validator@4.0.0(stylelint@17.14.1(supports-color@10.2.2)(typescript@7.0.2)):
+  stylelint-csstree-validator@4.0.0(stylelint@17.14.1):
     dependencies:
       css-tree: 3.2.1
       stylelint: 17.14.1(supports-color@10.2.2)(typescript@7.0.2)
 
-  stylelint-order@8.1.1(stylelint@17.14.1(supports-color@10.2.2)(typescript@7.0.2)):
+  stylelint-order@8.1.1(stylelint@17.14.1):
     dependencies:
       postcss: 8.5.25
       postcss-sorting: 10.0.0(postcss@8.5.25)
@@ -3469,11 +3470,11 @@ snapshots:
 
   stylelint@17.14.1(supports-color@10.2.2)(typescript@7.0.2):
     dependencies:
-      '@csstools/css-calc': 3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
+      '@csstools/css-calc': 3.2.1(@csstools/css-parser-algorithms@4.0.0)(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-syntax-patches-for-csstree': 1.1.7(css-tree@3.2.1)
       '@csstools/css-tokenizer': 4.0.0
-      '@csstools/media-query-list-parser': 5.0.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
+      '@csstools/media-query-list-parser': 5.0.0(@csstools/css-parser-algorithms@4.0.0)(@csstools/css-tokenizer@4.0.0)
       '@csstools/selector-resolve-nested': 4.0.0(postcss-selector-parser@7.1.4)
       '@csstools/selector-specificity': 6.0.0(postcss-selector-parser@7.1.4)
       colord: 2.9.3
