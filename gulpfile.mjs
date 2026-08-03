@@ -113,4 +113,7 @@ const build_xpi_official_release = gulp.series(
 gulp.task("default", () => watch())
 gulp.task("clean_build", () => clean_build())
 gulp.task("watch", () => watch())
-gulp.task("build_xpi_official_release", () => build_xpi_official_release())
+gulp.task("build_xpi_official_release", async (done) => {
+  await build_xpi_official_release();
+  done()
+})
