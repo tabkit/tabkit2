@@ -11,7 +11,8 @@
     "eslint-lint-fix": "eslint --config eslint.config.mjs --fix \"src/**/*.js\"",
     "lint-style": "stylelint \"src/**/*.{css,scss}\"",
     "lint-style-fix": "stylelint --fix \"src/**/*.{css,scss}\"",
-    "release": "gulp build_xpi_official_release"
+    "release": "gulp build_xpi_official_release",
+    "ci": "pnpm install --frozen-lockfile"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
