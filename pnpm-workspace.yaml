@@ -1,0 +1,22 @@
+# https://github.com/pnpm/pnpm/issues/11070
+dedupePeers: true
+
+# To reduce the risk of installing compromised packages, you can delay the installation of newly published versions.
+# In most cases, malicious releases are discovered and removed from the registry within an hour.
+# https://pnpm.io/settings#minimumreleaseage
+# 2 days
+minimumReleaseAge: 2880
+# Falls back to a version that doesn't meet the minimumReleaseAge constraint so installation can still succeed
+minimumReleaseAgeStrict: false
+# Only direct dependencies may use exotic sources (git repo/tarball URLs)
+# https://pnpm.io/settings#blockexoticsubdeps
+blockExoticSubdeps: true
+# A repeat install or an install on a project with everything up-to-date becomes a lot faster
+# https://pnpm.io/settings#optimisticrepeatinstall
+optimisticRepeatInstall: true
+# Install if `node_modules` outdated before pnpm run/exec
+# https://pnpm.io/settings#verifydepsbeforerun
+verifyDepsBeforeRun: "install"
+# Installation will exit with a non-zero exit code if any dependencies have unreviewed build scripts (aka postinstall scripts)
+# https://pnpm.io/settings#strictdepbuilds
+strictDepBuilds: true
