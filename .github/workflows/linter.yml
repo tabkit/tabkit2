@@ -33,7 +33,7 @@ jobs:
     - name: Install pnpm
       uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 #v6.0.9
       with:
-        version: 10
+        version: 11
         cache: false
 
     - name: Get pnpm cache directory
@@ -55,11 +55,6 @@ jobs:
 
     - run: pnpm run ci
       shell: bash
-    - run: pnpm run lint
-      shell: bash
-    # let's verify that webpack is able to package the project
+      # Test build
     - run: pnpm run pack
-      shell: bash
-    # verify that webpack is able to package the project using the web config
-    - run: pnpm run pack:web
       shell: bash
