@@ -5,6 +5,12 @@
   "author": "",
   "scripts": {
     "dev": "gulp watch",
+    "lint": "pnpm run \"/^(eslint-lint|lint-style)$/\"",
+    "lint-fix": "pnpm run \"/^(eslint-lint|lint-style)-fix$/\"",
+    "eslint-lint": "eslint --config eslint.config.mjs \"src/**/*.js\"",
+    "eslint-lint-fix": "eslint --config eslint.config.mjs --fix \"src/**/*.js\"",
+    "lint-style": "stylelint \"src/**/*.{css,scss}\"",
+    "lint-style-fix": "stylelint --fix \"src/**/*.{css,scss}\"",
     "release": "gulp build_xpi_official_release"
   },
   "devDependencies": {
@@ -13,6 +19,8 @@
     "@babel/plugin-transform-class-properties": "^8.0.1",
     "@babel/plugin-transform-object-rest-spread": "^8.0.1",
     "@babel/preset-typescript": "^8.0.1",
+    "@eslint/eslintrc": "^3.3.6",
+    "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
     "@typescript-eslint/parser": "^8.65.0",
     "babelify": "^10.0.0",
@@ -21,6 +29,7 @@
     "del": "^8.0.1",
     "eslint": "^10.8.0",
     "file-exists": "^5.0.1",
+    "globals": "^17.8.0",
     "gulp": "^5.0.1",
     "gulp-babel": "^8.1.0",
     "gulp-cli": "^3.1.0",
@@ -29,7 +38,7 @@
     "stylelint": "^17.14.1",
     "stylelint-csstree-validator": "^4.0.0",
     "stylelint-order": "^8.1.1",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   },
   "license": "GPL-2.0+"
 }
