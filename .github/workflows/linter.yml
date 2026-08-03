@@ -56,5 +56,5 @@ jobs:
     - run: pnpm run ci
       shell: bash
       # Test build
-    - run: pnpm run pack
+    - run: pnpm run release
       shell: bash
