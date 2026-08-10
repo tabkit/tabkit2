@@ -29,10 +29,8 @@ jobs:
       with:
         runtime: node@lts
         cache: true
-        install: false
+        install: true
 
-    - run: pnpm run ci
-      shell: bash
       # Test build
     - run: pnpm run release
       shell: bash
