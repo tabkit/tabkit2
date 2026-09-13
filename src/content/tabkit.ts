@@ -501,7 +501,10 @@
 
     this.VerticalTabBarScrollbar = this.VerticalTabBarScrollbar || {}
     this.VerticalTabBarScrollbar.getElement = function () {
-      if (!tk.TabBar.Mode.getIsVerticalMode()) {
+      if (!tk.TabBar.Mode.getIsVerticalMode() && !(
+        (_prefs.getIntPref("tabbarPosition") === tk.Positions.TOP ||
+         _prefs.getIntPref("tabbarPosition") === tk.Positions.BOTTOM) &&
+         _prefs.getIntPref("tabRows")) > 1) {
         return null
       }
 
