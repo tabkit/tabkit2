@@ -489,6 +489,14 @@
     this.TabBar.Mode.getIsVerticalMode = function getIsVerticalMode () {
       return gBrowser.hasAttribute("vertitabbar")
     }
+    // @return [Boolean] if multirow mode, true
+    this.TabBar.Mode.getIsMultiRowMode = function getIsMultiRowMode () {
+      const tabbarPosition = _prefs.getIntPref("tabbarPosition")
+
+      const isHorizontalTabbar = tabbarPosition === tk.Positions.TOP || tk.Positions.BOTTOM
+      const isMoreThanOneRow = _prefs.getIntPref("tabRows") > 1
+      return isHorizontalTabbar && isMoreThanOneRow
+    }
 
 
     this.DomUtility = this.DomUtility || {}
@@ -501,10 +509,7 @@
 
     this.VerticalTabBarScrollbar = this.VerticalTabBarScrollbar || {}
     this.VerticalTabBarScrollbar.getElement = function () {
-      if (!tk.TabBar.Mode.getIsVerticalMode() && !(
-        (_prefs.getIntPref("tabbarPosition") === tk.Positions.TOP ||
-         _prefs.getIntPref("tabbarPosition") === tk.Positions.BOTTOM) &&
-         _prefs.getIntPref("tabRows")) > 1) {
+      if (!tk.TabBar.Mode.getIsVerticalMode() && !tk.TabBar.Mode.getIsMultiRowMode()) {
         return null
       }
 
@@ -6473,7 +6478,7 @@
 
       // endregion close button visibility
 
-      if ((tabbarPosition === tk.Positions.TOP || tabbarPosition === tk.Positions.BOTTOM) && _prefs.getIntPref("tabRows") > 1) {
+      if (tk.TabBar.Mode.getIsMultiRowMode()) {
         if (!gBrowser.getStripVisibility()) {
           rows = 0
         }
@@ -6521,16 +6526,16 @@
               tk.debug("Oops, the scrollbar hasn't been created yet... TODO-P6: TJS use a timeout")
               availWidth -= 22
             }
-            
+
             // the scrollbar takes up some of the space allocated to tabs, so the
             //   presence of one might cause the number of tabs per row to change,
             //   which in turn means a recalculation is necessary to account for that
-            
+
             tabsPerRow = Math.max(Math.floor(availWidth /
               (Math.max(minWidth, TAB_MIN_WIDTH) + tabHorizontalBorders)), 1)
               // Minimum minWidth of tab is 100, a built-in CSS rule
             rows = Math.ceil(visibleTabs / tabsPerRow)
-            
+
           }
           else {
             _tabContainer.removeAttribute("multirowscroll")
