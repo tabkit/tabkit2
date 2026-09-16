@@ -6443,9 +6443,13 @@
       const tabbarPosition = _prefs.getIntPref("tabbarPosition")
       let needsDisabling = false
       let availWidth = 0
+      let visibleTabs = 0
+      let tabsPerRow = 1 // this avoids the risk of a divide by zero getting introduced
       let rows = 0
       let minWidth = null as null | number
       let needsScrolling = false
+      const tabHorizontalBorders = 11
+        // in a more ideal world, tab border size would be queried from the browser environment
 
       // region close button visibility
 
@@ -6481,7 +6485,9 @@
           //   visibleTabs++ // Treat the new tab button as a tab for our purposes
           minWidth = _prefs.getIntPref("tabs.tabMinWidth")
           availWidth = _tabContainer.mTabstrip._scrollbox.boxObject.width
-          const tabsPerRow = Math.floor(availWidth / Math.max(minWidth, TAB_MIN_WIDTH))  //Minimum minWidth of tab is 100, a built-in CSS rule
+          tabsPerRow = Math.max(Math.floor(availWidth /
+            (Math.max(minWidth, TAB_MIN_WIDTH) + tabHorizontalBorders)), 1)
+            // Minimum minWidth of tab is 100, a built-in CSS rule
           rows = Math.ceil(visibleTabs / tabsPerRow)
         }
         if (rows > 1) {
@@ -6512,6 +6518,16 @@
               tk.debug("Oops, the scrollbar hasn't been created yet... TODO-P6: TJS use a timeout")
               availWidth -= 22
             }
+            
+            // the scrollbar takes up some of the space allocated to tabs, so the
+            //   presence of one might cause the number of tabs per row to change,
+            //   which in turn means a recalculation is necessary to account for that
+            
+            tabsPerRow = Math.max(Math.floor(availWidth /
+              (Math.max(minWidth, TAB_MIN_WIDTH) + tabHorizontalBorders)), 1)
+              // Minimum minWidth of tab is 100, a built-in CSS rule
+            rows = Math.ceil(visibleTabs / tabsPerRow)
+            
           }
           else {
             _tabContainer.removeAttribute("multirowscroll")
@@ -6520,8 +6536,8 @@
             _tabContainer.mTabstrip.style.setProperty("max-height", 24 * rows + "px", "important")
           }
 
-          tk.setTabMinWidth(minWidth)
-          // tk.setTabMinWidth(availWidth / tabsPerRow)
+          // tk.setTabMinWidth(minWidth)
+          tk.setTabMinWidth(Math.floor(availWidth / tabsPerRow))
 
           if (rows > maxRows)
             tk.multiRow_onTabSelect() // Check if we need to scroll
