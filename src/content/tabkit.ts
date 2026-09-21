@@ -493,7 +493,7 @@
     this.TabBar.Mode.getIsMultiRowMode = function getIsMultiRowMode () {
       const tabbarPosition = _prefs.getIntPref("tabbarPosition")
 
-      const isHorizontalTabbar = tabbarPosition === tk.Positions.TOP || tk.Positions.BOTTOM
+      const isHorizontalTabbar = tabbarPosition === tk.Positions.TOP || tabbarPosition === tk.Positions.BOTTOM
       const isMoreThanOneRow = _prefs.getIntPref("tabRows") > 1
       return isHorizontalTabbar && isMoreThanOneRow
     }
