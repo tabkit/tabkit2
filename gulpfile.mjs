@@ -79,11 +79,14 @@ const build_src = gulp.series(
 
 function build_xpi_official_release_impl() {
   const final_install_rdf_path = "./src/install.rdf"
+  const final_install_rdf_path_in_build_path = `${build_path}/install.rdf`
   const product_path = "./product"
   const product_ext = ".xpi"
+  let final_install_rdf_content = ""
 
   return fs.readFile(final_install_rdf_path, {encoding: "utf8"})
   .then(function (content) {
+    final_install_rdf_content = content
     const matchData = /<em:version>(.+)<\/em:version>/i.exec(content)
     return matchData[1]
   })
@@ -92,16 +95,25 @@ function build_xpi_official_release_impl() {
       throw new Error("Something is wrong, version is nil")
     }
 
+    let new_final_install_rdf_content = final_install_rdf_content
     let product_filename = `tabkit2_${version_string}`
 
+    let sometimesWriteFilePromise = Promise.resolve()
     if (fileExists.sync(`${product_path}/${product_filename}${product_ext}`)) {
       let now = new Date()
       product_filename = `${product_filename}-${dateFormat(now, "yyyy-mm-dd-hhMMss")}`
+      new_final_install_rdf_content = final_install_rdf_content.replace(
+        /(<em:version>)(.+)(<\/em:version>)/i,
+        `$1$2.dev.${dateFormat(now, "yyyy-mm-dd-hhMMss")}$3`,
+      )
+      sometimesWriteFilePromise = fs.writeFile(final_install_rdf_path_in_build_path, new_final_install_rdf_content, {encoding: "utf8"})
     }
 
-    return gulp.src(`${build_path}/**/*`)
-    .pipe(zip(`${product_filename}${product_ext}`))
-    .pipe(gulp.dest(product_path))
+    return sometimesWriteFilePromise.then(() => {
+      return gulp.src(`${build_path}/**/*`)
+      .pipe(zip(`${product_filename}${product_ext}`))
+      .pipe(gulp.dest(product_path))
+    })
   })
 }
 
