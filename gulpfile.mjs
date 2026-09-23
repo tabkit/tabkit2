@@ -112,7 +112,9 @@ function build_xpi_official_release_impl() {
     }
 
     return sometimesWriteFilePromise.then(() => {
-      return gulp.src(`${build_path}/**/*`)
+      // encoding default to UTF-8 but causing issue in copying PNG files
+      // See https://github.com/gulpjs/gulp/issues/2766
+      return gulp.src(`${build_path}/**/*`, {encoding: false})
       .pipe(zip(`${product_filename}${product_ext}`))
       .pipe(gulp.dest(product_path))
     })
