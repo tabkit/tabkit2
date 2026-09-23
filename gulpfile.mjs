@@ -57,11 +57,13 @@ function build_src_css() {
 }
 
 function build_src_static_files() {
+  // encoding default to UTF-8 but causing issue in copying PNG files
+  // See https://github.com/gulpjs/gulp/issues/2766
   return gulp.src([
     "./src/**/*",
     "!./src/**/*.{js,ts}",
     "!./src/**/*.css",
-  ])
+  ], {encoding: false})
   .on("error", console.error.bind(console))
   .pipe(gulp.dest(build_path))
 }
