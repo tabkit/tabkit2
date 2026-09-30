@@ -23,7 +23,7 @@
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.69.0",
-    "@typescript-eslint/parser": "^8.69.0",
+    "@typescript-eslint/parser": "^8.70.1",
     "babelify": "^10.0.0",
     "bluebird": "^3.7.2",
     "dateformat": "5.0.3",
