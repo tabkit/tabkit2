@@ -15,8 +15,8 @@
     "ci": "pnpm install --frozen-lockfile"
   },
   "devDependencies": {
-    "@babel/core": "^8.0.1",
-    "@babel/eslint-parser": "^8.0.1",
+    "@babel/core": "^8.0.6",
+    "@babel/eslint-parser": "^8.0.6",
     "@babel/plugin-transform-class-properties": "^8.0.1",
     "@babel/plugin-transform-object-rest-spread": "^8.0.1",
     "@babel/preset-typescript": "^8.0.1",
