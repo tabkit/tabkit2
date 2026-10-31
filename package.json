@@ -27,7 +27,7 @@
     "babelify": "^10.0.0",
     "bluebird": "^3.7.2",
     "dateformat": "5.0.3",
-    "del": "^8.0.1",
+    "del": "^9.0.1",
     "eslint": "^10.13.0",
     "file-exists": "^5.0.1",
     "globals": "^17.13.0",
